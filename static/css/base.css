@@ -3,16 +3,19 @@
     padding: 0;
     font-family: 'Roboto', sans-serif;
     background-color: #FBFAF5;
+    font-size: 1rem;
 }
 
 /* Navbar */
-
+.tom-nav {
+    padding: 1rem 1.375rem;
+}
 
 /* Footer */
-footer{
+footer {
     /*background-color: #eee6d3;*/
 }
 
-.footerLink{
+.footerLink {
     color: #4f4f4f;
 }
