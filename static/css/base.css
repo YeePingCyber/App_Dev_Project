@@ -19,3 +19,28 @@ footer {
 .footerLink {
     color: #4f4f4f;
 }
+
+.o-topbar {
+    display: flex;
+    padding: 0 2.125rem;
+    align-items: center;
+    background: 0 0;
+    z-index: 50;
+    height: 2.5rem;
+    background: #fbfaf4;
+}
+
+.o-topbar svg {
+    width: .9375rem;
+    margin-right: 0.5rem;
+}
+
+.o-topbar div {
+    font-size: .6875em;
+}
+
+.tom-nav {
+    display: flex;
+    width: 1600px ;
+    justify-content: space-between;
+}
