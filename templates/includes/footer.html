@@ -1,52 +1,46 @@
-<footer>
-    <div class="container p-4">
-        <div class="row">
-        <div class="col-lg-6 col-md-12 mb-4">
-            <h5 class="mb-3 text-dark">footer content</h5>
-            <p>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iste atque ea quis
-            molestias. Fugiat pariatur maxime quis culpa corporis vitae repudiandae aliquam
-            voluptatem veniam, est atque cumque eum delectus sint!
-            </p>
-        </div>
-        <div class="col-lg-3 col-md-6 mb-4">
-            <h5 class="mb-3 text-dark">links</h5>
-            <ul class="list-unstyled mb-0">
-            <li class="mb-1">
-                <a href="#!" class="footerLink">FAQ</a>
-            </li>
-            <li class="mb-1">
-                <a href="#!" class="footerLink">Classes</a>
-            </li>
-            <li class="mb-1">
-                <a href="#!" class="footerLink">Pricing</a>
-            </li>
-            <li>
-                <a href="#!" class="footerLink">Safety</a>
-            </li>
-            </ul>
-        </div>
-        <div class="col-lg-3 col-md-6 mb-4">
-            <h5 class="mb-1 text-dark">opening hours</h5>
-            <table class="table" style="border-color: #666;">
-            <tbody>
-                <tr>
-                <td>Mon - Fri:</td>
-                <td>8am - 9pm</td>
-                </tr>
-                <tr>
-                <td>Sat - Sun:</td>
-                <td>8am - 1am</td>
-                </tr>
-            </tbody>
-            </table>
-        </div>
-        </div>
-    </div>
+<footer class="c-footer">
+    <div class="c-footer__inner">
+        <div class="c-footer__logo"><img src="../../static/images/Tom Patterson Logo.png"/></div>
 
-    <!-- Copyright -->
-    <div class="text-center p-3">
-        &copy; 2020 Copyright:
-        <a class="text-dark" href="#">Tom Patterson</a>
+        <div class="c-footer__newsletter-container">
+            <div class="o-newsletter c-footer__newsletter">
+                <h4 class="o-newsletter__title">Subscribe</h4>
+                <form method="post" action="/contact#newsletter_signup" id="newsletter_signup" accept-charset="UTF-8" class="c-footer__newsletter">
+                    <input type="hidden" name="form_type" value="customer"><input type="hidden" name="utf8" value="✓">
+                    <div class="o-newsletter__content">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 16"><path d="M7.69502.070361L7.7117 0l3.6375 7.19094L15 14.4224h-4.9669V16H5.35832v-1.344H0L7.69502.037205V.07036zM7.45957 14.1926V1.50403L.783203 14.1926H7.45957z" fill="black"></path></svg> 
+                        <p class="o-newsletter__subscribe-message">Subscribe for inspiring stories, offers, and news.</p>
+                    </div>
+        
+                    <div class="o-newsletter__input-container">
+                        <input type="email" placeholder="Enter your email" class="o-input is-full-width o-newsletter__input" name="contact[email]">
+                        <button type="submit" class="o-btn is-icon o-newsletter__submit "></button>
+                    </div>
+                </form>
+            </div>
+        </div> 
+
+        <nav class="c-footer-menu">
+            <ul class="c-footer-menu__column">
+                <li class="c-footer-menu__link-item"><a href="#" class="c-footer-menu__link" title="Shop All">Shop All</a></li>
+                <li class="c-footer-menu__link-item"><a href="#" class="c-footer-menu__link" title="Shop All">Shop All</a></li>
+                <li class="c-footer-menu__link-item"><a href="#" class="c-footer-menu__link" title="Shop All">Shop All</a></li>
+                <li class="c-footer-menu__link-item"><a href="#" class="c-footer-menu__link" title="Shop All">Shop All</a></li>
+                <li class="c-footer-menu__link-item"><a href="#" class="c-footer-menu__link" title="Shop All">Shop All</a></li>
+            </ul>
+            <ul class="c-footer-menu__column">
+                <li class="c-footer-menu__link-item"><a href="#" class="c-footer-menu__link" title="Shop All">Shop All</a></li>
+                <li class="c-footer-menu__link-item"><a href="#" class="c-footer-menu__link" title="Shop All">Shop All</a></li>
+                <li class="c-footer-menu__link-item"><a href="#" class="c-footer-menu__link" title="Shop All">Shop All</a></li>
+                <li class="c-footer-menu__link-item"><a href="#" class="c-footer-menu__link" title="Shop All">Shop All</a></li>
+                <li class="c-footer-menu__link-item"><a href="#" class="c-footer-menu__link" title="Shop All">Shop All</a></li>
+            </ul>
+        </nav>
+    </div>
+    
+    <div class="c-footer__lower">
+        <div class="c-footer__lower-inner">
+            <p class="c-footer__copyright is-desktop">Copyright © 2021 Tom Patterson All rights reserved.</p>
+        </div>
     </div>
 </footer>

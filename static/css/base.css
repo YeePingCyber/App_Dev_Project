@@ -9,6 +9,11 @@ body {
     background-color: #FBFAF5;
 }
 
+a {
+    color: #111;
+    text-decoration: none;
+}
+
 /* Navbar */
 .o-topbar {
     position: relative;
@@ -53,6 +58,107 @@ body {
 }
 
 /* Footer */
-footer {
-    background-color: #DEDAD1;
+.c-footer {
+    transition: background .15s ease;
+    background: #e2dfd7;
+}
+
+.c-footer__inner {
+    margin: 0 auto;
+    display: flex;
+}
+
+@media only screen and (min-width: 750px) {
+    .c-footer__inner {
+        display: flex;
+        flex-wrap: wrap;
+        position: relative;
+        align-items: flex-start;
+        justify-content: space-between;
+    }
+}
+
+@media only screen and (min-width: 1650px) {
+    .c-footer__inner {
+        padding: 7.5rem 10% 2.25rem;
+        max-width: 125rem;
+        margin: 0 auto;
+    }
+}
+
+@media only screen and (min-width: 1650px) {
+    .c-footer__newsletter-container {
+        width: 32%;
+        margin-top: 4.25rem;
+        max-width: 31.625rem;
+    }
+}
+
+@media only screen and (min-width: 750px) {
+    .c-footer__newsletter-container {
+        order: 2;
+        width: 50%;
+        padding-left: 5%;
+    }
+}
+
+.o-newsletter__content {
+    display: flex;
+    align-items: center;
+}
+
+.o-newsletter__content svg {
+    width: 41px;
+    height: 44px;
+    margin-right: 0.5rem;
+}
+
+@media only screen and (min-width: 1100px) {
+    .c-footer-menu {
+        padding-right: 0;
+        margin-top: 2.75rem;
+        width: 29%;
+        max-width: 20.75rem;
+        justify-content: space-between;
+    }
+}
+
+.c-footer-menu {
+    display: flex;
+    align-items: flex-start;
+    margin: 2.375rem 0;
+}
+
+@media only screen and (min-width: 1650px) {
+    .c-footer-menu {
+        margin-top: 8.5rem;
+        max-width: 25.875rem;
+    }
+}
+
+@media only screen and (min-width: 1100px) {
+    .c-footer-menu__column {
+        width: auto;
+    }
+}
+
+.c-footer-menu__column {
+    list-style: none;
+    padding: 0;
+    width: 50%;
+    margin: 0 .5rem 0 0;
+}
+
+@media only screen and (min-width: 1100px) {
+    .c-footer-menu__link {
+        font-size: .6875rem;
+    }
+}
+
+.c-footer__lower {
+    padding: 0 7.5rem;
+}
+
+.c-footer__lower-inner p {
+    font-size: 0.75rem;
 }
