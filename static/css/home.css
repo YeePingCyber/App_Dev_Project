@@ -21,3 +21,35 @@
     margin: 1.5rem auto 0;
     max-width: 15rem;
 }
+
+.is-tall {
+    margin: min(13.5rem,10.8%) 0 min(14rem,11.2%);
+    padding-bottom: 0;
+}
+
+.is-tall .c-home-messaging__message {
+    max-width: 25rem;
+}
+
+.c-section__home-messaging {
+    display: flex;
+    justify-content: center;
+}
+
+.c-home-messaging h2 {
+    font-size: 1.5rem;
+    line-height: 1.5;
+    letter-spacing: 0.01em;
+    text-align: center;
+}
+
+.has-bold {
+    color: #dedad2;
+}
+
+.toptop {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-bottom: 270px;
+}
