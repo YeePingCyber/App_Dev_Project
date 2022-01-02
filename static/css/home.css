@@ -68,3 +68,30 @@
         display: flex;
         justify-content: space-evenly;
     }
+
+    /* --------------------------------------------------------------------------
+        3. top-items
+    -------------------------------------------------------------------------- */
+    .top-items__inner {
+        margin: min(14%,17.5rem) auto;
+        padding: 0 min(8%,10rem) 0 0;
+        overflow: visible;
+        display: flex;
+        justify-content: space-between;
+        align-items: stretch;
+        max-width: 125rem;
+    }
+
+    .top4 {
+        width: 47%;
+        margin-bottom: 3.2%;
+    }
+
+    .c-product-grid__header {
+        text-align: center;
+        margin: 18% 0 14.2%;
+    }
+
+    .top-items__card {
+        margin-bottom: 11.3%;
+    }

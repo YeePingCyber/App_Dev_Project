@@ -66,6 +66,16 @@
         padding: 1rem 1.375rem;
     }
 
+    /* add later */
+    .nav__scroll {
+        position: fixed;
+        top: 0;
+        left: 0;
+        border-color: #111;
+        background: #fbfaf4;
+        transition: color 1s cubic-bezier(.72,0,.28,1),background .65s cubic-bezier(.72,0,.28,1);
+    }
+
     .nav__right {
         display: flex;
         align-items: center;
