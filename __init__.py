@@ -12,7 +12,12 @@ def home():
 
 @app.route("/cartEmpty")
 def empty_cart():
-    return render_template("cart_empty.html")
+    return render_template("cart_empty.html")\
+
+
+@app.route("/login")
+def login():
+    return render_template("loginpage.html")
 
 
 if __name__ == "__main__":
