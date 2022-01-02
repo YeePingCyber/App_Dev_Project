@@ -3,7 +3,8 @@
    Structure of home.css
    |
    ├─ 1. header
-   ├─ 2. top-items
+   ├─ 2. top-links
+   ├─ 3. top-items
    ├─ 3. creator-showcase
      
     /* --------------------------------------------------------------------------
@@ -34,34 +35,36 @@
         max-width: 15rem;
     }
 
-    .is-tall {
+    /* --------------------------------------------------------------------------
+        2. top-links
+    -------------------------------------------------------------------------- */
+    .top-links-messaging__message {
+        max-width: 25rem;
+    }
+
+    .top-links__message {
+        display: flex;
+        justify-content: center;
         margin: min(13.5rem,10.8%) 0 min(14rem,11.2%);
         padding-bottom: 0;
     }
 
-    .is-tall .c-home-messaging__message {
-        max-width: 25rem;
-    }
-
-    .c-section__home-messaging {
-        display: flex;
-        justify-content: center;
-    }
-
-    .c-home-messaging h2 {
+    .top-links-messaging h2 {
         font-size: 1.5rem;
         line-height: 1.5;
         letter-spacing: 0.01em;
         text-align: center;
     }
 
-    .has-bold {
+    .bold {
         color: #dedad2;
     }
+    
+    .top-links {
+        margin-bottom: 14rem;
+    }
 
-    .toptop {
+    .top-links__link {
         display: flex;
-        align-items: center;
         justify-content: space-evenly;
-        margin-bottom: 270px;
     }
