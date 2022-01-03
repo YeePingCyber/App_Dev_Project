@@ -1,0 +1,22 @@
+/* NYP Y1S2 2021 - 2022 APP DEVELOPMENT PROJECT
+
+   Structure of cart.css
+   |
+   ├─ 1. header
+   ├─ 2. top-links
+   ├─ 3. top-items
+   ├─ 3. creator-showcase
+
+    /* --------------------------------------------------------------------------
+        1. header
+    -------------------------------------------------------------------------- */
+    .tom-navv {
+        background-image: url(none);
+    }
+
+    .wrap {
+        margin: 0 auto;
+        max-width: 40em;
+        zoom: 1
+        display: flex;
+    }
