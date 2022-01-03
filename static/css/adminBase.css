@@ -74,5 +74,49 @@
     }
 
     .nav__right a svg {
-        width: 20px;
+        width: 15px;
+    }
+
+    #navbarNav, .navbar-brand{
+        font-size: 0.9rem;
+    }
+
+    /* --------------------------------------------------------------------------
+        3. footer
+    -------------------------------------------------------------------------- */
+    .tom-footer__founders {
+        margin:3.125rem 0 2.75rem
+    }
+
+    .tom-footer__lower {
+        background:#fbfaf4
+    }
+
+    .tom-footer__lower-inner {
+        padding:1rem 1.25rem
+    }
+
+    .tom-footer__store-selector {
+        display: flex;
+        justify-content: space-between;
+        align-items:baseline
+    }
+
+    .tom-footer__store-selector-select .o-select {
+        font-size:.75rem
+    }
+
+    .tom-footer__store-selector-title {
+        font-size: .75rem;
+        text-transform:uppercase
+    }
+
+    .tom-footer__store-selector-title.is-link {
+        display:none
+    }
+
+    .tom-footer__copyright {
+        margin: 0;
+        opacity: .3;
+        font-size:.75rem
     }
