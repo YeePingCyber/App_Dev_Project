@@ -35,5 +35,6 @@ def cart():
 def mainshop():
     return render_template("mainshop.html")
 
+
 if __name__ == "__main__":
     app.run(debug=True)
