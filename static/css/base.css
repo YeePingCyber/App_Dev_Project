@@ -28,13 +28,20 @@
         text-decoration: none;
     }
 
+    .navEmpty {
+        padding-top: 15vh;
+    }
+
     /* --------------------------------------------------------------------------
         2. navbar
     -------------------------------------------------------------------------- */
     .tom-navv {
-        background-image: url("../images/nav-bg.png");
+        background-color: transparent;
         background-repeat: no-repeat;
         background-size: cover;
+        z-index: 100;
+        position: absolute;
+        width: 100%;
     }
 
     .o-topbar {

@@ -1,0 +1,19 @@
+/* NYP Y1S2 2021 - 2022 APP DEVELOPMENT PROJECT
+
+   Structure of home.css
+   |
+   ├─ 1. header
+   ├─ 2. top-links
+   ├─ 3. top-items
+   ├─ 3. creator-showcase
+
+    /* --------------------------------------------------------------------------
+        1. header
+    -------------------------------------------------------------------------- */
+
+    .shopHeader {
+        width: 30%;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+    }

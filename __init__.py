@@ -31,5 +31,9 @@ def cart():
         return render_template("cart.html", form=create_payment_form)
 
 
+@app.route("/mainshop")
+def mainshop():
+    return render_template("mainshop.html")
+
 if __name__ == "__main__":
     app.run(debug=True)
