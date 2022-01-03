@@ -163,6 +163,10 @@
         display:none
     }
 
+    label {
+        display: none;
+    }
+
     .field__input {
         border: 1px transparent solid;
         border-radius: 5px;
