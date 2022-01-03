@@ -1,10 +1,12 @@
 # Version 0.1
+import hashlib as hl
+
 class User:
     def __init__(self, fname, lname, email, password):
         self.__firstname = fname
         self.__lastname = lname
         self.__email = email
-        self.__password = password
+        self.__password = self.hashing_pwsd(password)
 
 # Ill try to do epoch timing for time of creation later on - Dylan
 # Hashing and password security we do later on - Dylan
@@ -19,7 +21,7 @@ class User:
         self.__email = email
 
     def set_password(self, password):
-        self.__password = password
+        self.__password = self.hashing_pwsd(password)
 
     def get_first_name(self):
         return self.__firstname
@@ -32,3 +34,6 @@ class User:
 
     def get_password(self):
         return self.__password
+
+    def hashing_pwsd(self, pwsd):
+        return hl.pbkdf2_hmac('sha256', str(pwsd).encode(), b'salt', 100000).hex()
