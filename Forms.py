@@ -28,6 +28,10 @@ class CreateAdminForm(Form):
 
 
 class CreatePaymentForm(Form):
+    email = EmailField('Email', [validators.Email(), validators.DataRequired()])
+    country = SelectField("Country", choices=[("1","SG"),("2","AU")])
     first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()])
     last_name = StringField('Last Name', [validators.Length(min=1, max=150), validators.DataRequired()])
-    email = EmailField('Email', [validators.Email(), validators.DataRequired()])
+    address = TextAreaField('Mailing Address', [validators.optional(), validators.length(max=200)])
+    postal_code = StringField("Postal Code", [validators.Length(min=6, max=6), validators.DataRequired()])
+    city = StringField("City", [validators.Length(min=1, max=150), validators.DataRequired()])

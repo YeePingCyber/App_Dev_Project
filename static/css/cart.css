@@ -2,17 +2,191 @@
 
    Structure of cart.css
    |
-   ├─ 1. header
-   ├─ 2. top-links
-   ├─ 3. top-items
-   ├─ 3. creator-showcase
+   ├─ 1. cart-header
+   ├─ 2. cart-items
 
     /* --------------------------------------------------------------------------
-        1. header
+        1. cart-header
     -------------------------------------------------------------------------- */
+    body {
+        overflow: hidden;
+    }
+
     .wrap {
+        display: block;
         margin: 0 auto;
         max-width: 40em;
-        zoom: 1
-        display: flex;
+        zoom:1
     }
+
+    .wrap:after, .wrap:before {
+        content: "";
+        display:table
+    }
+
+    .wrap:after {
+        clear:both
+    }
+
+    @media (max-width: 999px) {
+        .wrap {
+            width: 100%;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            padding:0 1em
+        }
+    }
+
+    @media (min-width: 1000px) {
+        .wrap {
+            padding: 0 5%;
+            width: 90%;
+            max-width:78.5714285714em
+        }
+    }
+
+    .cart-header {
+        width: 638px;
+        padding-right: 6%;
+        float: left;
+        padding-top: 4rem;
+    }
+
+    .cart-brand {
+        font-size: 30px;
+    }
+
+    .breadcrumb {
+        margin-top: 1em;
+    }
+
+    .breadcrumb-item {
+        font-size: 12px;
+    }
+
+    .cart-details {
+        width: 38%;
+        padding-left: 4%;
+        background-position: left top;
+        float: right;
+        padding-top: 4rem;
+        background-color: #eeece3;
+    }
+
+    .cart-details::after {
+        content: "";
+        display: block;
+        width: 300%;
+        position: absolute;
+        top: 0;
+        left: -100%;
+        bottom: 0;
+        background: #eeece3;
+        z-index: -1;
+        /* -webkit-box-shadow: 0 -1px 0 #d6d4cc inset; */
+        /* box-shadow:0 -1px 0 #d6d4cc inset */}
+
+    @media (min-width: 1000px) {
+        .cart-details::after {
+            left: 0;
+            background-position: left top;
+            -webkit-box-shadow: 1px 0 0 #d6d4cc inset;
+            box-shadow:1px 0 0 #d6d4cc inset
+        }
+    }
+
+    .dynamic-checkout {
+        padding-bottom: 2em;
+    }
+
+    .dynamic-checkout__title {
+        color: #71716e;
+        font-size: 1em;
+        font-weight: 500;
+        margin: 0;
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        align-items: flex-end;
+        text-align:center
+    }
+
+.dynamic-checkout__title::before, .dynamic-checkout__title::after {
+    content: '';
+    border: 1px #e2e1dc solid;
+    border-bottom: 0;
+    height: 0.5em;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1 0 2em;
+    -ms-flex: 1 0 2em;
+    flex:1 0 2em
+}
+
+.dynamic-checkout__title::before {
+    border-right: 0;
+    border-top-left-radius: 5px;
+    margin-right:1em
+}
+
+.dynamic-checkout__title::after {
+    border-left: 0;
+    border-top-right-radius: 5px;
+    margin-left:1em
+}
+
+.dynamic-checkout__content {
+    border: 1px #e2e1dc solid;
+    border-top: 0;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    padding:0.9285714286em 1.4285714286em 1.4285714286em
+}
+
+.dynamic-checkout__skeleton {
+    display:none
+}
+
+.dynamic-checkout__buttons {
+    display:block
+}
+
+.dynamic-checkout--loading .dynamic-checkout__skeleton {
+    display:block
+}
+
+.dynamic-checkout--loading .dynamic-checkout__skeleton .placeholder-line {
+    height:3.8571428571em
+}
+
+@media (min-width: 750px) {
+    .dynamic-checkout--loading .dynamic-checkout__skeleton {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: center;
+        -webkit-justify-content: center;
+        -ms-flex-pack: center;
+        justify-content:center
+    }
+
+    .dynamic-checkout--loading .dynamic-checkout__skeleton .placeholder-line {
+        max-width: 18.7142857143em;
+        height: 3em;
+        -webkit-box-flex: 1;
+        -webkit-flex: 1 1 auto;
+        -ms-flex: 1 1 auto;
+        flex:1 1 auto
+    }
+
+    .dynamic-checkout--loading .dynamic-checkout__skeleton .placeholder-line + .placeholder-line {
+        margin-top: 0;
+        margin-left:0.5714285714em
+    }
+}
+
+.dynamic-checkout--loading .dynamic-checkout__buttons {
+    display:none
+}
+
+
