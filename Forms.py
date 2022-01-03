@@ -26,3 +26,8 @@ class CreateAdminForm(Form):
     password = StringField('Password', [validators.Length(min=1, max=150), validators.DataRequired()])
     employee_id = StringField('Employee ID', [validators.Length(min=1, max=150), validators.DataRequired()])
 
+
+class CreatePaymentForm(Form):
+    first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()])
+    last_name = StringField('Last Name', [validators.Length(min=1, max=150), validators.DataRequired()])
+    email = EmailField('Email', [validators.Email(), validators.DataRequired()])
