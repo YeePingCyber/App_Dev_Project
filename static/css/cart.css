@@ -8,6 +8,10 @@
     /* --------------------------------------------------------------------------
         1. cart-header
     -------------------------------------------------------------------------- */
+    .content {
+        overflow: hidden;
+    }
+
     .wrap {
         display: block;
         margin: 0 auto;
@@ -155,6 +159,20 @@
         vertical-align: middle;
     }
 
+    .hehe {
+        padding-bottom: 4rem;
+    }
+
+    .main__footer {
+        padding: 1em 0;
+        border-top: 1px solid #e2e1dc;
+    }
+
+    .policy-list li {
+        list-style: none;
+        font-size: 12px;
+    }
+
     /* --------------------------------------------------------------------------
         2. cart-items
     -------------------------------------------------------------------------- */
@@ -164,6 +182,68 @@
         background-position: left top;
         float: right;
         padding-top: 4rem;
+        position: relative;
+        background:#eeece3
+    }
+
+    @media (min-width: 1000px) {
+        .cart-details {
+            width: 38%;
+            padding-left: 4%;
+            background-position: left top;
+        }
+    }
+    
+    .cart-details::after {
+        content: "";
+        display: block;
+        width: 300%;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        background: #eeece3;
+        z-index: -1;
+    }
+    
+    @media (min-width: 1000px) {
+        .cart-details::after {
+            left: 0;
+            box-shadow: 1px 0 0 #d6d4cc inset;
+        }
+    }
+
+    .product {
+        padding-bottom: 1.5em;
+        font-size: 14px;
+    }
+
+    .discount {
+        border-top: 1px solid rgba(167,165,159,0.34);
+        border-bottom: 1px solid rgba(167,165,159,0.34);
+        padding-top: 1.5em;
+        padding-bottom: 1.5em;
+    }
+
+    .len {
+        width: 318px;
+    }
+
+    .discount button {
+        background: #bebdb6;
+        color: white;
+        width: 88px;
+        height: 46px;
+        margin-left: 0.8571428571em;
+    }
+
+    .shipping {
+        font-size: 14px;
+    }
+
+    .subtotal, .total  {
+        border-top: 1px solid rgba(167,165,159,0.34);
+        padding-top: 1.5em;
+        font-size: 14px;
     }
 
 

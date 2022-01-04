@@ -12,7 +12,7 @@
 
     <body>
         {% from "includes/formHelper.html" import render_field %}
-        <div class="container wrap">
+        <div class="container wrap content">
             <div class="cart-header">
                 <a class="cart-brand" href="/">Tom Patterson</a>
                 <nav aria-label="breadcrumb">
@@ -35,7 +35,7 @@
                     </div>
                 </div>
 
-                <form method="POST" action="">
+                <form class="hehe" method="POST" action="">
                     <div class="info">
                         <div class="d-flex justify-content-between align-items-center">
                             <h2 class="section__title" tabindex="-1">Contact information</h2>
@@ -73,30 +73,45 @@
                         </div>
                     </div>
                 </form>
+
+                <footer class="main__footer">
+                    <ul class="policy-list d-flex justify-content-between align-items-center">
+                        <li class="policy-list__item "><a href="#">Refund policy</a></li>
+                        <li class="policy-list__item "><a href="#">Shipping policy</a></li>
+                        <li class="policy-list__item "><a href="#">Privacy policy</a></li>
+                        <li class="policy-list__item "><a href="#">Terms of service</a></li>
+                    </ul>
+                </footer>
             </div>
 
             <div class="cart-details">
-                <div class="order-summary__section__content">
-                    <table class="product-table">
-                        <tbody>
-                            <tr class="product">
-                                <td class="product__image">
-                                    <div class="product-thumbnail">
-                                        <div class="product-thumbnail__wrapper"><img alt="Black" class="product-thumbnail__image" src="../../static/images/1-urth-arkose-20l-backpack-grey_1000x@2x.png" width="64">
-                                    </div>
-                                    <span class="product-thumbnail__quantity">1</span>
-                                    </div>
-                                </td>
+                <div class=" product d-flex justify-content-between align-items-center">
+                    <img class="product-thumbnail__image" src="../../static/images/1-urth-arkose-20l-backpack-grey_1000x@2x.png" width="64" height="64">
+                    <div class="product__description">
+                        <span class="product__description__name">Arkose 20L Modular Backpack</span>
+                        <span class="product__description__variant">Black</span>
+                    </div>
+                    <p class="product__price"><span class="order-summary__emphasis">€142.95</span></p>
+                </div>
 
-                                <th class="product__description" scope="row">
-                                    <span class="product__description__name order-summary__emphasis">Arkose 20L Modular Backpack</span>
-                                    <span class="product__description__variant order-summary__small-text">Black</span>
-                                </th>
+                <div class="discount d-flex align-items-center">
+                    {{  render_field(form.discount, class="field__input len")  }}
+                    <button type="button" class="btn">Apply</button>
+                </div>
 
-                                <td class="product__price"><span class="order-summary__emphasis skeleton-while-loading">€142.95</span> </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="subtotal d-flex justify-content-between align-items-center">
+                    <p>Subtotal</p>
+                    <p>$143.95</p>
+                </div>
+
+                <div class="shipping d-flex justify-content-between align-items-center">
+                    <p>Shipping</p>
+                    <p>Calculated at next step</p>
+                </div>
+
+                <div class="total d-flex justify-content-between align-items-center">
+                    <p>Total</p>
+                    <p>$143.95</p>
                 </div>
             </div>
         </div>
