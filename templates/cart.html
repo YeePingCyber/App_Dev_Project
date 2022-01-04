@@ -4,6 +4,7 @@
 {% block css %}
     <link rel="stylesheet" type="text/css" href="../static/css/base.css">
     <link rel="stylesheet" type="text/css" href="../static/css/login.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/cart.css">
 {% endblock %}
 
 {% block bodyContent %}
@@ -13,11 +14,28 @@
         }
     </style>
 
-    <div class="container mx_auto" style="width: 200px; height: 43.6vh; text-align: center; position: relative; top: 50%;">
-        <div>
-            <p>Empty</p>
-            <a class="btn btn-outline-primary" href="/" role="button">Return to Shop</a>
-            <a class="btn btn-outline-primary" href="/checkout" role="button">Checkout</a>
+    <div class="container">
+        <div class="d-flex justify-content-center cart-title"><h2>Your Cart</h2></div>
+
+        <div class="product-list">
+            <div class="product">
+                <div class="d-flex justify-content-center">
+                    <div class="product-image"><a href=""><img src="../../static/images/1-urth-arkose-20l-backpack-grey_1000x@2x.png" width="201" height="256"/></a></div>
+                    <div class="product-details">
+                        <p class="product-details-title">Arkose 20L Modular Backpack</p>
+                        <p class="product-details-option">Black</p>
+                        <button type="button" class="btn btn-primary">Remove</button>
+                    </div>
+                    <input type="number" class="o-input o-quantity-selector__input-field " value="1" data-quantity-selector-field="" name="">
+                    <div class="price">
+                        <p class="c-cart-product__price">Price:<span>€143,95</span></p>
+                        <p class="c-cart-product__price">Total:<span>€143,95</span></p>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <a class="btn btn-outline-primary" href="/" role="button">Return to Shop</a>
+        <a class="btn btn-outline-primary" href="/checkout" role="button">Checkout</a>
     </div>    
 {% endblock %}
