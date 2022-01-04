@@ -8,7 +8,19 @@
 
 {% block bodyContent %}
 {% from "includes/formHelper.html" import render_field %}
-    <div>Hello
-
+<div class="container-login">
+    <div class="row">
+        <div class="col">
+            <h1>Log in</h1>
+            <br>
+            <form method="POST" class="form-login">
+                <input type="email" placeholder="Email Address" id="email">
+            </form>
+            <br>
+        </div>
+        <div class="col">
+            Hello world
+        </div>
+    </div>
     </div>
 {% endblock %}
