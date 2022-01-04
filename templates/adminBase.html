@@ -1,21 +1,25 @@
 {% extends "base.html" %}
+    <!-- CSS (Admin) -->
+    {% block css %}
+        <link rel="stylesheet" type="text/css" href="../static/css/adminBase.css">
+    {% endblock %}
 
-<!-- CSS (Admin) -->
-{% block css %}
-    <link rel="stylesheet" type="text/css" href="../static/css/adminBase.css">
-{% endblock %}
+    <!-- JS (Admin) -->
+    {% block js %}
 
-<!-- JS (Admin) -->
-{% block js %}
+    {% endblock %}
 
-{% endblock %}
+    <!-- Navbar (Admin)-->
+    {% block navbar %}
+        {% include "includes/adminNavbar.html" %}
+    {% endblock %}
 
-<!-- Navbar (Admin)-->
-{% block navbar %}
-    {% include "includes/adminNavbar.html" %}
-{% endblock %}
+    {% block title %}Tom Patterson - (Admin) Auction{% endblock %}
 
-<!-- Footer (Admin)-->
-{% block footer %}
-    {% include "includes/adminFooter.html" %}
-{% endblock %}
+
+    {% block bodyContent %}{% endblock %}
+
+    <!-- Footer (Admin)-->
+    {% block footer %}
+        {% include "includes/adminFooter.html" %}
+    {% endblock %}
