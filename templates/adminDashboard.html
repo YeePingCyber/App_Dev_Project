@@ -1,10 +1,12 @@
 {% extends "adminBase.html" %}
 {% block title %}Tom Patterson - (Admin){% endblock %}
 
-{% block js %}<script src="../static/js/demo.js"></script>{% endblock %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="static/css/adminDashboard.css"/>
+{% endblock %}
 
 {% block bodyContent %}
-    <div class="container">
+    <div class="wrapp">
         <div class="d-flex justify-content-between">
             <h2>Sales</h2>
             <div class="btn-group">
@@ -19,46 +21,184 @@
             </div>
         </div>
 
-        <canvas id="myChart" width="400" height="400"></canvas>
-<script>
-const ctx = document.getElementById('myChart');
-const myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-        datasets: [{
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true
-            }
-        }
-    }
-});
-</script>
+        <div class="adminDashboard">
+            <div class="">
+                <div class="row justify-content-center">
+                    <div class="col-lg-4 col-md-12">
+                        <div class="row">
+                            <div class="col-lg-6 card" style="background: linear-gradient(to right, rgba(243,144,52,1) , rgba(255,39,39,1));">
+                                <h3 class="title">Auction</h3>
+                                <p class="value">56</p>
+                                <p class="remarks">Quantity</p>
+                            </div>
+                            <div class="col-lg-6 card" style="background: linear-gradient(to right, rgba(0,210,84,1), rgba(0,179,235,1));">
+                                <h3 class="title">Auction</h3>
+                                <p class="value">56</p>
+                                <p class="remarks">Quantity</p>
+                            </div>
+                        </div>
 
+                        <div class="row">
+                            <div class="col-lg-6 card">
+                                <h3 class="title">Out of Stock</h3>
+                                <p class="value">56</p>
+                                <p class="remarks">Quantity</p>
+                            </div>
+                            <div class="col-lg-6 card">
+                                <h3 class="title">All Products</h3>
+                                <p class="value">56</p>
+                                <p class="remarks">Quantity</p>
+                            </div>
+                        </div>
+                    </div>
 
+                    <div class="col-lg-8 col-md-6 card">
+                        <canvas id="myChart"></canvas>
+                        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                        <script>
+                              // Area Chart Example
+                            var ctx = document.getElementById("myChart");
+                            var myLineChart = new Chart(ctx, {
+                              type: 'line',
+                              data: {
+                                labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                                datasets: [{
+                                  label: "Earnings",
+                                  lineTension: 0.3,
+                                  backgroundColor: "rgba(78, 115, 223, 0.05)",
+                                  borderColor: "rgba(78, 115, 223, 1)",
+                                  pointRadius: 3,
+                                  pointBackgroundColor: "rgba(78, 115, 223, 1)",
+                                  pointBorderColor: "rgba(78, 115, 223, 1)",
+                                  pointHoverRadius: 3,
+                                  pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+                                  pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+                                  pointHitRadius: 10,
+                                  pointBorderWidth: 2,
+                                  data: [0, 10000, 5000, 15000, 10000, 20000, 15000, 25000, 20000, 30000, 25000, 40000],
+                                }],
+                              },
+                              options: {
+                                maintainAspectRatio: false,
+                                layout: {
+                                  padding: {
+                                    left: 10,
+                                    right: 25,
+                                    top: 25,
+                                    bottom: 0
+                                  }
+                                },
+                                scales: {
+                                  xAxes: [{
+                                    time: {
+                                      unit: 'date'
+                                    },
+                                    gridLines: {
+                                      display: false,
+                                      drawBorder: false
+                                    },
+                                    ticks: {
+                                      maxTicksLimit: 7
+                                    }
+                                  }],
+                                  yAxes: [{
+                                    ticks: {
+                                      maxTicksLimit: 5,
+                                      padding: 10,
+                                      // Include a dollar sign in the ticks
+                                      callback: function(value, index, values) {
+                                        return '$' + number_format(value);
+                                      }
+                                    },
+                                    gridLines: {
+                                      color: "rgb(234, 236, 244)",
+                                      zeroLineColor: "rgb(234, 236, 244)",
+                                      drawBorder: false,
+                                      borderDash: [2],
+                                      zeroLineBorderDash: [2]
+                                    }
+                                  }],
+                                },
+                                legend: {
+                                  display: false
+                                },
+                                tooltips: {
+                                  backgroundColor: "rgb(255,255,255)",
+                                  bodyFontColor: "#858796",
+                                  titleMarginBottom: 10,
+                                  titleFontColor: '#6e707e',
+                                  titleFontSize: 14,
+                                  borderColor: '#dddfeb',
+                                  borderWidth: 1,
+                                  xPadding: 15,
+                                  yPadding: 15,
+                                  displayColors: false,
+                                  intersect: false,
+                                  mode: 'index',
+                                  caretPadding: 10,
+                                  callbacks: {
+                                    label: function(tooltipItem, chart) {
+                                      var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+                                      return datasetLabel + ': $' + number_format(tooltipItem.yLabel);
+                                    }
+                                  }
+                                }
+                              }
+                            });
+                        </script>
+            
+                        <script>
+                              const myChart = new Chart(
+                                document.getElementById('myChart'),
+                                config
+                              );
+                        </script>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container">
+                  <div class="row justify-content-center">
+                        <div class="col-lg-4 col-md-12 card">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">First</th>
+                                        <th scope="col">Last</th>
+                                        <th scope="col">Handle</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <th scope="row">1</th>
+                                        <td>Mark</td>
+                                        <td>Otto</td>
+                                        <td>@mdo</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">2</th>
+                                        <td>Jacob</td>
+                                        <td>Thornton</td>
+                                        <td>@fat</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">3</th>
+                                        <td colspan="2">Larry the Bird</td>
+                                        <td>@twitter</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-lg-4 col-md-6 card">
+                            hi
+                        </div>
+                        <div class="col-lg-4 col-md-6 card">
+                            hi
+                        </div>
+                  </div>
+            </div>
+        </div>
     </div>
 
 {% endblock %}

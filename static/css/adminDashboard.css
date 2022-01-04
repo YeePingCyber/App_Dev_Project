@@ -1,0 +1,21 @@
+/* NYP Y1S2 2021 - 2022 APP DEVELOPMENT PROJECT
+
+   Structure of adminDashboard.css
+   |
+   ├─ 1. global
+
+
+    /* --------------------------------------------------------------------------
+        1. global
+    -------------------------------------------------------------------------- */
+    .wrapp {
+        display: block;
+        margin: 0 auto;
+        max-width: 90%;
+    }
+
+    .card {
+        background-color: white;
+        border-radius: 5px;
+        padding: 20px;
+    }
