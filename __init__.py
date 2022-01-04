@@ -17,6 +17,36 @@ def login():
     return render_template("loginpage.html")
 
 
+@app.route("/admin")
+def admin():
+    return render_template("adminDashboard.html")
+
+
+@app.route("/adminAuction")
+def adminAuction():
+    return render_template("adminAuction.html")
+
+
+@app.route("/adminSupplier")
+def adminSupplier():
+    return render_template("adminSupplier.html")
+
+
+@app.route("/adminOrders")
+def adminOrders():
+    return render_template("adminOrders.html")
+
+
+@app.route("/adminUser")
+def adminUser():
+    return render_template("adminUser.html")
+
+
+@app.route("/adminProductManagement")
+def adminProductManagement():
+    return render_template("adminProductManagement.html")
+
+
 @app.route("/cart")
 def cart():
     return render_template("cart.html")

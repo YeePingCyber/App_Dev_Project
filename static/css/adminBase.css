@@ -35,14 +35,6 @@
     /* --------------------------------------------------------------------------
         2. navbar
     -------------------------------------------------------------------------- */
-    .tom-navv {
-        background-repeat: no-repeat;
-        background-size: cover;
-        z-index: 100;
-        /*position: absolute;*/
-        width: 100%;
-    }
-
     .nav__left {
         position: relative;
         width: 100%;
@@ -102,21 +94,95 @@
         align-items:baseline
     }
 
-    .tom-footer__store-selector-select .o-select {
-        font-size:.75rem
-    }
-
     .tom-footer__store-selector-title {
         font-size: .75rem;
         text-transform:uppercase
-    }
-
-    .tom-footer__store-selector-title.is-link {
-        display:none
     }
 
     .tom-footer__copyright {
         margin: 0;
         opacity: .3;
         font-size:.75rem
+    }
+
+    @media only screen and (min-width: 750px) {
+        .tom-footer__founders {
+            order: 3;
+            margin-bottom:0
+        }
+
+        .tom-footer__copyright.is-mobile {
+            display:none
+        }
+
+        .tom-footer__store-selector-select {
+            margin-left:1.25rem
+        }
+
+        .tom-footer__lower-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding:1rem 1.75rem
+        }
+    }
+
+    @media only screen and (min-width: 1100px) {
+        .tom-footer__founders.is-small {
+            font-size:.6875rem
+        }
+
+        .tom-footer__lower-inner {
+            padding:1.25rem 7.32%
+        }
+    }
+
+    @media only screen and (min-width: 1350px) {
+        .tom-footer__lower-inner {
+            padding:1.625rem 7.32%
+        }
+
+        .tom-footer__store-selector {
+            margin-left:3rem
+        }
+
+        .tom-footer__store-selector-title {
+            font-size: .75rem;
+            margin-right: 1.75rem;
+            text-decoration:none
+        }
+
+        .tom-footer__store-selector-title.is-link {
+            display:block
+        }
+
+        .tom-footer__store-selector a:hover, .tom-footer__store-selector-title.is-active {
+            text-decoration:underline
+        }
+
+        .tom-footer__founders {
+            margin:0 0 0 auto
+        }
+    }
+
+    @media only screen and (min-width: 1650px) {
+        .tom-footer__lower-inner {
+            padding: 2rem 10%;
+            max-width: 125rem;
+            margin:0 auto
+        }
+
+        .tom-footer__store-selector {
+            margin-left:4rem
+        }
+
+        .tom-footer__founders.is-small, .tom-footer__store-selector-title {
+            font-size:.75rem
+        }
+    }
+
+    @media only screen and (min-width: 2000px) {
+        .tom-footer__lower-inner {
+            padding:2.25rem 12.5rem
+        }
     }
