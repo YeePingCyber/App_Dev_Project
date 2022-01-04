@@ -17,18 +17,18 @@ def login():
     return render_template("loginpage.html")
 
 
-@app.route("/cart", methods=['GET', 'POST'])
+@app.route("/cart")
 def cart():
-    userCart()
-    if userCart.count == 0:
-        return render_template("cart_empty.html")
+    return render_template("cart.html")
 
-    else:
-        create_payment_form = CreatePaymentForm(request.form)
-        if request.method == 'POST' and create_payment_form.validate():
-            pass
 
-        return render_template("cart.html", form=create_payment_form)
+@app.route("/checkout", methods=['GET', 'POST'])
+def checkout():
+    create_payment_form = CreatePaymentForm(request.form)
+    # if request.method == 'POST' and create_payment_form.validate():
+    #     pass
+
+    return render_template("checkout.html", form=create_payment_form)
 
 
 @app.route("/mainshop")
