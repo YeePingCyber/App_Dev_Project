@@ -9,7 +9,6 @@ class User:
         self.__password = self.hashing_pwsd(password)
 
 # Ill try to do epoch timing for time of creation later on - Dylan
-# Hashing and password security we do later on - Dylan
 
     def set_first_name(self, fname):
         self.__firstname = fname

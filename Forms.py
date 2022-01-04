@@ -3,8 +3,8 @@ from wtforms.fields import EmailField, DateField, FloatField, IntegerField
 
 
 class CreateCustomerForm(Form):
-    first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()])
-    last_name = StringField('Last Name', [validators.Length(min=1, max=150), validators.DataRequired()])
+    first_name = StringField('First-Name', [validators.Length(min=1, max=150), validators.DataRequired()])
+    last_name = StringField('Last-Name', [validators.Length(min=1, max=150), validators.DataRequired()])
     email = EmailField('Email', [validators.Email(), validators.DataRequired()])
     birthdate = DateField('birthdate', format='%Y-%m-%d')
     password = StringField('Password', [validators.Length(min=1, max=150), validators.DataRequired()])
