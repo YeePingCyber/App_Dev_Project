@@ -25,7 +25,7 @@
                     {{ render_field(form.login_password, class="form-login-field") }}
                </div>
                <br><br><br>
-                <input type="submit" value="Log in" name="submit-button">
+               <button type="submit" name="submit_button" value="Log in" class="submit-login">Log in</button>
            </form>
             <!--   later change ~szeyan   -->
                 <a class="btn btn-warning" href="/admin" role="button">Admin</a>
@@ -39,6 +39,12 @@
                 <h1>Register</h1>
                 <br><br>
 
+                <div class="form-login-field-date">
+                    {{ render_field(form.birthdate, class="form-login-field-date") }}
+                </div>
+
+                <br><br><br>
+
                 <div class="form-login-field">
                     {{ render_field(form.first_name, class="form-login-field") }}
                 </div>
@@ -48,12 +54,6 @@
                 <div class="form-login-field">
                     {{ render_field(form.last_name, class="form-login-field") }}
                 </div>
-
-                <br><br><br>
-
-                <div class="form-login-field-date">
-                    {{ render_field(form.birthdate, class="form-login-field-date") }}
-               </div>
 
                 <br><br><br>
 
@@ -74,7 +74,7 @@
                 </div>
 
                 <br><br><br>
-                <input type="submit" value="Create An Account" name="submit-button">
+                <button type="submit" name="submit_button" value="Create An Account" class="submit-login">Create An Account</button>
             </form>
         </div>
 

@@ -4,7 +4,7 @@ import shelve
 from userCart import UserCart
 from Customer import Customer
 from User import User
-from Forms import CreateAdminForm, CreateCustomerForm, CreatePaymentForm, CreateProductForm
+from Forms import CreateAdminForm, CreateLoginForm,CreateCustomerForm, CreatePaymentForm, CreateProductForm
 
 # create product function
 from createProduct import load_product
@@ -22,31 +22,35 @@ def home():
 
 
 @app.route("/login", methods=['GET', 'POST'])
-def create_customer():
-    create_customer_form = CreateCustomerForm(request.form)
-    if request.method == 'POST' and create_customer_form.validate():
-        if create_customer_form.password.data == create_customer_form.confirm_password.data:
-            customer_dict = {}
-            db = shelve.open('user.db', 'c')
-            try:
-                customer_dict = db['Users']
-            except:
-                print("Error in retrieving Users from user.db")
+def create_customer_log_in():
 
-            new_customer = Customer(create_customer_form.first_name.data, create_customer_form.last_name.data,
-                                    create_customer_form.birthdate.data, create_customer_form.email.data,
-                                    create_customer_form.password.data)
-            customer_dict[new_customer.get_customer_id()] = new_customer
-            db['Users'] = customer_dict
-            for i in customer_dict:
-                print(customer_dict[i])
-            db.close()
-            return redirect(url_for('home'))
-        else:
-            print("Password does not match!")
-            # Ill fix this to a popup ltr -Dylan
-    print("hi")
-    return render_template("loginpage.html", form=create_customer_form)
+    if request.form['submit_button'] == "Create An Account":
+        create_customer_form = CreateCustomerForm(request.form)
+        if request.method == 'POST' and create_customer_form.validate():
+            if create_customer_form.register_password.data == create_customer_form.confirm_password.data:
+                customer_dict = {}
+                db = shelve.open('user.db', 'c')
+                try:
+                    customer_dict = db['Users']
+                except:
+                    print("Error in retrieving Users from user.db")
+
+                new_customer = Customer(create_customer_form.first_name.data, create_customer_form.last_name.data,
+                                        create_customer_form.birthdate.data, create_customer_form.email.data,
+                                        create_customer_form.register_password.data)
+                customer_dict[new_customer.get_customer_id()] = new_customer
+                db['Users'] = customer_dict
+                for i in customer_dict:
+                    print(customer_dict[i])
+                db.close()
+                return redirect(url_for('home'))
+            else:
+                print("Password does not match!")
+                # Ill fix this to a popup ltr -Dylan
+        print("hi")
+        return render_template("loginpage.html", form=create_customer_form)
+
+    return render_template("loginpage.html")
 
 
 @app.route("/cart")
