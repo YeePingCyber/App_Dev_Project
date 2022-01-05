@@ -27,11 +27,6 @@ def adminAuction():
     return render_template("adminAuction.html")
 
 
-@app.route("/adminSupplier")
-def adminSupplier():
-    return render_template("adminSupplier.html")
-
-
 @app.route("/adminOrders")
 def adminOrders():
     return render_template("adminOrders.html")
