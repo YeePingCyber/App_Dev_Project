@@ -7,194 +7,222 @@
 
 {% block bodyContent %}
     <div class="wrapp">
-        <div class="d-flex justify-content-between">
-            <h2>Sales</h2>
-            <div class="btn-group">
-                <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
-                <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Separated link</a>
+        <div class="admin-title">
+            <div class="d-flex justify-content-between">
+                <h2>Sales</h2>
+                <div class="dropdown">
+                      <button class="btn btn-warning dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Filter
+                      </button>
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                      </div>
                 </div>
             </div>
         </div>
 
         <div class="adminDashboard">
-            <div class="">
-                <div class="row justify-content-center">
-                    <div class="col-lg-4 col-md-12">
-                        <div class="row">
-                            <div class="col-lg-6 card" style="background: linear-gradient(to right, rgba(243,144,52,1) , rgba(255,39,39,1));">
-                                <h3 class="title">Auction</h3>
-                                <p class="value">56</p>
-                                <p class="remarks">Quantity</p>
-                            </div>
-                            <div class="col-lg-6 card" style="background: linear-gradient(to right, rgba(0,210,84,1), rgba(0,179,235,1));">
-                                <h3 class="title">Auction</h3>
-                                <p class="value">56</p>
-                                <p class="remarks">Quantity</p>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-lg-6 card">
-                                <h3 class="title">Out of Stock</h3>
-                                <p class="value">56</p>
-                                <p class="remarks">Quantity</p>
-                            </div>
-                            <div class="col-lg-6 card">
-                                <h3 class="title">All Products</h3>
-                                <p class="value">56</p>
-                                <p class="remarks">Quantity</p>
-                            </div>
+            <div class="p-1">
+                <div class="row">
+                    <div class="col-lg-6 col-md-12">
+                        <div class="">
+                              <div class="row g-0">
+                                    <div class="col-6">
+                                        <div class="p-1">
+                                            <div class="cardd white" style="background: linear-gradient(to right, rgba(243,144,52,1) , rgba(255,39,39,1));">
+                                                <h3 class="title">Auction</h3>
+                                                <p class="value">56</p>
+                                                <p class="remarks">Quantity</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="p-1">
+                                            <div class="cardd white" style="background: linear-gradient(to right, rgba(0,210,84,1), rgba(0,179,235,1));">
+                                                <h3 class="title">Trees Planted</h3>
+                                                <p class="value">240381</p>
+                                                <p class="remarks">Quantity</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="p-1">
+                                            <div class="cardd">
+                                                <h3 class="title">Out of stock products</h3>
+                                                <p class="value">89.00</p>
+                                                <p class="remarks">Quantity</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="p-1">
+                                            <div class="cardd">
+                                                <h3 class="title">All Products</h3>
+                                                <p class="value">267.00</p>
+                                                <p class="remarks">Quantity</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                              </div>
                         </div>
                     </div>
 
-                    <div class="col-lg-8 col-md-6 card">
-                        <canvas id="myChart"></canvas>
+                    <div class="col-lg-6 col-md-12">
+                        <canvas id="myChart" class="cardd"></canvas>
                         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                        <script>
-                              // Area Chart Example
-                            var ctx = document.getElementById("myChart");
-                            var myLineChart = new Chart(ctx, {
-                              type: 'line',
-                              data: {
-                                labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-                                datasets: [{
-                                  label: "Earnings",
-                                  lineTension: 0.3,
-                                  backgroundColor: "rgba(78, 115, 223, 0.05)",
-                                  borderColor: "rgba(78, 115, 223, 1)",
-                                  pointRadius: 3,
-                                  pointBackgroundColor: "rgba(78, 115, 223, 1)",
-                                  pointBorderColor: "rgba(78, 115, 223, 1)",
-                                  pointHoverRadius: 3,
-                                  pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
-                                  pointHoverBorderColor: "rgba(78, 115, 223, 1)",
-                                  pointHitRadius: 10,
-                                  pointBorderWidth: 2,
-                                  data: [0, 10000, 5000, 15000, 10000, 20000, 15000, 25000, 20000, 30000, 25000, 40000],
-                                }],
-                              },
-                              options: {
-                                maintainAspectRatio: false,
-                                layout: {
-                                  padding: {
-                                    left: 10,
-                                    right: 25,
-                                    top: 25,
-                                    bottom: 0
-                                  }
-                                },
-                                scales: {
-                                  xAxes: [{
-                                    time: {
-                                      unit: 'date'
-                                    },
-                                    gridLines: {
-                                      display: false,
-                                      drawBorder: false
-                                    },
-                                    ticks: {
-                                      maxTicksLimit: 7
-                                    }
-                                  }],
-                                  yAxes: [{
-                                    ticks: {
-                                      maxTicksLimit: 5,
-                                      padding: 10,
-                                      // Include a dollar sign in the ticks
-                                      callback: function(value, index, values) {
-                                        return '$' + number_format(value);
-                                      }
-                                    },
-                                    gridLines: {
-                                      color: "rgb(234, 236, 244)",
-                                      zeroLineColor: "rgb(234, 236, 244)",
-                                      drawBorder: false,
-                                      borderDash: [2],
-                                      zeroLineBorderDash: [2]
-                                    }
-                                  }],
-                                },
-                                legend: {
-                                  display: false
-                                },
-                                tooltips: {
-                                  backgroundColor: "rgb(255,255,255)",
-                                  bodyFontColor: "#858796",
-                                  titleMarginBottom: 10,
-                                  titleFontColor: '#6e707e',
-                                  titleFontSize: 14,
-                                  borderColor: '#dddfeb',
-                                  borderWidth: 1,
-                                  xPadding: 15,
-                                  yPadding: 15,
-                                  displayColors: false,
-                                  intersect: false,
-                                  mode: 'index',
-                                  caretPadding: 10,
-                                  callbacks: {
-                                    label: function(tooltipItem, chart) {
-                                      var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-                                      return datasetLabel + ': $' + number_format(tooltipItem.yLabel);
-                                    }
-                                  }
-                                }
-                              }
-                            });
-                        </script>
-            
-                        <script>
-                              const myChart = new Chart(
-                                document.getElementById('myChart'),
-                                config
-                              );
-                        </script>
+                        <script src="../static/js/areachart.js"></script>
                     </div>
                 </div>
             </div>
 
-            <div class="container">
-                  <div class="row justify-content-center">
-                        <div class="col-lg-4 col-md-12 card">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">First</th>
-                                        <th scope="col">Last</th>
-                                        <th scope="col">Handle</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Mark</td>
-                                        <td>Otto</td>
-                                        <td>@mdo</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">2</th>
-                                        <td>Jacob</td>
-                                        <td>Thornton</td>
-                                        <td>@fat</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">3</th>
-                                        <td colspan="2">Larry the Bird</td>
-                                        <td>@twitter</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+            <div class="p-1">
+                  <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="p-1">
+                                <div class="cardd">
+                                    <h3 class="title">Latest Sales Orders</h3>
+                                    <nav class="navbar navbar-light bg-light">
+                                        <form class="form-inline">
+                                              <input id="myInput" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                                        </form>
+                                    </nav>
+                                    <script>
+                                        $(document).ready(function(){
+                                              $("#myInput").on("keyup", function() {
+                                                    var value = $(this).val().toLowerCase();
+                                                    $("#myTable tr").filter(function() {
+                                                      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                                                    });
+                                              });
+                                        });
+                                    </script>
+                                    <table class="table table-hover" id="dtBasicExample">
+                                          <thead>
+                                              <tr>
+                                                  <th scope="col">Order ID</th>
+                                                  <th scope="col">Customer</th>
+                                                  <th scope="col">Fufillment status</th>
+                                                  <th scope="col">Payment status</th>
+                                                  <th scope="col">Total</th>
+                                              </tr>
+                                          </thead>
+                                        <tbody id="myTable">
+                                              <tr>
+                                                  <th scope="row">1</th>
+                                                  <td>Mark</td>
+                                                  <td>Otto</td>
+                                                  <td>@mdo</td>
+                                                  <td>$6000</td>
+                                              </tr>
+                                              <tr>
+                                                  <th scope="row">2</th>
+                                                  <td>Jacob</td>
+                                                  <td>Thornton</td>
+                                                  <td>@fat</td>
+                                                  <td>$6000</td>
+                                              </tr>
+                                              <tr>
+                                                  <th scope="row">3</th>
+                                                  <td colspan="2">Larry the Bird</td>
+                                                  <td>@twitter</td>
+                                                  <td>$6000</td>
+                                              </tr>
+                                              <tr>
+                                                  <th scope="row">4</th>
+                                                  <td colspan="2">Larry the Bird</td>
+                                                  <td>@twitter</td>
+                                                  <td>$6000</td>
+                                              </tr>
+                                              <tr>
+                                                  <th scope="row">5</th>
+                                                  <td colspan="2">Larry the Bird</td>
+                                                  <td>@twitter</td>
+                                                  <td>$6000</td>
+                                              </tr>
+                                          </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-lg-4 col-md-6 card">
-                            hi
+                        <div class="col-lg-3 col-md-6">
+                            <div class="p-1">
+                                <div class="cardd">
+                                    <h3 class="title">Purchase Orders</h3>
+                                    <table class="table table-hover">
+                                        <tr>
+                                            <td><p class="value">Received orderes</p></td>
+                                            <td><p class="remarks">$20</p></td>
+                                        </tr>
+                                        <tr>
+                                            <td><p class="value">Total Cost</p></td>
+                                            <td><p class="remarks">$4600</p></td>
+                                        </tr>
+                                    </table>
+
+                                    <table class="table table-hover">
+                                        <thead>
+                                              <tr>
+                                                  <th scope="col">Order ID</th>
+                                                  <th scope="col">Customer</th>
+                                              </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><p class="value">Received orderes</p></td>
+                                                <td><p class="remarks">$20</p></td>
+                                            </tr>
+                                            <tr>
+                                                <td><p class="value">Total Cost</p></td>
+                                                <td><p class="remarks">$4600</p></td>
+                                            </tr>
+                                            <tr>
+                                                <td><p class="value">Total Cost</p></td>
+                                                <td><p class="remarks">$4600</p></td>
+                                            </tr>
+                                        </tbody>
+
+                                    </table>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-lg-4 col-md-6 card">
-                            hi
+                        <div class="col-lg-3 col-md-6">
+                            <div class="p-1">
+                                <div class="cardd">
+                                    <h3 class="title">Top Selling Products</h3>
+                                    <div class="row g-0">
+                                        <div class="col-6">
+                                            <div class="p-1">
+                                                <div class="cardd">
+                                                    <img src="../static/images/1-Urth-Norite-24L-Backpack-Combo-Grey-1614664835017_300x@2x.png" width="84"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="p-1">
+                                                <div class="cardd">
+                                                    <img src="../static/images/1-Urth-Norite-24L-Backpack-Combo-Grey-1614664835017_300x@2x.png" width="84"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="p-1">
+                                                <div class="cardd">
+                                                    <img src="../static/images/1-Urth-Norite-24L-Backpack-Combo-Grey-1614664835017_300x@2x.png" width="84"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="p-1">
+                                                <div class="cardd">
+                                                    <img src="../static/images/1-Urth-Norite-24L-Backpack-Combo-Grey-1614664835017_300x@2x.png" width="84"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                   </div>
             </div>

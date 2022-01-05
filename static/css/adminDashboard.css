@@ -14,8 +14,19 @@
         max-width: 90%;
     }
 
-    .card {
+    .admin-title {
+        padding-bottom: 1.5em;
+        padding-top: 1rem;
+        border-bottom: 1px solid #dbd8d0;
+        margin-bottom: 1.25rem;
+    }
+
+    .cardd {
         background-color: white;
-        border-radius: 5px;
-        padding: 20px;
+        border-radius: 20px;
+        padding: 15px;
+    }
+
+    .white {
+        color: white;
     }
