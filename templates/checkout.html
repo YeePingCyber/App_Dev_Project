@@ -12,7 +12,7 @@
 
     <body>
         {% from "includes/formHelper.html" import render_field %}
-        <div class="container wrap content">
+        <form class="container wrap content">
             <div class="cart-header">
                 <a class="cart-brand" href="/">Tom Patterson</a>
                 <nav aria-label="breadcrumb">
@@ -35,7 +35,7 @@
                     </div>
                 </div>
 
-                <form class="hehe" method="POST" action="">
+                <div class="hehe" method="POST" action="">
                     <div class="info">
                         <div class="d-flex justify-content-between align-items-center">
                             <h2 class="section__title" tabindex="-1">Contact information</h2>
@@ -72,7 +72,7 @@
                             <a class="step__footer__previous-link" href="/mainshop"><svg focusable="false" aria-hidden="true" class="icon-svg icon-svg--color-accent icon-svg--size-10 previous-link__icon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><path d="M8 1L7 0 3 4 2 5l1 1 4 4 1-1-4-4"></path></svg><span class="step__footer__previous-link-content">Return to Shop</span></a>
                         </div>
                     </div>
-                </form>
+                </div>
 
                 <footer class="main__footer">
                     <ul class="policy-list d-flex justify-content-between align-items-center">
@@ -106,14 +106,32 @@
 
                 <div class="shipping d-flex justify-content-between align-items-center">
                     <p>Shipping</p>
-                    <p>Calculated at next step</p>
+                    <p>$15</p>
                 </div>
 
                 <div class="total d-flex justify-content-between align-items-center">
                     <p>Total</p>
                     <p>$143.95</p>
                 </div>
+
+                <button class="btn btn-primary b" type="submit">Checkout</button>
+
+                <div class="interactions">
+                    <div class="c-cart-drawer__tree">
+                        <div class="c-cart-drawer__tree-header"><svg viewBox="0 0 15 16" xmlns="http://www.w3.org/2000/svg" class="c-cart-drawer__tree-icon"><path d="M7.69502.070361L7.7117 0l3.6375 7.19094L15 14.4224h-4.9669V16H5.35832v-1.344H0L7.69502.037205V.07036zM7.45957 14.1926V1.50403L.783203 14.1926H7.45957z" fill="#FFF" fill-rule="evenodd"></path></svg>
+                            <p class="c-cart-drawer__tree-title">You will plant <span>20</span> trees with this order</p>
+                        </div>
+                        <p class="c-cart-drawer__tree-message"><a href="/login">Sign up</a> or <a href="/login">log in</a> to track your impact and earn rewards.</p>
+                    </div>
+
+                    <div class="c-cart-drawer__tree">
+                        <div class="c-cart-drawer__tree-header"><svg viewBox="0 0 15 16" xmlns="http://www.w3.org/2000/svg" class="c-cart-drawer__tree-icon"><path d="M7.69502.070361L7.7117 0l3.6375 7.19094L15 14.4224h-4.9669V16H5.35832v-1.344H0L7.69502.037205V.07036zM7.45957 14.1926V1.50403L.783203 14.1926H7.45957z" fill="#FFF" fill-rule="evenodd"></path></svg>
+                            <p class="c-cart-drawer__tree-title">Play a quick game and earn discounts</p>
+                        </div>
+                        <p class="c-cart-drawer__tree-message"><a href="/login">Sign up</a> or <a href="/login">log in</a> to track your impact and earn rewards.</p>
+                    </div>
+                </div>
             </div>
-        </div>
+        </form>
     </body>
 </html>

@@ -5,6 +5,7 @@
     <link rel="stylesheet" type="text/css" href="../static/css/base.css">
     <link rel="stylesheet" type="text/css" href="../static/css/login.css">
 {% endblock %}
+
 {% block bodyContent %}
 {% from "includes/formHelper.html" import render_field %}
 <br>
@@ -13,42 +14,67 @@
     <div class="row">
 
         <div class="col">
-            <form method="POST" class="form-login">
+           <form method="POST" class="form-login">
                 <h1>Log in</h1>
-                <br><br><br><br>
-                <input type="email" placeholder="Email Address" id="login-email">
-                <br><br><br><br>
-                <div>
-                    <input type="password" placeholder="Password" id="login-password">
-                    <br>
-                    <a href="#" class="forget-pw">Forget password</a>
-                </div>
-                <br><br><br>
-                <input type="submit" value="Log in">
-
-                <!--   later change ~szeyan   -->
+                <br><br>
+               <div class="form-login-field">
+                    {{ render_field(form.login_email, class="form-login-field") }}
+               </div>
+               <br><br><br>
+               <div class="form-login-field">
+                    {{ render_field(form.login_password, class="form-login-field") }}
+               </div>
+               <br><br><br>
+                <input type="submit" value="Log in" name="submit-button">
+           </form>
+            <!--   later change ~szeyan   -->
                 <a class="btn btn-warning" href="/admin" role="button">Admin</a>
-            </form>
+
             <br>
             <br>
         </div>
 
         <div class="col">
-            <form method="POST" class="form-login">
+            <form method="POST" class="form-login" action="">
                 <h1>Register</h1>
-                <br><br><br><br>
-                <input type="text" placeholder="First Name" id="first-name" >
-                <input type="text" placeholder="Last Name" id="last-name" >
-                <br><br><br><br>
-                <input type="date" id="birthdate">
-                <br><br><br><br>
-                <input type="email" placeholder="Email Address" id="register-email">
-                <br><br><br><br>
-                <input type="password" placeholder="Password" id="register-password">
-                <br><br><br><br>
-                <input type="password" placeholder="Confirm Password" id="confirm-password">
-                <br><br><br><br>
-                <input type="submit" value="Create An Account">
+                <br><br>
+
+                <div class="form-login-field">
+                    {{ render_field(form.first_name, class="form-login-field") }}
+                </div>
+
+                <br><br><br>
+
+                <div class="form-login-field">
+                    {{ render_field(form.last_name, class="form-login-field") }}
+                </div>
+
+                <br><br><br>
+
+                <div class="form-login-field-date">
+                    {{ render_field(form.birthdate, class="form-login-field-date") }}
+               </div>
+
+                <br><br><br>
+
+                <div class="form-login-field">
+                    {{ render_field(form.email, class="form-login-field") }}
+                </div>
+
+                <br><br><br>
+
+                <div class="form-login-field">
+                    {{ render_field(form.register_password, class="form-login-field") }}
+                </div>
+
+                <br><br><br>
+
+                <div class="form-login-field">
+                    {{ render_field(form.confirm_password, class="form-login-field") }}
+                </div>
+
+                <br><br><br>
+                <input type="submit" value="Create An Account" name="submit-button">
             </form>
         </div>
 
