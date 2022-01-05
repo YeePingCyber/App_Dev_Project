@@ -24,14 +24,14 @@
         </div>
 
         <div class="adminDashboard">
-            <div>
+            <div class="p-1">
                 <div class="row">
                     <div class="col-lg-6 col-md-12">
                         <div class="">
                               <div class="row g-0">
                                     <div class="col-6">
                                         <div class="p-1">
-                                            <div class="card white" style="background: linear-gradient(to right, rgba(243,144,52,1) , rgba(255,39,39,1));">
+                                            <div class="cardd white" style="background: linear-gradient(to right, rgba(243,144,52,1) , rgba(255,39,39,1));">
                                                 <h3 class="title">Auction</h3>
                                                 <p class="value">56</p>
                                                 <p class="remarks">Quantity</p>
@@ -40,7 +40,7 @@
                                     </div>
                                     <div class="col-6">
                                         <div class="p-1">
-                                            <div class="card white" style="background: linear-gradient(to right, rgba(0,210,84,1), rgba(0,179,235,1));">
+                                            <div class="cardd white" style="background: linear-gradient(to right, rgba(0,210,84,1), rgba(0,179,235,1));">
                                                 <h3 class="title">Trees Planted</h3>
                                                 <p class="value">240381</p>
                                                 <p class="remarks">Quantity</p>
@@ -49,7 +49,7 @@
                                     </div>
                                     <div class="col-6">
                                         <div class="p-1">
-                                            <div class="card">
+                                            <div class="cardd">
                                                 <h3 class="title">Out of stock products</h3>
                                                 <p class="value">89.00</p>
                                                 <p class="remarks">Quantity</p>
@@ -58,7 +58,7 @@
                                     </div>
                                     <div class="col-6">
                                         <div class="p-1">
-                                            <div class="card">
+                                            <div class="cardd">
                                                 <h3 class="title">All Products</h3>
                                                 <p class="value">267.00</p>
                                                 <p class="remarks">Quantity</p>
@@ -69,83 +69,158 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-6 col-md-12 card">
-                        <canvas id="myChart"></canvas>
+                    <div class="col-lg-6 col-md-12">
+                        <canvas id="myChart" class="cardd"></canvas>
                         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
                         <script src="../static/js/areachart.js"></script>
                     </div>
                 </div>
             </div>
 
-            <div>
+            <div class="p-1">
                   <div class="row">
-                        <div class="col-4">
+                        <div class="col-lg-6 col-md-12">
                             <div class="p-1">
-                                <div class="card">
+                                <div class="cardd">
                                     <h3 class="title">Latest Sales Orders</h3>
                                     <nav class="navbar navbar-light bg-light">
                                         <form class="form-inline">
-                                              <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                                              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                                              <input id="myInput" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
                                         </form>
                                     </nav>
-                                    <table class="table table-hover">
+                                    <script>
+                                        $(document).ready(function(){
+                                              $("#myInput").on("keyup", function() {
+                                                    var value = $(this).val().toLowerCase();
+                                                    $("#myTable tr").filter(function() {
+                                                      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                                                    });
+                                              });
+                                        });
+                                    </script>
+                                    <table class="table table-hover" id="dtBasicExample">
                                           <thead>
                                               <tr>
-                                                  <th scope="col">#</th>
-                                                  <th scope="col">First</th>
-                                                  <th scope="col">Last</th>
-                                                  <th scope="col">Handle</th>
+                                                  <th scope="col">Order ID</th>
+                                                  <th scope="col">Customer</th>
+                                                  <th scope="col">Fufillment status</th>
+                                                  <th scope="col">Payment status</th>
+                                                  <th scope="col">Total</th>
                                               </tr>
                                           </thead>
-                                        <tbody>
+                                        <tbody id="myTable">
                                               <tr>
                                                   <th scope="row">1</th>
                                                   <td>Mark</td>
                                                   <td>Otto</td>
                                                   <td>@mdo</td>
+                                                  <td>$6000</td>
                                               </tr>
                                               <tr>
                                                   <th scope="row">2</th>
                                                   <td>Jacob</td>
                                                   <td>Thornton</td>
                                                   <td>@fat</td>
+                                                  <td>$6000</td>
                                               </tr>
                                               <tr>
                                                   <th scope="row">3</th>
                                                   <td colspan="2">Larry the Bird</td>
                                                   <td>@twitter</td>
+                                                  <td>$6000</td>
                                               </tr>
                                               <tr>
                                                   <th scope="row">4</th>
                                                   <td colspan="2">Larry the Bird</td>
                                                   <td>@twitter</td>
+                                                  <td>$6000</td>
                                               </tr>
                                               <tr>
                                                   <th scope="row">5</th>
                                                   <td colspan="2">Larry the Bird</td>
                                                   <td>@twitter</td>
+                                                  <td>$6000</td>
                                               </tr>
                                           </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-lg-3 col-md-6">
                             <div class="p-1">
-                                <div class="card">
+                                <div class="cardd">
                                     <h3 class="title">Purchase Orders</h3>
-                                    <p class="value">267.00</p>
-                                    <p class="remarks">Quantity</p>
+                                    <table class="table table-hover">
+                                        <tr>
+                                            <td><p class="value">Received orderes</p></td>
+                                            <td><p class="remarks">$20</p></td>
+                                        </tr>
+                                        <tr>
+                                            <td><p class="value">Total Cost</p></td>
+                                            <td><p class="remarks">$4600</p></td>
+                                        </tr>
+                                    </table>
+
+                                    <table class="table table-hover">
+                                        <thead>
+                                              <tr>
+                                                  <th scope="col">Order ID</th>
+                                                  <th scope="col">Customer</th>
+                                              </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><p class="value">Received orderes</p></td>
+                                                <td><p class="remarks">$20</p></td>
+                                            </tr>
+                                            <tr>
+                                                <td><p class="value">Total Cost</p></td>
+                                                <td><p class="remarks">$4600</p></td>
+                                            </tr>
+                                            <tr>
+                                                <td><p class="value">Total Cost</p></td>
+                                                <td><p class="remarks">$4600</p></td>
+                                            </tr>
+                                        </tbody>
+
+                                    </table>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-lg-3 col-md-6">
                             <div class="p-1">
-                                <div class="card">
+                                <div class="cardd">
                                     <h3 class="title">Top Selling Products</h3>
-                                    <p class="value">267.00</p>
-                                    <p class="remarks">Quantity</p>
+                                    <div class="row g-0">
+                                        <div class="col-6">
+                                            <div class="p-1">
+                                                <div class="cardd">
+                                                    <img src="../static/images/1-Urth-Norite-24L-Backpack-Combo-Grey-1614664835017_300x@2x.png" width="84"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="p-1">
+                                                <div class="cardd">
+                                                    <img src="../static/images/1-Urth-Norite-24L-Backpack-Combo-Grey-1614664835017_300x@2x.png" width="84"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="p-1">
+                                                <div class="cardd">
+                                                    <img src="../static/images/1-Urth-Norite-24L-Backpack-Combo-Grey-1614664835017_300x@2x.png" width="84"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="p-1">
+                                                <div class="cardd">
+                                                    <img src="../static/images/1-Urth-Norite-24L-Backpack-Combo-Grey-1614664835017_300x@2x.png" width="84"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
