@@ -25,7 +25,11 @@
                     {{ render_field(form.login_password, class="form-login-field") }}
                </div>
                <br><br><br>
-               <button type="submit" name="submit_button" value="Log in" class="submit-login">Log in</button>
+               <div id="login_btn">
+                   {{ render_field(form.login) }}
+               </div>
+               <!--{{ render_field(form.login) }}-->
+               <!--<button type="submit" name="submit_button" value="Log in" class="submit-login">Log in</button>-->
            </form>
             <!--   later change ~szeyan   -->
                 <a class="btn btn-warning" href="/admin" role="button">Admin</a>

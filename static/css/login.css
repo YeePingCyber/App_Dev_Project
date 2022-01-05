@@ -81,3 +81,7 @@ font-weight: bold;
     color: white;
     border-radius: 8px;
 }
+
+#login_btn label{
+    visibility: hidden;
+}

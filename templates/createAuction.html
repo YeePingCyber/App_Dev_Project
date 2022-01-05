@@ -6,6 +6,7 @@
 {% endblock %}
 
 {% block bodyContent %}
+{% from "includes/formHelper.html" import render_field %}
 <div id="create_auction_title">
   <h1>Create Auction</h1>
 </div>
@@ -21,27 +22,21 @@
   <div class="form_container">
     <form action="" method="post">
       <div id="productName">
-        <!--<div>-->
-        <!--  <label for="pName">Product Name:</label>-->
-        <!--</div>-->
         <div>
-          <input id="pName" type="text" placeholder="Product Name">
+          {{ render_field(form.product_name) }}
+          <!--<input id="pName" type="text" placeholder="Product Name">-->
         </div>
       </div>
       <div id="baseAmt">
-        <!--<div>-->
-        <!--  <label for="bAmt">Base Amount:</label>-->
-        <!--</div>-->
         <div>
-          <input id="bAmt" type="number" placeholder="Base Amount">
+          {{ render_field(form.base_amount) }}
+          <!--<input id="bAmt" type="number" placeholder="Base Amount">-->
         </div>
       </div>
       <div id="minimumAmt">
-        <!--<div>-->
-        <!--  <label for="mAmt">Minimum Amount:</label>-->
-        <!--</div>-->
         <div>
-          <input id="mAmt" type="number" placeholder="Minimum Amount" min="10">
+          {{ render_field(form.minimum_amount) }}
+          <!--<input id="mAmt" type="number" placeholder="Minimum Amount" min="10">-->
         </div>
       </div>
       <div class="date_container">
@@ -49,15 +44,17 @@
           <label for="startDate">Start Date:</label>
         </div>
         <div>
-          <input id="startDate" type="date" name="Start Date">
+          {{ render_field(form.start_date, id="startDate") }}
+          <!--<input id="startDate" type="date" name="Start Date">-->
         </div>
       </div>
       <div class="date_container">
         <div>
-          <label for="endDate">End Date:</label>
+          <label>End Date:</label>
         </div>
         <div>
-          <input id="endDate" type="date" name="End Date">
+          {{ render_field(form.end_date, id="endDate") }}
+          <!--<input id="endDate" type="date" name="End Date">-->
         </div>
       </div>
       <div id="description">
