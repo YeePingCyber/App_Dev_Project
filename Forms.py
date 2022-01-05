@@ -1,5 +1,5 @@
 from wtforms import Form, StringField, RadioField, SelectField, TextAreaField, validators
-from wtforms.fields import EmailField, DateField, FloatField, IntegerField, SubmitField
+from wtforms.fields import EmailField, DateField, FloatField, IntegerField
 
 
 class CreateCustomerForm(Form):
@@ -11,7 +11,7 @@ class CreateCustomerForm(Form):
     confirm_password = StringField('', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "Confirm Password"})
     login_email = EmailField('', [validators.Email(), validators.DataRequired()], render_kw={"placeholder": "Email Address"})
     login_password = StringField('', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "Password"})
-    login = SubmitField("login")
+
 
 
 class CreateLoginForm(Form):
