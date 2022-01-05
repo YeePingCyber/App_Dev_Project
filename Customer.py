@@ -2,7 +2,7 @@ from User import User
 
 
 class Customer(User):
-    def __init__(self, fname, lname, email, password,birth_date):
+    def __init__(self, fname, lname, email, password, birth_date):
         super().__init__(fname, lname, email, password)
         self.__birthdate = birth_date
         self.__customer_id = None
@@ -44,3 +44,6 @@ class Customer(User):
         # return round(price/5)
         # OR
         # return round(price/10)
+
+    def __str__(self):
+        return f"{self.get_first_name()} ,{self.get_last_name()}, {self.get_email()}, {self.get_password()}, {self.get_birth_date()}"

@@ -1,10 +1,10 @@
 from flask import Flask, render_template
 from flask import Flask, render_template, request, redirect, url_for
 import shelve
-from userCart import userCart
+from userCart import UserCart
 from Forms import CreateAdminForm, CreateCustomerForm, CreatePaymentForm, CreateProductForm
 
-#create product function
+# create product function
 from createProduct import load_product
 
 app = Flask(__name__)
@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-    #return render_template("adminAuction.html")
+    # return render_template("adminAuction.html")
     return render_template("home.html")
 
 
@@ -48,7 +48,13 @@ def adminProductManagement():
 
 @app.route("/cart")
 def cart():
-    return render_template("cart.html")
+    # append new product here
+    cartList = ["BagA"]
+
+    if len(cartList) > 0:
+        return render_template("cart.html")
+    else:
+        return render_template("cart_empty.html")
 
 
 @app.route("/checkout", methods=['GET', 'POST'])

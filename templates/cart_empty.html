@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Tom Patterson - Cart (Empty){% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="../static/css/base.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/login.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/cart.css">
+{% endblock %}
+
+{% block bodyContent %}
+    <style>
+        .tom-navv {
+            background-image: url(none);
+        }
+    </style>
+
+    <div class="container">
+        <div class="d-flex justify-content-center cart-title"><h2>Empty Cart</h2></div>
+        <a class="btn btn-warning" href="/mainshop" role="button">Return to Shop</a>
+    </div>    
+{% endblock %}
