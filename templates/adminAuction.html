@@ -1,8 +1,72 @@
 {% extends "adminBase.html" %}
 {% block title %}Tom Patterson - (Admin) Auction{% endblock %}
 
+{% block css %}
+  <link rel="stylesheet" type="text/css" href="../static/css/adminAuction.css">
+{% endblock %}
 
 {% block bodyContent %}
-<h1>Auction</h1>
+<div id="admin_auction_title">
+  <h1>Auction</h1>
+  <a href="#" id="addAuction_btn">Add Auction</a>
+</div>
+
+<hr>
+
+<div class="ongoing">
+  <h2 id="ongoing_title">Ongoing</h2>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Auction ID</th>
+        <th scope="col">Product Name</th>
+        <th scope="col">Base Amount</th>
+        <th scope="col">Minimum Amount</th>
+        <th scope="col">Start Date</th>
+        <th scope="col">End Date</th>
+        <th scope="col">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">1</th>
+        <td>Mark</td>
+        <td>Otto</td>
+        <td>@mdo</td>
+        <td>@mdo</td>
+        <td>@mdo</td>
+        <td>@mdo</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="upcoming">
+  <h2 id="upcoming_title">Upcoming</h2>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Auction ID</th>
+        <th scope="col">Product Name</th>
+        <th scope="col">Base Amount</th>
+        <th scope="col">Minimum Amount</th>
+        <th scope="col">Start Date</th>
+        <th scope="col">End Date</th>
+        <th scope="col"> </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">1</th>
+        <td>Mark</td>
+        <td>Otto</td>
+        <td>@mdo</td>
+        <td>@mdo</td>
+        <td>@mdo</td>
+        <td>@mdo</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 {% endblock %}
 

@@ -4,12 +4,16 @@ import shelve
 from userCart import userCart
 from Forms import CreateAdminForm, CreateCustomerForm, CreatePaymentForm, CreateProductForm
 
+#create product function
+from createProduct import load_product
+
 app = Flask(__name__)
 
 
 @app.route("/")
 def home():
-    return render_template("Home.html")
+    #return render_template("adminAuction.html")
+    return render_template("home.html")
 
 
 @app.route("/login")

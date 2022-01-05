@@ -1,0 +1,40 @@
+#admin_auction_title{
+    display: flex;
+    padding: 0% 2%;
+}
+
+hr{
+    margin: 0;
+}
+
+table{
+    text-align: center;
+    margin-top: 2%;
+    background-color: white;
+    box-shadow: 0px 0px 20px rgba(0,0,0, 0.3);
+    border-radius: 15px;
+}
+
+#addAuction_btn{
+    width: 9%;
+    float: right;
+    position: absolute;
+    margin-left: 80%;
+    margin-top: 1.3%;
+    text-align: center;
+    background-color: #C4C4C4;
+    padding: 0.3%;
+}
+
+#ongoing_title{
+    color: #5BB700;
+}
+
+#upcoming_title{
+    color: #E56E00;
+}
+
+.ongoing, .upcoming{
+    margin: 2% 5%;
+    width: 90%;
+}

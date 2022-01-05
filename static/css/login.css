@@ -1,3 +1,67 @@
 .tom-navv {
     position: static;
 }
+
+/*.col{
+border: 1px solid;
+}
+*/
+
+.container-login{
+margin-left: 10%;
+margin-right: 10%;
+margin-bottom: 10%;
+}
+
+input[type=email] {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #000000;
+    padding-right: 50%;
+}
+
+input[type=password] {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #000000;
+    padding-right: 50%;
+}
+
+input[type=date] {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #000000;
+}
+
+input[type=text] {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #000000;
+}
+
+.form-login {
+    margin-left: 10%;
+}
+
+#first-name, #last-name{
+padding-right: 20%;
+display: inline-block
+}
+
+#last-name{
+margin-left: 5%;
+}
+
+.forget-pw{
+text-align: right;
+font-size: 70%;
+font-weight: bold;
+}
+
+input[type=submit] {
+    padding: 2% 4% 2% 4%;
+    background-color: black;
+    border: none;
+    color: white;
+    border-radius: 8px;
+}
