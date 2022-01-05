@@ -1,12 +1,13 @@
 from User import User
-
+from random import randint
 
 class Customer(User):
-    def __init__(self, fname, lname, email, password, birth_date):
+    def __init__(self, fname, lname, birth_date, email, password):
         super().__init__(fname, lname, email, password)
         self.__birthdate = birth_date
-        self.__customer_id = None
-        # When i sort out the time of creation i will get to this -Dylan
+        self.__customer_id = randint(1, 10000)
+        # When i sort out the time of creation i will get to this
+        # for now ill do random integers-Dylan
         self.__contact_number = None
         self.__points = 0
         self.__address = None
@@ -44,6 +45,3 @@ class Customer(User):
         # return round(price/5)
         # OR
         # return round(price/10)
-
-    def __str__(self):
-        return f"{self.get_first_name()} ,{self.get_last_name()}, {self.get_email()}, {self.get_password()}, {self.get_birth_date()}"
