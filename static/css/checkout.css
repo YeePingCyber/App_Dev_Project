@@ -259,5 +259,25 @@
         font-weight: 400;
     }
 
+    .order-summary-toggle {
+        display: none;
+    }
 
+    @media only screen and (max-width: 999px) {
+          .order-summary-toggle {
+               display: block;
+               background: #f6f5ef;
+               border-top: 1px solid #e2e1dc;
+               border-bottom: 1px solid #e2e1dc;
+               padding: 1.25em 0;
+               flex-shrink: 0;
+               text-align: left;
+               width:100%
+          }
+    }
 
+    @media only screen and (max-width: 1300px) {
+           .cart-details {
+               display: none;
+          }
+    }
