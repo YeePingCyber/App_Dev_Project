@@ -1,0 +1,75 @@
+#create_auction_title{
+    display: flex;
+    padding: 0% 2%;
+}
+
+hr{
+    margin: 0;
+}
+
+.create_auction_container{
+    display: flex;
+    background-color: white;
+    width: 70%;
+    margin: 2% 15%;
+    box-shadow: 0px 0px 20px rgba(0,0,0, 0.3);
+    border-radius: 15px;
+}
+
+.img_container{
+    margin: 2%;
+}
+
+.form_container{
+    margin: 2% 3%;
+    width: 100%;
+}
+
+#pName, #bAmt, #mAmt{
+    width:90%;
+    height:100%;
+    background-color: transparent;
+    border:none;
+    border-bottom: 1.5px solid black;
+}
+
+#pName:focus, #bAmt:focus, #mAmt:focus{
+    outline: none;
+}
+
+#productName, #baseAmt, #minimumAmt{
+    height: 2em;
+    margin-top: 3%;
+}
+
+label{
+    font-weight: 500;
+}
+
+.date_container, #description, #create_btn{
+    margin-top: 2%;
+}
+
+#startDate, #endDate{
+    border-radius: 5px;
+    padding-left: 1%;
+    border: 1px solid black;
+}
+
+/*#startDate::-webkit-calendar-picker-indicator{
+    content: ../images/calendar.png;
+    width: 20px;
+    height: 20px;
+}*/
+
+#desc{
+    border-radius: 10px;
+    padding-left: 1%;
+}
+
+#create_btn{
+    background-color: black;
+    color: white;
+    border-radius: 5px;
+    width: 20%;
+}
