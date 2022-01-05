@@ -11,6 +11,8 @@ from createProduct import load_product
 
 app = Flask(__name__)
 
+# Customer Side
+
 
 @app.route("/")
 def home():
@@ -44,31 +46,6 @@ def create_customer():
     print("hi")
     return render_template("loginpage.html", form=create_customer_form)
 
-@app.route("/admin")
-def admin():
-    return render_template("adminDashboard.html")
-
-
-@app.route("/adminAuction")
-def adminAuction():
-    return render_template("adminAuction.html")
-
-
-@app.route("/adminOrders")
-def adminOrders():
-    return render_template("adminOrders.html")
-
-
-@app.route("/adminUser")
-def adminUser():
-    return render_template("adminUser.html")
-
-
-@app.route("/adminProductManagement")
-def adminProductManagement():
-    return render_template("adminProductManagement.html")
-
-
 @app.route("/cart")
 def cart():
     return render_template("cart.html")
@@ -86,6 +63,38 @@ def checkout():
 @app.route("/mainshop")
 def mainshop():
     return render_template("mainshop.html")
+
+
+# Admin Side
+
+@app.route("/admin")
+def admin():
+    return render_template("adminDashboard.html")
+
+
+@app.route("/adminAuction")
+def adminAuction():
+    return render_template("adminAuction.html")
+
+
+@app.route("/createAuction")
+def createAuction():
+    return render_template("createAuction.html")
+
+
+@app.route("/adminOrders")
+def adminOrders():
+    return render_template("adminOrders.html")
+
+
+@app.route("/adminUser")
+def adminUser():
+    return render_template("adminUser.html")
+
+
+@app.route("/adminProductManagement")
+def adminProductManagement():
+    return render_template("adminProductManagement.html")
 
 
 if __name__ == "__main__":
