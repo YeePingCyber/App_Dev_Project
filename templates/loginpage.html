@@ -14,10 +14,17 @@
     <div class="row">
 
         <div class="col">
-            <form method="POST" class="form-login">
+           <form method="POST" class="form-login">
                 <h1>Log in</h1>
                 <br><br><br><br>
-                <input type="email" placeholder="Email Address" id="login-email">
+               <div class="form-login-field">
+                    {{ render_field(form.login_email, class="form-login-field") }}
+               </div>
+               <br><br><br><br>
+               <div class="form-login-field">
+                    {{ render_field(form.login_password, class="form-login-field") }}
+               </div>
+               <!-- <input type="email" placeholder="Email Address" id="login-email">
                 <br><br><br><br>
                 <div>
                     <input type="password" placeholder="Password" id="login-password">
@@ -25,31 +32,32 @@
                     <a href="#" class="forget-pw">Forget password</a>
                 </div>
                 <br><br><br>
-                <input type="submit" value="Log in">
-
+                <input type="submit" value="Log in" name="submit-button">
+            -->
                 <!--   later change ~szeyan   -->
+           </form>
                 <a class="btn btn-warning" href="/admin" role="button">Admin</a>
-            </form>
+
             <br>
             <br>
         </div>
 
         <div class="col">
-            <form method="POST" class="form-login">
+            <form method="POST" class="form-login" action="">
                 <h1>Register</h1>
                 <br><br><br><br>
-                <input type="text" placeholder="First Name" id="first-name" >
-                <input type="text" placeholder="Last Name" id="last-name" >
+                <input type="text" placeholder="First Name" id="First-Name" >
+                <input type="text" placeholder="Last Name" id="Last-Name" >
                 <br><br><br><br>
                 <input type="date" id="birthdate">
                 <br><br><br><br>
-                <input type="email" placeholder="Email Address" id="register-email">
+                <input type="email" placeholder="Email Address" id="Register-Email">
                 <br><br><br><br>
-                <input type="password" placeholder="Password" id="register-password">
+                <input type="password" placeholder="Password" id="Register-Password">
                 <br><br><br><br>
-                <input type="password" placeholder="Confirm Password" id="confirm-password">
+                <input type="password" placeholder="Confirm Password" id="Confirm-Password">
                 <br><br><br><br>
-                <input type="submit" value="Create An Account">
+                <input type="submit" value="Create An Account" name="submit-button">
             </form>
         </div>
 

@@ -13,11 +13,19 @@ margin-right: 10%;
 margin-bottom: 10%;
 }
 
+.form-login-field{
+ background: transparent;
+    border: none;
+    border-bottom: 0px solid #000000;
+    padding-right: 50%;
+    border-radius: 1px;
+}
+
 input[type=email] {
     background: transparent;
     border: none;
     border-bottom: 1px solid #000000;
-    padding-right: 50%;
+    padding-right: 70%;
 }
 
 input[type=password] {
