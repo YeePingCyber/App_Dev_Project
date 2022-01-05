@@ -2,6 +2,8 @@
 {% block title %}Tom Patterson - Shop{% endblock %}
 
 {% block css %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="js/OwlCarousel2-2.3.4/dist/assets/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" type="text/css" href="../static/css/base.css">
     <link rel="stylesheet" type="text/css" href="../static/css/mainshop.css">
 {% endblock %}
@@ -14,5 +16,95 @@
             <p>To carry with your fingertips or slipped under your arm, these bags add the ultimate touch of sophistication and femininity to every outfit.
             Available in styles and colours designed to suit any situation, they guarantee elegance for all occasions.</p>
         </div>
+    </div>
+    <div id="myCarousel" class="carousel slide" data-interval="2000" data-ride="carousel">
+        <!-- Indicators -->
+        <ul class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel" data-slide-to="1"></li>
+            <li data-target="#myCarousel" data-slide-to="2"></li>
+        </ul>
+        <!-- The slideshow -->
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+              <a href="store.html"><img src="../static/images/slider_bag1.jpg" alt="Bag 1"></a>
+              <div class="carousel-caption">
+                  <h3>NEW YEARS SALE</h3>
+                  <p>1/1 - 31/1</p>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <a href="class_mi.html"><img src="../static/images/slider_bag2.jpg" alt="Bag 2"></a>
+              <div class="carousel-caption">
+                  <h3>STAY STYLED</h3>
+                  <p>Bold and fashionable</p>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <a href="gallery.html"><img src="../static/images/slider_bag3.jpg" alt="Bag 3"></a>
+              <div class="carousel-caption">
+                  <h3>GUILT FREE</h3>
+                  <p>100% Bio-degradable, eco-friendly</p>
+              </div>
+            </div>
+        </div>
+        <!-- Left and right controls -->
+        <a class="carousel-control-prev" href="#myCarousel" data-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+        </a>
+        <a class="carousel-control-next" href="#myCarousel" data-slide="next">
+        <span class="carousel-control-next-icon"></span>
+        </a>
+    </div>
+    <div class="navEmpty"></div>
+    <div class="product-view">
+      <div class="container-fluid">
+        <div class="row">
+              <div class="col-md-3">
+                <div class="product-item">
+                <div class="product-image">
+                <img src="../static/images/1-urth-arkose-20l-backpack-grey_1000x@2x.png" alt="Arkose 20L Modular Bag">
+                </div>
+                </div>
+                <div class="product-price">
+                <h5>Arkose 20L Modular Bag</h5>
+                <p><span>$</span>30</p>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="product-item">
+                <div class="product-image">
+                <img src="../static/images/1-urth-arkose-20l-backpack-grey_1000x@2x.png" alt="Norite 24L Modular Bag">
+                </div>
+                </div>
+                <div class="product-price">
+                <h5>Norite 24L Modular Bag</h5>
+                <p><span>$</span>50</p>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="product-item">
+                <div class="product-image">
+                <img src="../static/images/1-urth-arkose-20l-backpack-grey_1000x@2x.png" alt="Arkose 20L Modular Camera Bag">
+                </div>
+                </div>
+                <div class="product-price">
+                <h5>Arkose 20L Modular Camera Bag</h5>
+                <p><span>$</span>50</p>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="product-item">
+                <div class="product-image">
+                <img src="../static/images/1-urth-arkose-20l-backpack-grey_1000x@2x.png" alt="Norite 24L Modular Camera Bag">
+                </div>
+                </div>
+                <div class="product-price">
+                <h5>Norite 25L Modular Camera Bag</h5>
+                <p><span>$</span>70</p>
+                </div>
+              </div>
+        </div>
+      </div>
     </div>
 {% endblock %}
