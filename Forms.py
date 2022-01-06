@@ -6,12 +6,18 @@ import shelve
 class CreateCustomerForm(Form):
     first_name = StringField('', [validators.Length(min=1, max=150), validators.DataRequired()],render_kw={"placeholder": "First Name"})
     last_name = StringField('', [validators.Length(min=1, max=150), validators.DataRequired()],render_kw={"placeholder": "Last Name"})
-    login_email = EmailField('', [validators.Email(), validators.DataRequired()], render_kw={"placeholder": "Email Address"})
     email = EmailField('', [validators.Email(), validators.DataRequired()],render_kw={"placeholder": "Email"})
     birthdate = DateField('', format='%Y-%m-%d', render_kw={"placeholder": "DD/MM/YYYY"})
-    login_password = StringField('', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "Password"})
     register_password = StringField('', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "Password"})
     confirm_password = StringField('', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "Confirm Password"})
+    login_email = EmailField('', [validators.Email(), validators.DataRequired()], render_kw={"placeholder": "Email Address"})
+    login_password = StringField('', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "Password"})
+
+
+
+class CreateLoginForm(Form):
+    login_email = EmailField('', [validators.Email(), validators.DataRequired()], render_kw={"placeholder": "Email Address"})
+    login_password = StringField('', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "Password"})
 
 
 class CreateProductForm(Form):
@@ -66,3 +72,11 @@ class CreatePaymentForm(Form):
     city = StringField("City", [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "City"})
     phone = StringField("Phone", [validators.Length(min=8, max=8)], render_kw={"placeholder": "Phone (optional)"})
     discount = StringField("Gift card or discount code", [validators.Length(min=4, max=8)], render_kw={"placeholder": "Gift card or discount code"})
+
+
+class CreateAuctionForm(Form):
+    product_name = StringField('', [validators.Length(min=1, max=200), validators.DataRequired()], id="pName", render_kw={"placeholder": "Product Name"})
+    base_amount = IntegerField('', [validators.NumberRange(min=1, max=100, message="The value should be between 1 - 100"), validators.DataRequired()], id="bAmt", render_kw={"placeholder": "Base Amount"})
+    minimum_amount = IntegerField('', [validators.NumberRange(min=10, max=100, message="The value should be between 10 - 100"), validators.DataRequired()], id="mAmt", render_kw={"placeholder": "Minimum Amount"})
+    start_date = DateField('Start Date:', format='%Y-%m-%d', render_kw={"placeholder": "DD/MM/YYYY"})
+    end_date = DateField('', format='%Y-%m-%d', render_kw={"placeholder": "DD/MM/YYYY"})

@@ -74,10 +74,14 @@ font-size: 70%;
 font-weight: bold;
 }
 
-input[type=submit] {
+.submit-login {
     padding: 2% 4% 2% 4%;
     background-color: black;
     border: none;
     color: white;
     border-radius: 8px;
+}
+
+#login_btn label{
+    visibility: hidden;
 }
