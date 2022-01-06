@@ -1,5 +1,6 @@
-from wtforms import Form, StringField, RadioField, SelectField, TextAreaField, validators
+from wtforms import Form, StringField, RadioField, SelectField, TextAreaField, HiddenField, validators
 from wtforms.fields import EmailField, DateField, FloatField, IntegerField
+import shelve
 
 
 class CreateCustomerForm(Form):
@@ -28,6 +29,29 @@ class CreateAdminForm(Form):
     email = EmailField('Email', [validators.Email(), validators.DataRequired()])
     password = StringField('Password', [validators.Length(min=1, max=150), validators.DataRequired()])
     employee_id = StringField('Employee ID', [validators.Length(min=1, max=150), validators.DataRequired()])
+
+
+class CreateAddCartForm(Form):
+    inventory_dict = {}
+    db = shelve.open("inventory", "c")
+    try:
+        if "Inventory" in db:
+                inventory_dict = db["Inventory"]
+        else:
+            db["Inventory"] = inventory_dict
+    except:
+        print("Error in retrieving Inventory from inventory.db")
+
+    # for x in inventory_dict:
+    #     print(inventory_dict[x])
+    db.close()
+
+    name = HiddenField('Name', [validators.Length(min=1, max=150)], default=inventory_dict[0])
+    price = HiddenField('Price')
+    quantity = HiddenField('Quantity')
+    category = HiddenField('Category', [validators.Length(min=1, max=150)])
+    discount = HiddenField('Discount')
+    description = HiddenField('Description', [validators.Length(min=1, max=300)])
 
 
 class CreatePaymentForm(Form):
