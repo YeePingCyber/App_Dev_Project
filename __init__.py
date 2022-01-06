@@ -3,8 +3,10 @@ from flask import Flask, render_template, request, redirect, url_for
 import shelve
 from userCart import UserCart
 from Customer import Customer
+from Admin import Admin
 from User import User
 from Forms import CreateAdminForm, CreateLoginForm,CreateCustomerForm, CreatePaymentForm, CreateProductForm
+import hashlib as hl
 
 # create product function
 from createProduct import load_product
@@ -21,15 +23,27 @@ def home():
     return render_template("home.html")
 
 
-@app.route("/login", methods=['GET', 'POST'])
-def create_customer_log_in():
+@app.route("/login", methods=['GET','POST'])
+def log_in():
+    create_log_in_form = CreateLoginForm(request.form)
+    if request.method == 'POST' and create_log_in_form.validate():
+        db = shelve.open('user.db', 'r')
+        users_dict = db['Users']
+        hashed_password = hl.pbkdf2_hmac('sha256', str(create_log_in_form.login_password.data).encode(), b'salt', 100000).hex()
+        for user in users_dict:
+            if users_dict[user].get_email() == create_log_in_form.login_email.data and users_dict[user].get_password() == hashed_password:
+                if isinstance(users_dict[user], Customer):
+                    return redirect(url_for('home'))
+                elif isinstance(users_dict[user], Admin):
+                    return redirect((url_for('admin')))
+        db.close()
+    return render_template("loginpage.html", form=create_log_in_form)
 
-    # if request.form['submit_button'] == "Create An Account":
+
+@app.route("/register", methods=['GET', 'POST'])
+def create_customer():
     create_customer_form = CreateCustomerForm(request.form)
-    if request.method == 'POST' and create_customer_form.validate() and request.form['submit_button'] == "Create An Account":
-        # I have shift it here
-        # if request.form['submit_button'] == "Create An Account":
-        print("hello")
+    if request.method == 'POST' and create_customer_form.validate():
         if create_customer_form.register_password.data == create_customer_form.confirm_password.data:
             customer_dict = {}
             db = shelve.open('user.db', 'c')
@@ -42,19 +56,14 @@ def create_customer_log_in():
                                     create_customer_form.birthdate.data, create_customer_form.email.data,
                                     create_customer_form.register_password.data)
             customer_dict[new_customer.get_customer_id()] = new_customer
+            print(new_customer.get_password())
             db['Users'] = customer_dict
-            for i in customer_dict:
-                print(customer_dict[i])
             db.close()
             return redirect(url_for('home'))
         else:
             print("Password does not match!")
-            # Ill fix this to a popup ltr -Dylan
+    return render_template("register.html", form=create_customer_form)
 
-        print("hi")
-    return render_template("loginpage.html", form=create_customer_form)
-
-    # return render_template("loginpage.html", form=create_customer_form)
 
 
 @app.route("/cart")

@@ -2,46 +2,28 @@
     position: static;
 }
 
-/*.col{
-border: 1px solid;
-}
-*/
 
 .container-login{
 margin-left: 10%;
 margin-right: 10%;
 margin-bottom: 10%;
+text-align: center;
 }
 
 .form-login-field{
-background: transparent;
+background-color: transparent;
 border: none;
-padding-right: 70%;
+width: 50%;
 border-radius: 1px;
-}
-
-.form-login-field-name{
-background: transparent;
-border: none;
-padding-right: 40%;
-border-radius: 1px;
-}
-
-.form-login-field-name{
-background: transparent;
-border: none;
-padding-right: 20%;
-border-radius: 1px;
+margin: auto;
 }
 
 input[type=email] {
     border-bottom: 1px solid #000000;
-    padding-right: 70%;
 }
 
 input[type=password] {
     border-bottom: 1px solid #000000;
-    padding-right: 70%;
 }
 
 input[type=date] {
@@ -56,16 +38,7 @@ input[type=text] {
 }
 
 .form-login {
-    margin-left: 20%;
-}
-
-#first-name, #last-name{
-padding-right: 20%;
-display: inline-block
-}
-
-#last-name{
-margin-left: 5%;
+    text-align: center;
 }
 
 .forget-pw{
@@ -75,13 +48,17 @@ font-weight: bold;
 }
 
 .submit-login {
-    padding: 2% 4% 2% 4%;
+    padding: 1% 2% 1% 2%;
     background-color: black;
     border: none;
     color: white;
     border-radius: 8px;
 }
 
-#login_btn label{
-    visibility: hidden;
+.register-link{
+font-size:60%;
+}
+
+.register-link-click{
+color:blue;
 }

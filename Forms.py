@@ -1,5 +1,5 @@
 from wtforms import Form, StringField, RadioField, SelectField, TextAreaField, validators
-from wtforms.fields import EmailField, DateField, FloatField, IntegerField
+from wtforms.fields import EmailField, DateField, FloatField, IntegerField, PasswordField
 
 
 class CreateCustomerForm(Form):
@@ -7,16 +7,13 @@ class CreateCustomerForm(Form):
     last_name = StringField('', [validators.Length(min=1, max=150), validators.DataRequired()],render_kw={"placeholder": "Last Name"})
     email = EmailField('', [validators.Email(), validators.DataRequired()],render_kw={"placeholder": "Email"})
     birthdate = DateField('', format='%Y-%m-%d', render_kw={"placeholder": "DD/MM/YYYY"})
-    register_password = StringField('', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "Password"})
-    confirm_password = StringField('', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "Confirm Password"})
-    login_email = EmailField('', [validators.Email(), validators.DataRequired()], render_kw={"placeholder": "Email Address"})
-    login_password = StringField('', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "Password"})
-
+    register_password = PasswordField('', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "Password"})
+    confirm_password = PasswordField('', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "Confirm Password"})
 
 
 class CreateLoginForm(Form):
     login_email = EmailField('', [validators.Email(), validators.DataRequired()], render_kw={"placeholder": "Email Address"})
-    login_password = StringField('', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "Password"})
+    login_password = PasswordField('', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "Password"})
 
 
 class CreateProductForm(Form):
