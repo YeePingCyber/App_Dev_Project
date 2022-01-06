@@ -1,13 +1,13 @@
 from flask import Flask, render_template
 from flask import Flask, render_template, request, redirect, url_for
 import shelve
-from userCart import UserCart
+import hashlib as hl
 from Customer import Customer
 from Admin import Admin
 from User import User
-from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreatePaymentForm, CreateProductForm, \
-    CreateAddCartForm
-import hashlib as hl
+from addtocart import Addtocart
+from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreatePaymentForm, CreateProductForm, CreateAddCartForm
+
 
 # create product function
 from createProduct import load_product
@@ -15,9 +15,30 @@ from createProduct import load_product
 app = Flask(__name__)
 
 
+# Initilising Inventory
+# inventory_dict = {}
+# db = shelve.open("inventory", "c")
+#
+# try:
+#     if "Inventory" in db:
+#         inventory_dict = db["Inventory"]
+#     else:
+#         db["Inventory"] = inventory_dict
+#
+# except:
+#     print("Error in retrieving Inventory from inventory.db")
+#
+# for x in range(4):
+#     inventory = Product("Arkose 20L Modular Bacpack", "Everyday backpack + small camera insert", 140, 50, "Camera", 0)
+#     inventory_dict[x] = inventory
+#     db["Inventory"] = inventory_dict
+#
+# for x in inventory_dict:
+#     print(inventory_dict[x])
+# db.close()
+
+
 # Customer Side
-
-
 @app.route("/")
 def home():
     # return render_template("adminAuction.html")
@@ -72,7 +93,7 @@ def create_customer():
 def cart():
     cartList = []
     cart_dict = {}
-    db = shelve.open("addtocart", "w")
+    db = shelve.open("addtocart", "c")
     try:
         if "Add_to_cart" in db:
             cart_dict = db["Add_to_cart"]
@@ -89,7 +110,28 @@ def cart():
     # print(cartList)
 
     if len(cartList) > 0:
-        return render_template("cart.html")
+        return render_template("cart.html", cart_list = cartList)
+    else:
+        return render_template("cart_empty.html")
+
+
+@app.route('/deleteCart/<id>', methods=['POST'])
+def delete_item(id):
+    cartList = []
+    cart_dict = {}
+    db = shelve.open('addtocart', 'c')
+    cart_dict = db['Add_to_cart']
+
+    cart_dict.pop(id)
+
+    for x in cart_dict:
+        cartList.append(cart_dict[x])
+
+    db['Add_to_cart'] = cart_dict
+    db.close()
+
+    if len(cartList) > 0:
+        return redirect(url_for("cart"))
     else:
         return render_template("cart_empty.html")
 
@@ -103,17 +145,32 @@ def checkout():
     return render_template("checkout.html", form=create_payment_form)
 
 
-@app.route("/mainshop")
+@app.route("/mainshop", methods=['GET', 'POST'])
 def mainshop():
-    return render_template("mainshop.html")
+    addtocartform = CreateAddCartForm(request.form)
+    if request.method == "POST":
+        addtocart_dict = {}
+        db = shelve.open("addtocart", "c")
 
-@app.route("/bag1")
-def bag1():
-    return render_template("bag1.html")
+        try:
+            if "Add_to_cart" in db:
+                addtocart_dict = db["Add_to_cart"]
+            else:
+                db["Add_to_cart"] = addtocart_dict
+        except:
+            print("Error in retrieving Inventory from addtocart.db")
+
+        addtocart = Addtocart(addtocartform.name.data, addtocartform.description.data, int(addtocartform.price.data), int(addtocartform.quantity.data), addtocartform.category.data, int(addtocartform.discount.data))
+        addtocart_dict[addtocart.get_id()] = addtocart
+
+        print(addtocart_dict[addtocart.get_id()])
+
+        db["Add_to_cart"] = addtocart_dict
+
+    return render_template("mainshop.html", form=addtocartform)
 
 
 # Admin Side
-
 @app.route("/admin")
 def admin():
     return render_template("adminDashboard.html")
