@@ -1,12 +1,13 @@
 from flask import Flask, render_template
 from flask import Flask, render_template, request, redirect, url_for
 import shelve
+import hashlib as hl
 from Customer import Customer
 from Admin import Admin
 from User import User
-from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreatePaymentForm, CreateProductForm, \
-    CreateAddCartForm
-import hashlib as hl
+from addtocart import Addtocart
+from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreatePaymentForm, CreateProductForm, CreateAddCartForm
+
 
 # create product function
 from createProduct import load_product
@@ -114,14 +115,14 @@ def cart():
         return render_template("cart_empty.html")
 
 
-@app.route('/deleteCart', methods=['POST'])
-def delete_item():
+@app.route('/deleteCart/<id>', methods=['POST'])
+def delete_item(id):
     cartList = []
     cart_dict = {}
     db = shelve.open('addtocart', 'c')
     cart_dict = db['Add_to_cart']
 
-    cart_dict.popitem()
+    cart_dict.pop(id)
 
     for x in cart_dict:
         cartList.append(cart_dict[x])
@@ -130,7 +131,7 @@ def delete_item():
     db.close()
 
     if len(cartList) > 0:
-        return render_template("cart.html")
+        return redirect(url_for("cart"))
     else:
         return render_template("cart_empty.html")
 
@@ -146,7 +147,6 @@ def checkout():
 
 @app.route("/mainshop", methods=['GET', 'POST'])
 def mainshop():
-    # needa have this so can add to da cart ~sy
     addtocartform = CreateAddCartForm(request.form)
     if request.method == "POST":
         addtocart_dict = {}
@@ -160,15 +160,17 @@ def mainshop():
         except:
             print("Error in retrieving Inventory from addtocart.db")
 
-        addtocart = addtocartform.name.data
-        addtocart_dict[1] = addtocart
+        addtocart = Addtocart(addtocartform.name.data, addtocartform.description.data, int(addtocartform.price.data), int(addtocartform.quantity.data), addtocartform.category.data, int(addtocartform.discount.data))
+        addtocart_dict[addtocart.get_id()] = addtocart
+
+        print(addtocart_dict[addtocart.get_id()])
+
         db["Add_to_cart"] = addtocart_dict
 
     return render_template("mainshop.html", form=addtocartform)
 
 
 # Admin Side
-
 @app.route("/admin")
 def admin():
     return render_template("adminDashboard.html")

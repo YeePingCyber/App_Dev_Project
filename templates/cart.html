@@ -29,7 +29,7 @@
                             <div class="c-cart-product__details-inner">
                                 <div class="c-cart-product__title-container">
                                     <p class="c-cart-product__title o-title">{{ products.get_name() }}</p>
-                                    <p class="c-cart-product__options"><span>Black</span></p>
+                                    <p class="c-cart-product__options"><span>{{ products.get_description() }}</span></p>
                                 </div>
 
                                 <div class="o-quantity-selector c-cart-product__quantity">
@@ -45,9 +45,9 @@
                                         </button>
                                     </div>
                                 </div>
-                                <p class="c-cart-product__price-container"><span class="c-cart-product__price">Price:<span>$143,95</span></span><span class="c-cart-product__price">Total:<span>143,95</span></span></p>
+                                <p class="c-cart-product__price-container"><span class="c-cart-product__price">Price:<span>${{ products.get_price() }}</span></span><span class="c-cart-product__price">Total:<span>143,95</span></span></p>
                             </div>
-                            <form action="/deleteCart" method="POST">
+                            <form action="/deleteCart/{{ products.get_id() }}" method="POST">
                                 <button class="c-cart-product__remove is-desktop o-btn is-underline">Remove</button>
                             </form>
                         </div>
