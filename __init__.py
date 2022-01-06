@@ -5,7 +5,8 @@ from userCart import UserCart
 from Customer import Customer
 from Admin import Admin
 from User import User
-from Forms import CreateAdminForm, CreateLoginForm,CreateCustomerForm, CreatePaymentForm, CreateProductForm
+from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreatePaymentForm, CreateProductForm, \
+    CreateAddCartForm
 import hashlib as hl
 
 # create product function
@@ -23,15 +24,17 @@ def home():
     return render_template("home.html")
 
 
-@app.route("/login", methods=['GET','POST'])
+@app.route("/login", methods=['GET', 'POST'])
 def log_in():
     create_log_in_form = CreateLoginForm(request.form)
     if request.method == 'POST' and create_log_in_form.validate():
         db = shelve.open('user.db', 'r')
         users_dict = db['Users']
-        hashed_password = hl.pbkdf2_hmac('sha256', str(create_log_in_form.login_password.data).encode(), b'salt', 100000).hex()
+        hashed_password = hl.pbkdf2_hmac('sha256', str(create_log_in_form.login_password.data).encode(), b'salt',
+                                         100000).hex()
         for user in users_dict:
-            if users_dict[user].get_email() == create_log_in_form.login_email.data and users_dict[user].get_password() == hashed_password:
+            if users_dict[user].get_email() == create_log_in_form.login_email.data and users_dict[
+                user].get_password() == hashed_password:
                 if isinstance(users_dict[user], Customer):
                     return redirect(url_for('home'))
                 elif isinstance(users_dict[user], Admin):
@@ -65,11 +68,25 @@ def create_customer():
     return render_template("register.html", form=create_customer_form)
 
 
-
 @app.route("/cart")
 def cart():
-    # append new product here
-    cartList = ["BagA"]
+    cartList = []
+    cart_dict = {}
+    db = shelve.open("addtocart", "w")
+    try:
+        if "Add_to_cart" in db:
+            cart_dict = db["Add_to_cart"]
+        else:
+            db["Add_to_cart"] = cart_dict
+    except:
+        print("Error in retrieving Inventory from addtocart.db")
+
+    for x in cart_dict:
+        cartList.append(cart_dict[x])
+
+    db.close()
+
+    # print(cartList)
 
     if len(cartList) > 0:
         return render_template("cart.html")
