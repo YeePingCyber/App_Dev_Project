@@ -5,7 +5,7 @@
    ├─ 1. header
    ├─ 2. top-links
    ├─ 3. top-items
-   ├─ 3. creator-showcase
+   ├─ 4. creator-showcase
      
     /* --------------------------------------------------------------------------
         1. header
@@ -83,16 +83,67 @@
         max-width: 125rem;
     }
 
+    .top-items-banner {
+        width: 45.48%;
+    }
+
+    @media only screen and (min-width: 1100px) {
+        .banner-container {
+            padding-bottom: min(calc(100vh - 4rem),143.33%);
+            position: sticky;
+            top: 4rem;
+        }
+    }
+
+
+
+    .banner-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+    }
+
+    @supports ((-o-object-fit:cover) or (object-fit:cover)) {
+        .banner-image {
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
     .top4 {
         width: 47%;
         margin-bottom: 3.2%;
     }
 
-    .c-product-grid__header {
+    .top4header {
         text-align: center;
         margin: 18% 0 14.2%;
     }
 
     .top-items__card {
         margin-bottom: 11.3%;
+        padding: 0;
+        width: calc(50% - 1rem);
+    }
+
+    .top-items__card a {
+        display: block;
+        position: relative;
+        width: 100%;
+    }
+
+    .thumbnail {
+        margin-bottom: 1em;
+    }
+
+    .top-items__card a img {
+        width: 250px
+    }
+
+    /* --------------------------------------------------------------------------
+        4. creator-showcase
+    -------------------------------------------------------------------------- */
+    .h {
+        height: 1000px;
     }
