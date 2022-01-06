@@ -6,6 +6,7 @@ from Customer import Customer
 from Admin import Admin
 from User import User
 from addtocart import Addtocart
+from Auction import Auction
 from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreatePaymentForm, CreateProductForm, CreateAddCartForm, CreateAuctionForm
 
 
@@ -179,9 +180,33 @@ def adminAuction():
     return render_template("adminAuction.html")
 
 
-@app.route("/createAuction")
+@app.route("/createAuction", methods=['GET', 'POST'])
 def createAuction():
     create_auction = CreateAuctionForm(request.form)
+
+    if request.method == "POST" and create_auction.validate():
+        create_auction_list = {}
+        db = shelve.open("auction", "c")
+
+        try:
+            if "Auction" in db:
+                create_auction_list = db["Auction"]
+            else:
+                db["Auction"] = create_auction_list
+        except:
+            print("Error in retrieving Inventory from auction.db")
+
+        auction = Auction(create_auction.product_name.data, create_auction.description.data,
+                          create_auction.base_amount.data, create_auction.minimum_amount.data,
+                          create_auction.start_date.data, create_auction.end_date.data)
+
+        create_auction_list[auction.get_auction_id()] = auction
+        db["Auction"] = create_auction_list
+
+        db.close()
+
+        return redirect(url_for("adminAuction"))
+
     return render_template("createAuction.html", form=create_auction)
 
 
