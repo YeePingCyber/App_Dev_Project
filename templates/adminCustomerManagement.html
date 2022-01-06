@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Tom Patterson - (Admin) Customer Management{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="../static/css/base.css">
+<link rel="stylesheet" type="text/css" href="../static/css/adminCustManagement.css">
+
+{% endblock %}
+
+{% block bodyContent %}
+<div class="page-title">
+    <b>Customer Management</b>
+</div>
+<hr style="height: 2px;">
+<table border="1" class="cust-table">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Points</th>
+        <th>Birthdate</th>
+    </tr>
+</table>
+{% endblock %}

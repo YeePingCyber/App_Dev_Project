@@ -51,11 +51,9 @@ def log_in():
     if request.method == 'POST' and create_log_in_form.validate():
         db = shelve.open('user.db', 'r')
         users_dict = db['Users']
-        hashed_password = hl.pbkdf2_hmac('sha256', str(create_log_in_form.login_password.data).encode(), b'salt',
-                                         100000).hex()
+        hashed_password = hl.pbkdf2_hmac('sha256', str(create_log_in_form.login_password.data).encode(), b'salt',100000).hex()
         for user in users_dict:
-            if users_dict[user].get_email() == create_log_in_form.login_email.data and users_dict[
-                user].get_password() == hashed_password:
+            if users_dict[user].get_email() == create_log_in_form.login_email.data and users_dict[user].get_password() == hashed_password:
                 if isinstance(users_dict[user], Customer):
                     return redirect(url_for('home'))
                 elif isinstance(users_dict[user], Admin):
@@ -191,9 +189,9 @@ def adminOrders():
     return render_template("adminOrders.html")
 
 
-@app.route("/adminUser")
-def adminUser():
-    return render_template("adminUser.html")
+@app.route("/adminCustomerManagement")
+def admin_customer_management():
+    return render_template("adminCustomerManagement.html")
 
 
 @app.route("/adminProductManagement")
