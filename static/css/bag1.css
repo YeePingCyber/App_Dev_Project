@@ -1,0 +1,17 @@
+/* NYP Y1S2 2021 - 2022 APP DEVELOPMENT PROJECT
+
+   Structure of mainshop.css
+   |
+   ├─ 1. product img (left div)
+   ├─ 2. product info (right div)
+   ├─ 3. creator-showcase
+
+    /* --------------------------------------------------------------------------
+        1. product img
+    -------------------------------------------------------------------------- */
+
+    .product-img img {
+        width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+    }

@@ -107,6 +107,10 @@ def checkout():
 def mainshop():
     return render_template("mainshop.html")
 
+@app.route("/bag1")
+def bag1():
+    return render_template("bag1.html")
+
 
 # Admin Side
 

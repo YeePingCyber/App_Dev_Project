@@ -49,7 +49,7 @@ class CreateAddCartForm(Form):
     #     print(inventory_dict[x])
     db.close()
 
-    name = HiddenField('Name', [validators.Length(min=1, max=150)], default=inventory_dict[0])
+    #name = HiddenField('Name', [validators.Length(min=1, max=150)], default=inventory_dict[0])
     price = HiddenField('Price')
     quantity = HiddenField('Quantity')
     category = HiddenField('Category', [validators.Length(min=1, max=150)])
