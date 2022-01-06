@@ -72,4 +72,10 @@ label{
     color: white;
     border-radius: 5px;
     width: 20%;
+    padding: 1%;
+    border: none;
+}
+
+#startDateLbl, #endDateLbl, #descLbl, #create_btn{
+    margin-left: 0.4em;
 }

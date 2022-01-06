@@ -24,45 +24,40 @@
       <div id="productName">
         <div>
           {{ render_field(form.product_name) }}
-          <!--<input id="pName" type="text" placeholder="Product Name">-->
         </div>
       </div>
       <div id="baseAmt">
         <div>
           {{ render_field(form.base_amount) }}
-          <!--<input id="bAmt" type="number" placeholder="Base Amount">-->
         </div>
       </div>
       <div id="minimumAmt">
         <div>
           {{ render_field(form.minimum_amount) }}
-          <!--<input id="mAmt" type="number" placeholder="Minimum Amount" min="10">-->
         </div>
       </div>
       <div class="date_container">
         <div>
-          <label for="startDate">Start Date:</label>
+          <label id="startDateLbl">Start Date:</label>
         </div>
         <div>
           {{ render_field(form.start_date, id="startDate") }}
-          <!--<input id="startDate" type="date" name="Start Date">-->
         </div>
       </div>
       <div class="date_container">
         <div>
-          <label>End Date:</label>
+          <label id="endDateLbl">End Date:</label>
         </div>
         <div>
           {{ render_field(form.end_date, id="endDate") }}
-          <!--<input id="endDate" type="date" name="End Date">-->
         </div>
       </div>
       <div id="description">
         <div>
-          <label for="desc">Description:</label>
+          <label id="descLbl">Description:</label>
         </div>
         <div>
-          <textarea name="description" id="desc" cols="30" rows="5" placeholder="Enter product description"></textarea>
+          {{ render_field(form.description) }}
         </div>
       </div>
       <div>

@@ -96,5 +96,7 @@ class CreateAuctionForm(Form):
     minimum_amount = IntegerField('', [
         validators.NumberRange(min=10, max=100, message="The value should be between 10 - 100"),
         validators.DataRequired()], id="mAmt", render_kw={"placeholder": "Minimum Amount"})
-    start_date = DateField('Start Date:', format='%Y-%m-%d', render_kw={"placeholder": "DD/MM/YYYY"})
+    start_date = DateField('', format='%Y-%m-%d', render_kw={"placeholder": "DD/MM/YYYY"})
     end_date = DateField('', format='%Y-%m-%d', render_kw={"placeholder": "DD/MM/YYYY"})
+    description = TextAreaField('', [validators.DataRequired()], id="desc",
+                                render_kw={"rows": "5", "cols": "30", "placeholder": "Enter product description"})

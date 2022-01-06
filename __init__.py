@@ -6,7 +6,7 @@ from Customer import Customer
 from Admin import Admin
 from User import User
 from addtocart import Addtocart
-from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreatePaymentForm, CreateProductForm, CreateAddCartForm
+from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreatePaymentForm, CreateProductForm, CreateAddCartForm, CreateAuctionForm
 
 
 # create product function
@@ -181,7 +181,8 @@ def adminAuction():
 
 @app.route("/createAuction")
 def createAuction():
-    return render_template("createAuction.html")
+    create_auction = CreateAuctionForm(request.form)
+    return render_template("createAuction.html", form=create_auction)
 
 
 @app.route("/adminOrders")
