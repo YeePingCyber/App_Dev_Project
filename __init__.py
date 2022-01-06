@@ -88,7 +88,7 @@ def cart():
 
     db.close()
 
-    print(cartList)
+    # print(cartList)
 
     if len(cartList) > 0:
         return render_template("cart.html")
