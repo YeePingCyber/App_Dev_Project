@@ -74,7 +74,7 @@ def create_customer():
 def cart():
     cartList = []
     cart_dict = {}
-    db = shelve.open("addtocart", "w")
+    db = shelve.open("addtocart", "c")
     try:
         if "Add_to_cart" in db:
             cart_dict = db["Add_to_cart"]
