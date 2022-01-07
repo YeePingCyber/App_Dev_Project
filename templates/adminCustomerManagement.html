@@ -11,7 +11,7 @@
     <b>Customer Management</b>
 </div>
 <hr style="height: 2px;">
-<table border="1" class="cust-table">
+<table class="cust-table">
     <tr>
         <th>ID</th>
         <th>Name</th>
@@ -20,7 +20,7 @@
         <th>Birthdate</th>
     </tr>
     <tr>
-        <td colspan="5"><hr></td>
+        <td colspan="6"><hr></td>
     </tr>
     {% for customer in customer_list %}
     <tr>
@@ -29,7 +29,37 @@
         <td>{{ customer.get_email() }}</td>
         <td>{{ customer.get_points() }}</td>
         <td>{{ customer.get_birth_date() }}</td>
+        <td class="delete-button">
+            <form action="{{url_for('delete_customer', id=customer.get_customer_id())}}" method="POST">
+            <!-- will change to the X symbol ltr ~dylan -->
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{customer.get_customer_id()}}">
+                       Delete
+                </button>
+                <div class="modal" id="myModal_{{customer.get_customer_id()}}">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+
+                          <div class="modal-header">
+                            <h4 class="modal-title">Delete Confirmation</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                          </div>
+
+
+                          <div class="modal-body">
+                            Are you sure you want to delete {{customer.get_first_name()}} {{customer.get_last_name()}}?
+                          </div>
+
+                          <div class="modal-footer">
+                            <input type="submit" value="Delete" class="btn btn-danger">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </td>
     </tr>
+    <tr><td colspan="6"><hr></td></tr>
     {% endfor %}
 </table>
 {% endblock %}

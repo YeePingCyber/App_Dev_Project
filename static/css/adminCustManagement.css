@@ -18,12 +18,23 @@ width: 80%
 }
 
 th,td{
-border: 1px solid black;
+/*border: 1px solid black;*/
 width: 16%;
+padding-top: 1%;
+padding-bottom: 1%;
 text-align: center;
 }
 
 th{
 font-size: 150%;
 color: #9E9E9E;
+}
+
+td{
+font-size:125%;
+font-weight: bold;
+}
+
+.delete-button{
+width:8%;
 }

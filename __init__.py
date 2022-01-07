@@ -328,6 +328,18 @@ def admin_customer_management():
     return render_template("adminCustomerManagement.html", count = len(customer_list), customer_list=customer_list)
 
 
+@app.route('/deleteCustomer/<int:id>', methods=['POST'])
+def delete_customer(id):
+    users_dict = {}
+    db = shelve.open('user.db', 'w')
+    users_dict = db['Users']
+    users_dict.pop(id)
+
+    db['Users'] = users_dict
+    db.close()
+    return redirect(url_for('admin_customer_management'))
+
+
 @app.route("/adminProductManagement")
 def adminProductManagement():
     return render_template("adminProductManagement.html")
