@@ -2,6 +2,7 @@
 {% block title %}Tom Patterson - (Admin) Auction{% endblock %}
 
 {% block css %}
+  <link rel="stylesheet" type="text/css" href="../static/css/adminBase.css">
   <link rel="stylesheet" type="text/css" href="../static/css/adminAuction.css">
 {% endblock %}
 
@@ -60,11 +61,13 @@
       </tr>
     </thead>
     <tbody>
+      {% if upcoming == [] %}
+        <tr>
+          <td colspan="7">There are currently no upcoming auction</td>
+        </tr>
+      {% else %}
+      {% for auction in upcoming %}
       <tr>
-        {% if upcoming == [] %}
-        <td colspan="7">There are currently no upcoming auction</td>
-        {% else %}
-        {% for auction in upcoming %}
         <th scope="row">{{ auction.get_auction_id() }}</th>
         <td>{{ auction.get_name() }}</td>
         <td>{{ auction.get_price() }}</td>
@@ -73,11 +76,10 @@
         <td>{{ auction.get_end_date() }}</td>
         <td>
           <a href="/updateAuction/{{ auction.get_auction_id() }}" class="btn btn-warning">Update</a>
-          <a href="#" class="btn btn-warning">Update</a>
         </td>
-        {% endfor %}
-        {% endif %}
       </tr>
+      {% endfor %}
+      {% endif %}
     </tbody>
   </table>
 </div>

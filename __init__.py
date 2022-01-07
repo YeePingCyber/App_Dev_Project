@@ -220,23 +220,30 @@ def admin():
 
 @app.route("/adminAuction")
 def adminAuction():
-    db = shelve.open('auction', 'r')
-    auction_dict = db["Auction"]
-    db.close()
+    try:
+        db = shelve.open('auction', 'r')
+        auction_dict = db["Auction"]
+        db.close()
+    except:
+        auction_dict = {}
 
     today = date.today().strftime('%Y-%m-%d')
     upcoming = []
     ongoing = ""
-    print(auction_dict)
-    for keys, values in auction_dict.items():
-        start = date.strftime(values.get_start_date(), '%Y-%m-%d')
-        end = date.strftime(values.get_end_date(), '%Y-%m-%d')
-        if start == today or today > start and end <= today:
-            ongoing = values
-        elif start > today and end > today:
-            upcoming.append(values)
+
+    if auction_dict != {}:
+
+        for keys, values in auction_dict.items():
+            start = date.strftime(values.get_start_date(), '%Y-%m-%d')
+            end = date.strftime(values.get_end_date(), '%Y-%m-%d')
+
+            if start == today or today > start or start <= today and end <= today:
+                ongoing = values
+            elif start > today and end > today:
+                upcoming.append(values)
 
     return render_template("adminAuction.html", ongoing=ongoing, upcoming=upcoming)
+
 
 
 @app.route("/createAuction", methods=['GET', 'POST'])
@@ -280,10 +287,10 @@ def updateAuction(id):
         auction_dict.get(id).set_description(update_auction_form.description.data)
         auction_dict.get(id).set_price(update_auction_form.base_amount.data)
         auction_dict.get(id).set_minimum_amount(update_auction_form.minimum_amount.data)
-        auction_dict.get(id).set_minimum_amount(update_auction_form.start_date.data)
+        auction_dict.get(id).set_start_date(update_auction_form.start_date.data)
         auction_dict.get(id).set_end_date(update_auction_form.end_date.data)
 
-        db["Auction"] = auction_dict.get(id)
+        db["Auction"] = auction_dict
         db.close()
 
         return redirect(url_for("adminAuction"))

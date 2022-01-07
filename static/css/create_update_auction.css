@@ -1,4 +1,4 @@
-#create_auction_title{
+#create_auction_title, #update_auction_title{
     display: flex;
     padding: 0% 2%;
 }
@@ -7,7 +7,7 @@ hr{
     margin: 0;
 }
 
-.create_auction_container{
+.create_auction_container, .update_auction_container{
     display: flex;
     background-color: white;
     width: 70%;

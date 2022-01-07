@@ -2,7 +2,8 @@
 {% block title %}Tom Patterson - (Admin) Auction{% endblock %}
 
 {% block css %}
-  <link rel="stylesheet" type="text/css" href="../static/css/createAuction.css">
+  <link rel="stylesheet" type="text/css" href="../../static/css/adminBase.css">
+  <link rel="stylesheet" type="text/css" href="../../static/css/create_update_auction.css">
 {% endblock %}
 
 {% block bodyContent %}
@@ -11,61 +12,61 @@
   <h1>Edit Auction</h1>
 </div>
 
-<!--<hr>-->
+<hr>
 
-<!--<div class="update_auction_container">-->
+<div class="update_auction_container">
 
-<!--  <div class="img_container">-->
-<!--    <img src="../static/images/bags.png" alt="bag">-->
-<!--  </div>-->
+  <div class="img_container">
+    <img src="../../static/images/bags.png" alt="bag">
+  </div>
 
-<!--  <div class="form_container">-->
-<!--    <form method="post">-->
-<!--      <div id="productName">-->
-<!--        <div>-->
-<!--          {{ render_field(form.product_name) }}-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div id="baseAmt">-->
-<!--        <div>-->
-<!--          {{ render_field(form.base_amount) }}-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div id="minimumAmt">-->
-<!--        <div>-->
-<!--          {{ render_field(form.minimum_amount) }}-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div class="date_container">-->
-<!--        <div>-->
-<!--          <label id="startDateLbl">Start Date:</label>-->
-<!--        </div>-->
-<!--        <div>-->
-<!--          {{ render_field(form.start_date, id="startDate") }}-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div class="date_container">-->
-<!--        <div>-->
-<!--          <label id="endDateLbl">End Date:</label>-->
-<!--        </div>-->
-<!--        <div>-->
-<!--          {{ render_field(form.end_date, id="endDate") }}-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div id="description">-->
-<!--        <div>-->
-<!--          <label id="descLbl">Description:</label>-->
-<!--        </div>-->
-<!--        <div>-->
-<!--          {{ render_field(form.description) }}-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div>-->
-<!--        <input id="create_btn" type="submit" value="Update">-->
-<!--      </div>-->
-<!--    </form>-->
-<!--  </div>-->
-<!--</div>-->
+  <div class="form_container">
+    <form method="post">
+      <div id="productName">
+        <div>
+          {{ render_field(form.product_name) }}
+        </div>
+      </div>
+      <div id="baseAmt">
+        <div>
+          {{ render_field(form.base_amount) }}
+        </div>
+      </div>
+      <div id="minimumAmt">
+        <div>
+          {{ render_field(form.minimum_amount) }}
+        </div>
+      </div>
+      <div class="date_container">
+        <div>
+          <label id="startDateLbl">Start Date:</label>
+        </div>
+        <div>
+          {{ render_field(form.start_date, id="startDate") }}
+        </div>
+      </div>
+      <div class="date_container">
+        <div>
+          <label id="endDateLbl">End Date:</label>
+        </div>
+        <div>
+          {{ render_field(form.end_date, id="endDate") }}
+        </div>
+      </div>
+      <div id="description">
+        <div>
+          <label id="descLbl">Description:</label>
+        </div>
+        <div>
+          {{ render_field(form.description) }}
+        </div>
+      </div>
+      <div>
+        <input id="create_btn" type="submit" value="Update">
+      </div>
+    </form>
+  </div>
+</div>
 
 {% endblock %}
 
