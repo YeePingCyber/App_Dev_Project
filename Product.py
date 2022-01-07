@@ -43,4 +43,4 @@ class Product(Goods):
         return "".join(str(uuid.uuid4())[::2].split("-"))
 
     def __str__(self):
-        return f"{self.get_name(), self.get_description(), self.get_price(), self.get_quantity(), self.get_category(), self.get_discount()}"
+        return f"{self.get_product_id(), self.get_name(), self.get_description(), self.get_price(), self.get_quantity(), self.get_category(), self.get_discount()}"

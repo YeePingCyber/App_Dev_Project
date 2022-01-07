@@ -146,6 +146,11 @@ def checkout():
 
 @app.route("/mainshop", methods=['GET', 'POST'])
 def mainshop():
+    return render_template("mainshop.html")
+
+
+@app.route("/bag1", methods=['GET', 'POST'])
+def bag1():
     addtocartform = CreateAddCartForm(request.form)
     if request.method == "POST":
         addtocart_dict = {}
@@ -159,14 +164,51 @@ def mainshop():
         except:
             print("Error in retrieving Inventory from addtocart.db")
 
-        addtocart = Addtocart(addtocartform.name.data, addtocartform.description.data, int(addtocartform.price.data), int(addtocartform.quantity.data), addtocartform.category.data, int(addtocartform.discount.data))
+        addtocart = Addtocart(
+            addtocartform.name.data,
+            addtocartform.description.data,
+            int(addtocartform.price.data),
+            int(addtocartform.quantity.data),
+            addtocartform.category.data,
+            int(addtocartform.discount.data)
+        )
+
         addtocart_dict[addtocart.get_id()] = addtocart
-
         print(addtocart_dict[addtocart.get_id()])
-
         db["Add_to_cart"] = addtocart_dict
 
-    return render_template("mainshop.html", form=addtocartform)
+    return render_template("bag1.html", form=addtocartform)
+
+
+@app.route("/bag2", methods=['GET', 'POST'])
+def bag2():
+    addtocartform = CreateAddCartForm(request.form)
+    if request.method == "POST":
+        addtocart_dict = {}
+        db = shelve.open("addtocart", "c")
+
+        try:
+            if "Add_to_cart" in db:
+                addtocart_dict = db["Add_to_cart"]
+            else:
+                db["Add_to_cart"] = addtocart_dict
+        except:
+            print("Error in retrieving Inventory from addtocart.db")
+
+        addtocart = Addtocart(
+            addtocartform.name.data,
+            addtocartform.description.data,
+            int(addtocartform.price.data),
+            int(addtocartform.quantity.data),
+            addtocartform.category.data,
+            int(addtocartform.discount.data)
+        )
+
+        addtocart_dict[addtocart.get_id()] = addtocart
+        print(addtocart_dict[addtocart.get_id()])
+        db["Add_to_cart"] = addtocart_dict
+
+    return render_template("bag2.html", form=addtocartform)
 
 
 # Admin Side

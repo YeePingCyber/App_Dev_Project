@@ -52,15 +52,15 @@ class CreateAddCartForm(Form):
     except:
         print("Error in retrieving Inventory from inventory.db")
 
+    # needa fix this, default value only show first item in dictionary.
     for x in inventory_dict:
-        print(inventory_dict[x])
-
         name = HiddenField('Name', [validators.Length(min=1, max=150)], default=inventory_dict[x].get_name())
         price = HiddenField('Price', default=inventory_dict[x].get_price())
         quantity = HiddenField('Quantity', default=1)
         category = HiddenField('Category', [validators.Length(min=1, max=150)], default=inventory_dict[x].get_category())
         discount = HiddenField('Discount', default=inventory_dict[x].get_discount())
         description = HiddenField('Description', [validators.Length(min=1, max=300)], default=inventory_dict[x].get_description())
+        print(inventory_dict[x])
 
     db.close()
 
@@ -68,35 +68,21 @@ class CreateAddCartForm(Form):
 class CreatePaymentForm(Form):
     email = EmailField('Email', [validators.Email(), validators.DataRequired()], render_kw={"placeholder": "Email"})
     country = SelectField("Country", choices=[("1", "SG"), ("2", "AU")], render_kw={"placeholder": "Country"})
-    first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()],
-                             render_kw={"placeholder": "First Name"})
-    last_name = StringField('Last Name', [validators.Length(min=1, max=150), validators.DataRequired()],
-                            render_kw={"placeholder": "Last Name"})
-    company = StringField("Company", [validators.Length(min=1, max=150)],
-                          render_kw={"placeholder": "Company (optional)"})
-    address = TextAreaField('Mailing Address', [validators.optional(), validators.length(max=200)],
-                            render_kw={"placeholder": "Address"})
-    apartment = StringField("Apartment", [validators.Length(min=1, max=150)],
-                            render_kw={"placeholder": "Apartment (optional)"})
-    postal_code = StringField("Postal Code", [validators.Length(min=6, max=6), validators.DataRequired()],
-                              render_kw={"placeholder": "Postal Code"})
-    city = StringField("City", [validators.Length(min=1, max=150), validators.DataRequired()],
-                       render_kw={"placeholder": "City"})
+    first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "First Name"})
+    last_name = StringField('Last Name', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "Last Name"})
+    company = StringField("Company", [validators.Length(min=1, max=150)], render_kw={"placeholder": "Company (optional)"})
+    address = TextAreaField('Mailing Address', [validators.optional(), validators.length(max=200)], render_kw={"placeholder": "Address"})
+    apartment = StringField("Apartment", [validators.Length(min=1, max=150)], render_kw={"placeholder": "Apartment (optional)"})
+    postal_code = StringField("Postal Code", [validators.Length(min=6, max=6), validators.DataRequired()], render_kw={"placeholder": "Postal Code"})
+    city = StringField("City", [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "City"})
     phone = StringField("Phone", [validators.Length(min=8, max=8)], render_kw={"placeholder": "Phone (optional)"})
-    discount = StringField("Gift card or discount code", [validators.Length(min=4, max=8)],
-                           render_kw={"placeholder": "Gift card or discount code"})
+    discount = StringField("Gift card or discount code", [validators.Length(min=4, max=8)], render_kw={"placeholder": "Gift card or discount code"})
 
 
 class CreateAuctionForm(Form):
-    product_name = StringField('', [validators.Length(min=1, max=200), validators.DataRequired()], id="pName",
-                               render_kw={"placeholder": "Product Name"})
-    base_amount = IntegerField('',
-                               [validators.NumberRange(min=1, max=100, message="The value should be between 1 - 100"),
-                                validators.DataRequired()], id="bAmt", render_kw={"placeholder": "Base Amount"})
-    minimum_amount = IntegerField('', [
-        validators.NumberRange(min=10, max=100, message="The value should be between 10 - 100"),
-        validators.DataRequired()], id="mAmt", render_kw={"placeholder": "Minimum Amount"})
+    product_name = StringField('', [validators.Length(min=1, max=200), validators.DataRequired()], id="pName", render_kw={"placeholder": "Product Name"})
+    base_amount = IntegerField('', [validators.NumberRange(min=1, max=100, message="The value should be between 1 - 100"), validators.DataRequired()], id="bAmt", render_kw={"placeholder": "Base Amount"})
+    minimum_amount = IntegerField('', [validators.NumberRange(min=10, max=100, message="The value should be between 10 - 100"), validators.DataRequired()], id="mAmt", render_kw={"placeholder": "Minimum Amount"})
     start_date = DateField('', format='%Y-%m-%d', render_kw={"placeholder": "DD/MM/YYYY"})
     end_date = DateField('', format='%Y-%m-%d', render_kw={"placeholder": "DD/MM/YYYY"})
-    description = TextAreaField('', [validators.DataRequired()], id="desc",
-                                render_kw={"rows": "5", "cols": "30", "placeholder": "Enter product description"})
+    description = TextAreaField('', [validators.DataRequired()], id="desc",  render_kw={"rows": "5", "cols": "30", "placeholder": "Enter prduct description"})
