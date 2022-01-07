@@ -1,5 +1,7 @@
 from User import User
 from random import randint
+from time import time
+
 
 class Customer(User):
     def __init__(self, fname, lname, birth_date, email, password):

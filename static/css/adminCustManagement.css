@@ -13,5 +13,17 @@ height: 10px;
 
 .cust-table{
 margin: 0 auto;
-width: 80%;
+width: 80%
+
+}
+
+th,td{
+border: 1px solid black;
+width: 16%;
+text-align: center;
+}
+
+th{
+font-size: 150%;
+color: #9E9E9E;
 }

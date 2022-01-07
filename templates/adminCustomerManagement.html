@@ -20,5 +20,12 @@
         <th>Points</th>
         <th>Birthdate</th>
     </tr>
+    <tr>
+        <td colspan="5"><hr></td>
+    </tr>
+    {% for customer in customer_list %}
+    <tr>
+        <td>{{ customer.get_customer_id() }}</td>
+    </tr>
 </table>
 {% endblock %}

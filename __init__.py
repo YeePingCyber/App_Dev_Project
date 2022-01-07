@@ -259,7 +259,16 @@ def adminOrders():
 
 @app.route("/adminCustomerManagement")
 def admin_customer_management():
-    return render_template("adminCustomerManagement.html")
+    db = shelve.open('user.db','r')
+    users_dict = db['Users']
+    db.close()
+    customer_list = []
+    for user in users_dict:
+        if isinstance(users_dict[user], Customer):
+            customer = users_dict[user]
+            customer_list.append(customer)
+
+    return render_template("adminCustomerManagement.html", count = len(customer_list), customer_list=customer_list)
 
 
 @app.route("/adminProductManagement")
