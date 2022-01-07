@@ -83,7 +83,7 @@ def create_customer():
             print(new_customer.get_password())
             db['Users'] = customer_dict
             db.close()
-            return redirect(url_for('home'))
+            return redirect(url_for('log_in'))
         else:
             print("Password does not match!")
     return render_template("register.html", form=create_customer_form)
@@ -339,6 +339,55 @@ def delete_customer(id):
     db.close()
     return redirect(url_for('admin_customer_management'))
 
+
+@app.route("/adminAdminManagement")
+def admin_admin_management():
+    db = shelve.open('user.db','r')
+    users_dict = db['Users']
+    db.close()
+    admin_list = []
+    for user in users_dict:
+        if isinstance(users_dict[user], Admin):
+            admin = users_dict[user]
+            admin_list.append(admin)
+    return render_template("adminAdminManagement.html",count = len(admin_list), admin_list=admin_list)
+
+
+@app.route('/deleteAdmin/<int:id>', methods=['POST'])
+def delete_admin(id):
+    users_dict = {}
+    db = shelve.open('user.db', 'w')
+    users_dict = db['Users']
+    users_dict.pop(id)
+
+    db['Users'] = users_dict
+    db.close()
+    return redirect(url_for('admin_admin_management'))
+
+
+@app.route("/adminAccountCreation", methods = ['GET','POST'])
+def admin_creation():
+    create_admin_form = CreateAdminForm(request.form)
+    if request.method == 'POST' and create_admin_form.validate():
+        if create_admin_form.register_password.data == create_admin_form.confirm_password.data:
+            admin_dict = {}
+            db = shelve.open('user.db', 'c')
+            try:
+                admin_dict = db['Users']
+            except:
+                print("Error in retrieving Users from user.db")
+
+            new_admin = Admin(create_admin_form.first_name.data, create_admin_form.last_name.data,
+                              create_admin_form.email.data,create_admin_form.register_password.data,
+                              create_admin_form.employee_id.data)
+            admin_dict[new_admin.get_admin_id()] = new_admin
+            print(new_admin.get_password())
+            db['Users'] = admin_dict
+            db.close()
+            return redirect(url_for('admin_admin_management'))
+        else:
+            print("Password does not match!")
+    return render_template("adminAdminCreation.html", form=create_admin_form)
 
 @app.route("/adminProductManagement")
 def adminProductManagement():

@@ -1,0 +1,55 @@
+.tom-navv {
+    position: static;
+}
+
+.page-title{
+font-size: 200%;
+margin-left: 3%;
+}
+
+.title-divider{
+height: 10px;
+}
+
+.cust-table{
+margin: 0 auto;
+width: 80%
+
+}
+
+th,td{
+/*border: 1px solid black;*/
+width: 16%;
+padding-top: 1%;
+padding-bottom: 1%;
+text-align: center;
+}
+
+th{
+font-size: 150%;
+color: #9E9E9E;
+}
+
+td{
+font-size:125%;
+font-weight: bold;
+}
+
+.delete-button{
+width:8%;
+}
+
+.add-account {
+    padding: 0.5% 1% 0.5% 1%;
+    background-color: black;
+    border: none;
+    color: white;
+    border-radius: 8px;
+    font-size: 100%;
+    float: right;
+    margin-right:3%;
+}
+
+.add-account:hover{
+color:white;
+}

@@ -34,11 +34,12 @@ class CreateProductForm(Form):
 
 
 class CreateAdminForm(Form):
-    first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()])
-    last_name = StringField('Last Name', [validators.Length(min=1, max=150), validators.DataRequired()])
-    email = EmailField('Email', [validators.Email(), validators.DataRequired()])
-    password = StringField('Password', [validators.Length(min=1, max=150), validators.DataRequired()])
-    employee_id = StringField('Employee ID', [validators.Length(min=1, max=150), validators.DataRequired()])
+    first_name = StringField('', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "First Name"})
+    last_name = StringField('', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "Last Name"})
+    email = EmailField('', [validators.Email(), validators.DataRequired()], render_kw={"placeholder": "Email"})
+    register_password = PasswordField('', [validators.Length(min=1, max=150), validators.DataRequired()],render_kw={"placeholder": "Password"})
+    confirm_password = PasswordField('', [validators.Length(min=1, max=150), validators.DataRequired()],render_kw={"placeholder": "Confirm Password"})
+    employee_id = StringField('', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "Employee ID"})
 
 
 class CreateAddCartForm(Form):
