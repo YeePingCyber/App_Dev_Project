@@ -32,6 +32,9 @@ class Auction(Goods):
     def get_end_date(self):
         return self.__endDate
 
+    def get_total(self):
+        return self.__total
+
     def calculate_total(self):
         self.__total += self.__minimumAmount
 

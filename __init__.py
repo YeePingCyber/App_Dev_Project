@@ -2,6 +2,7 @@ from flask import Flask, render_template
 from flask import Flask, render_template, request, redirect, url_for
 import shelve
 import hashlib as hl
+from datetime import date
 from Customer import Customer
 from Admin import Admin
 from User import User
@@ -219,7 +220,23 @@ def admin():
 
 @app.route("/adminAuction")
 def adminAuction():
-    return render_template("adminAuction.html")
+    db = shelve.open('auction', 'r')
+    auction_dict = db["Auction"]
+    db.close()
+
+    today = date.today().strftime('%Y-%m-%d')
+    upcoming = []
+    ongoing = ""
+    print(auction_dict)
+    for keys, values in auction_dict.items():
+        start = date.strftime(values.get_start_date(), '%Y-%m-%d')
+        end = date.strftime(values.get_end_date(), '%Y-%m-%d')
+        if start == today or today > start and end <= today:
+            ongoing = values
+        elif start > today and end > today:
+            upcoming.append(values)
+
+    return render_template("adminAuction.html", ongoing=ongoing, upcoming=upcoming)
 
 
 @app.route("/createAuction", methods=['GET', 'POST'])
@@ -227,14 +244,14 @@ def createAuction():
     create_auction = CreateAuctionForm(request.form)
 
     if request.method == "POST" and create_auction.validate():
-        create_auction_list = {}
+        create_auction_dict = {}
         db = shelve.open("auction", "c")
 
         try:
             if "Auction" in db:
-                create_auction_list = db["Auction"]
+                create_auction_dict = db["Auction"]
             else:
-                db["Auction"] = create_auction_list
+                db["Auction"] = create_auction_dict
         except:
             print("Error in retrieving Inventory from auction.db")
 
@@ -242,14 +259,47 @@ def createAuction():
                           create_auction.base_amount.data, create_auction.minimum_amount.data,
                           create_auction.start_date.data, create_auction.end_date.data)
 
-        create_auction_list[auction.get_auction_id()] = auction
-        db["Auction"] = create_auction_list
+        create_auction_dict[auction.get_auction_id()] = auction
+        db["Auction"] = create_auction_dict
 
         db.close()
 
         return redirect(url_for("adminAuction"))
 
     return render_template("createAuction.html", form=create_auction)
+
+
+@app.route("/updateAuction/<id>/", methods=['GET', 'POST'])
+def updateAuction(id):
+    update_auction_form = CreateAuctionForm(request.form)
+    if request.method == 'POST' and update_auction_form.validate():
+        db = shelve.open("auction", 'w')
+        auction_dict = db["Auction"]
+
+        auction_dict.get(id).set_name(update_auction_form.product_name.data)
+        auction_dict.get(id).set_description(update_auction_form.description.data)
+        auction_dict.get(id).set_price(update_auction_form.base_amount.data)
+        auction_dict.get(id).set_minimum_amount(update_auction_form.minimum_amount.data)
+        auction_dict.get(id).set_minimum_amount(update_auction_form.start_date.data)
+        auction_dict.get(id).set_end_date(update_auction_form.end_date.data)
+
+        db["Auction"] = auction_dict.get(id)
+        db.close()
+
+        return redirect(url_for("adminAuction"))
+    else:
+        db = shelve.open("auction", 'r')
+        auction_dict = db["Auction"]
+        db.close()
+
+        update_auction_form.product_name.data = auction_dict.get(id).get_name()
+        update_auction_form.base_amount.data = auction_dict.get(id).get_price()
+        update_auction_form.minimum_amount.data = auction_dict.get(id).get_minimum_amount()
+        update_auction_form.start_date.data = auction_dict.get(id).get_start_date()
+        update_auction_form.end_date.data = auction_dict.get(id).get_end_date()
+        update_auction_form.description.data = auction_dict.get(id).get_description()
+
+        return render_template("updateAuction.html", form=update_auction_form)
 
 
 @app.route("/adminOrders")

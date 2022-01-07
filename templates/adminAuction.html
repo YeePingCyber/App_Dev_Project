@@ -29,13 +29,17 @@
     </thead>
     <tbody>
       <tr>
-        <th scope="row">1</th>
-        <td>Mark</td>
-        <td>Otto</td>
-        <td>@mdo</td>
-        <td>@mdo</td>
-        <td>@mdo</td>
-        <td>@mdo</td>
+        {% if ongoing == "" %}
+        <td colspan="7">There are currently no ongoing auction</td>
+        {% else %}
+        <th scope="row">{{ ongoing.get_auction_id() }}</th>
+        <td>{{ ongoing.get_name() }}</td>
+        <td>{{ ongoing.get_price() }}</td>
+        <td>{{ ongoing.get_minimum_amount() }}</td>
+        <td>{{ ongoing.get_start_date() }}</td>
+        <td>{{ ongoing.get_end_date() }}</td>
+        <td>{{ ongoing.get_total() }}</td>
+        {% endif %}
       </tr>
     </tbody>
   </table>
@@ -57,13 +61,22 @@
     </thead>
     <tbody>
       <tr>
-        <th scope="row">1</th>
-        <td>Mark</td>
-        <td>Otto</td>
-        <td>@mdo</td>
-        <td>@mdo</td>
-        <td>@mdo</td>
-        <td>@mdo</td>
+        {% if upcoming == [] %}
+        <td colspan="7">There are currently no upcoming auction</td>
+        {% else %}
+        {% for auction in upcoming %}
+        <th scope="row">{{ auction.get_auction_id() }}</th>
+        <td>{{ auction.get_name() }}</td>
+        <td>{{ auction.get_price() }}</td>
+        <td>{{ auction.get_minimum_amount() }}</td>
+        <td>{{ auction.get_start_date() }}</td>
+        <td>{{ auction.get_end_date() }}</td>
+        <td>
+          <a href="/updateAuction/{{ auction.get_auction_id() }}" class="btn btn-warning">Update</a>
+          <a href="#" class="btn btn-warning">Update</a>
+        </td>
+        {% endfor %}
+        {% endif %}
       </tr>
     </tbody>
   </table>
