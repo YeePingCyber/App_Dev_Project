@@ -35,8 +35,22 @@
                         <td>Sale ends at {{ product.get_end_date() }}</td>
                         </tr>
                         <tr>
-                        <td rowspan="2">Minimum Bid</td>
+                        <td rowspan="3">Minimum Bid</td>
                         <td>{{ product.get_minimum_amount() }}</td>
+                        <td>
+                            <p>
+                                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#makebid" aria-expanded="false" aria-controls="collapseExample">
+                                Place bid
+                                </button>
+                            </p>
+                            <div class="collapse" id="makebid">
+                                <div class="card card-body">
+                                <form>
+                                    <label for="bid">Your bid ($USD):</label><input type="number" id="bid" min="{{ product.get_minimum_amount() }}">
+                                </form>
+                                </div>
+                            </div>
+                        </td>
                         </tr>
                     </table>
                     <p>
