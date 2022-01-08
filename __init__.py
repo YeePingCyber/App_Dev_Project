@@ -221,7 +221,7 @@ def admin():
 @app.route("/adminAuction")
 def adminAuction():
     try:
-        db = shelve.open('auction', 'r')
+        db = shelve.open('auction.db', 'r')
         auction_dict = db["Auction"]
         db.close()
     except:
@@ -252,7 +252,7 @@ def createAuction():
 
     if request.method == "POST" and create_auction.validate():
         create_auction_dict = {}
-        db = shelve.open("auction", "c")
+        db = shelve.open("auction.db", "c")
 
         try:
             if "Auction" in db:
@@ -280,7 +280,7 @@ def createAuction():
 def updateAuction(id):
     update_auction_form = CreateAuctionForm(request.form)
     if request.method == 'POST' and update_auction_form.validate():
-        db = shelve.open("auction", 'w')
+        db = shelve.open("auction.db", 'w')
         auction_dict = db["Auction"]
 
         auction_dict.get(id).set_name(update_auction_form.product_name.data)
@@ -295,7 +295,7 @@ def updateAuction(id):
 
         return redirect(url_for("adminAuction"))
     else:
-        db = shelve.open("auction", 'r')
+        db = shelve.open("auction.db", 'r')
         auction_dict = db["Auction"]
         db.close()
 
