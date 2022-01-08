@@ -8,7 +8,7 @@ from Admin import Admin
 from User import User
 from addtocart import Addtocart
 from Auction import Auction
-from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreatePaymentForm, CreateProductForm, CreateAddCartForm, CreateAuctionForm
+from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreatePaymentForm, CreateProductForm, CreateAddCartForm, CreateAuctionForm, UpdateAdminForm
 
 
 # create product function
@@ -388,6 +388,40 @@ def admin_creation():
         else:
             print("Password does not match!")
     return render_template("adminAdminCreation.html", form=create_admin_form)
+
+
+@app.route("/adminAdminUpdate/<int:id>/", methods=["GET","POST"])
+def update_admin(id):
+    update_admin_form = UpdateAdminForm(request.form)
+    if request.method == 'POST' and update_admin_form.validate():
+        users_dict = {}
+        db = shelve.open('user.db', 'w')
+        users_dict = db['Users']
+        # Reminder to self: doesnt work because dict id used to store admin is not updated -Dylan
+        admin = users_dict.get(id)
+        admin.set_first_name(update_admin_form.first_name.data)
+        admin.set_last_name(update_admin_form.last_name.data)
+        admin.set_email(update_admin_form.email.data)
+        admin.set_admin_id(update_admin_form.employee_id.data)
+        admin.set_password(update_admin_form.new_password.data)
+
+        db['Users'] = users_dict
+        db.close()
+
+        return redirect(url_for('admin_admin_management'))
+    else:
+        users_dict = {}
+        db = shelve.open('user.db', 'r')
+        users_dict = db['Users']
+        db.close()
+
+        admin = users_dict.get(id)
+        update_admin_form.first_name.data = admin.get_first_name()
+        update_admin_form.last_name.data = admin.get_last_name()
+        update_admin_form.email.data = admin.get_email()
+        update_admin_form.employee_id.data = admin.get_admin_id()
+    return render_template("adminAdminUpdate.html", form=update_admin_form)
+
 
 @app.route("/adminProductManagement")
 def adminProductManagement():
