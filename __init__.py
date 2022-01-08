@@ -145,6 +145,8 @@ def checkout():
     return render_template("checkout.html", form=create_payment_form)
 
 
+# main shop
+
 @app.route("/mainshop", methods=['GET', 'POST'])
 def mainshop():
     return render_template("mainshop.html")
@@ -210,6 +212,21 @@ def bag2():
         db["Add_to_cart"] = addtocart_dict
 
     return render_template("bag2.html", form=addtocartform)
+
+
+@app.route("/auction")
+def auction():
+    auction_dict = {}
+    db = shelve.open('auction.db', 'r')
+    auction_dict = db["Auction"]
+    db.close()
+
+    auction_list = []
+    for key in auction_list:
+        product = auction_list.get(key)
+        auction_list.append(product)
+
+    return render_template('auction.html', auction_list=auction_list)
 
 
 # Admin Side

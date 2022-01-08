@@ -3,7 +3,7 @@
 
 {% block css %}
     <link rel="stylesheet" type="text/css" href="../static/css/base.css">
-    <link rel="stylesheet" type="text/css" href="../static/css/bag1.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/auction.css">
 {% endblock %}
 
 {% block bodyContent %}
@@ -29,24 +29,34 @@
                     <div class="product-info">
                     <h3>Tom Patterson<br>20L Modular Bag</h3>
                     <p id="title">White Lyocell Canvas Bag</p>
-                    <hr>
-                    <h5>$30</h5>
-                    <p>Free Shipping and Returns</p>
-
-                    <div class="product-help">
-                        <a href="/productFAQ"><p>Check availability</p></a>
-                        <a href="/productFAQ"><p>Product Details</p></a>
-                        <a href="/productFAQ"><p>Customer Support Page</p></a>
-                        <a href="/productFAQ"><p>Contact us at +65 12345678</p></a>
+                    {% for product in auction_list %}
+                    <table style="width:100%">
+                        <tr>
+                        <td>Sale ends at {{ product.get_end_date() }}</td>
+                        </tr>
+                        <tr>
+                        <td rowspan="2">Minimum Bid</td>
+                        <td>{{ product.get_minimum_amount() }}</td>
+                        </tr>
+                    </table>
+                    <p>
+                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#offers" aria-expanded="false" aria-controls="collapseExample">
+                        Offers
+                        </button>
+                    </p>
+                    <div class="collapse" id="offers">
+                        <div class="card card-body">
                         <table>
-                            <form method=post action="">
-                                {% for field in form %}
-                                    {{field}}
-                                {% endfor %}
-                                <input type=submit value="Add to Cart">
-                            </form>
+                            <tr>
+                            <th>Price</th><th>Expiration</th><th>From</th>
+                            </tr>
+                            <tr>
+                            <td>Placeholder Price</td>
+                            <td>Placeholder Date</td>
+                            <td>Placeholder User</td>
+                            </tr>
                         </table>
-                    </div>
+                        </div>
                     </div>
                 </div>
             </div>

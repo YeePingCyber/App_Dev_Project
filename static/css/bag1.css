@@ -10,8 +10,9 @@
         1. product img
     -------------------------------------------------------------------------- */
 
-    .product-img img {
-        width: 80%;
+    .shopHeader {
+        width: 30%;
         margin-left: auto;
         margin-right: auto;
+        text-align: center;
     }
