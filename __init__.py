@@ -414,7 +414,6 @@ def update_admin(id):
         users_dict = {}
         db = shelve.open('user.db', 'w')
         users_dict = db['Users']
-        # Reminder to self: doesnt work because dict id used to store admin is not updated -Dylan
         admin = users_dict.get(id)
         admin.set_first_name(update_admin_form.first_name.data)
         admin.set_last_name(update_admin_form.last_name.data)
