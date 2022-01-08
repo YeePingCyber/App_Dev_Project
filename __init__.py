@@ -236,7 +236,7 @@ def admin():
 
 
 @app.route("/adminAuction")
-def adminAuction():
+def admin_auction():
     try:
         db = shelve.open('auction.db', 'r')
         auction_dict = db["Auction"]
@@ -264,10 +264,10 @@ def adminAuction():
 
 
 @app.route("/createAuction", methods=['GET', 'POST'])
-def createAuction():
-    create_auction = CreateAuctionForm(request.form)
+def create_auction():
+    create_auction_form = CreateAuctionForm(request.form)
 
-    if request.method == "POST" and create_auction.validate():
+    if request.method == "POST" and create_auction_form.validate():
         create_auction_dict = {}
         db = shelve.open("auction.db", "c")
 
@@ -279,22 +279,22 @@ def createAuction():
         except:
             print("Error in retrieving Inventory from auction.db")
 
-        auction = Auction(create_auction.product_name.data, create_auction.description.data,
-                          create_auction.base_amount.data, create_auction.minimum_amount.data,
-                          create_auction.start_date.data, create_auction.end_date.data)
+        auction_class = Auction(create_auction_form.product_name.data, create_auction_form.description.data,
+                                create_auction_form.base_amount.data, create_auction_form.minimum_amount.data,
+                                create_auction_form.start_date.data, create_auction_form.end_date.data)
 
-        create_auction_dict[auction.get_auction_id()] = auction
+        create_auction_dict[auction_class.get_auction_id()] = auction_class
         db["Auction"] = create_auction_dict
 
         db.close()
 
-        return redirect(url_for("adminAuction"))
+        return redirect(url_for("admin_auction"))
 
-    return render_template("createAuction.html", form=create_auction)
+    return render_template("createAuction.html", form=create_auction_form)
 
 
 @app.route("/updateAuction/<id>/", methods=['GET', 'POST'])
-def updateAuction(id):
+def update_auction(id):
     update_auction_form = CreateAuctionForm(request.form)
     if request.method == 'POST' and update_auction_form.validate():
         db = shelve.open("auction.db", 'w')
@@ -310,7 +310,7 @@ def updateAuction(id):
         db["Auction"] = auction_dict
         db.close()
 
-        return redirect(url_for("adminAuction"))
+        return redirect(url_for("admin_auction"))
     else:
         db = shelve.open("auction.db", 'r')
         auction_dict = db["Auction"]
@@ -326,8 +326,21 @@ def updateAuction(id):
         return render_template("updateAuction.html", form=update_auction_form)
 
 
+@app.route('/deleteAuction/<id>', methods=["POST"])
+def delete_auction(id):
+    db = shelve.open("auction.db", "w")
+    auction_dict = db["Auction"]
+
+    auction_dict.pop(id)
+
+    db["Auction"] = auction_dict
+    db.close()
+
+    return redirect(url_for("admin_auction"))
+
+
 @app.route("/adminOrders")
-def adminOrders():
+def admin_orders():
     return render_template("adminOrders.html")
 
 
@@ -440,7 +453,7 @@ def update_admin(id):
 
 
 @app.route("/adminProductManagement")
-def adminProductManagement():
+def admin_product_management():
     return render_template("adminProductManagement.html")
 
 
