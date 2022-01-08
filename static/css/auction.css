@@ -1,0 +1,28 @@
+/* NYP Y1S2 2021 - 2022 APP DEVELOPMENT PROJECT
+
+   Structure of mainshop.css
+   |
+   ├─ 1. header (left div)
+   ├─ 2. product img (left div)
+   ├─ 3. product info (right div)
+
+    /* --------------------------------------------------------------------------
+        1. header
+    -------------------------------------------------------------------------- */
+
+    .shopHeader {
+        width: 30%;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+    }
+
+    /* --------------------------------------------------------------------------
+        1. header
+    -------------------------------------------------------------------------- */
+
+    .product-img {
+        width: 60%;
+        margin-left: auto;
+        margin-right: auto;
+    }
