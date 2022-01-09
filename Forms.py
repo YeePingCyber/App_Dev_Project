@@ -52,27 +52,13 @@ class UpdateAdminForm(Form):
 
 
 class CreateAddCartForm(Form):
-    inventory_dict = {}
-    db = shelve.open("inventory", "c")
-    try:
-        if "Inventory" in db:
-            inventory_dict = db["Inventory"]
-        else:
-            db["Inventory"] = inventory_dict
-    except:
-        print("Error in retrieving Inventory from inventory.db")
-
-    for x in inventory_dict:
-        product_id = HiddenField("ID", default=inventory_dict[x].get_product_id())
-        name = HiddenField('Name', [validators.Length(min=1, max=150)], default=inventory_dict[x].get_name())
-        price = HiddenField('Price', default=inventory_dict[x].get_price())
-        quantity = HiddenField('Quantity', default=1)
-        category = HiddenField('Category', [validators.Length(min=1, max=150)], default=inventory_dict[x].get_category())
-        discount = HiddenField('Discount', default=inventory_dict[x].get_discount())
-        description = HiddenField('Description', [validators.Length(min=1, max=300)], default=inventory_dict[x].get_description())
-        # print(inventory_dict[x].get_product_id())
-
-    db.close()
+    product_id = HiddenField("")
+    name = HiddenField('', [validators.Length(min=1, max=150)])
+    price = HiddenField('')
+    quantity = HiddenField('')
+    category = HiddenField('', [validators.Length(min=1, max=150)])
+    discount = HiddenField('')
+    description = HiddenField('', [validators.Length(min=1, max=300)])
 
 
 class CreatePaymentForm(Form):

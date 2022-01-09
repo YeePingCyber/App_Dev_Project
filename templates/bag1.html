@@ -42,12 +42,12 @@
                         <table>
                             <form method=post action="">
                                 {{ product[x].get_product_id() }}
-                                {{ render_field(form.name, default=product[x].get_name()) }}
-                                {{ render_field(form.description, default=product[x].get_description()) }}
-                                {{ render_field(form.price, default=product[x].get_price()) }}
-                                {{ render_field(form.quantity, default=1) }}
-                                {{ render_field(form.category, default=product[x].get_category()) }}
-                                {{ render_field(form.discount, default=0) }}
+                                {{ render_field(form.name, value=product[x].get_name()) }}
+                                {{ render_field(form.description, value=product[x].get_description()) }}
+                                {{ render_field(form.price, value=product[x].get_price()) }}
+                                {{ render_field(form.quantity, value=1) }}
+                                {{ render_field(form.category, value=product[x].get_category()) }}
+                                {{ render_field(form.discount, value=0) }}
                                 <input type=submit value="Add to Cart">
                             </form>
                         </table>
