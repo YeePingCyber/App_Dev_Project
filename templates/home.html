@@ -31,9 +31,9 @@
     
         <div class="container">
             <div class="top-links__link"> 
-                <a class="p-2" href=""><img src="../static/images/Auction.png" width="362" height="465"/></a>
-                <a class="p-2" href=""><img src="../static/images/Freelance Design.png" width="362" height="465"/></a>
-                <a class="p-2" href=""><img src="../static/images/bags.png" width="362" height="465"/></a>
+                <a class="p-2" href="/auction"><img src="../static/images/Auction.png" width="362" height="465"/></a>
+                <a class="p-2" href="#cs"><img src="../static/images/Freelance Design.png" width="362" height="465"/></a>
+                <a class="p-2" href="/mainshop"><img src="../static/images/bags.png" width="362" height="465"/></a>
             </div>
         </div>
     </div>
@@ -50,58 +50,28 @@
                     <h2 class="top4title">Your creative journey starts here —</h2>
                     <p class="top4subtitle">Discover consciously designed tools made by and for creators.</p>
                 </header>
-                <div class="container top-items__grid">
-                    <div class="row">
-                        <div class="top-items__card p-3">
-                            <a class="thumbnail" href=""><img src="../static/images/1-Urth-Norite-24L-Backpack-Combo-Grey-1614664835017_300x@2x.png"/></a>
-                            <div class="top-items__card-detail">
-                                <a href=""> Arkose 20L Modular Backpack </a>
-                                <p  class="top-items__card-subtitle">Versatile everyday backpack</p>
-                                <div class="top-items__card-price">
-                                    <p><span>$142,95</span></p>
+                <div class="container product-grid__products">
+                    {% for top in top4 %}
+                        {% if top4[top].get_top() == 1 %}
+                            <div class="">
+                                <div class="top-items__card">
+                                    <a class="thumbnail" href=""><img src="../static/images/1-Urth-Norite-24L-Backpack-Combo-Grey-1614664835017_300x@2x.png"/></a>
+                                    <div class="top-items__card-detail">
+                                        <a href=""> {{ top4[top].get_name() }} </a>
+                                        <div class="top-items__card-price">
+                                            <p><span>${{ top4[top].get_price() }}</span></p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="top-items__card p-3">
-                            <a class="thumbnail" href=""><img src="../static/images/1-Urth-Norite-24L-Backpack-Combo-Grey-1614664835017_300x@2x.png"/></a>
-                            <div class="top-items__card-detail">
-                                <a href=""> Arkose 20L Modular Backpack </a>
-                                <p  class="top-items__card-subtitle">Versatile everyday backpack</p>
-                                <div class="top-items__card-price">
-                                    <p><span>$142,95</span></p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="top-items__card p-3">
-                            <a class="thumbnail" href=""><img src="../static/images/1-Urth-Norite-24L-Backpack-Combo-Grey-1614664835017_300x@2x.png"/></a>
-                            <div class="top-items__card-detail">
-                                <a href=""> Arkose 20L Modular Backpack </a>
-                                <p  class="top-items__card-subtitle">Versatile everyday backpack</p>
-                                <div class="top-items__card-price">
-                                    <p><span>$142,95</span></p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="top-items__card p-3">
-                            <a class="thumbnail" href=""><img src="../static/images/1-Urth-Norite-24L-Backpack-Combo-Grey-1614664835017_300x@2x.png"/></a>
-                            <div class="top-items__card-detail">
-                                <a href=""> Arkose 20L Modular Backpack </a>
-                                <p  class="top-items__card-subtitle">Versatile everyday backpack</p>
-                                <div class="top-items__card-price">
-                                    <p><span>$142,95</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        {% endif %}
+                    {% endfor %}
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="c-section__creator-showcase">
+    <div class="c-section__creator-showcase" id="cs">
         <section class="c-creator-showcase">
             <div class="creator-showcase__inner">
                 <header class="creator-showcase__header">
