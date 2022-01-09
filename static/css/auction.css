@@ -26,3 +26,182 @@
         margin-left: auto;
         margin-right: auto;
     }
+
+
+    /* --------------------------------------------------------------------------
+        2. Other FreeLance Work
+    -------------------------------------------------------------------------- */
+    .chooseMe__header {
+        width: 100%;
+    }
+
+    .chooseMe__intro {
+        padding-top: 10em;
+        margin: auto;
+        text-align: center;
+        letter-spacing: -.005em;
+    }
+
+    .chooseMe__intro h6 {
+        margin-bottom: 10px;
+        color: var(--dark-grey);
+        text-transform: uppercase;
+    }
+
+    .chooseMe__intro h2 {
+        font-size: 45px;
+        font-weight: 100;
+    }
+
+    .chooseMe__description {
+        padding-top: 10px;
+        max-width: 760px;
+        margin: auto;
+        color: var(--grey);
+    }
+
+    .chooseMe__description span {
+        color: var(--blue);
+    }
+
+    .chooseMe__moving {
+        padding-top: 50px;
+        padding-bottom: 100px;
+        overflow-x: hidden;
+    }
+
+    .chooseMe__left, .chooseMe__right {
+        display: flex;
+        position: relative;
+    }
+
+    .chooseMe__left {
+        animation: moveleft 300s linear infinite;
+    }
+
+    .chooseMe__right {
+        animation: moveright 300s linear infinite;
+    }
+
+    .chooseMe__right .chooseMe__projectSet1, .chooseMe__right .chooseMe__projectSet2 {
+        position: relative;
+        left: 500px;
+    }
+
+    @keyframes moveleft {
+        0% {
+            right: 0px
+        }
+
+        100% {
+            right: 2000px;
+        }
+    }
+
+    @keyframes moveright {
+        100% {
+            right: 0px
+        }
+
+        0% {
+            right: 2000px;
+        }
+    }
+
+    .chooseMe__projectSet1, .chooseMe__projectSet2 {
+        display: grid;
+        padding-top: 20px;
+        row-gap: 45px;
+        column-gap: 40px;
+        grid-template-columns: repeat(5, 300px);
+    }
+
+    .chooseMe__projectSet2 {
+        padding-left: 40px;
+    }
+
+    .chooseMe__card {
+        padding: 20px;
+        width: 300px;
+        height: 112px;
+        border-radius: 10px;
+        background-color: #e2dfd7;
+    }
+
+    .chooseMe__card:active, .chooseMe__card:hover {
+        transform: scale(0.98);
+    }
+
+    .chooseMe__card h4 {
+        color: #fff;
+    }
+
+    .chooseMe__card p {
+        color: var(--grey);
+    }
+
+    .chooseMe__content {
+        display: flex;
+        width: 100%;
+    }
+
+    .chooseMe__content img {
+        margin-right: 10px
+    }
+
+    .chooseMe__projects__description h4 {
+        font-size: 16px;
+    }
+
+    .chooseMe__projects__description p {
+        font-size: 16px;
+    }
+
+    @media (max-width: 890px) {
+        .chooseMe__intro {
+            padding-top: 8em;
+            padding-left: 26px;
+            padding-right: 26px;
+        }
+
+        .chooseMe__intro h6 {
+            font-size: 16px;
+        }
+
+        .chooseMe__intro h2{
+            font-size: 36px;
+        }
+
+        .chooseMe__description {
+            font-size: 16px;
+        }
+
+        .chooseMe__moving {
+            padding-top: 50px;
+            padding-bottom: 50px;
+        }
+
+        .mobile, .chooseMe__projects__description, .chooseMe__right {
+            display: none;
+        }
+
+        .chooseMe__left {
+            animation: moveleft 200s linear infinite;
+        }
+
+        .chooseMe__card {
+            padding: 0;
+            width: 100px;
+            background-color: transparent;
+        }
+
+        .chooseMe__projectSet1, .chooseMe__projectSet2 {
+            padding-top: 20px;
+            grid-template-columns: repeat(5, 100px);
+        }
+
+        .chooseMe__card img {
+            width: 78px;
+            height: 78px;
+        }
+    }

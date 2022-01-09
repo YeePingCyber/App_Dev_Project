@@ -8,8 +8,7 @@ from Admin import Admin
 from User import User
 from addtocart import Addtocart
 from Auction import Auction
-from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreatePaymentForm, CreateProductForm, \
-    CreateAddCartForm, CreateAuctionForm, UpdateAdminForm
+from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreatePaymentForm, CreateProductForm, CreateAddCartForm, CreateAuctionForm, UpdateAdminForm
 
 # create product function
 from createProduct import load_product
@@ -52,8 +51,7 @@ def log_in():
         hashed_password = hl.pbkdf2_hmac('sha256', str(create_log_in_form.login_password.data).encode(), b'salt',
                                          100000).hex()
         for user in users_dict:
-            if users_dict[user].get_email() == create_log_in_form.login_email.data and users_dict[
-                user].get_password() == hashed_password:
+            if users_dict[user].get_email() == create_log_in_form.login_email.data and users_dict[user].get_password() == hashed_password:
                 if isinstance(users_dict[user], Customer):
                     return redirect(url_for('home'))
                 elif isinstance(users_dict[user], Admin):
@@ -105,8 +103,6 @@ def cart():
 
     db.close()
 
-    # print(cartList)
-
     if len(cartList) > 0:
         return render_template("cart.html", cart_list=cartList)
     else:
@@ -144,7 +140,6 @@ def checkout():
 
 
 # main shop
-
 @app.route("/mainshop", methods=['GET', 'POST'])
 def mainshop():
     return render_template("mainshop.html")
@@ -154,7 +149,6 @@ def mainshop():
 def bag1():
     x = 0
     addtocartform = CreateAddCartForm(request.form)
-
     if request.method == "POST":
         addtocart_dict = {}
         db = shelve.open("addtocart", "c")
@@ -177,8 +171,9 @@ def bag1():
         )
 
         addtocart_dict[addtocart.get_id()] = addtocart
-        print(addtocart_dict[addtocart.get_id()])
         db["Add_to_cart"] = addtocart_dict
+
+        return redirect(url_for("cart"))
 
     return render_template("bag1.html", form=addtocartform, product=inventory_dict, x=x)
 
@@ -186,7 +181,6 @@ def bag1():
 @app.route("/bag2", methods=['GET', 'POST'])
 def bag2():
     x = 1
-
     addtocartform = CreateAddCartForm(request.form)
     if request.method == "POST":
         addtocart_dict = {}
@@ -210,8 +204,9 @@ def bag2():
         )
 
         addtocart_dict[addtocart.get_id()] = addtocart
-        print(addtocart_dict[addtocart.get_id()])
         db["Add_to_cart"] = addtocart_dict
+
+        return redirect(url_for("cart"))
 
     return render_template("bag2.html", form=addtocartform, product=inventory_dict, x=x)
 
