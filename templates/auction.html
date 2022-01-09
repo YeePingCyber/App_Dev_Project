@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}Tom Patterson - Shop{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="../static/css/base.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/auction.css">
+{% endblock %}
+
+{% block bodyContent %}
+    <div class="navEmpty"></div>
+    <div class="shopHeader">
+        <div class="toptext">
+            <h5>ALL BAGS</h5>
+            <p>To carry with your fingertips or slipped under your arm, these bags add the ultimate touch of sophistication and femininity to every outfit.
+            Available in styles and colours designed to suit any situation, they guarantee elegance for all occasions.</p>
+        </div>
+    </div>
+    <div class="navEmpty"></div>
+    <div class="product-container">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="product-img">
+                    <img src="../static/images/1-urth-arkose-20l-backpack-grey_1000x@2x.png" alt="Norite 24L Modular Bag">
+                    <p id="img-text">Everyday Backpack</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="product-info">
+                    <h3>Tom Patterson<br>20L Modular Bag</h3>
+                    <p id="title">White Lyocell Canvas Bag</p>
+                    {% for product in auction_list %}
+                    <table style="width:100%">
+                        <tr>
+                        <td>Sale ends at {{ product.get_end_date() }}</td>
+                        </tr>
+                        <tr>
+                        <td rowspan="3">Minimum Bid</td>
+                        <td>{{ product.get_minimum_amount() }}</td>
+                        <td>
+                            <p>
+                                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#makebid" aria-expanded="false" aria-controls="collapseExample">
+                                Place bid
+                                </button>
+                            </p>
+                            <div class="collapse" id="makebid">
+                                <div class="card card-body">
+                                <form>
+                                    <label for="bid">Your bid ($USD):</label><input type="number" id="bid" min="{{ product.get_minimum_amount() }}">
+                                </form>
+                                </div>
+                            </div>
+                        </td>
+                        </tr>
+                    </table>
+                    <p>
+                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#offers" aria-expanded="false" aria-controls="collapseExample">
+                        Offers
+                        </button>
+                    </p>
+                    <div class="collapse" id="offers">
+                        <div class="card card-body">
+                        <table>
+                            <tr>
+                            <th>Price</th><th>Expiration</th><th>From</th>
+                            </tr>
+                            <tr>
+                            <td>Placeholder Price</td>
+                            <td>Placeholder Date</td>
+                            <td>Placeholder User</td>
+                            </tr>
+                        </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

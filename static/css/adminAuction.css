@@ -38,3 +38,14 @@ table{
     margin: 2% 5%;
     width: 90%;
 }
+
+#update_btn{
+    width: 25%;
+    height: 25%;
+    margin-right: 3%;
+    padding: 1.5%;
+}
+
+svg{
+    width: 2.5em;
+}
