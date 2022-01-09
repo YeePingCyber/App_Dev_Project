@@ -144,6 +144,25 @@
     /* --------------------------------------------------------------------------
         4. creator-showcase
     -------------------------------------------------------------------------- */
-    .h {
-        height: 1000px;
+    .c-creator-showcase {
+        margin: 5rem 0 7.5rem;
+        overflow:hidden
+    }
+
+    .creator-showcase__inner {
+        max-width: 125rem;
+        margin: 0 auto;
+        overflow:visible
+    }
+
+    .creator-showcase__header {
+        padding:0 min(4%, 5rem)
+    }
+
+    .creator-showcase__title {
+        margin-bottom:1rem
+    }
+
+    .creator-showcase__description {
+        max-width:17.5rem
     }
