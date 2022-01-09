@@ -62,3 +62,9 @@ font-size:60%;
 .register-link-click{
 color:blue;
 }
+
+.profile-pic{
+border-radius: 50%;
+height: 15%;
+width: 15%;
+}

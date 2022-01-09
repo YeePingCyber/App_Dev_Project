@@ -53,3 +53,9 @@ width:8%;
 .add-account:hover{
 color:white;
 }
+
+.profile-pic{
+border-radius: 50%;
+height: 25%;
+width: 25%;
+}

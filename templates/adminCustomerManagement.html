@@ -24,7 +24,7 @@
     </tr>
     {% for customer in customer_list %}
     <tr>
-        <td>{{ customer.get_customer_id() }}</td>
+        <td><img src="../static/images/Default_picture.jpg" class="profile-pic"> {{ customer.get_customer_id() }}</td>
         <td>{{ customer.get_first_name() }} {{ customer.get_last_name() }}</td>
         <td>{{ customer.get_email() }}</td>
         <td>{{ customer.get_points() }}</td>
