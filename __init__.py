@@ -213,6 +213,7 @@ def bag2():
 
 @app.route("/auction")
 def auction():
+    # create_bid_form = CreateBidForm(request.form)
     auction_dict = {}
     db = shelve.open('auction.db', 'r')
     auction_dict = db["Auction"]
@@ -224,6 +225,26 @@ def auction():
         auction_list.append(product)
         print(key)
 
+    # if request.method == 'POST' and create_bid_form.validate():
+    #     bid_dict = {}
+    #     db = shelve.open('UserBid.db', 'c')
+    #
+    #     try:
+    #         customers_dict = db['UserBid']
+    #     except:
+    #         print("Error in retrieving UserBid.db.")
+    #
+    #     userBid = Customer(create_customer_form.first_name.data, create_customer_form.last_name.data,
+    #                                  create_customer_form.gender.data, create_customer_form.membership.data,
+    #                                  create_customer_form.remarks.data, create_customer_form.email.data,
+    #                                  create_customer_form.date_joined.data,
+    #                                  create_customer_form.address.data)
+    #     print(customer.get_customer_id())
+    #     customers_dict[customer.get_customer_id()] = customer
+    #     db['Customers'] = customers_dict
+    #
+    #     db.close()
+    #
     return render_template('auction.html', auction_list=auction_list)
 
 
