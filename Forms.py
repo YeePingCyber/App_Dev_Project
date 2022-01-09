@@ -62,15 +62,15 @@ class CreateAddCartForm(Form):
     except:
         print("Error in retrieving Inventory from inventory.db")
 
-    # needa fix this, default value only show first item in dictionary.
     for x in inventory_dict:
+        product_id = HiddenField("ID", default=inventory_dict[x].get_product_id())
         name = HiddenField('Name', [validators.Length(min=1, max=150)], default=inventory_dict[x].get_name())
         price = HiddenField('Price', default=inventory_dict[x].get_price())
         quantity = HiddenField('Quantity', default=1)
         category = HiddenField('Category', [validators.Length(min=1, max=150)], default=inventory_dict[x].get_category())
         discount = HiddenField('Discount', default=inventory_dict[x].get_discount())
         description = HiddenField('Description', [validators.Length(min=1, max=300)], default=inventory_dict[x].get_description())
-        print(inventory_dict[x])
+        # print(inventory_dict[x].get_product_id())
 
     db.close()
 

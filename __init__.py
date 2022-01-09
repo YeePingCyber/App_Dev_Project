@@ -8,36 +8,32 @@ from Admin import Admin
 from User import User
 from addtocart import Addtocart
 from Auction import Auction
-from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreatePaymentForm, CreateProductForm, CreateAddCartForm, CreateAuctionForm, UpdateAdminForm
-
+from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreatePaymentForm, CreateProductForm, \
+    CreateAddCartForm, CreateAuctionForm, UpdateAdminForm
 
 # create product function
 from createProduct import load_product
 
 app = Flask(__name__)
 
+inventory_dict = {}
+db = shelve.open("inventory", "c")
+try:
+    if "Inventory" in db:
+        inventory_dict = db["Inventory"]
+    else:
+        db["Inventory"] = inventory_dict
+except:
+    print("Error in retrieving Inventory from inventory.db")
 
-# Initilising Inventory
-# inventory_dict = {}
-# db = shelve.open("inventory", "c")
-#
-# try:
-#     if "Inventory" in db:
-#         inventory_dict = db["Inventory"]
-#     else:
-#         db["Inventory"] = inventory_dict
-#
-# except:
-#     print("Error in retrieving Inventory from inventory.db")
-#
 # for x in range(4):
 #     inventory = Product("Arkose 20L Modular Bacpack", "Everyday backpack + small camera insert", 140, 50, "Camera", 0)
 #     inventory_dict[x] = inventory
 #     db["Inventory"] = inventory_dict
 #
-# for x in inventory_dict:
-#     print(inventory_dict[x])
-# db.close()
+for x in inventory_dict:
+    print(inventory_dict[x])
+db.close()
 
 
 # Customer Side
@@ -53,9 +49,11 @@ def log_in():
     if request.method == 'POST' and create_log_in_form.validate():
         db = shelve.open('user.db', 'r')
         users_dict = db['Users']
-        hashed_password = hl.pbkdf2_hmac('sha256', str(create_log_in_form.login_password.data).encode(), b'salt',100000).hex()
+        hashed_password = hl.pbkdf2_hmac('sha256', str(create_log_in_form.login_password.data).encode(), b'salt',
+                                         100000).hex()
         for user in users_dict:
-            if users_dict[user].get_email() == create_log_in_form.login_email.data and users_dict[user].get_password() == hashed_password:
+            if users_dict[user].get_email() == create_log_in_form.login_email.data and users_dict[
+                user].get_password() == hashed_password:
                 if isinstance(users_dict[user], Customer):
                     return redirect(url_for('home'))
                 elif isinstance(users_dict[user], Admin):
@@ -110,7 +108,7 @@ def cart():
     # print(cartList)
 
     if len(cartList) > 0:
-        return render_template("cart.html", cart_list = cartList)
+        return render_template("cart.html", cart_list=cartList)
     else:
         return render_template("cart_empty.html")
 
@@ -152,7 +150,9 @@ def mainshop():
 
 @app.route("/bag1", methods=['GET', 'POST'])
 def bag1():
+    x = 0
     addtocartform = CreateAddCartForm(request.form)
+
     if request.method == "POST":
         addtocart_dict = {}
         db = shelve.open("addtocart", "c")
@@ -178,11 +178,13 @@ def bag1():
         print(addtocart_dict[addtocart.get_id()])
         db["Add_to_cart"] = addtocart_dict
 
-    return render_template("bag1.html", form=addtocartform)
+    return render_template("bag1.html", form=addtocartform, product=inventory_dict, x=x)
 
 
 @app.route("/bag2", methods=['GET', 'POST'])
 def bag2():
+    x = 1
+
     addtocartform = CreateAddCartForm(request.form)
     if request.method == "POST":
         addtocart_dict = {}
@@ -209,7 +211,7 @@ def bag2():
         print(addtocart_dict[addtocart.get_id()])
         db["Add_to_cart"] = addtocart_dict
 
-    return render_template("bag2.html", form=addtocartform)
+    return render_template("bag2.html", form=addtocartform, product=inventory_dict, x=x)
 
 
 # Admin Side
@@ -243,7 +245,6 @@ def adminAuction():
                 upcoming.append(values)
 
     return render_template("adminAuction.html", ongoing=ongoing, upcoming=upcoming)
-
 
 
 @app.route("/createAuction", methods=['GET', 'POST'])
@@ -316,7 +317,7 @@ def adminOrders():
 
 @app.route("/adminCustomerManagement")
 def admin_customer_management():
-    db = shelve.open('user.db','r')
+    db = shelve.open('user.db', 'r')
     users_dict = db['Users']
     db.close()
     customer_list = []
@@ -325,7 +326,7 @@ def admin_customer_management():
             customer = users_dict[user]
             customer_list.append(customer)
 
-    return render_template("adminCustomerManagement.html", count = len(customer_list), customer_list=customer_list)
+    return render_template("adminCustomerManagement.html", count=len(customer_list), customer_list=customer_list)
 
 
 @app.route('/deleteCustomer/<int:id>', methods=['POST'])
@@ -342,7 +343,7 @@ def delete_customer(id):
 
 @app.route("/adminAdminManagement")
 def admin_admin_management():
-    db = shelve.open('user.db','r')
+    db = shelve.open('user.db', 'r')
     users_dict = db['Users']
     db.close()
     admin_list = []
@@ -350,7 +351,7 @@ def admin_admin_management():
         if isinstance(users_dict[user], Admin):
             admin = users_dict[user]
             admin_list.append(admin)
-    return render_template("adminAdminManagement.html",count = len(admin_list), admin_list=admin_list)
+    return render_template("adminAdminManagement.html", count=len(admin_list), admin_list=admin_list)
 
 
 @app.route('/deleteAdmin/<int:id>', methods=['POST'])
@@ -365,7 +366,7 @@ def delete_admin(id):
     return redirect(url_for('admin_admin_management'))
 
 
-@app.route("/adminAccountCreation", methods = ['GET','POST'])
+@app.route("/adminAccountCreation", methods=['GET', 'POST'])
 def admin_creation():
     create_admin_form = CreateAdminForm(request.form)
     if request.method == 'POST' and create_admin_form.validate():
@@ -378,7 +379,7 @@ def admin_creation():
                 print("Error in retrieving Users from user.db")
 
             new_admin = Admin(create_admin_form.first_name.data, create_admin_form.last_name.data,
-                              create_admin_form.email.data,create_admin_form.register_password.data,
+                              create_admin_form.email.data, create_admin_form.register_password.data,
                               create_admin_form.employee_id.data)
             admin_dict[new_admin.get_admin_id()] = new_admin
             print(new_admin.get_password())
@@ -390,7 +391,7 @@ def admin_creation():
     return render_template("adminAdminCreation.html", form=create_admin_form)
 
 
-@app.route("/adminAdminUpdate/<int:id>/", methods=["GET","POST"])
+@app.route("/adminAdminUpdate/<int:id>/", methods=["GET", "POST"])
 def update_admin(id):
     update_admin_form = UpdateAdminForm(request.form)
     if request.method == 'POST' and update_admin_form.validate():

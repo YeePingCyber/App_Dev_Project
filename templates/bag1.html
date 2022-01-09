@@ -20,6 +20,7 @@
     <div class="navEmpty"></div>
     <div class="product-container">
         <div class="container-fluid">
+            {% from "includes/formHelper.html" import render_field %}
             <div class="row">
                 <div class="col-md-6">
                     <div class="product-img">
@@ -29,8 +30,8 @@
                 </div>
                 <div class="col-md-6">
                     <div class="product-info">
-                    <h3>Tom Patterson<br>20L Modular Bag</h3>
-                    <p id="title">White Lyocell Canvas Bag</p>
+                    <h3>Tom Patterson<br>{{ product[x].get_name() }}</h3>
+                    <p id="title">{{ product[x].get_description() }}</p>
                     <hr>
 
                     <p>Free Shipping and Returns</p>
@@ -42,9 +43,13 @@
                         <p>placeholder 2</p>
                         <table>
                             <form method=post action="">
-                                {% for field in form %}
-                                    {{field}}
-                                {% endfor %}
+                                {{ product[x].get_product_id() }}
+                                {{ render_field(form.name, default=product[x].get_name()) }}
+                                {{ render_field(form.description, default=product[x].get_description()) }}
+                                {{ render_field(form.price, default=product[x].get_price()) }}
+                                {{ render_field(form.quantity, default=1) }}
+                                {{ render_field(form.category, default=product[x].get_category()) }}
+                                {{ render_field(form.discount, default=0) }}
                                 <input type=submit value="Add to Cart">
                             </form>
                         </table>
