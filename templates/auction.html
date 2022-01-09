@@ -28,9 +28,9 @@
 
                 <div class="col-md-6">
                     <div class="product-info">
-                        <h3>Tom Patterson<br>20L Modular Bag</h3>
+                       {% for product in auction_list %}
+                        <h3>{{ product.get_name() }}</h3>
                         <p id="title">White Lyocell Canvas Bag</p>
-                        {% for product in auction_list %}
                             <table style="width:100%">
                                 <tr>
                                     <td>Sale ends at {{ product.get_end_date() }}</td>
@@ -73,7 +73,7 @@
 
 
 <div class="chooseMe__header">
-            <div class"container">
+            <div class="container">
                 <div class="chooseMe__intro">
                     <h6>Diverse experience</h6>
                     <h2>Projects Accomplished</h2>

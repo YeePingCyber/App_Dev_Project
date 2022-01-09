@@ -219,9 +219,10 @@ def auction():
     db.close()
 
     auction_list = []
-    for key in auction_list:
-        product = auction_list.get(key)
+    for key in auction_dict:
+        product = auction_dict.get(key)
         auction_list.append(product)
+        print(key)
 
     return render_template('auction.html', auction_list=auction_list)
 
