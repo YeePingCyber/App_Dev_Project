@@ -14,54 +14,51 @@
         }
     </style>
 
-    <div class="container">
-        <div class="d-flex justify-content-center cart-title"><h2>Your Cart</h2></div>
+    <div>
+        <div class="container">
+            <div class="d-flex justify-content-center cart-title"><h2>Your Cart</h2></div>
 
-        <div class="c-cart-template__products is-visible">
-            {% for products in cart_list %}
-                <div class="c-cart-products">
-                    <div class="c-cart-product">
-                        <div class="c-cart-product__image-col">
-                            <a href="" class="c-cart-product__image-container"><img width="160" alt="Black" class="c-cart-product__image ls-is-cached lazyloaded" src="../static/images/1-Urth-Norite-24L-Backpack-Combo-Grey-1614664835017_300x@2x.png"></a>
-                            <button class="c-cart-product__remove is-mobile o-btn is-underline">Remove</button>
-                        </div>
-                        <div class="c-cart-product__details">
-                            <div class="c-cart-product__details-inner">
-                                <div class="c-cart-product__title-container">
-                                    <p class="c-cart-product__title o-title">{{ products.get_name() }}</p>
-                                    <p class="c-cart-product__options"><span>{{ products.get_description() }}</span></p>
-                                </div>
-
-                                <div class="o-quantity-selector c-cart-product__quantity">
-                                    <div class="o-quantity-selector__inner">
-                                        <button type="button" class="o-btn o-quantity-selector__button is-minus is-disabled">
-                                            <svg class="o-icon o-quantity-selector__icon is-minus cust-svg-263965" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 3"><path d="M1.1579 1.5H12.842" stroke="#111" stroke-width="2" fill="none" stroke-linecap="square"></path></svg>
-                                        </button>
-                                        <div class="o-quantity-selector__input">
-                                            <input type="number" class="o-input o-quantity-selector__input-field" value="1">
-                                        </div>
-                                        <button type="button" class="o-btn o-quantity-selector__button is-plus">
-                                            <svg class="o-icon o-quantity-selector__icon is-plus cust-svg-806553" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 13"><path d="M1.1579 6.5H12.842M7 1v11" stroke="#111" stroke-width="2" fill="none" stroke-linecap="square"></path></svg>
-                                        </button>
-                                    </div>
-                                </div>
-                                <p class="c-cart-product__price-container"><span class="c-cart-product__price">Price:<span>${{ products.get_price() }}</span></span><span class="c-cart-product__price">Total:<span>143,95</span></span></p>
+            <div class="c-cart-template__products is-visible">
+                {% for products in cart_list %}
+                    <div class="c-cart-products">
+                        <div class="c-cart-product">
+                            <div class="c-cart-product__image-col">
+                                <a href="" class="c-cart-product__image-container"><img width="160" alt="Black" class="c-cart-product__image ls-is-cached lazyloaded" src="../static/images/1-Urth-Norite-24L-Backpack-Combo-Grey-1614664835017_300x@2x.png"></a>
+                                <button class="c-cart-product__remove is-mobile o-btn is-underline">Remove</button>
                             </div>
-                            <form action="/deleteCart/{{ products.get_id() }}" method="POST">
-                                <button class="c-cart-product__remove is-desktop o-btn is-underline">Remove</button>
-                            </form>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
+                            <div class="c-cart-product__details">
+                                <div class="c-cart-product__details-inner">
+                                    <div class="c-cart-product__title-container">
+                                        <p class="c-cart-product__title o-title">{{ products.get_name() }}</p>
+                                        <p class="c-cart-product__options"><span>{{ products.get_description() }}</span></p>
+                                    </div>
 
-        <p class="c-cart-template__empty ">Your cart is currently empty.</p>
-        <p class="c-cart-template__subtotal o-heading is-size-4">
-            <span>Subtotal:</span>
-            <span>€143,95</span>
-            <a class="btn btn-outline-primary" href="/" role="button">Return to Shop</a>
-            <a class="btn btn-outline-primary" href="/checkout" role="button">Checkout</a>
-        </p>
+                                    <div class="o-quantity-selector c-cart-product__quantity">
+                                        <div class="o-quantity-selector__inner">
+                                            <div class="o-quantity-selector__input">
+                                                <input type="number" class="o-input o-quantity-selector__input-field" value="1">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <p class="c-cart-product__price-container"><span class="c-cart-product__price">Price:<span>${{ products.get_price() }}</span></span><span class="c-cart-product__price">Total:<span>${{ products.get_price() }}</span></span></p>
+                                </div>
+                                <form action="/deleteCart/{{ products.get_id() }}" method="POST">
+                                    <button class="c-cart-product__remove is-desktop o-btn is-underline">Remove</button>
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <p class="c-cart-template__empty ">Your cart is currently empty.</p>
+            <p class="c-cart-template__subtotal o-heading is-size-4">
+                <span>Subtotal:</span>
+                <span>${{ subtotal }}</span>
+                <a class="btn btn-outline-primary" href="/" role="button">Return to Shop</a>
+                <a class="btn btn-outline-primary" href="/checkout" role="button">Checkout</a>
+            </p>
+        </div>
     </div>    
 {% endblock %}

@@ -95,8 +95,6 @@
         }
     }
 
-
-
     .banner-image {
         position: absolute;
         top: 0;
@@ -119,6 +117,13 @@
     .top4header {
         text-align: center;
         margin: 18% 0 14.2%;
+    }
+
+    .product-grid__products {
+        margin-top: 2.75rem;
+        padding: 0 18.99% 0 0;
+        display: flex;
+        overflow-x:auto
     }
 
     .top-items__card {
