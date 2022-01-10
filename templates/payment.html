@@ -3,6 +3,11 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="../static/css/base.css">
         <link rel="stylesheet" type="text/css" href="../static/css/checkout.css">
+        <link rel="stylesheet" type="text/css" href="../static/css/payment.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <style>
             .tom-navv {
                 background-image: url(none);
@@ -32,56 +37,75 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="/cart">Cart</a></li>
-                        <li class="breadcrumb-item active">Information</li>
-                        <li class="breadcrumb-item" aria-current="page">Payment</li>
+                        <li class="breadcrumb-item"><a href="/checkout">Shipping</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Payment</li>
                     </ol>
                 </nav>
 
-                <div class="dynamic-checkout">
-                    <h2 class="dynamic-checkout__title">Express checkout</h2>
-                    <div class="dynamic-checkout__content">
-                        <div class="dynamic-checkout__buttons text-center">
-                            <button type="button" class="btn btn-primary btn-warning">Apple</button>
-                            <button type="button" class="btn btn-primary btn-dark">Google</button>
-                            <button type="button" class="btn btn-primary btn-warning">Tom</button>
-                        </div>
-                    </div>
-                </div>
+                <table class="table table-borderless review">
+                    <tbody>
+                        <tr style="margin-top: 0.8571428571em;padding-top: 0.8571428571em;border-top: 1px solid #e2e1dc;">
+                            <td style="font-size: 14px">Contact</td>
+                            <td style="font-size: 14px">{{ ship[0] }}</td>
+                            <td style="font-size: 14px"><a href="/checkout">Change</a></td>
+                        </tr>
+                        <tr style="margin-top: 0.8571428571em;padding-top: 0.8571428571em;border-top: 1px solid #e2e1dc;">
+                            <td style="font-size: 14px">Ship to</td>
+                            <td style="font-size: 14px">{{ ship[1] }}</td>
+                            <td style="font-size: 14px"><a href="/checkout">Change</a></td>
+                        </tr>
+                    </tbody>
+                </table>
 
-                <div class="hehe">
-                    <div class="info">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h2 class="section__title" tabindex="-1">Contact information</h2>
-                            <p class="section__details">
-                                <span aria-hidden="true">Already have an account?</span>
-                                <a href="/login">Log in</a>
-                            </p>
-                        </div>
-                    </div>
-
+                <div class="hehe" style="padding-top: 3em;">
                     <div class="form-row">
-                        <h2 class="section__title" tabindex="-1">Shipping Address</h2>
-                        <div class="form-group">{{ render_field(form.country, class="form-control field__input") }}</div>
-                        <div class="form-group">
-                            <div class="form-row">
-                                {{ render_field(form.first_name, class="col half-field field__input") }}
-                                {{ render_field(form.last_name, class="col half-field field__input") }}
+                        <h2 class="section__title" tabindex="-1">Payment</h2>
+
+                        <div class="accordion" id="accordionExample">
+                            <div class="card">
+                                <div class="card-header" id="headingOne">
+                                    <h5 class="mb-0">
+                                        <button class="btn" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            Credit card
+                                        </button>
+                                    </h5>
+                                </div>
+
+                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                    <div class="card-body">
+                                        <div class="form-group">{{ render_field(form.card_num, class="form-control field__input") }}</div>
+                                        <div class="form-group">{{ render_field(form.name_card, class="form-control field__input") }}</div>
+                                        <div class="form-group">
+                                            <div class="form-row">
+                                                {{ render_field(form.expire, class="col half-field field__input") }}
+                                                {{ render_field(form.ccv, class="col half-field field__input") }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header" id="headingTwo">
+                                    <h5 class="mb-0">
+                                        <button class="btn collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                            Others
+                                        </button>
+                                      </h5>
+                                </div>
+                                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                                    <div class="card-body">
+                                        <div class="blank-slate">
+                                            <p class="shown-if-js">After clicking “Complete order”, you will be redirected to PayPal to complete your purchase securely.</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group">{{ render_field(form.company, class="form-control field__input") }}</div>
-                        <div class="form-group">{{ render_field(form.address, class="form-control field__input") }}</div>
-                        <div class="form-group">{{ render_field(form.apartment, class="form-control field__input") }}</div>
-                        <div class="form-group">
-                            <div class="form-row">
-                                {{ render_field(form.postal_code, class="col half-field field__input") }}
-                                {{ render_field(form.city, class="col half-field field__input") }}
-                            </div>
-                        </div>
-                        <div class="form-group">{{ render_field(form.phone, class="form-control field__input") }}</div>
 
                         <div class="step__footer">
-                            <button type="button" class="btn btn-primary btn-dark" style="width: 187px; height: 58px;"><span class="btn__content">Continue to shipping</span></button>
-                            <a class="step__footer__previous-link" href="/mainshop"><svg focusable="false" aria-hidden="true" class="icon-svg icon-svg--color-accent icon-svg--size-10 previous-link__icon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><path d="M8 1L7 0 3 4 2 5l1 1 4 4 1-1-4-4"></path></svg><span class="step__footer__previous-link-content">Return to Shop</span></a>
+                            <button type="submit" class="btn btn-primary btn-dark" style="width: 187px; height: 58px;"><span class="btn__content">Pay Now</span></button>
+                            <a class="step__footer__previous-link" href="/checkout"><svg focusable="false" aria-hidden="true" class="icon-svg icon-svg--color-accent icon-svg--size-10 previous-link__icon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><path d="M8 1L7 0 3 4 2 5l1 1 4 4 1-1-4-4"></path></svg><span class="step__footer__previous-link-content">Return to Shipping</span></a>
                         </div>
                     </div>
                 </div>
@@ -97,14 +121,15 @@
             </div>
 
             <div class="cart-details">
-                <div class="product d-flex justify-content-between align-items-center">
+                <div class="product">
                     {% for products in cart_list %}
-                        <img class="product-thumbnail__image" src="../../static/images/1-urth-arkose-20l-backpack-grey_1000x@2x.png" width="64" height="64">
-                        <div class="product__description">
-                            <span class="product__description__name">{{ products.get_name() }}</span>
-                            <span class="product__description__variant">{{ products.get_description() }}</span>
+                        <div class="d-flex justify-content-between align-items-center p-1">
+                            <img class="product-thumbnail__image" src="../../static/images/1-urth-arkose-20l-backpack-grey_1000x@2x.png" width="64" height="64">
+                            <div class="product__description">
+                                <span class="product__description__name">{{ products.get_name() }}</span>
+                            </div>
+                            <p class="product__price"><span class="order-summary__emphasis">${{ products.get_price() }}</span></p>
                         </div>
-                        <p class="product__price"><span class="order-summary__emphasis">${{ products.get_price() }}</span></p>
                     {% endfor %}
                 </div>
 
@@ -126,23 +151,6 @@
                 <div class="total d-flex justify-content-between align-items-center">
                     <p>Total</p>
                     <p>${{ grandtotal }}</p>
-                </div>
-
-                <button class="btn btn-primary b" type="submit">Checkout</button>
-
-                <div class="interactions">
-                    <div class="c-cart-drawer__tree">
-                        <div class="c-cart-drawer__tree-header"><svg viewBox="0 0 15 16" xmlns="http://www.w3.org/2000/svg" class="c-cart-drawer__tree-icon"><path d="M7.69502.070361L7.7117 0l3.6375 7.19094L15 14.4224h-4.9669V16H5.35832v-1.344H0L7.69502.037205V.07036zM7.45957 14.1926V1.50403L.783203 14.1926H7.45957z" fill="#FFF" fill-rule="evenodd"></path></svg>
-                            <p class="c-cart-drawer__tree-title">You will plant <span>20</span> trees with this order</p>
-                        </div>
-                        <p class="c-cart-drawer__tree-message"><a href="/register">Sign up</a> or <a href="/login">log in</a> to track your impact and earn rewards.</p>
-                    </div>
-
-                    <div class="c-cart-drawer__tree">
-                        <div class="c-cart-drawer__tree-header"><svg viewBox="0 0 15 16" xmlns="http://www.w3.org/2000/svg" class="c-cart-drawer__tree-icon"><path d="M7.69502.070361L7.7117 0l3.6375 7.19094L15 14.4224h-4.9669V16H5.35832v-1.344H0L7.69502.037205V.07036zM7.45957 14.1926V1.50403L.783203 14.1926H7.45957z" fill="#FFF" fill-rule="evenodd"></path></svg>
-                            <p class="c-cart-drawer__tree-title">Play a quick game and earn discounts</p>
-                        </div>
-                    </div>
                 </div>
             </div>
         </form>

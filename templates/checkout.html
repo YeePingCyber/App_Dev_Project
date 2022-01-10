@@ -3,6 +3,10 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="../static/css/base.css">
         <link rel="stylesheet" type="text/css" href="../static/css/checkout.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <style>
             .tom-navv {
                 background-image: url(none);
@@ -12,7 +16,7 @@
 
     <body>
         {% from "includes/formHelper.html" import render_field %}
-        <form class="container wrap content">
+        <form class="container wrap content" method="POST">
             <div class="cart-header">
                 <a class="cart-brand" href="/">Tom Patterson</a>
 
@@ -24,7 +28,7 @@
                                 <span>Show order summary</span>
                                 <svg width="11" height="6" xmlns="http://www.w3.org/2000/svg" class="order-summary-toggle__dropdown" fill="#000"><path d="M.504 1.813l4.358 3.845.496.438.496-.438 4.642-4.096L9.504.438 4.862 4.534h.992L1.496.69.504 1.812z"></path></svg>
                             </span>
-                            <span class="order-summary__emphasis total-recap__final-price skeleton-while-loading" data-checkout-payment-due-target="29285">€292.85</span>
+                            <span class="order-summary__emphasis total-recap__final-price skeleton-while-loading" data-checkout-payment-due-target="29285">${{ grandtotal }}</span>
                         </span>
                     </span>
                 </div>
@@ -81,7 +85,7 @@
                         <div class="form-group">{{ render_field(form.phone, class="form-control field__input") }}</div>
 
                         <div class="step__footer">
-                            <button type="button" class="btn btn-primary btn-dark" style="width: 187px; height: 58px;"><span class="btn__content">Continue to shipping</span></button>
+                            <a href="/checkout/payment"><button type="submit" class="btn btn-primary btn-dark" style="width: 187px; height: 58px;"><span class="btn__content">Continue to Payment</span></button></a>
                             <a class="step__footer__previous-link" href="/mainshop"><svg focusable="false" aria-hidden="true" class="icon-svg icon-svg--color-accent icon-svg--size-10 previous-link__icon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><path d="M8 1L7 0 3 4 2 5l1 1 4 4 1-1-4-4"></path></svg><span class="step__footer__previous-link-content">Return to Shop</span></a>
                         </div>
                     </div>
@@ -98,14 +102,16 @@
             </div>
 
             <div class="cart-details">
-                <div class="product d-flex justify-content-between align-items-center">
+                <div class="product">
                     {% for products in cart_list %}
+                    <div class="d-flex justify-content-between align-items-center p-1">
                         <img class="product-thumbnail__image" src="../../static/images/1-urth-arkose-20l-backpack-grey_1000x@2x.png" width="64" height="64">
                         <div class="product__description">
                             <span class="product__description__name">{{ products.get_name() }}</span>
-                            <span class="product__description__variant">{{ products.get_description() }}</span>
                         </div>
                         <p class="product__price"><span class="order-summary__emphasis">${{ products.get_price() }}</span></p>
+                    </div>
+
                     {% endfor %}
                 </div>
 
@@ -128,8 +134,6 @@
                     <p>Total</p>
                     <p>${{ grandtotal }}</p>
                 </div>
-
-                <button class="btn btn-primary b" type="submit">Checkout</button>
 
                 <div class="interactions">
                     <div class="c-cart-drawer__tree">
