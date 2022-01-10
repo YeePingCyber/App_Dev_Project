@@ -298,7 +298,7 @@ def auction():
             print("Error in retrieving UserBid.db.")
 
         userBid = UserBid(create_bid_form.bidAmount.data)
-        bid_dict[userBid.get_bidAmount()] = userBid
+
         db['UserBid'] = bid_dict
 
         db.close()
