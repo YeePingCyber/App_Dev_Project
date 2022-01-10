@@ -9,7 +9,7 @@ from User import User
 from Product import Product
 from addtocart import Addtocart
 from Auction import Auction
-from ProcessPayment import ProcessPayment
+from ProcessCart import PaymentProcess, ShippingProcess
 from UserBid import UserBid
 from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreateShipmentForm, CreatePaymentForm, CreateProductForm, CreateAddCartForm, CreateAuctionForm, UpdateAdminForm, CreateBidForm
 
@@ -136,9 +136,6 @@ def delete_item(id):
         return render_template("cart_empty.html")
 
 
-shippingList = []
-
-
 @app.route("/checkout", methods=['GET', 'POST'])
 def checkout():
     cart_dict = {}
@@ -160,13 +157,24 @@ def checkout():
     grandtotal = total + 4
 
     db.close()
+    shipping_dict = {}
     create_shipment_form = CreateShipmentForm(request.form)
     if request.method == 'POST' and create_shipment_form.validate():
-        shippingList.append(create_shipment_form.email.data)
-        shippingList.append(create_shipment_form.address.data)
+        db = shelve.open("shipping", "c")
+        try:
+            if "Shipping" in db:
+                shipping_dict = db["Shipping"]
+            else:
+                db["Shipping"] = shipping_dict
+        except:
+            print("Error in retrieving Inventory from shipping.db")
+        shipping = ShippingProcess(create_shipment_form.email.data, create_shipment_form.country.data, create_shipment_form.first_name.data, create_shipment_form.last_name.data, create_shipment_form.address.data, create_shipment_form.postal_code.data, create_shipment_form.city.data, create_shipment_form.phone.data)
+        shipping_dict[0] = shipping
+        db["Shipping"] = shipping_dict
+
         return redirect(url_for("payment"))
 
-    return render_template("checkout.html", form=create_shipment_form, cart_list=cartList, subtotal=total,grandtotal=grandtotal)
+    return render_template("checkout.html", form=create_shipment_form, cart_list=cartList, subtotal=total, grandtotal=grandtotal)
 
 
 @app.route("/checkout/payment", methods=['GET', 'POST'])
@@ -181,6 +189,16 @@ def payment():
     except:
         print("Error in retrieving Inventory from addtocart.db")
 
+    shipping_dict = {}
+    db = shelve.open("shipping", "c")
+    try:
+        if "Shipping" in db:
+            shipping_dict = db["Shipping"]
+        else:
+            db["Shipping"] = shipping_dict
+    except:
+        print("Error in retrieving Inventory from shipping.db")
+
     cartList = []
     total = 0
     for x in cart_dict:
@@ -190,6 +208,8 @@ def payment():
     grandtotal = total + 4
 
     db.close()
+
+    payment_dict = {}
     create_payment_form = CreatePaymentForm(request.form)
     if request.method == 'POST' and create_payment_form.validate():
         sales = {}
@@ -202,12 +222,23 @@ def payment():
         except:
             print("Error in retrieving Sales from sales.db")
 
-        # payment_done = ProcessPayment()
-        # sales[0] = payment_done
-        # db["sales"] = sales
+        db = shelve.open("payment", "c")
+        try:
+            if "payment" in db:
+                payment_dict = db["payment"]
+            else:
+                db["payment"] = payment_dict
+        except:
+            print("Error in retrieving Sales from payment.db")
+
+        payment = PaymentProcess(create_payment_form.card_num.data, create_payment_form.name_card.data, create_payment_form.expire.data, create_payment_form.ccv.data)
+        payment_dict[0] = payment
+        db["payment"] = payment_dict
         db.close()
 
-    return render_template("payment.html", form=create_payment_form, cart_list=cartList, subtotal=total, grandtotal=grandtotal, ship=shippingList)
+        return redirect(url_for("home"))
+
+    return render_template("payment.html", form=create_payment_form, cart_list=cartList, subtotal=total, grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict)
 
 
 # main shop
@@ -276,18 +307,12 @@ def bag2():
 
 @app.route("/auction", methods=['GET', 'POST'])
 def auction():
-    create_bid_form = CreateBidForm(request.form)
     auction_dict = {}
-    db = shelve.open('auction.db', 'r')
+    db = shelve.open('auction.db', 'c')
     auction_dict = db["Auction"]
     db.close()
 
-    # auction_list = []
-    # for key in auction_dict:
-    #     product = auction_dict.get(key)
-    #     auction_list.append(product)
-    #     print(key)
-
+    create_bid_form = CreateBidForm(request.form)
     if request.method == 'POST' and create_bid_form.validate():
         bid_dict = {}
         db = shelve.open('UserBid.db', 'c')

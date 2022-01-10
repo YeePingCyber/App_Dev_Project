@@ -17,7 +17,7 @@
 
     <body>
         {% from "includes/formHelper.html" import render_field %}
-        <form class="container wrap content">
+        <form class="container wrap content" method="POST">
             <div class="cart-header">
                 <a class="cart-brand" href="/">Tom Patterson</a>
 
@@ -46,12 +46,12 @@
                     <tbody>
                         <tr style="margin-top: 0.8571428571em;padding-top: 0.8571428571em;border-top: 1px solid #e2e1dc;">
                             <td style="font-size: 14px">Contact</td>
-                            <td style="font-size: 14px">{{ ship[0] }}</td>
+                            <td style="font-size: 14px">{{ ship[0].get_email() }}</td>
                             <td style="font-size: 14px"><a href="/checkout">Change</a></td>
                         </tr>
                         <tr style="margin-top: 0.8571428571em;padding-top: 0.8571428571em;border-top: 1px solid #e2e1dc;">
                             <td style="font-size: 14px">Ship to</td>
-                            <td style="font-size: 14px">{{ ship[1] }}</td>
+                            <td style="font-size: 14px">{{ ship[0].get_address() }}</td>
                             <td style="font-size: 14px"><a href="/checkout">Change</a></td>
                         </tr>
                     </tbody>
