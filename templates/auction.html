@@ -29,17 +29,17 @@
 
                 <div class="col-md-6">
                     <div class="product-info">
-                       {% for product in auction_list %}
-                            {% if product == AUde3121422d8aff59 %}
-                                <h3>{{ product.get_name() }}</h3>
+                       {% for product in auction_dict %}
+                            {% if product == "AUde3121422d8aff59" %}
+                                <h3>{{ auction_dict.get(product).get_name() }}</h3>
                                 <p id="title">White Lyocell Canvas Bag</p>
                                 <table style="width:100%">
                                     <tr>
-                                        <td>Sale ends at {{ product.get_end_date() }}</td>
+                                        <td>Sale ends at {{ auction_dict.get(product).get_end_date() }}</td>
                                     </tr>
                                     <tr>
                                         <td rowspan="3">Minimum Bid</td>
-                                        <td>{{ product.get_minimum_amount() }}</td>
+                                        <td>{{ auction_dict.get(product).get_minimum_amount() }}</td>
                                         <td>
                                             <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#makebid" aria-expanded="false" aria-controls="collapseExample">Place bid</button>
                                             <div class="collapse" id="makebid">
