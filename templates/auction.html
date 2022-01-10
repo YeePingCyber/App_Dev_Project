@@ -30,6 +30,7 @@
                 <div class="col-md-6">
                     <div class="product-info">
                        {% for product in auction_list %}
+
                         <h3>{{ product.get_name() }}</h3>
                         <p id="title">White Lyocell Canvas Bag</p>
                             <table style="width:100%">
@@ -53,6 +54,7 @@
                                     </td>
                                 </tr>
                             </table>
+
                         {% endfor %}
 
                         <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#offers" aria-expanded="false" aria-controls="collapseExample">Offers</button>
