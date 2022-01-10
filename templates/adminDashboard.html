@@ -192,36 +192,22 @@
                             <div class="p-1">
                                 <div class="cardd">
                                     <h3 class="title">Top Selling Products</h3>
-                                    <div class="row g-0">
-                                        <div class="col-6">
-                                            <div class="p-1">
-                                                <div class="cardd">
-                                                    <img src="../static/images/1-Urth-Norite-24L-Backpack-Combo-Grey-1614664835017_300x@2x.png" width="84"/>
+                                    {% for top in top4 %}
+                                        {% if top4[top].get_top() == 1 %}
+                                            <div class="">
+                                                <div class="top-items__card">
+                                                    <a class="thumbnail" href=""><img src="../static/images/1-Urth-Norite-24L-Backpack-Combo-Grey-1614664835017_300x@2x.png"/></a>
+                                                    <div class="top-items__card-detail">
+                                                        <a href=""> {{ top4[top].get_name() }} </a>
+                                                        <div class="top-items__card-price">
+                                                            <p><span>${{ top4[top].get_price() }}</span></p>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="p-1">
-                                                <div class="cardd">
-                                                    <img src="../static/images/1-Urth-Norite-24L-Backpack-Combo-Grey-1614664835017_300x@2x.png" width="84"/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="p-1">
-                                                <div class="cardd">
-                                                    <img src="../static/images/1-Urth-Norite-24L-Backpack-Combo-Grey-1614664835017_300x@2x.png" width="84"/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="p-1">
-                                                <div class="cardd">
-                                                    <img src="../static/images/1-Urth-Norite-24L-Backpack-Combo-Grey-1614664835017_300x@2x.png" width="84"/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                        {% endif %}
+                                    {% endfor %}
+
                                 </div>
                             </div>
                         </div>

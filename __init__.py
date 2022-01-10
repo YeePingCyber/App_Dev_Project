@@ -9,8 +9,8 @@ from User import User
 from Product import Product
 from addtocart import Addtocart
 from Auction import Auction
-from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreateShipmentForm, CreatePaymentForm, \
-    CreateProductForm, CreateAddCartForm, CreateAuctionForm, UpdateAdminForm
+from ProcessPayment import ProcessPayment
+from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreateShipmentForm, CreatePaymentForm, CreateProductForm, CreateAddCartForm, CreateAuctionForm, UpdateAdminForm
 
 # create product function
 from createProduct import load_product
@@ -49,11 +49,9 @@ def log_in():
     if request.method == 'POST' and create_log_in_form.validate():
         db = shelve.open('user.db', 'r')
         users_dict = db['Users']
-        hashed_password = hl.pbkdf2_hmac('sha256', str(create_log_in_form.login_password.data).encode(), b'salt',
-                                         100000).hex()
+        hashed_password = hl.pbkdf2_hmac('sha256', str(create_log_in_form.login_password.data).encode(), b'salt', 100000).hex()
         for user in users_dict:
-            if users_dict[user].get_email() == create_log_in_form.login_email.data and users_dict[
-                user].get_password() == hashed_password:
+            if users_dict[user].get_email() == create_log_in_form.login_email.data and users_dict[user].get_password() == hashed_password:
                 if isinstance(users_dict[user], Customer):
                     return redirect(url_for('home'))
                 elif isinstance(users_dict[user], Admin):
@@ -192,8 +190,21 @@ def payment():
 
     db.close()
     create_payment_form = CreatePaymentForm(request.form)
-    # if request.method == 'POST' and create_payment_form.validate():
-    #     pass
+    if request.method == 'POST' and create_payment_form.validate():
+        sales = {}
+        db = shelve.open("sales", "c")
+        try:
+            if "sales" in db:
+                sales = db["sales"]
+            else:
+                db["sales"] = sales
+        except:
+            print("Error in retrieving Sales from sales.db")
+
+        # payment_done = ProcessPayment()
+        # sales[0] = payment_done
+        # db["sales"] = sales
+        db.close()
 
     return render_template("payment.html", form=create_payment_form, cart_list=cartList, subtotal=total, grandtotal=grandtotal, ship=shippingList)
 
@@ -281,7 +292,7 @@ def auction():
 # Admin Side
 @app.route("/admin")
 def admin():
-    return render_template("adminDashboard.html")
+    return render_template("adminDashboard.html", top4=inventory_dict)
 
 
 @app.route("/adminAuction")
