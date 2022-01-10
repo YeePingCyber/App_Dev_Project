@@ -10,7 +10,8 @@ from Product import Product
 from addtocart import Addtocart
 from Auction import Auction
 from ProcessPayment import ProcessPayment
-from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreateShipmentForm, CreatePaymentForm, CreateProductForm, CreateAddCartForm, CreateAuctionForm, UpdateAdminForm
+from UserBid import UserBid
+from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreateShipmentForm, CreatePaymentForm, CreateProductForm, CreateAddCartForm, CreateAuctionForm, UpdateAdminForm, CreateBidForm
 
 # create product function
 from createProduct import load_product
@@ -273,8 +274,9 @@ def bag2():
     return render_template("bag2.html", form=addtocartform, product=inventory_dict, x=x)
 
 
-@app.route("/auction")
+@app.route("/auction", methods=['GET', 'POST'])
 def auction():
+    create_bid_form = CreateBidForm(request.form)
     auction_dict = {}
     db = shelve.open('auction.db', 'r')
     auction_dict = db["Auction"]
@@ -286,7 +288,22 @@ def auction():
         auction_list.append(product)
         print(key)
 
-    return render_template('auction.html', auction_list=auction_list)
+    if request.method == 'POST' and create_bid_form.validate():
+        bid_dict = {}
+        db = shelve.open('UserBid.db', 'c')
+
+        try:
+            bid_dict = db['UserBid']
+        except:
+            print("Error in retrieving UserBid.db.")
+
+        userBid = UserBid(create_bid_form.bidAmount.data)
+        bid_dict[userBid.get_bidAmount()] = userBid
+        db['UserBid'] = bid_dict
+
+        db.close()
+
+    return render_template('auction.html', auction_list=auction_list, form=create_bid_form)
 
 
 # Admin Side
