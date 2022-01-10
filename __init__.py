@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, flash
 from flask import Flask, render_template, request, redirect, url_for
 import shelve
 import hashlib as hl
@@ -12,12 +12,11 @@ from Auction import Auction
 from ProcessPayment import ProcessPayment
 from UserBid import UserBid
 from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreateShipmentForm, CreatePaymentForm, CreateProductForm, CreateAddCartForm, CreateAuctionForm, UpdateAdminForm, CreateBidForm
-
 # create product function
 from createProduct import load_product
 
 app = Flask(__name__)
-
+app.secret_key = "abc"
 inventory_dict = {}
 db = shelve.open("inventory", "c")
 try:
@@ -501,12 +500,14 @@ def update_admin(id):
         users_dict = {}
         db = shelve.open('user.db', 'w')
         users_dict = db['Users']
+        hashed_password = hl.pbkdf2_hmac('sha256', str(update_admin_form.current_password.data).encode(), b'salt', 100000).hex()
         admin = users_dict.get(id)
         admin.set_first_name(update_admin_form.first_name.data)
         admin.set_last_name(update_admin_form.last_name.data)
         admin.set_email(update_admin_form.email.data)
         admin.set_admin_id(update_admin_form.employee_id.data)
-        admin.set_password(update_admin_form.new_password.data)
+        if hashed_password == admin.get_password():
+            admin.set_password(update_admin_form.new_password.data)
 
         db['Users'] = users_dict
         db.close()
