@@ -282,11 +282,11 @@ def auction():
     auction_dict = db["Auction"]
     db.close()
 
-    auction_list = []
-    for key in auction_dict:
-        product = auction_dict.get(key)
-        auction_list.append(product)
-        print(key)
+    # auction_list = []
+    # for key in auction_dict:
+    #     product = auction_dict.get(key)
+    #     auction_list.append(product)
+    #     print(key)
 
     if request.method == 'POST' and create_bid_form.validate():
         bid_dict = {}
@@ -303,7 +303,7 @@ def auction():
 
         db.close()
 
-    return render_template('auction.html', auction_list=auction_list, form=create_bid_form)
+    return render_template('auction.html', auction_dict=auction_dict, form=create_bid_form)
 
 
 # Admin Side
@@ -324,7 +324,7 @@ def admin_auction():
     today = date.today().strftime('%Y-%m-%d')
     upcoming = []
     ongoing = ""
-
+    print(auction_dict)
     if auction_dict != {}:
 
         for keys, values in auction_dict.items():
