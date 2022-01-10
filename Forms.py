@@ -11,9 +11,9 @@ class CreateCustomerForm(Form):
                             render_kw={"placeholder": "Last Name"})
     email = EmailField('', [validators.Email(), validators.DataRequired()], render_kw={"placeholder": "Email"})
     birthdate = DateField('', format='%Y-%m-%d', render_kw={"placeholder": "DD/MM/YYYY"})
-    register_password = PasswordField('', [validators.Length(min=1, max=150), validators.DataRequired()],
+    register_password = PasswordField('', [validators.Length(min=8, max=15), validators.DataRequired(), validators.EqualTo('confirm_password', message='Passwords must match')],
                                       render_kw={"placeholder": "Password"})
-    confirm_password = PasswordField('', [validators.Length(min=1, max=150), validators.DataRequired()],
+    confirm_password = PasswordField('', [validators.Length(min=8, max=15), validators.DataRequired()],
                                      render_kw={"placeholder": "Confirm Password"})
 
 
@@ -37,8 +37,8 @@ class CreateAdminForm(Form):
     first_name = StringField('', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "First Name"})
     last_name = StringField('', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "Last Name"})
     email = EmailField('', [validators.Email(), validators.DataRequired()], render_kw={"placeholder": "Email"})
-    register_password = PasswordField('', [validators.Length(min=1, max=150), validators.DataRequired()],render_kw={"placeholder": "Password"})
-    confirm_password = PasswordField('', [validators.Length(min=1, max=150), validators.DataRequired()],render_kw={"placeholder": "Confirm Password"})
+    register_password = PasswordField('', [validators.Length(min=8, max=15), validators.DataRequired(),validators.EqualTo('confirm_password', message='Passwords must match')],render_kw={"placeholder": "Password"})
+    confirm_password = PasswordField('', [validators.Length(min=8, max=15), validators.DataRequired()],render_kw={"placeholder": "Confirm Password"})
     employee_id = StringField('', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "Employee ID"})
 
 
@@ -46,8 +46,8 @@ class UpdateAdminForm(Form):
     first_name = StringField('', [validators.Length(min=1, max=150)], render_kw={"placeholder": "First Name"})
     last_name = StringField('', [validators.Length(min=1, max=150)], render_kw={"placeholder": "Last Name"})
     email = EmailField('', [validators.Email()], render_kw={"placeholder": "Email"})
-    current_password = PasswordField('',render_kw={"placeholder": "Current Password"})
-    new_password = PasswordField('',render_kw={"placeholder": "New Password"})
+    current_password = PasswordField('',[validators.Length(min=8, max=15), validators.Optional(strip_whitespace=True)],render_kw={"placeholder": "Current Password"})
+    new_password = PasswordField('',[validators.Length(min=8, max=15), validators.Optional(strip_whitespace=True)],render_kw={"placeholder": "New Password"})
     employee_id = StringField('', [validators.Length(min=1, max=150)], render_kw={"placeholder": "Employee ID"})
 
 
