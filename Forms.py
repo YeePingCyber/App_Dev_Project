@@ -59,19 +59,28 @@ class CreateAddCartForm(Form):
     category = HiddenField('', [validators.Length(min=1, max=150)])
     discount = HiddenField('')
     description = HiddenField('', [validators.Length(min=1, max=300)])
+    top = HiddenField('')
 
 
-class CreatePaymentForm(Form):
+class CreateShipmentForm(Form):
     email = EmailField('Email', [validators.Email(), validators.DataRequired()], render_kw={"placeholder": "Email"})
     country = SelectField("Country", choices=[("1", "SG"), ("2", "AU")], render_kw={"placeholder": "Country"})
     first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "First Name"})
     last_name = StringField('Last Name', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "Last Name"})
-    company = StringField("Company", [validators.Length(min=1, max=150)], render_kw={"placeholder": "Company (optional)"})
+    company = StringField("Company", render_kw={"placeholder": "Company (optional)"})
     address = TextAreaField('Mailing Address', [validators.optional(), validators.length(max=200)], render_kw={"placeholder": "Address"})
-    apartment = StringField("Apartment", [validators.Length(min=1, max=150)], render_kw={"placeholder": "Apartment (optional)"})
+    apartment = StringField("Apartment", render_kw={"placeholder": "Apartment (optional)"})
     postal_code = StringField("Postal Code", [validators.Length(min=6, max=6), validators.DataRequired()], render_kw={"placeholder": "Postal Code"})
     city = StringField("City", [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "City"})
     phone = StringField("Phone", [validators.Length(min=8, max=8)], render_kw={"placeholder": "Phone (optional)"})
+    discount = StringField("Gift card or discount code", [validators.Length(min=4, max=8)], render_kw={"placeholder": "Gift card or discount code"})
+
+
+class CreatePaymentForm(Form):
+    card_num = StringField('', [validators.Length(min=16, max=16), validators.DataRequired()], render_kw={"placeholder": "Card number"})
+    name_card = StringField("", [validators.DataRequired()], render_kw={"placeholder": "Name on card"})
+    expire = DateField('', [validators.DataRequired()], render_kw={"placeholder": "Expiration date (MM / YY)"})
+    ccv = StringField('', [validators.Length(min=3, max=3), validators.DataRequired()], render_kw={"placeholder": "Security code"})
     discount = StringField("Gift card or discount code", [validators.Length(min=4, max=8)], render_kw={"placeholder": "Gift card or discount code"})
 
 

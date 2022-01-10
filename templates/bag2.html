@@ -43,13 +43,13 @@
                         <p>placeholder 2</p>
                         <table>
                             <form method=post action="">
-                                {{ product[x].get_product_id() }}
                                 {{ render_field(form.name, value=product[x].get_name()) }}
                                 {{ render_field(form.description, value=product[x].get_description()) }}
                                 {{ render_field(form.price, value=product[x].get_price()) }}
                                 {{ render_field(form.quantity, value=1) }}
                                 {{ render_field(form.category, value=product[x].get_category()) }}
                                 {{ render_field(form.discount, value=0) }}
+                                {{ render_field(form.top, value=product[x].get_top()) }}
                                 <input type=submit value="Add to Cart">
                             </form>
                         </table>
