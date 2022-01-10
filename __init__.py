@@ -292,16 +292,14 @@ def auction():
         bid_dict = {}
         db = shelve.open('UserBid.db', 'c')
 
-        try:
-            bid_dict = db['UserBid']
-        except:
-            print("Error in retrieving UserBid.db.")
-
-        userBid = UserBid(create_bid_form.bidAmount.data)
+        userbidID = UserBid(create_bid_form.bidAmount.data)
+        # bid_dict[userbidID.get_bidId()] = userbidID
+        #db["Auction"] = bid_dict
 
         db['UserBid'] = bid_dict
 
         db.close()
+        return render_template('auction.html', auction_dict=auction_dict, form=create_bid_form, bid_dict=bid_dict)
 
     return render_template('auction.html', auction_dict=auction_dict, form=create_bid_form)
 
