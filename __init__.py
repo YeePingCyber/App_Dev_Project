@@ -10,7 +10,8 @@ from Product import Product
 from addtocart import Addtocart
 from Auction import Auction
 from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreatePaymentForm, CreateProductForm, \
-    CreateAddCartForm, CreateAuctionForm, UpdateAdminForm
+    CreateAddCartForm, CreateAuctionForm, UpdateAdminForm, CreateBidForm
+from UserBid import UserBid
 
 # create product function
 from createProduct import load_product
@@ -272,9 +273,9 @@ def bag2():
     return render_template("bag2.html", form=addtocartform, product=inventory_dict, x=x)
 
 
-@app.route("/auction")
+@app.route("/auction", methods=['GET', 'POST'])
 def auction():
-    # create_bid_form = CreateBidForm(request.form)
+    create_bid_form = CreateBidForm(request.form)
     auction_dict = {}
     db = shelve.open('auction.db', 'r')
     auction_dict = db["Auction"]
@@ -286,27 +287,22 @@ def auction():
         auction_list.append(product)
         print(key)
 
-    # if request.method == 'POST' and create_bid_form.validate():
-    #     bid_dict = {}
-    #     db = shelve.open('UserBid.db', 'c')
-    #
-    #     try:
-    #         customers_dict = db['UserBid']
-    #     except:
-    #         print("Error in retrieving UserBid.db.")
-    #
-    #     userBid = Customer(create_customer_form.first_name.data, create_customer_form.last_name.data,
-    #                                  create_customer_form.gender.data, create_customer_form.membership.data,
-    #                                  create_customer_form.remarks.data, create_customer_form.email.data,
-    #                                  create_customer_form.date_joined.data,
-    #                                  create_customer_form.address.data)
-    #     print(customer.get_customer_id())
-    #     customers_dict[customer.get_customer_id()] = customer
-    #     db['Customers'] = customers_dict
-    #
-    #     db.close()
-    #
-    return render_template('auction.html', auction_list=auction_list)
+    if request.method == 'POST' and create_bid_form.validate():
+        bid_dict = {}
+        db = shelve.open('UserBid.db', 'c')
+
+        try:
+            bid_dict = db['UserBid']
+        except:
+            print("Error in retrieving UserBid.db.")
+
+        userBid = UserBid(create_bid_form.bidAmount.data)
+        bid_dict[userBid.get_bidAmount()] = userBid
+        db['UserBid'] = userBid
+
+        db.close()
+
+    return render_template('auction.html', auction_list=auction_list, form=create_bid_form)
 
 
 # Admin Side

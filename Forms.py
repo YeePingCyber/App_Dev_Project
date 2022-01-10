@@ -83,5 +83,6 @@ class CreateAuctionForm(Form):
     end_date = DateField('', format='%Y-%m-%d', render_kw={"placeholder": "DD/MM/YYYY"})
     description = TextAreaField('', [validators.DataRequired()], id="desc",  render_kw={"rows": "5", "cols": "30", "placeholder": "Enter prduct description"})
 
-# class CreateBidForm(Form):
-#     bid_amount = IntegerField('', [validators.NumberRange(min=1, max=1000, message="The value should be higher than {}"), validators.DataRequired()], render_kw={"placeholder": "Your Bid"})
+
+class CreateBidForm(Form):
+    bidAmount = IntegerField('', [validators.NumberRange(min=1, max=1000, message="The value should be higher than {}"), validators.DataRequired()], render_kw={"placeholder": "Your Bid"})

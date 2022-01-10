@@ -7,6 +7,7 @@
 {% endblock %}
 
 {% block bodyContent %}
+{% from "includes/formHelper.html" import render_field %}
     <div class="navEmpty"></div>
     <div class="shopHeader">
         <div class="toptext">
@@ -44,7 +45,7 @@
                                             <div class="card card-body">
                                             <form method="POST" action="">
                                             <div class="form-group">
-
+                                                {{ render_field(form.bidAmount, class="form-check") }}
                                             </div>
                                             </form>
                                             </div>
