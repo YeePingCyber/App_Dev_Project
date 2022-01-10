@@ -6,40 +6,59 @@ from datetime import date
 from Customer import Customer
 from Admin import Admin
 from User import User
+from Product import Product
 from addtocart import Addtocart
 from Auction import Auction
-from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreatePaymentForm, CreateProductForm, CreateAddCartForm, CreateAuctionForm, UpdateAdminForm
+from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreatePaymentForm, CreateProductForm, \
+    CreateAddCartForm, CreateAuctionForm, UpdateAdminForm
 
 # create product function
 from createProduct import load_product
 
 app = Flask(__name__)
 
-inventory_dict = {}
-db = shelve.open("inventory", "c")
-try:
-    if "Inventory" in db:
-        inventory_dict = db["Inventory"]
-    else:
-        db["Inventory"] = inventory_dict
-except:
-    print("Error in retrieving Inventory from inventory.db")
-
-# for x in range(4):
-#     inventory = Product("Arkose 20L Modular Bacpack", "Everyday backpack + small camera insert", 140, 50, "Camera", 0)
-#     inventory_dict[x] = inventory
-#     db["Inventory"] = inventory_dict
+# inventory_dict = {}
+# db = shelve.open("inventory", "c")
+# try:
+#     if "Inventory" in db:
+#         inventory_dict = db["Inventory"]
+#     else:
+#         db["Inventory"] = inventory_dict
+# except:
+#     print("Error in retrieving Inventory from inventory.db")
 #
-for x in inventory_dict:
-    print(inventory_dict[x])
-db.close()
+# # for x in range(6):
+# #     inventory = Product("Arkose 20L Modular Bacpack", "Everyday backpack + small camera insert", 140, 50, "Camera", 0, 0)
+# #     inventory_dict[x] = inventory
+# #     db["Inventory"] = inventory_dict
+# for x in inventory_dict:
+#     print(inventory_dict[x])
+# db.close()
 
 
 # Customer Side
 @app.route("/")
 def home():
-    # return render_template("adminAuction.html")
-    return render_template("home.html")
+    inventory_dict = {}
+    top = {}
+    db = shelve.open("inventory", "c")
+    try:
+        if "Inventory" in db:
+            inventory_dict = db["Inventory"]
+        else:
+            db["Inventory"] = inventory_dict
+    except:
+        print("Error in retrieving Inventory from inventory.db")
+
+    # for x in inventory_dict:
+    #     if inventory_dict[x].get_top() == 1:
+    #         top[x] = inventory_dict[x].get_top()
+    #
+    # print(len(top))
+
+    db.close()
+
+    return render_template("home.html", top4=inventory_dict)
 
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -48,8 +67,7 @@ def log_in():
     if request.method == 'POST' and create_log_in_form.validate():
         db = shelve.open('user.db', 'r')
         users_dict = db['Users']
-        hashed_password = hl.pbkdf2_hmac('sha256', str(create_log_in_form.login_password.data).encode(), b'salt',
-                                         100000).hex()
+        hashed_password = hl.pbkdf2_hmac('sha256', str(create_log_in_form.login_password.data).encode(), b'salt',100000).hex()
         for user in users_dict:
             if users_dict[user].get_email() == create_log_in_form.login_email.data and users_dict[user].get_password() == hashed_password:
                 if isinstance(users_dict[user], Customer):
@@ -87,6 +105,7 @@ def create_customer():
 
 @app.route("/cart")
 def cart():
+    total = 0
     cartList = []
     cart_dict = {}
     db = shelve.open("addtocart", "c")
@@ -100,11 +119,12 @@ def cart():
 
     for x in cart_dict:
         cartList.append(cart_dict[x])
+        total += cart_dict[x].get_price()
 
     db.close()
 
     if len(cartList) > 0:
-        return render_template("cart.html", cart_list=cartList)
+        return render_template("cart.html", cart_list=cartList, subtotal=total)
     else:
         return render_template("cart_empty.html")
 
@@ -132,11 +152,62 @@ def delete_item(id):
 
 @app.route("/checkout", methods=['GET', 'POST'])
 def checkout():
+    total = 0
+    cartList = []
+    cart_dict = {}
+
+    db = shelve.open("addtocart", "c")
+    try:
+        if "Add_to_cart" in db:
+            cart_dict = db["Add_to_cart"]
+        else:
+            db["Add_to_cart"] = cart_dict
+    except:
+        print("Error in retrieving Inventory from addtocart.db")
+
+    for x in cart_dict:
+        cartList.append(cart_dict[x])
+        total += cart_dict[x].get_price()
+
+    grandtotal = total + 4
+
+    db.close()
+
+    create_payment_form = CreatePaymentForm(request.form)
+    if request.method == 'POST' and create_payment_form.validate():
+        return redirect(url_for("payment"))
+
+    return render_template("checkout.html", form=create_payment_form, cart_list=cartList, subtotal=total, grandtotal=grandtotal)
+
+
+@app.route("/checkout/payment", methods=['GET', 'POST'])
+def payment():
+    total = 0
+    cartList = []
+    cart_dict = {}
+
+    db = shelve.open("addtocart", "c")
+    try:
+        if "Add_to_cart" in db:
+            cart_dict = db["Add_to_cart"]
+        else:
+            db["Add_to_cart"] = cart_dict
+    except:
+        print("Error in retrieving Inventory from addtocart.db")
+
+    for x in cart_dict:
+        cartList.append(cart_dict[x])
+        total += cart_dict[x].get_price()
+
+    grandtotal = total + 4
+
+    db.close()
+
     create_payment_form = CreatePaymentForm(request.form)
     # if request.method == 'POST' and create_payment_form.validate():
     #     pass
 
-    return render_template("checkout.html", form=create_payment_form)
+    return render_template("payment.html", form=create_payment_form, cart_list=cartList, subtotal=total, grandtotal=grandtotal)
 
 
 # main shop
@@ -161,14 +232,9 @@ def bag1():
         except:
             print("Error in retrieving Inventory from addtocart.db")
 
-        addtocart = Addtocart(
-            addtocartform.name.data,
-            addtocartform.description.data,
-            int(addtocartform.price.data),
-            int(addtocartform.quantity.data),
-            addtocartform.category.data,
-            int(addtocartform.discount.data)
-        )
+        addtocart = Addtocart(addtocartform.name.data, addtocartform.description.data,
+                              int(addtocartform.price.data), int(addtocartform.quantity.data),
+                              addtocartform.category.data, int(addtocartform.discount.data))
 
         addtocart_dict[addtocart.get_id()] = addtocart
         db["Add_to_cart"] = addtocart_dict
@@ -194,14 +260,9 @@ def bag2():
         except:
             print("Error in retrieving Inventory from addtocart.db")
 
-        addtocart = Addtocart(
-            addtocartform.name.data,
-            addtocartform.description.data,
-            int(addtocartform.price.data),
-            int(addtocartform.quantity.data),
-            addtocartform.category.data,
-            int(addtocartform.discount.data)
-        )
+        addtocart = Addtocart(addtocartform.name.data, addtocartform.description.data,
+                              int(addtocartform.price.data), int(addtocartform.quantity.data),
+                              addtocartform.category.data, int(addtocartform.discount.data))
 
         addtocart_dict[addtocart.get_id()] = addtocart
         db["Add_to_cart"] = addtocart_dict

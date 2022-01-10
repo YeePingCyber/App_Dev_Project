@@ -23,11 +23,11 @@
         <th>Employee ID</th>
     </tr>
     <tr>
-        <td colspan="5"><hr></td>
+        <td colspan="6"><hr></td>
     </tr>
 {% for admin in admin_list %}
     <tr>
-        <td>{{ admin.get_admin_id() }}</td>
+        <td><img src="../static/images/Default_picture.jpg" class="profile-pic"> {{ admin.get_admin_id() }}</td>
         <td>{{ admin.get_first_name() }} {{ admin.get_last_name() }}</td>
         <td>{{ admin.get_email() }}</td>
         <td>{{ admin.get_employee_id() }}</td>
@@ -64,7 +64,7 @@
             </form>
         </td>
     </tr>
-    <tr><td colspan="5"><hr></td></tr>
+    <tr><td colspan="6"><hr></td></tr>
     {% endfor %}
 </table>
 {% endblock %}

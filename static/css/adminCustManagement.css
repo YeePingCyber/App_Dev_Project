@@ -38,3 +38,9 @@ font-weight: bold;
 .delete-button{
 width:8%;
 }
+
+.profile-pic{
+border-radius: 50%;
+height: 25%;
+width: 25%;
+}
