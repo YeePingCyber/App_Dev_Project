@@ -68,3 +68,8 @@ border-radius: 50%;
 height: 15%;
 width: 15%;
 }
+
+.forgot-link-click{
+color:black;
+font-weight: bold;
+}
