@@ -9,7 +9,7 @@ from User import User
 from Product import Product
 from addtocart import Addtocart
 from Auction import Auction
-from ProcessCart import PaymentProcess, ShippingProcess, Output
+from ProcessCart import PaymentProcess, ShippingProcess
 from UserBid import UserBid
 from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreateShipmentForm, CreatePaymentForm, CreateProductForm, CreateAddCartForm, CreateAuctionForm, UpdateAdminForm, CreateBidForm
 # create product function
