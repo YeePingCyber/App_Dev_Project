@@ -21,6 +21,41 @@
         margin-bottom: 1.25rem;
     }
 
+    .product-grid__products {
+        padding: 0 18.99% 0 0;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .top-items__card {
+        margin-bottom: 11.3%;
+        padding: 0;
+        width: calc(50% - 1rem);
+    }
+
+    .top-items__card a {
+        display: block;
+        position: relative;
+        width: 100%;
+        font-size: 12px;
+    }
+
+    .top-items__card-price p {
+        font-size: 12px;
+    }
+    
+    .value, .remarks {
+        font-size: 15px;
+    }
+
+    .thumbnail {
+        margin-bottom: 1em;
+    }
+
+    .top-items__card a img {
+        width: 70px
+    }
+
     .cardd {
         background-color: white;
         border-radius: 20px;
