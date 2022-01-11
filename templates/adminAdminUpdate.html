@@ -43,7 +43,9 @@
       <div class="form-login-field">
         {{ render_field(form.current_password, class="form-login-field") }}
       </div>
-
+      {% if error %}
+      <p style="color: red; font-size: 80%;"><strong></strong> {{error}}</p>
+      {% endif %}
       <br><br><br>
 
       <div class="form-login-field">

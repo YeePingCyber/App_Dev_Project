@@ -45,6 +45,7 @@ def home():
 
 @app.route("/login", methods=['GET', 'POST'])
 def log_in():
+    error = ""
     create_log_in_form = CreateLoginForm(request.form)
     if request.method == 'POST' and create_log_in_form.validate():
         db = shelve.open('user.db', 'r')
@@ -56,8 +57,10 @@ def log_in():
                     return redirect(url_for('home'))
                 elif isinstance(users_dict[user], Admin):
                     return redirect((url_for('admin')))
+            elif users_dict[user].get_email() != create_log_in_form.login_email.data or users_dict[user].get_password() != hashed_password:
+                error = "Invalid email or password"
         db.close()
-    return render_template("loginpage.html", form=create_log_in_form)
+    return render_template("loginpage.html", form=create_log_in_form, error= error)
 
 
 @app.route("/register", methods=['GET', 'POST'])
@@ -71,7 +74,6 @@ def create_customer():
                 customer_dict = db['Users']
             except:
                 print("Error in retrieving Users from user.db")
-
             new_customer = Customer(create_customer_form.first_name.data, create_customer_form.last_name.data,
                                     create_customer_form.birthdate.data, create_customer_form.email.data,
                                     create_customer_form.register_password.data)
@@ -569,23 +571,34 @@ def admin_creation():
 @app.route("/adminAdminUpdate/<int:id>/", methods=["GET", "POST"])
 def update_admin(id):
     update_admin_form = UpdateAdminForm(request.form)
+    error = ""
     if request.method == 'POST' and update_admin_form.validate():
         users_dict = {}
         db = shelve.open('user.db', 'w')
         users_dict = db['Users']
-        hashed_password = hl.pbkdf2_hmac('sha256', str(update_admin_form.current_password.data).encode(), b'salt', 100000).hex()
         admin = users_dict.get(id)
-        admin.set_first_name(update_admin_form.first_name.data)
-        admin.set_last_name(update_admin_form.last_name.data)
-        admin.set_email(update_admin_form.email.data)
-        admin.set_admin_id(update_admin_form.employee_id.data)
-        if hashed_password == admin.get_password():
-            admin.set_password(update_admin_form.new_password.data)
+        hashed_password = hl.pbkdf2_hmac('sha256', str(update_admin_form.current_password.data).encode(), b'salt', 100000).hex()
+        if update_admin_form.current_password.data == "":
+            admin.set_first_name(update_admin_form.first_name.data)
+            admin.set_last_name(update_admin_form.last_name.data)
+            admin.set_email(update_admin_form.email.data)
+            admin.set_admin_id(update_admin_form.employee_id.data)
+            db['Users'] = users_dict
+            db.close()
+            return redirect(url_for('admin_admin_management'))
+        elif update_admin_form.current_password.data != "":
+            if hashed_password == admin.get_password():
+                admin.set_first_name(update_admin_form.first_name.data)
+                admin.set_last_name(update_admin_form.last_name.data)
+                admin.set_email(update_admin_form.email.data)
+                admin.set_admin_id(update_admin_form.employee_id.data)
+                admin.set_password(update_admin_form.new_password.data)
+                db['Users'] = users_dict
+                db.close()
+                return redirect(url_for('admin_admin_management'))
+            elif hashed_password != admin.get_password():
+                error = "Wrong password entered"
 
-        db['Users'] = users_dict
-        db.close()
-
-        return redirect(url_for('admin_admin_management'))
     else:
         users_dict = {}
         db = shelve.open('user.db', 'r')
@@ -597,7 +610,7 @@ def update_admin(id):
         update_admin_form.last_name.data = admin.get_last_name()
         update_admin_form.email.data = admin.get_email()
         update_admin_form.employee_id.data = admin.get_admin_id()
-    return render_template("adminAdminUpdate.html", form=update_admin_form)
+    return render_template("adminAdminUpdate.html", form=update_admin_form, error = error)
 
 
 @app.route("/adminProductManagement")

@@ -21,10 +21,15 @@
         <div class="form-login-field">
             {{ render_field(form.login_password, class="form-login-field") }}
         </div>
+        {% if error %}
+        <p style="color: red; font-size: 80%;"><strong></strong> {{error}}</p>
+        {% endif %}
         <br><br><br>
         <button type="submit" name="submit_button" value="Log in" class="submit-login">Log in</button>
     </form>
-
+    <p class="register-link">
+        <a href="#" class="forgot-link-click">Forget password?</a>
+    </p>
     <p class="register-link">
         Not yet a member? Click <a href="/register" class="register-link-click">HERE</a> to register
     </p>
