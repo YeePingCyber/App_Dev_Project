@@ -52,7 +52,7 @@ def log_in():
         users_dict = db['Users']
         hashed_password = hl.pbkdf2_hmac('sha256', str(create_log_in_form.login_password.data).encode(), b'salt', 100000).hex()
         for user in users_dict:
-            if users_dict[user].get_email() == create_log_in_form.login_email.data and users_dict[user].get_password() == hashed_password:
+            if users_dict[user].get_email().upper() == create_log_in_form.login_email.data.upper() and users_dict[user].get_password() == hashed_password:
                 if isinstance(users_dict[user], Customer):
                     return redirect(url_for('home'))
                 elif isinstance(users_dict[user], Admin):
@@ -584,7 +584,7 @@ def update_admin(id):
             admin.set_first_name(update_admin_form.first_name.data)
             admin.set_last_name(update_admin_form.last_name.data)
             admin.set_email(update_admin_form.email.data)
-            admin.set_admin_id(update_admin_form.employee_id.data)
+            admin.set_employee_id(update_admin_form.employee_id.data)
             db['Users'] = users_dict
             db.close()
             return redirect(url_for('admin_admin_management'))
@@ -593,7 +593,7 @@ def update_admin(id):
                 admin.set_first_name(update_admin_form.first_name.data)
                 admin.set_last_name(update_admin_form.last_name.data)
                 admin.set_email(update_admin_form.email.data)
-                admin.set_admin_id(update_admin_form.employee_id.data)
+                admin.set_employee_id(update_admin_form.employee_id.data)
                 admin.set_password(update_admin_form.new_password.data)
                 db['Users'] = users_dict
                 db.close()
@@ -611,7 +611,7 @@ def update_admin(id):
         update_admin_form.first_name.data = admin.get_first_name()
         update_admin_form.last_name.data = admin.get_last_name()
         update_admin_form.email.data = admin.get_email()
-        update_admin_form.employee_id.data = admin.get_admin_id()
+        update_admin_form.employee_id.data = admin.get_employee_id()
     return render_template("adminAdminUpdate.html", form=update_admin_form, error = error)
 
 
