@@ -11,7 +11,8 @@ from addtocart import Addtocart
 from Auction import Auction
 from ProcessCart import PaymentProcess, ShippingProcess, Output
 from UserBid import UserBid
-from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreateShipmentForm, CreatePaymentForm, CreateProductForm, CreateAddCartForm, CreateAuctionForm, UpdateAdminForm, CreateBidForm
+from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreateShipmentForm, CreatePaymentForm, \
+    CreateProductForm, CreateAddCartForm, CreateAuctionForm, UpdateAdminForm, CreateBidForm
 # create product function
 from createProduct import load_product
 
@@ -49,9 +50,11 @@ def log_in():
     if request.method == 'POST' and create_log_in_form.validate():
         db = shelve.open('user.db', 'r')
         users_dict = db['Users']
-        hashed_password = hl.pbkdf2_hmac('sha256', str(create_log_in_form.login_password.data).encode(), b'salt', 100000).hex()
+        hashed_password = hl.pbkdf2_hmac('sha256', str(create_log_in_form.login_password.data).encode(), b'salt',
+                                         100000).hex()
         for user in users_dict:
-            if users_dict[user].get_email() == create_log_in_form.login_email.data and users_dict[user].get_password() == hashed_password:
+            if users_dict[user].get_email() == create_log_in_form.login_email.data and users_dict[
+                user].get_password() == hashed_password:
                 if isinstance(users_dict[user], Customer):
                     return redirect(url_for('home'))
                 elif isinstance(users_dict[user], Admin):
@@ -176,7 +179,8 @@ def checkout():
 
         return redirect(url_for("payment"))
 
-    return render_template("checkout.html", form=create_shipment_form, cart_list=cartList, subtotal=total, grandtotal=grandtotal)
+    return render_template("checkout.html", form=create_shipment_form, cart_list=cartList, subtotal=total,
+                           grandtotal=grandtotal)
 
 
 @app.route("/checkout/payment", methods=['GET', 'POST'])
@@ -232,7 +236,8 @@ def payment():
 
     db.close()
 
-    return render_template("payment.html", form=create_payment_form, cart_list=cartList, subtotal=total, grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict)
+    return render_template("payment.html", form=create_payment_form, cart_list=cartList, subtotal=total,
+                           grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict)
 
 
 @app.route("/checkout/paymentdone")
@@ -285,7 +290,8 @@ def paymentdone():
     except:
         print("Error in retrieving Sales from payment.db")
 
-    return render_template("paymentdone.html", subtotal=total, grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict, sales=sales, cart_list=cartList)
+    return render_template("paymentdone.html", subtotal=total, grandtotal=grandtotal, ship=shipping_dict,
+                           payment=payment_dict, sales=sales, cart_list=cartList)
 
 
 # main shop
@@ -359,19 +365,33 @@ def auction():
     auction_dict = db["Auction"]
     db.close()
 
+
+    # check key values
+    # for key in auction_dict:
+    #     product = auction_dict.get(key)
+    #     print(key)
+
     create_bid_form = CreateBidForm(request.form)
     if request.method == 'POST' and create_bid_form.validate():
         bid_dict = {}
         db = shelve.open('UserBid.db', 'c')
 
+        try:
+            bid_dict = db['UserBid']
+        except:
+            print("Error in retrieving userbid.db.")
+
+        bid_list = []
+        for key in bid_dict:
+            user = bid_dict.get(key)
+            bid_list.append(user)
+
         userbidID = UserBid(create_bid_form.bidAmount.data)
-        # bid_dict[userbidID.get_bidId()] = userbidID
-        #db["Auction"] = bid_dict
-
+        bid_dict[userbidID.get_bidId()] = userbidID
         db['UserBid'] = bid_dict
-
         db.close()
-        return render_template('auction.html', auction_dict=auction_dict, form=create_bid_form, bid_dict=bid_dict)
+
+        return render_template('auction.html', auction_dict=auction_dict, form=create_bid_form, bid_list=bid_list)
 
     return render_template('auction.html', auction_dict=auction_dict, form=create_bid_form)
 
@@ -573,7 +593,8 @@ def update_admin(id):
         users_dict = {}
         db = shelve.open('user.db', 'w')
         users_dict = db['Users']
-        hashed_password = hl.pbkdf2_hmac('sha256', str(update_admin_form.current_password.data).encode(), b'salt', 100000).hex()
+        hashed_password = hl.pbkdf2_hmac('sha256', str(update_admin_form.current_password.data).encode(), b'salt',
+                                         100000).hex()
         admin = users_dict.get(id)
         admin.set_first_name(update_admin_form.first_name.data)
         admin.set_last_name(update_admin_form.last_name.data)

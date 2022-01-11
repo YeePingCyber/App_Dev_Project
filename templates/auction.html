@@ -47,7 +47,7 @@
                                                     <div class="form-group">
                                                         {{ render_field(form.bidAmount, class="form-check") }}
                                                     </div>
-
+                                                    <input type="submit" value="Submit" class="btn btn-primary"/>
                                                 </form>
                                             </div>
                                         </div><br>
@@ -57,21 +57,21 @@
                         {% endif %}
                         {% endfor %}
 
-
-                                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#offers" aria-expanded="false" aria-controls="collapseExample">Offers</button>
-                                <div class="collapse" id="offers">
-                                    <div class="card card-body">
-                                        <table>
-                                            <tr><th>Price</th><th>Expiration</th><th>From</th></tr>
-                                            <tr>
-                                                <td>Placeholder</td>
-                                                <td>Placeholder Date</td>
-                                                <td>Placeholder User</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </div>
-
+                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#offers" aria-expanded="false" aria-controls="collapseExample">Offers</button>
+                        <div class="collapse" id="offers">
+                            <div class="card card-body">
+                                {% for user in bid_list %}
+                                <table>
+                                    <tr><th>Price</th><th>Expiration</th><th>From</th></tr>
+                                    <tr>
+                                        <td>{{ user.get_bidAmount() }}</td>
+                                        <td>Placeholder Date</td>
+                                        <td>{{ user.get_bidId() }}</td>
+                                    </tr>
+                                </table>
+                               {% endfor %}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

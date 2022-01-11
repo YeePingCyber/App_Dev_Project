@@ -94,4 +94,4 @@ class CreateAuctionForm(Form):
 
 
 class CreateBidForm(Form):
-    bidAmount = IntegerField('', [validators.NumberRange(min=1, max=1000, message="The value should be higher than {}"), validators.DataRequired()], render_kw={"placeholder": "Your Bid"})
+    bidAmount = IntegerField('', [validators.NumberRange(min=1, max=1000, message="The value should be higher than minimum amount"), validators.DataRequired()], render_kw={"placeholder": "Your Bid"})
