@@ -9,7 +9,7 @@ from User import User
 from Product import Product
 from addtocart import Addtocart
 from Auction import Auction
-from ProcessCart import PaymentProcess, ShippingProcess
+from ProcessCart import PaymentProcess, ShippingProcess, Output
 from UserBid import UserBid
 from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreateShipmentForm, CreatePaymentForm, CreateProductForm, CreateAddCartForm, CreateAuctionForm, UpdateAdminForm, CreateBidForm
 # create product function
@@ -167,7 +167,10 @@ def checkout():
                 db["Shipping"] = shipping_dict
         except:
             print("Error in retrieving Inventory from shipping.db")
-        shipping = ShippingProcess(create_shipment_form.email.data, create_shipment_form.country.data, create_shipment_form.first_name.data, create_shipment_form.last_name.data, create_shipment_form.address.data, create_shipment_form.postal_code.data, create_shipment_form.city.data, create_shipment_form.phone.data)
+        shipping = ShippingProcess(create_shipment_form.email.data, create_shipment_form.country.data,
+                                   create_shipment_form.first_name.data, create_shipment_form.last_name.data,
+                                   create_shipment_form.address.data, create_shipment_form.postal_code.data,
+                                   create_shipment_form.city.data, create_shipment_form.phone.data)
         shipping_dict[0] = shipping
         db["Shipping"] = shipping_dict
 
@@ -206,21 +209,9 @@ def payment():
 
     grandtotal = total + 4
 
-    db.close()
-
     payment_dict = {}
     create_payment_form = CreatePaymentForm(request.form)
     if request.method == 'POST' and create_payment_form.validate():
-        sales = {}
-        db = shelve.open("sales", "c")
-        try:
-            if "sales" in db:
-                sales = db["sales"]
-            else:
-                db["sales"] = sales
-        except:
-            print("Error in retrieving Sales from sales.db")
-
         db = shelve.open("payment", "c")
         try:
             if "payment" in db:
@@ -230,14 +221,71 @@ def payment():
         except:
             print("Error in retrieving Sales from payment.db")
 
-        payment = PaymentProcess(create_payment_form.card_num.data, create_payment_form.name_card.data, create_payment_form.expire.data, create_payment_form.ccv.data)
+        payment = PaymentProcess(create_payment_form.card_num.data, create_payment_form.name_card.data,
+                                 create_payment_form.expire.data, create_payment_form.ccv.data)
         payment_dict[0] = payment
         db["payment"] = payment_dict
+
         db.close()
 
-        return redirect(url_for("home"))
+        return redirect(url_for("paymentdone"))
+
+    db.close()
 
     return render_template("payment.html", form=create_payment_form, cart_list=cartList, subtotal=total, grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict)
+
+
+@app.route("/checkout/paymentdone")
+def paymentdone():
+    sales = {}
+    db = shelve.open("sales", "c")
+    try:
+        if "sales" in db:
+            sales = db["sales"]
+        else:
+            db["sales"] = sales
+    except:
+        print("Error in retrieving Sales from sales.db")
+
+    cart_dict = {}
+    db = shelve.open("addtocart", "c")
+    try:
+        if "Add_to_cart" in db:
+            cart_dict = db["Add_to_cart"]
+        else:
+            db["Add_to_cart"] = cart_dict
+    except:
+        print("Error in retrieving Inventory from addtocart.db")
+
+    cartList = []
+    total = 0
+    for x in cart_dict:
+        cartList.append(cart_dict[x])
+        total += cart_dict[x].get_price()
+
+    grandtotal = total + 4
+
+    shipping_dict = {}
+    db = shelve.open("shipping", "c")
+    try:
+        if "Shipping" in db:
+            shipping_dict = db["Shipping"]
+        else:
+            db["Shipping"] = shipping_dict
+    except:
+        print("Error in retrieving Inventory from shipping.db")
+
+    payment_dict = {}
+    db = shelve.open("payment", "c")
+    try:
+        if "payment" in db:
+            payment_dict = db["payment"]
+        else:
+            db["payment"] = payment_dict
+    except:
+        print("Error in retrieving Sales from payment.db")
+
+    return render_template("paymentdone.html", subtotal=total, grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict, sales=sales, cart_list=cartList)
 
 
 # main shop

@@ -19,8 +19,20 @@ class ShippingProcess:
     def get_email(self):
         return self.__email
 
+    def get_firstname(self):
+        return self.__first_name
+
+    def get_lastname(self):
+        return self.__last_name
+
     def get_address(self):
         return self.__address
+
+    def get_postal(self):
+        return self.__postal_code
+
+    def get_phone(self):
+        return self.__phone
 
 
 class PaymentProcess:
@@ -33,3 +45,9 @@ class PaymentProcess:
 
     def get_card(self):
         return self.__card_num
+
+
+class Output(ShippingProcess, PaymentProcess):
+    def __init__(self, email, country, first_name, last_name, address, postal_code, city, phone, card_num, name_card, expire, ccv):
+        ShippingProcess.__init__(self, email, country, first_name, last_name, address, postal_code, city, phone)
+        PaymentProcess.__init__(self, card_num, name_card, expire, ccv)

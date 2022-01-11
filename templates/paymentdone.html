@@ -1,0 +1,142 @@
+<html>
+    <head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="../static/css/base.css">
+        <link rel="stylesheet" type="text/css" href="../static/css/checkout.css">
+        <link rel="stylesheet" type="text/css" href="../static/css/payment.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <style>
+            .tom-navv {
+                background-image: url(none);
+            }
+
+            .step__footer {
+                flex-direction: row;
+            }
+
+            .card {
+                margin-top: 1em;
+                padding: 16px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <form class="container wrap content" method="POST">
+            <div class="cart-header">
+                <a class="cart-brand" href="/">Tom Patterson</a>
+
+                <div class="order-summary-toggle">
+                    <span class="wrap">
+                        <span class="order-summary-toggle__inner">
+                            <span class="order-summary-toggle__icon-wrapper"><svg width="20" height="19" xmlns="http://www.w3.org/2000/svg" class="order-summary-toggle__icon"><path d="M17.178 13.088H5.453c-.454 0-.91-.364-.91-.818L3.727 1.818H0V0h4.544c.455 0 .91.364.91.818l.09 1.272h13.45c.274 0 .547.09.73.364.18.182.27.454.18.727l-1.817 9.18c-.09.455-.455.728-.91.728zM6.27 11.27h10.09l1.454-7.362H5.634l.637 7.362zm.092 7.715c1.004 0 1.818-.813 1.818-1.817s-.814-1.818-1.818-1.818-1.818.814-1.818 1.818.814 1.817 1.818 1.817zm9.18 0c1.004 0 1.817-.813 1.817-1.817s-.814-1.818-1.818-1.818-1.818.814-1.818 1.818.814 1.817 1.818 1.817z"></path></svg></span>
+                            <span class="order-summary-toggle__text order-summary-toggle__text--show">
+                                <span>Show order summary</span>
+                                <svg width="11" height="6" xmlns="http://www.w3.org/2000/svg" class="order-summary-toggle__dropdown" fill="#000"><path d="M.504 1.813l4.358 3.845.496.438.496-.438 4.642-4.096L9.504.438 4.862 4.534h.992L1.496.69.504 1.812z"></path></svg>
+                            </span>
+                            <span class="order-summary__emphasis total-recap__final-price skeleton-while-loading" data-checkout-payment-due-target="29285">€292.85</span>
+                        </span>
+                    </span>
+                </div>
+
+                <div class="hehe" style="padding-top: 3em;">
+                    <div class="form-row">
+                        <h2 class="section__title" tabindex="-1">{{ ship[0].get_id() }} Thank You {{ ship[0].get_lastname() }}</h2>
+
+                        <div class="card">
+                            <div>Your order is confirmed</div>
+                            <table class="card-table table table-borderless">
+                                <tr>
+                                    <td>You’ll receive an email and text when your order is ready.</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="card">
+                            <div>Order updates</div>
+                            <table class="card-table table table-borderless">
+                                <tr>
+                                    <td>You’ll get shipping and delivery updates by email and text.</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="card">
+                            <div>Customer information</div>
+                            <table class="card-table table table-borderless">
+                                <tr>
+                                    <th>Contact Information</th>
+                                    <th>Payment method</th>
+                                </tr>
+                                <tr>
+                                    <td>{{ ship[0].get_email() }}</td>
+                                    <td>{{ payment[0].get_card() }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Shipping Address</th>
+                                </tr>
+                                <tr>
+                                    <td>{{ ship[0].get_firstname() }} {{ ship[0].get_lastname() }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-wrap" style="width: 269px;">{{ ship[0].get_address() }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Singapore {{ ship[0].get_postal() }}</td>
+                                </tr>
+                                <tr>
+                                    <td>{{ ship[0].get_phone() }}</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="step__footer">
+                            <button type="submit" class="btn btn-primary btn-danger" style="width: 187px; height: 58px;"><span class="btn__content">Continue Shopping</span></button>
+                        </div>
+                    </div>
+                </div>
+
+                <footer class="main__footer">
+                    <ul class="policy-list d-flex justify-content-between align-items-center">
+                        <li class="policy-list__item "><a href="#">Refund policy</a></li>
+                        <li class="policy-list__item "><a href="#">Shipping policy</a></li>
+                        <li class="policy-list__item "><a href="#">Privacy policy</a></li>
+                        <li class="policy-list__item "><a href="#">Terms of service</a></li>
+                    </ul>
+                </footer>
+            </div>
+
+            <div class="cart-details">
+                <div class="product">
+                    {% for products in cart_list %}
+                        <div class="d-flex justify-content-between align-items-center p-1">
+                            <img class="product-thumbnail__image" src="../../static/images/1-urth-arkose-20l-backpack-grey_1000x@2x.png" width="64" height="64">
+                            <div class="product__description">
+                                <span class="product__description__name">{{ products.get_name() }}</span>
+                            </div>
+                            <p class="product__price"><span class="order-summary__emphasis">${{ products.get_price() }}</span></p>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="subtotal d-flex justify-content-between align-items-center">
+                    <p>Subtotal</p>
+                    <p>${{ subtotal }}</p>
+                </div>
+
+                <div class="shipping d-flex justify-content-between align-items-center">
+                    <p>Shipping</p>
+                    <p>$4</p>
+                </div>
+
+                <div class="total d-flex justify-content-between align-items-center">
+                    <p>Total</p>
+                    <p>${{ grandtotal }}</p>
+                </div>
+            </div>
+        </form>
+    </body>
+</html>
