@@ -381,7 +381,9 @@ def auction():
 # Admin Side
 @app.route("/admin")
 def admin():
-    return render_template("adminDashboard.html", top4=inventory_dict)
+    labels = ["Oct", "Nov", "Dec", "Jan", "Feb", "March"]
+    values = [25000, 20000, 30000, 25000, 40000, 100000]
+    return render_template("adminDashboard.html", top4=inventory_dict, labels=labels, values=values)
 
 
 @app.route("/adminAuction")
