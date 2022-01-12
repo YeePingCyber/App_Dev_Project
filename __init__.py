@@ -392,6 +392,19 @@ def auction():
     return render_template('auction.html', auction_dict=auction_dict, form=create_bid_form)
 
 
+@app.route("/deleteBid/<id>", methods=["POST"])
+def delete_bid(id):
+    db = shelve.open('UserBid.db', 'w')
+    bid_dict = db['UserBid']
+
+    bid_dict.pop(id)
+
+    db['UserBid'] = bid_dict
+    db.close()
+
+    return redirect(url_for('auction'))
+
+
 # Admin Side
 @app.route("/admin")
 def admin():

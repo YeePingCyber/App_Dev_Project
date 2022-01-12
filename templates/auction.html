@@ -49,30 +49,6 @@
                                                     </div>
 
                                                     <input type="submit" value="Submit" class="btn btn-primary"/>
-
-                                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal">
-                                                    Delete
-                                                    </button>
-                                                    <div class="modal" id="myModal">
-                                                        <div class="modal-dialog">
-                                                        <div class="modal-content">
-
-                                                        <div class="modal-header">
-                                                        <h4 class="modal-title">Delete Confirmation</h4>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                                        </div>
-
-                                                        <div class="modal-body">
-                                                       {{ render_field(form.bidAmount, class="form-check") }}
-                                                        </div>
-
-                                                        <div class="modal-footer">
-                                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                                                        </div>
-
-                                                        </div>
-                                                        </div>
-                                                    </div>
                                                 </form>
                                             </div>
                                         </div><br>
@@ -91,7 +67,11 @@
                                     <tr>
                                         <td>{{ user.get_bidAmount() }}</td>
                                         <td>Placeholder Date</td>
-                                        <td>{{ user.get_bidId() }}</td>
+                                        <td>{{ user.get_bidId() }}
+                                        <form action="{{url_for('delete_bid', id=user.get_bidId())}}" method="POST">
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                        </form>
+                                        </td>
                                     </tr>
                                 </table>
                                {% endfor %}
