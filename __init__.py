@@ -361,6 +361,22 @@ def auction():
     auction_dict = db["Auction"]
     db.close()
 
+    bid_dict = {}
+    db = shelve.open('UserBid.db', 'r')
+
+    try:
+        bid_dict = db['UserBid']
+    except:
+        print("Error in retrieving userbid.db.")
+
+    db.close()
+
+    bid_list = []
+    for key in bid_dict:
+        user = bid_dict.get(key)
+        bid_list.append(user)
+
+    print(bid_list)
 
     # check key values
     # for key in auction_dict:
@@ -385,16 +401,18 @@ def auction():
         userbidID = UserBid(create_bid_form.bidAmount.data)
         bid_dict[userbidID.get_bidId()] = userbidID
         db['UserBid'] = bid_dict
+
+        print(bid_dict)
         db.close()
 
         return render_template('auction.html', auction_dict=auction_dict, form=create_bid_form, bid_list=bid_list)
 
-    return render_template('auction.html', auction_dict=auction_dict, form=create_bid_form)
+    return render_template('auction.html', auction_dict=auction_dict, form=create_bid_form, bid_list=bid_list)
 
 
 @app.route("/deleteBid/<id>", methods=["POST"])
 def delete_bid(id):
-    db = shelve.open('UserBid.db', 'w')
+    db = shelve.open('UserBid.db', 'c')
     bid_dict = db['UserBid']
 
     bid_dict.pop(id)
