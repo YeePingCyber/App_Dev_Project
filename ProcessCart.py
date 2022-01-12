@@ -46,8 +46,3 @@ class PaymentProcess:
     def get_card(self):
         return self.__card_num
 
-
-class Output(ShippingProcess, PaymentProcess):
-    def __init__(self, email, country, first_name, last_name, address, postal_code, city, phone, card_num, name_card, expire, ccv):
-        ShippingProcess.__init__(self, email, country, first_name, last_name, address, postal_code, city, phone)
-        PaymentProcess.__init__(self, card_num, name_card, expire, ccv)

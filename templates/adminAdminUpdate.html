@@ -15,7 +15,8 @@
     <form method="POST" class="form-login" action="">
       <h1>Update Admin</h1>
       <br><br>
-
+      <img src="../../static/images/Default_picture.jpg" class="profile-pic">
+      <br><br><br>
       <div class="form-login-field">
         {{ render_field(form.first_name, class="form-login-field") }}
       </div>
@@ -38,8 +39,9 @@
         {{ render_field(form.email, class="form-login-field") }}
       </div>
 
-      <br><br><br><hr>
-
+      <br><br><hr>
+      <h2>Change your password</h2>
+      <br><br>
       <div class="form-login-field">
         {{ render_field(form.current_password, class="form-login-field") }}
       </div>

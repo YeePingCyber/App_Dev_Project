@@ -73,7 +73,102 @@
                     <div class="col-lg-6 col-md-12">
                         <canvas id="myChart" class="cardd"></canvas>
                         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                        <script src="../static/js/areachart.js"></script>
+                        <script>
+                            var ctx = document.getElementById("myChart");
+                            var myLineChart = new Chart(ctx, {
+                              type: 'line',
+                              data: {
+                                labels: {{ labels | tojson }},
+                                datasets: [{
+                                  label: "Earnings",
+                                  lineTension: 0.3,
+                                  backgroundColor: "rgba(78, 115, 223, 0.05)",
+                                  borderColor: "rgba(78, 115, 223, 1)",
+                                  pointRadius: 3,
+                                  pointBackgroundColor: "rgba(78, 115, 223, 1)",
+                                  pointBorderColor: "rgba(78, 115, 223, 1)",
+                                  pointHoverRadius: 3,
+                                  pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+                                  pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+                                  pointHitRadius: 10,
+                                  pointBorderWidth: 2,
+                                  data: {{ values }},
+                                }],
+                              },
+                              options: {
+                                maintainAspectRatio: false,
+                                layout: {
+                                  padding: {
+                                    left: 10,
+                                    right: 25,
+                                    top: 25,
+                                    bottom: 0
+                                  }
+                                },
+                                scales: {
+                                  xAxes: [{
+                                    time: {
+                                      unit: 'date'
+                                    },
+                                    gridLines: {
+                                      display: false,
+                                      drawBorder: false
+                                    },
+                                    ticks: {
+                                      maxTicksLimit: 7
+                                    }
+                                  }],
+                                  yAxes: [{
+                                    ticks: {
+                                      maxTicksLimit: 5,
+                                      padding: 10,
+                                      // Include a dollar sign in the ticks
+                                      callback: function(value, index, values) {
+                                        return '$' + number_format(value);
+                                      }
+                                    },
+                                    gridLines: {
+                                      color: "rgb(234, 236, 244)",
+                                      zeroLineColor: "rgb(234, 236, 244)",
+                                      drawBorder: false,
+                                      borderDash: [2],
+                                      zeroLineBorderDash: [2]
+                                    }
+                                  }],
+                                },
+                                legend: {
+                                  display: false
+                                },
+                                tooltips: {
+                                  backgroundColor: "rgb(255,255,255)",
+                                  bodyFontColor: "#858796",
+                                  titleMarginBottom: 10,
+                                  titleFontColor: '#6e707e',
+                                  titleFontSize: 14,
+                                  borderColor: '#dddfeb',
+                                  borderWidth: 1,
+                                  xPadding: 15,
+                                  yPadding: 15,
+                                  displayColors: false,
+                                  intersect: false,
+                                  mode: 'index',
+                                  caretPadding: 10,
+                                  callbacks: {
+                                    label: function(tooltipItem, chart) {
+                                      var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+                                      return datasetLabel + ': $' + number_format(tooltipItem.yLabel);
+                                    }
+                                  }
+                                }
+                              }
+                            });
+
+                            // render the chart
+                            const myChart = new Chart(
+                                document.getElementById('myChart'),
+                                config
+                            );
+                        </script>
                     </div>
                 </div>
             </div>
@@ -142,6 +237,18 @@
                                                   <td>@twitter</td>
                                                   <td>$6000</td>
                                               </tr>
+                                              <tr>
+                                                <th scope="row">6</th>
+                                                <td colspan="2">Larry the Bird</td>
+                                                <td>@twitter</td>
+                                                <td>$6000</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">7</th>
+                                                <td colspan="2">Larry the Bird</td>
+                                                <td>@twitter</td>
+                                                <td>$6000</td>
+                                            </tr>
                                           </tbody>
                                     </table>
                                 </div>
@@ -182,6 +289,10 @@
                                                 <td><p class="value">Total Cost</p></td>
                                                 <td><p class="remarks">$4600</p></td>
                                             </tr>
+                                            <tr>
+                                                <td><p class="value">Total Cost</p></td>
+                                                <td><p class="remarks">$4600</p></td>
+                                            </tr>
                                         </tbody>
 
                                     </table>
@@ -190,11 +301,11 @@
                         </div>
                         <div class="col-lg-3 col-md-6">
                             <div class="p-1">
-                                <div class="cardd">
+                                <div class="cardd product-grid__products">
                                     <h3 class="title">Top Selling Products</h3>
-                                    {% for top in top4 %}
-                                        {% if top4[top].get_top() == 1 %}
-                                            <div class="">
+                                    <div class="product-grid__products justify-content-center p-2">
+                                        {% for top in top4 %}
+                                            {% if top4[top].get_top() == 1 %}
                                                 <div class="top-items__card">
                                                     <a class="thumbnail" href=""><img src="../static/images/1-Urth-Norite-24L-Backpack-Combo-Grey-1614664835017_300x@2x.png"/></a>
                                                     <div class="top-items__card-detail">
@@ -204,10 +315,9 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        {% endif %}
-                                    {% endfor %}
-
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
                                 </div>
                             </div>
                         </div>
