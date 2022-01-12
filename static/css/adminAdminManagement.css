@@ -39,6 +39,9 @@ font-weight: bold;
 width:8%;
 }
 
+.edit-button{
+color: white;
+}
 .add-account {
     padding: 0.5% 1% 0.5% 1%;
     background-color: black;
