@@ -38,16 +38,41 @@
                                     <td>Sale ends at {{ auction_dict.get(product).get_end_date() }}</td>
                                 </tr>
                                 <tr>
-                                    <td rowspan="3">Minimum Bid<br>
+                                    <td rowspan="3">Minimum Bid:<br>
                                     {{ auction_dict.get(product).get_minimum_amount() }}<br>
                                         <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#makebid" aria-expanded="false" aria-controls="collapseExample">Place bid</button>
                                         <div class="collapse" id="makebid">
                                             <div class="card card-body">
                                                 <form method="POST" action="">
                                                     <div class="form-group">
-                                                        {{ render_field(form.bidAmount, class="form-check") }}
+                                                    {{ render_field(form.bidAmount, class="form-check") }}
                                                     </div>
+
                                                     <input type="submit" value="Submit" class="btn btn-primary"/>
+
+                                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal">
+                                                    Delete
+                                                    </button>
+                                                    <div class="modal" id="myModal">
+                                                        <div class="modal-dialog">
+                                                        <div class="modal-content">
+
+                                                        <div class="modal-header">
+                                                        <h4 class="modal-title">Delete Confirmation</h4>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                        </div>
+
+                                                        <div class="modal-body">
+                                                       {{ render_field(form.bidAmount, class="form-check") }}
+                                                        </div>
+
+                                                        <div class="modal-footer">
+                                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                                        </div>
+
+                                                        </div>
+                                                        </div>
+                                                    </div>
                                                 </form>
                                             </div>
                                         </div><br>

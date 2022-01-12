@@ -361,19 +361,33 @@ def auction():
     auction_dict = db["Auction"]
     db.close()
 
+
+    # check key values
+    # for key in auction_dict:
+    #     product = auction_dict.get(key)
+    #     print(key)
+
     create_bid_form = CreateBidForm(request.form)
     if request.method == 'POST' and create_bid_form.validate():
         bid_dict = {}
         db = shelve.open('UserBid.db', 'c')
 
+        try:
+            bid_dict = db['UserBid']
+        except:
+            print("Error in retrieving userbid.db.")
+
+        bid_list = []
+        for key in bid_dict:
+            user = bid_dict.get(key)
+            bid_list.append(user)
+
         userbidID = UserBid(create_bid_form.bidAmount.data)
-        # bid_dict[userbidID.get_bidId()] = userbidID
-        #db["Auction"] = bid_dict
-
+        bid_dict[userbidID.get_bidId()] = userbidID
         db['UserBid'] = bid_dict
-
         db.close()
-        return render_template('auction.html', auction_dict=auction_dict, form=create_bid_form, bid_dict=bid_dict)
+
+        return render_template('auction.html', auction_dict=auction_dict, form=create_bid_form, bid_list=bid_list)
 
     return render_template('auction.html', auction_dict=auction_dict, form=create_bid_form)
 
