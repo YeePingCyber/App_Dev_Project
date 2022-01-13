@@ -100,14 +100,17 @@ def cart():
         print("Error in retrieving Inventory from addtocart.db")
 
     total = 0
+    product_total = 0
     cartList = []
     for x in cart_dict:
         cartList.append(cart_dict[x])
+        product_total = cart_dict[x].get_price() * 2
         total += cart_dict[x].get_price()
+        # quantity += cart_dict[x].get_quantity()
 
     db.close()
     if len(cart_dict) > 0:
-        return render_template("cart.html", cart_list=cartList, subtotal=total)
+        return render_template("cart.html", cart_list=cartList, subtotal=total, product_total=product_total)
     else:
         return render_template("cart_empty.html")
 
