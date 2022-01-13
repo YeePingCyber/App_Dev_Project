@@ -17,6 +17,7 @@ from createProduct import load_product
 
 app = Flask(__name__)
 app.secret_key = "abc"
+
 inventory_dict = {}
 db = shelve.open("database/inventory", "c")
 try:
@@ -28,13 +29,13 @@ except:
     print("Error in retrieving Inventory from inventory.db")
 
 
-for x in range(6):
-    inventory = Product("Arkose 20L Modular Bacpack", "Everyday backpack + small camera insert", 140, 50, "Camera", 0, 0)
-    inventory_dict[x] = inventory
-    db["Inventory"] = inventory_dict
-for x in inventory_dict:
-    print(inventory_dict[x])
-db.close()
+# inventory = Product("Arkose 35L Modular Bacpack", "Everyday backpack + small camera insert", 120, 50, "Camera", 0, 1)
+# inventory_dict[3] = inventory
+# db["Inventory"] = inventory_dict
+#
+# for x in inventory_dict:
+#     print(inventory_dict[x])
+# db.close()
 
 
 # Customer Side
