@@ -41,6 +41,7 @@
                         <a href="/productFAQ"><p>Contact us at +65 12345678</p></a>
                         <table>
                             <form method=post action="">
+                                {{ render_field(form.product_id, value=product[x].get_product_id()) }}
                                 {{ render_field(form.name, value=product[x].get_name()) }}
                                 {{ render_field(form.description, value=product[x].get_description()) }}
                                 {{ render_field(form.price, value=product[x].get_price()) }}

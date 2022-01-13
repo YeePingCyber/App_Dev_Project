@@ -36,12 +36,12 @@
                                     <div class="o-quantity-selector c-cart-product__quantity">
                                         <div class="o-quantity-selector__inner">
                                             <div class="o-quantity-selector__input">
-                                                <input type="number" class="o-input o-quantity-selector__input-field" value="1">
+                                                <input type="number" class="o-input o-quantity-selector__input-field" value="2">
                                             </div>
                                         </div>
                                     </div>
 
-                                    <p class="c-cart-product__price-container"><span class="c-cart-product__price">Price:<span>${{ products.get_price() }}</span></span><span class="c-cart-product__price">Total:<span>${{ products.get_price() }}</span></span></p>
+                                    <p class="c-cart-product__price-container"><span class="c-cart-product__price">Price:<span>${{ products.get_price() }}</span></span><span class="c-cart-product__price">Total:<span>${{ product_total }}</span></span></p>
                                 </div>
                                 <form action="/deleteCart/{{ products.get_id() }}" method="POST">
                                     <button class="c-cart-product__remove is-desktop o-btn is-underline">Remove</button>
