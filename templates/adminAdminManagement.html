@@ -32,7 +32,7 @@
         <td>{{ admin.get_email() }}</td>
         <td>{{ admin.get_employee_id() }}</td>
         <td class="delete-button">
-            <button type="button" class="btn btn-danger"><a href="/adminAdminUpdate/{{admin.get_admin_id()}}/">Edit</a></button>
+            <button type="button" class="btn btn-danger"><a href="/adminAdminUpdate/{{admin.get_admin_id()}}/" class="edit-button">Edit</a></button>
         </td>
         <td class="delete-button">
             <form action="{{url_for('delete_admin', id=admin.get_admin_id())}}" method="POST">

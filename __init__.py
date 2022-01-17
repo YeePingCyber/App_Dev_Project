@@ -17,8 +17,9 @@ from createProduct import load_product
 
 app = Flask(__name__)
 app.secret_key = "abc"
+
 inventory_dict = {}
-db = shelve.open("inventory", "c")
+db = shelve.open("database/inventory", "c")
 try:
     if "Inventory" in db:
         inventory_dict = db["Inventory"]
@@ -28,10 +29,10 @@ except:
     print("Error in retrieving Inventory from inventory.db")
 
 
-# # for x in range(6):
-# #     inventory = Product("Arkose 20L Modular Bacpack", "Everyday backpack + small camera insert", 140, 50, "Camera", 0, 0)
-# #     inventory_dict[x] = inventory
-# #     db["Inventory"] = inventory_dict
+# inventory = Product("Arkose 35L Modular Bacpack", "Everyday backpack + small camera insert", 120, 50, "Camera", 0, 1)
+# inventory_dict[3] = inventory
+# db["Inventory"] = inventory_dict
+#
 # for x in inventory_dict:
 #     print(inventory_dict[x])
 # db.close()
@@ -48,7 +49,7 @@ def log_in():
     error = ""
     create_log_in_form = CreateLoginForm(request.form)
     if request.method == 'POST' and create_log_in_form.validate():
-        db = shelve.open('user.db', 'r')
+        db = shelve.open('database/user.db', 'r')
         users_dict = db['Users']
         hashed_password = hl.pbkdf2_hmac('sha256', str(create_log_in_form.login_password.data).encode(), b'salt', 100000).hex()
         for user in users_dict:
@@ -69,7 +70,7 @@ def create_customer():
     if request.method == 'POST' and create_customer_form.validate():
         if create_customer_form.register_password.data == create_customer_form.confirm_password.data:
             customer_dict = {}
-            db = shelve.open('user.db', 'c')
+            db = shelve.open('database/user.db', 'c')
             try:
                 customer_dict = db['Users']
             except:
@@ -90,7 +91,7 @@ def create_customer():
 @app.route("/cart")
 def cart():
     cart_dict = {}
-    db = shelve.open("addtocart", "c")
+    db = shelve.open("database/addtocart", "c")
     try:
         if "Add_to_cart" in db:
             cart_dict = db["Add_to_cart"]
@@ -100,14 +101,17 @@ def cart():
         print("Error in retrieving Inventory from addtocart.db")
 
     total = 0
+    product_total = 0
     cartList = []
     for x in cart_dict:
         cartList.append(cart_dict[x])
+        product_total = cart_dict[x].get_price() * 2
         total += cart_dict[x].get_price()
+        # quantity += cart_dict[x].get_quantity()
 
     db.close()
     if len(cart_dict) > 0:
-        return render_template("cart.html", cart_list=cartList, subtotal=total)
+        return render_template("cart.html", cart_list=cartList, subtotal=total, product_total=product_total)
     else:
         return render_template("cart_empty.html")
 
@@ -115,7 +119,7 @@ def cart():
 @app.route('/deleteCart/<id>', methods=['POST'])
 def delete_item(id):
     cart_dict = {}
-    db = shelve.open("addtocart", "c")
+    db = shelve.open("database/addtocart", "c")
     try:
         if "Add_to_cart" in db:
             cart_dict = db["Add_to_cart"]
@@ -140,7 +144,7 @@ def delete_item(id):
 @app.route("/checkout", methods=['GET', 'POST'])
 def checkout():
     cart_dict = {}
-    db = shelve.open("addtocart", "c")
+    db = shelve.open("database/addtocart", "c")
     try:
         if "Add_to_cart" in db:
             cart_dict = db["Add_to_cart"]
@@ -161,7 +165,7 @@ def checkout():
     shipping_dict = {}
     create_shipment_form = CreateShipmentForm(request.form)
     if request.method == 'POST' and create_shipment_form.validate():
-        db = shelve.open("shipping", "c")
+        db = shelve.open("database/shipping", "c")
         try:
             if "Shipping" in db:
                 shipping_dict = db["Shipping"]
@@ -184,7 +188,7 @@ def checkout():
 @app.route("/checkout/payment", methods=['GET', 'POST'])
 def payment():
     cart_dict = {}
-    db = shelve.open("addtocart", "c")
+    db = shelve.open("database/addtocart", "c")
     try:
         if "Add_to_cart" in db:
             cart_dict = db["Add_to_cart"]
@@ -194,7 +198,7 @@ def payment():
         print("Error in retrieving Inventory from addtocart.db")
 
     shipping_dict = {}
-    db = shelve.open("shipping", "c")
+    db = shelve.open("database/shipping", "c")
     try:
         if "Shipping" in db:
             shipping_dict = db["Shipping"]
@@ -214,7 +218,7 @@ def payment():
     payment_dict = {}
     create_payment_form = CreatePaymentForm(request.form)
     if request.method == 'POST' and create_payment_form.validate():
-        db = shelve.open("payment", "c")
+        db = shelve.open("database/payment", "c")
         try:
             if "payment" in db:
                 payment_dict = db["payment"]
@@ -240,7 +244,7 @@ def payment():
 @app.route("/checkout/paymentdone")
 def paymentdone():
     sales = {}
-    db = shelve.open("sales", "c")
+    db = shelve.open("database/sales", "c")
     try:
         if "sales" in db:
             sales = db["sales"]
@@ -250,7 +254,7 @@ def paymentdone():
         print("Error in retrieving Sales from sales.db")
 
     cart_dict = {}
-    db = shelve.open("addtocart", "c")
+    db = shelve.open("database/addtocart", "c")
     try:
         if "Add_to_cart" in db:
             cart_dict = db["Add_to_cart"]
@@ -268,7 +272,7 @@ def paymentdone():
     grandtotal = total + 4
 
     shipping_dict = {}
-    db = shelve.open("shipping", "c")
+    db = shelve.open("database/shipping", "c")
     try:
         if "Shipping" in db:
             shipping_dict = db["Shipping"]
@@ -278,7 +282,7 @@ def paymentdone():
         print("Error in retrieving Inventory from shipping.db")
 
     payment_dict = {}
-    db = shelve.open("payment", "c")
+    db = shelve.open("database/payment", "c")
     try:
         if "payment" in db:
             payment_dict = db["payment"]
@@ -302,7 +306,7 @@ def bag1():
     addtocartform = CreateAddCartForm(request.form)
     if request.method == "POST":
         addtocart_dict = {}
-        db = shelve.open("addtocart", "c")
+        db = shelve.open("database/addtocart", "c")
 
         try:
             if "Add_to_cart" in db:
@@ -331,7 +335,7 @@ def bag2():
     addtocartform = CreateAddCartForm(request.form)
     if request.method == "POST":
         addtocart_dict = {}
-        db = shelve.open("addtocart", "c")
+        db = shelve.open("database/addtocart", "c")
 
         try:
             if "Add_to_cart" in db:
@@ -357,12 +361,12 @@ def bag2():
 @app.route("/auction", methods=['GET', 'POST'])
 def auction():
     auction_dict = {}
-    db = shelve.open('auction.db', 'c')
+    db = shelve.open('database/auction.db', 'c')
     auction_dict = db["Auction"]
     db.close()
 
     bid_dict = {}
-    db = shelve.open('UserBid.db', 'r')
+    db = shelve.open('database/UserBid.db', 'r')
 
     try:
         bid_dict = db['UserBid']
@@ -386,7 +390,7 @@ def auction():
     create_bid_form = CreateBidForm(request.form)
     if request.method == 'POST' and create_bid_form.validate():
         bid_dict = {}
-        db = shelve.open('UserBid.db', 'c')
+        db = shelve.open('database/UserBid.db', 'c')
 
         try:
             bid_dict = db['UserBid']
@@ -412,7 +416,7 @@ def auction():
 
 @app.route("/deleteBid/<id>", methods=["POST"])
 def delete_bid(id):
-    db = shelve.open('UserBid.db', 'c')
+    db = shelve.open('database/UserBid.db', 'c')
     bid_dict = db['UserBid']
 
     bid_dict.pop(id)
@@ -434,7 +438,7 @@ def admin():
 @app.route("/adminAuction")
 def admin_auction():
     try:
-        db = shelve.open('auction.db', 'r')
+        db = shelve.open('database/auction.db', 'r')
         auction_dict = db["Auction"]
         db.close()
     except:
@@ -464,7 +468,7 @@ def create_auction():
 
     if request.method == "POST" and create_auction_form.validate():
         create_auction_dict = {}
-        db = shelve.open("auction.db", "c")
+        db = shelve.open("database/auction.db", "c")
 
         try:
             if "Auction" in db:
@@ -492,7 +496,7 @@ def create_auction():
 def update_auction(id):
     update_auction_form = CreateAuctionForm(request.form)
     if request.method == 'POST' and update_auction_form.validate():
-        db = shelve.open("auction.db", 'w')
+        db = shelve.open("database/auction.db", 'w')
         auction_dict = db["Auction"]
 
         auction_dict.get(id).set_name(update_auction_form.product_name.data)
@@ -507,7 +511,7 @@ def update_auction(id):
 
         return redirect(url_for("admin_auction"))
     else:
-        db = shelve.open("auction.db", 'r')
+        db = shelve.open("database/auction.db", 'r')
         auction_dict = db["Auction"]
         db.close()
 
@@ -523,7 +527,7 @@ def update_auction(id):
 
 @app.route('/deleteAuction/<id>', methods=["POST"])
 def delete_auction(id):
-    db = shelve.open("auction.db", "w")
+    db = shelve.open("database/auction.db", "w")
     auction_dict = db["Auction"]
 
     auction_dict.pop(id)
@@ -541,7 +545,7 @@ def admin_orders():
 
 @app.route("/adminCustomerManagement")
 def admin_customer_management():
-    db = shelve.open('user.db', 'r')
+    db = shelve.open('database/user.db', 'r')
     users_dict = db['Users']
     db.close()
     customer_list = []
@@ -556,7 +560,7 @@ def admin_customer_management():
 @app.route('/deleteCustomer/<int:id>', methods=['POST'])
 def delete_customer(id):
     users_dict = {}
-    db = shelve.open('user.db', 'w')
+    db = shelve.open('database/user.db', 'w')
     users_dict = db['Users']
     users_dict.pop(id)
 
@@ -567,7 +571,7 @@ def delete_customer(id):
 
 @app.route("/adminAdminManagement")
 def admin_admin_management():
-    db = shelve.open('user.db', 'r')
+    db = shelve.open('database/user.db', 'r')
     users_dict = db['Users']
     db.close()
     admin_list = []
@@ -581,7 +585,7 @@ def admin_admin_management():
 @app.route('/deleteAdmin/<int:id>', methods=['POST'])
 def delete_admin(id):
     users_dict = {}
-    db = shelve.open('user.db', 'w')
+    db = shelve.open('database/user.db', 'w')
     users_dict = db['Users']
     users_dict.pop(id)
 
@@ -596,7 +600,7 @@ def admin_creation():
     if request.method == 'POST' and create_admin_form.validate():
         if create_admin_form.register_password.data == create_admin_form.confirm_password.data:
             admin_dict = {}
-            db = shelve.open('user.db', 'c')
+            db = shelve.open('database/user.db', 'c')
             try:
                 admin_dict = db['Users']
             except:
@@ -621,7 +625,7 @@ def update_admin(id):
     error = ""
     if request.method == 'POST' and update_admin_form.validate():
         users_dict = {}
-        db = shelve.open('user.db', 'w')
+        db = shelve.open('database/user.db', 'w')
         users_dict = db['Users']
         admin = users_dict.get(id)
         hashed_password = hl.pbkdf2_hmac('sha256', str(update_admin_form.current_password.data).encode(), b'salt', 100000).hex()
@@ -648,7 +652,7 @@ def update_admin(id):
 
     else:
         users_dict = {}
-        db = shelve.open('user.db', 'r')
+        db = shelve.open('database/user.db', 'r')
         users_dict = db['Users']
         db.close()
 
