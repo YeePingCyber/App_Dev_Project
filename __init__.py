@@ -1,3 +1,4 @@
+from cv2 import add
 from flask import Flask, render_template, flash
 from flask import Flask, render_template, request, redirect, url_for
 import shelve
@@ -33,8 +34,8 @@ except:
 # inventory_dict[3] = inventory
 # db["Inventory"] = inventory_dict
 #
-# for x in inventory_dict:
-#     print(inventory_dict[x])
+for x in inventory_dict:
+    print(inventory_dict[x])
 # db.close()
 
 
@@ -102,16 +103,34 @@ def cart():
 
     total = 0
     product_total = 0
+    quantityA = 0
+    quantityB = 0
     cartList = []
+    count = 0
+    unique = []
     for x in cart_dict:
         cartList.append(cart_dict[x])
-        product_total = cart_dict[x].get_price() * 2
+        
+        if cartList[count].get_name() == "Arkose 24L Modular Bacpack":
+            quantityA += 1
+
+        if cartList[count].get_name() == "Arkose 20L Modular Bacpack":
+            quantityB += 1
+        
+        count += 1
+        product_total = cart_dict[x].get_price() * quantityA
         total += cart_dict[x].get_price()
-        # quantity += cart_dict[x].get_quantity()
+
+    for x in cartList:
+        if x.get_name() not in unique:
+            unique.append(x)
+
+        print(x.get_name())
+
 
     db.close()
     if len(cart_dict) > 0:
-        return render_template("cart.html", cart_list=cartList, subtotal=total, product_total=product_total)
+        return render_template("cart.html", cart_list=unique, subtotal=total , quantity=quantityA, product_total=product_total)
     else:
         return render_template("cart_empty.html")
 
@@ -320,6 +339,8 @@ def bag1():
                               int(addtocartform.price.data), int(addtocartform.quantity.data),
                               addtocartform.category.data, int(addtocartform.discount.data),
                               int(addtocartform.top.data))
+
+        print(addtocart)
 
         addtocart_dict[addtocart.get_id()] = addtocart
         db["Add_to_cart"] = addtocart_dict
