@@ -1,4 +1,6 @@
 from cv2 import add
+import importlib
+
 from flask import Flask, render_template, flash
 from flask import Flask, render_template, request, redirect, url_for
 import shelve
@@ -429,6 +431,8 @@ def auction():
 
         print(bid_dict)
         db.close()
+
+
 
         return render_template('auction.html', auction_dict=auction_dict, form=create_bid_form, bid_list=bid_list)
 
