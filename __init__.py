@@ -382,6 +382,16 @@ def auction():
 
     print(bid_list)
 
+    today = date.today().strftime('%Y-%m-%d')
+    ongoing = ""
+
+    for keys, values in auction_dict.items():
+        start = date.strftime(values.get_start_date(), '%Y-%m-%d')
+        end = date.strftime(values.get_end_date(), '%Y-%m-%d')
+
+        if start == today or today > start or start <= today and end <= today:
+            ongoing = values
+
     # check key values
     # for key in auction_dict:
     #     product = auction_dict.get(key)
@@ -409,9 +419,9 @@ def auction():
         print(bid_dict)
         db.close()
 
-        return render_template('auction.html', auction_dict=auction_dict, form=create_bid_form, bid_list=bid_list)
+        return render_template('auction.html', auction_dict=auction_dict, form=create_bid_form, bid_list=bid_list, ongoing=ongoing)
 
-    return render_template('auction.html', auction_dict=auction_dict, form=create_bid_form, bid_list=bid_list)
+    return render_template('auction.html',auction_dict=auction_dict, bid_list=bid_list, form=create_bid_form, ongoing=ongoing)
 
 
 @app.route("/deleteBid/<id>", methods=["POST"])

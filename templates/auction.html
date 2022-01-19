@@ -29,17 +29,15 @@
 
                 <div class="col-md-6">
                     <div class="product-info">
-                        {% for product in auction_dict %}
-                        {% if product == "AUde3121422d8aff59" %}
-                            <h3>{{ auction_dict.get(product).get_name() }}</h3>
+                            <h3>{{ ongoing.get_name() }}</h3>
                             <p id="title">White Lyocell Canvas Bag</p>
                             <table class="bid-table">
                                 <tr>
-                                    <td>Sale ends at {{ auction_dict.get(product).get_end_date() }}</td>
+                                    <td>Sale ends at {{ ongoing.get_end_date() }}</td>
                                 </tr>
                                 <tr>
                                     <td rowspan="3">Minimum Bid:<br>
-                                    {{ auction_dict.get(product).get_minimum_amount() }}<br>
+                                    {{ ongoing.get_minimum_amount() }}<br>
                                         <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#makebid" aria-expanded="false" aria-controls="collapseExample">Place bid</button>
                                         <div class="collapse" id="makebid">
                                             <div class="card card-body">
@@ -55,15 +53,13 @@
                                     </td>
                                 </tr>
                             </table>
-                        {% endif %}
-                        {% endfor %}
 
 
                         <form method="POST" action="/auction">
                             <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#offers" aria-expanded="false" aria-controls="collapseExample">Offers</button>
                             <div class="collapse" id="offers">
                                 <div class="card card-body">
-                                    {% print(bit_list) %}
+
                                     {% for user in bid_list %}
 
                                     <table>
