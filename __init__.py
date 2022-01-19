@@ -33,8 +33,8 @@ except:
 # inventory_dict[3] = inventory
 # db["Inventory"] = inventory_dict
 #
-# for x in inventory_dict:
-#     print(inventory_dict[x])
+for x in inventory_dict:
+    print(inventory_dict[x])
 # db.close()
 
 
@@ -91,6 +91,9 @@ def create_customer():
 @app.route("/cart")
 def cart():
     cart_dict = {}
+    productA = []
+    productB = []
+    cartList = []
     db = shelve.open("database/addtocart", "c")
     try:
         if "Add_to_cart" in db:
@@ -100,22 +103,36 @@ def cart():
     except:
         print("Error in retrieving Inventory from addtocart.db")
 
-    total = 0
+    # organising it such that its [[productA],[productB]]
+    for x in cart_dict[1]:
+        productA.append(cart_dict[1][x])
+
+    for y in cart_dict[2]:
+        productB.append(cart_dict[2][y])
+
+    cartList.append(productA)
+    cartList.append(productB)
+    print(cartList)
+
+    quantity = 1
     product_total = 0
-    cartList = []
-    for x in cart_dict:
-        cartList.append(cart_dict[x])
-        product_total = cart_dict[x].get_price() * 2
-        total += cart_dict[x].get_price()
-        # quantity += cart_dict[x].get_quantity()
+    subtotal = 0
+
+    for i in cartList:
+        # len(i) gives the quantity of the products, but will get overrided by the quantity of the second product, same for the product_total
+        quantity = len(i)
+        product_total = i[0].get_price() * quantity
+        subtotal += product_total
+
+    #   product a = 5, product b = 2, subtotal correct
 
     db.close()
-    if len(cart_dict) > 0:
-        return render_template("cart.html", cart_list=cartList, subtotal=total, product_total=product_total)
+    if len(cart_dict[1]) and len(cart_dict[2]) > 0:
+        return render_template("cart.html", cartList=cartList, quantity=quantity, product_total=product_total, subtotal=subtotal)
     else:
         return render_template("cart_empty.html")
 
-
+# need fix this shit delete thing
 @app.route('/deleteCart/<id>', methods=['POST'])
 def delete_item(id):
     cart_dict = {}
@@ -306,6 +323,7 @@ def bag1():
     addtocartform = CreateAddCartForm(request.form)
     if request.method == "POST":
         addtocart_dict = {}
+        productA = {}
         db = shelve.open("database/addtocart", "c")
 
         try:
@@ -321,9 +339,13 @@ def bag1():
                               addtocartform.category.data, int(addtocartform.discount.data),
                               int(addtocartform.top.data))
 
-        addtocart_dict[addtocart.get_id()] = addtocart
-        db["Add_to_cart"] = addtocart_dict
+        # key 0 stores product A, key 1 stores product B... {1:{},2:{}}
+        if addtocart.get_name() == "Arkose 24L Modular Bacpack":
+            productA[addtocart.get_id()] = addtocart
+            # need create key 1 first then update
+            addtocart_dict[1].update(productA)
 
+        db["Add_to_cart"] = addtocart_dict
         return redirect(url_for("cart"))
 
     return render_template("bag1.html", form=addtocartform, product=inventory_dict, x=x)
@@ -335,6 +357,7 @@ def bag2():
     addtocartform = CreateAddCartForm(request.form)
     if request.method == "POST":
         addtocart_dict = {}
+        productB = {}
         db = shelve.open("database/addtocart", "c")
 
         try:
@@ -350,7 +373,11 @@ def bag2():
                               addtocartform.category.data, int(addtocartform.discount.data),
                               int(addtocartform.top.data))
 
-        addtocart_dict[addtocart.get_id()] = addtocart
+        if addtocart.get_name() == "Arkose 20L Modular Bacpack":
+            productB[addtocart.get_id()] = addtocart
+            # need create key 2 first then update
+            addtocart_dict[2].update(productB)
+
         db["Add_to_cart"] = addtocart_dict
 
         return redirect(url_for("cart"))
