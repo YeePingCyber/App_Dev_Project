@@ -29,13 +29,13 @@ except:
     print("Error in retrieving Inventory from inventory.db")
 
 
-inventory = Product("Arkose 35L Modular Bacpack", "Everyday backpack + small camera insert", 100, 50, "Camera", 0, 1)
-inventory_dict[1] = inventory
-db["Inventory"] = inventory_dict
-
-for x in inventory_dict:
-    print(inventory_dict[x])
-db.close()
+# inventory = Product("Arkose 35L Modular Bacpack", "Everyday backpack + small camera insert", 120, 50, "Camera", 0, 1)
+# inventory_dict[3] = inventory
+# db["Inventory"] = inventory_dict
+#
+# for x in inventory_dict:
+#     print(inventory_dict[x])
+# db.close()
 
 
 # Customer Side
@@ -365,15 +365,6 @@ def auction():
     auction_dict = db["Auction"]
     db.close()
 
-    today = date.today().strftime('%Y-%m-%d')
-    ongoing = ""
-    for keys, values in auction_dict.items():
-            start = date.strftime(values.get_start_date(), '%Y-%m-%d')
-            end = date.strftime(values.get_end_date(), '%Y-%m-%d')
-
-            if start == today or today > start or start <= today and end <= today:
-                ongoing = values
-
     bid_dict = {}
     db = shelve.open('database/UserBid.db', 'r')
 
@@ -415,14 +406,12 @@ def auction():
         bid_dict[userbidID.get_bidId()] = userbidID
         db['UserBid'] = bid_dict
 
-        for i, j in bid_dict.items():
-            print(j.get_bidId(), j.get_bidAmount())
+        print(bid_dict)
         db.close()
 
-        # redirect(url_for("auction"))
-        return render_template('auction.html', auction_dict=auction_dict, form=create_bid_form, bid_list=bid_list, ongoing=ongoing)
+        return render_template('auction.html', auction_dict=auction_dict, form=create_bid_form, bid_list=bid_list)
 
-    return render_template('auction.html', auction_dict=auction_dict, form=create_bid_form, bid_list=bid_list, ongoing=ongoing)
+    return render_template('auction.html', auction_dict=auction_dict, form=create_bid_form, bid_list=bid_list)
 
 
 @app.route("/deleteBid/<id>", methods=["POST"])
