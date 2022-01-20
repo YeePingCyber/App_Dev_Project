@@ -114,12 +114,9 @@ def cart():
     cartList.append(productB)
     print(cartList)
 
-    quantity = 1
-    product_total = 0
     subtotal = 0
 
     for i in cartList:
-        # len(i) gives the quantity of the products, but will get overrided by the quantity of the second product, same for the product_total
         quantity = len(i)
         product_total = i[0].get_price() * quantity
         subtotal += product_total
@@ -128,7 +125,7 @@ def cart():
 
     db.close()
     if len(cart_dict[1]) and len(cart_dict[2]) > 0:
-        return render_template("cart.html", cartList=cartList, quantity=quantity, product_total=product_total, subtotal=subtotal)
+        return render_template("cart.html", cartList=cartList, subtotal=subtotal)
     else:
         return render_template("cart_empty.html")
 
@@ -157,7 +154,7 @@ def delete_item(id):
     else:
         return render_template("cart_empty.html")
 
-
+# need fix checkout too
 @app.route("/checkout", methods=['GET', 'POST'])
 def checkout():
     cart_dict = {}
@@ -343,6 +340,7 @@ def bag1():
         if addtocart.get_name() == "Arkose 24L Modular Bacpack":
             productA[addtocart.get_id()] = addtocart
             # need create key 1 first then update
+            # addtocart_dict[1] = productA
             addtocart_dict[1].update(productA)
 
         db["Add_to_cart"] = addtocart_dict
@@ -376,6 +374,7 @@ def bag2():
         if addtocart.get_name() == "Arkose 20L Modular Bacpack":
             productB[addtocart.get_id()] = addtocart
             # need create key 2 first then update
+            # addtocart_dict[2] = productB
             addtocart_dict[2].update(productB)
 
         db["Add_to_cart"] = addtocart_dict
