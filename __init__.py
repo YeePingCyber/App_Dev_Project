@@ -90,13 +90,13 @@ def create_customer():
 
 @app.route("/cart")
 def cart():
-    # productA = {}
-    # productB = {}
-    # addtocart_dict = {1: productA, 2: productB}
+    productA = {}
+    productB = {}
+    cart_dict = {"1":productA, "2":productB}
 
-    cart_dict = {}
-    productA = []
-    productB = []
+    # use list so that i can delete by using method clear() while remaining the key
+    productAList = []
+    productBList = []
     cartList = []
     db = shelve.open("database/addtocart", "c")
     try:
@@ -107,26 +107,25 @@ def cart():
     except:
         print("Error in retrieving Inventory from addtocart.db")
 
-    # organising it such that its [[productA],[productB]]
-    for x in cart_dict[1]:
-        productA.append(cart_dict[1][x])
-
-    for y in cart_dict[2]:
-        productB.append(cart_dict[2][y])
-
-    cartList.append(productA)
-    cartList.append(productB)
-    print(cartList)
-
-    subtotal = 0
-
-    for i in cartList:
-        quantity = len(i)
-        product_total = i[0].get_price() * quantity
-        subtotal += product_total
-
     db.close()
-    if len(cartList[1]) or len(cartList[2]) > 0:
+    if len(cart_dict["1"]) or len(cart_dict["2"]) > 0:
+        # organising it such that its [[productA],[productB]]
+        for x in cart_dict["1"]:
+            productAList.append(cart_dict["1"][x])
+
+        for y in cart_dict["2"]:
+            productBList.append(cart_dict["2"][y])
+
+        cartList.append(productAList)
+        cartList.append(productBList)
+        print(cartList)
+
+        subtotal = 0
+        for total in range(0, len(cartList)):
+            for x in cartList[total]:
+                subtotal += x.get_price()
+
+
         return render_template("cart.html", cartList=cartList, subtotal=subtotal)
     else:
         return render_template("cart_empty.html")
@@ -135,9 +134,13 @@ def cart():
 # need fix this shit delete thing
 @app.route('/deleteCart/<int:id>', methods=['POST'])
 def delete_item(id):
-    cart_dict = {}
-    productA = []
-    productB = []
+    productA = {}
+    productB = {}
+    cart_dict = {"1": productA, "2": productB}
+
+    # use list so that i can delete by using method clear() while remaining the key
+    productAList = []
+    productBList = []
     cartList = []
     db = shelve.open("database/addtocart", "c")
     try:
@@ -148,7 +151,22 @@ def delete_item(id):
     except:
         print("Error in retrieving Inventory from addtocart.db")
 
-    cart_dict[id].pop()
+    for x in cart_dict["1"]:
+        productAList.append(cart_dict["1"][x])
+
+    for y in cart_dict["2"]:
+        productBList.append(cart_dict["2"][y])
+
+    cartList.append(productAList)
+    cartList.append(productBList)
+
+    cartList[id].clear()
+    print(cartList)
+
+    # put it back into dictionary format to be saved in database
+    productAupdate = dict.fromkeys("1", productA)
+    print(productAupdate)
+    print(cart_dict)
 
     db['Add_to_cart'] = cart_dict
     db.close()
@@ -339,7 +357,7 @@ def bag1():
     if request.method == "POST":
         productA = {}
         productB = {}
-        addtocart_dict = {1:productA, 2:productB}
+        addtocart_dict = {"1":productA, "2":productB}
         db = shelve.open("database/addtocart", "c")
 
         try:
@@ -358,7 +376,7 @@ def bag1():
         # key 0 stores product A, key 1 stores product B... {1:{},2:{}}
         if addtocart.get_name() == "Arkose 24L Modular Bacpack":
             productA[addtocart.get_id()] = addtocart
-            addtocart_dict[1].update(productA)
+            addtocart_dict["1"].update(productA)
 
         db["Add_to_cart"] = addtocart_dict
         print(addtocart_dict)
@@ -374,7 +392,7 @@ def bag2():
     if request.method == "POST":
         productA = {}
         productB = {}
-        addtocart_dict = {1:productA, 2:productB}
+        addtocart_dict = {"1":productA, "2":productB}
         db = shelve.open("database/addtocart", "c")
 
         try:
@@ -392,7 +410,7 @@ def bag2():
 
         if addtocart.get_name() == "Arkose 20L Modular Bacpack":
             productB[addtocart.get_id()] = addtocart
-            addtocart_dict[2].update(productB)
+            addtocart_dict["2"].update(productB)
 
         db["Add_to_cart"] = addtocart_dict
         print(addtocart_dict)
