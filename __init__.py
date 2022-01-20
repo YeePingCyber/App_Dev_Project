@@ -443,7 +443,8 @@ def auction():
         bid_dict[userbidID.get_bidId()] = userbidID
         db['UserBid'] = bid_dict
 
-        print(bid_dict)
+        # print(bid_dict)
+        print("Test")
         db.close()
 
         return render_template('auction.html', auction_dict=auction_dict, form=create_bid_form, bid_list=bid_list, ongoing=ongoing)
