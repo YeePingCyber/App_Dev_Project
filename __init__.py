@@ -1,7 +1,9 @@
 from flask import Flask, render_template, flash
 from flask import Flask, render_template, request, redirect, url_for
 import shelve
+import random
 import hashlib as hl
+from bs4 import BeautifulSoup
 from datetime import date
 from Customer import Customer
 from Admin import Admin
@@ -11,7 +13,7 @@ from addtocart import Addtocart
 from Auction import Auction
 from ProcessCart import PaymentProcess, ShippingProcess
 from UserBid import UserBid
-from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreateShipmentForm, CreatePaymentForm, CreateProductForm, CreateAddCartForm, CreateAuctionForm, UpdateAdminForm, CreateBidForm
+from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreateShipmentForm, CreatePaymentForm, CreateProductForm, CreateAddCartForm, CreateAuctionForm, UpdateAdminForm, CreateBidForm, CreateForgetPassForm
 # create product function
 from createProduct import load_product
 
@@ -507,9 +509,41 @@ def delete_bid(id):
 
     return redirect(url_for('auction'))
 
+
+randomOTP = random.randint(111111, 999999)
+
 @app.route("/forgetPassword", methods=["POST", "GET"])
 def forget_password():
-    return render_template("forgetPassword.html")
+    create_forget_form = CreateForgetPassForm(request.form)
+
+    # with open("templates/forgetPassword.html") as file:
+    #     soup = BeautifulSoup(file, "html.parser")
+    #
+    # print(soup.prettify())
+
+    db = shelve.open("database/user.db", "r")
+    users_dict = db['Users']
+    db.close()
+
+    if request.method == 'POST' and create_forget_form.validate():
+        userId = ""
+        for userKey, userValue in users_dict.items():
+            if create_forget_form.email.data == userValue.get_email():
+                userId = userKey
+                break
+
+        if create_forget_form.newPass.data == create_forget_form.confirmPass.data and create_forget_form.otp.data == str(randomOTP):
+            db = shelve.open("database/user.db", "w")
+            users_dict = db['Users']
+
+            users_dict.get(userId).set_password(create_forget_form.newPass.data)
+
+            db['Users'] = users_dict
+            db.close()
+
+            return redirect(url_for("log_in"))
+
+    return render_template("forgetPassword.html", form=create_forget_form, otpNum=randomOTP)
 
 
 # Admin Side
