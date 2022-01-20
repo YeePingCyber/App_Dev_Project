@@ -108,6 +108,7 @@ def cart():
         print("Error in retrieving Inventory from addtocart.db")
 
     db.close()
+    print(cart_dict)
     if len(cart_dict["1"]) or len(cart_dict["2"]) > 0:
         # organising it such that its [[productA],[productB]]
         for x in cart_dict["1"]:
@@ -118,13 +119,11 @@ def cart():
 
         cartList.append(productAList)
         cartList.append(productBList)
-        print(cartList)
 
         subtotal = 0
         for total in range(0, len(cartList)):
             for x in cartList[total]:
                 subtotal += x.get_price()
-
 
         return render_template("cart.html", cartList=cartList, subtotal=subtotal)
     else:
@@ -161,17 +160,29 @@ def delete_item(id):
     cartList.append(productBList)
 
     cartList[id].clear()
-    print(cartList)
-
-    # put it back into dictionary format to be saved in database
-    productAupdate = dict.fromkeys("1", productA)
-    print(productAupdate)
     print(cart_dict)
 
+    # put it back into dictionary format to be saved in database
+    # getting the key
+    list_keyA = []
+    list_keyB = []
+
+    for x in cartList[0]:
+        list_keyB.append(x.get_id())
+
+    for x in cartList[1]:
+        list_keyB.append(x.get_id())
+
+    productAupdate = dict(zip(list_keyA, cartList[0]))
+    productBupdate = dict(zip(list_keyB, cartList[1]))
+    cart_dict = {"1":productAupdate, "2":productBupdate}
+
     db['Add_to_cart'] = cart_dict
+    print(cart_dict)
     db.close()
     if len(cartList) > 0:
         return redirect(url_for("cart"))
+
     else:
         return render_template("cart_empty.html")
 
@@ -201,7 +212,6 @@ def checkout():
 
     cartList.append(productA)
     cartList.append(productB)
-    print(cartList)
 
     subtotal = 0
     for i in cartList:
