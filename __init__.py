@@ -462,6 +462,10 @@ def delete_bid(id):
 
     return redirect(url_for('auction'))
 
+@app.route("/forgetPassword", methods=["POST", "GET"])
+def forget_password():
+    return render_template("forgetPassword.html")
+
 
 # Admin Side
 @app.route("/admin")
