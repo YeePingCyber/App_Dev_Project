@@ -139,7 +139,6 @@ def updateCart():
     productB = {}
     cart_dict = {"1":productA, "2":productB}
 
-    # use list so that i can delete by using method clear() while remaining the key
     productAList = []
     productBList = []
     cartList = []
@@ -153,13 +152,18 @@ def updateCart():
         print("Error in retrieving Inventory from addtocart.db")
 
     print(cart_dict)
+    for x in cart_dict["1"]:
+        productAList.append(cart_dict["1"][x])
 
-    # idea is when click add, creates addtocart object and save it
+    for y in cart_dict["2"]:
+        productBList.append(cart_dict["2"][y])
+
+    cartList.append(productAList)
+    cartList.append(productBList)
 
     if request.method == "POST":
-        # doesnt really matter cos details of product are from the first item. this just for adding the quantity only.
-        # total price will be affected as its calculated within python
-        addtocart = Addtocart(1,1,1, 1,1, 1,1)
+        # need to be dynamic
+        addtocart = Addtocart(cartList[0][0].get_name(),cartList[0][0].get_description(),cartList[0][0].get_price(), 1,cartList[0][0].get_category(), cartList[0][0].get_discount(),cartList[0][0].get_top())    # name, description, price, quantity, category, discount, top
         productA[addtocart.get_id()] = addtocart
         cart_dict["1"].update(productA)
 
@@ -169,7 +173,7 @@ def updateCart():
     return redirect(url_for("cart"))
 
 
-# can delete but must delete first item first, if not all will be deleted
+# can delete but must delete first item first, if not all will be deleted. problem lies in jinja cart.html
 @app.route('/deleteCart/<int:id>', methods=['POST'])
 def delete_item(id):
     productA = {}
@@ -198,6 +202,7 @@ def delete_item(id):
     cartList.append(productAList)
     cartList.append(productBList)
 
+    print(cartList[id])
     cartList[id].clear()
     print(cart_dict)
 
@@ -461,7 +466,7 @@ def bag2():
                               addtocartform.category.data, int(addtocartform.discount.data),
                               int(addtocartform.top.data))
 
-        if addtocart.get_name() == "Arkose 35L Modular Bacpack":
+        if addtocart.get_name() == "Arkose 20L Modular Bacpack":
             productB[addtocart.get_id()] = addtocart
             addtocart_dict["2"].update(productB)
 
