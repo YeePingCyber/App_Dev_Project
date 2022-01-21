@@ -26,10 +26,10 @@ class CreateLoginForm(Form):
 
 class CreateProductForm(Form):
     name = StringField('Name', [validators.Length(min=1, max=150), validators.DataRequired()])
-    price = FloatField('Price', validators.DataRequired())
-    quantity = IntegerField('Quantity', validators.DataRequired())
+    price = FloatField('Price', [validators.DataRequired()])
+    quantity = IntegerField('Quantity', [validators.DataRequired()])
     category = StringField('Category', [validators.Length(min=1, max=150), validators.DataRequired()])
-    discount = FloatField('Discount', validators.DataRequired())
+    discount = FloatField('Discount', [validators.DataRequired()])
     description = TextAreaField('Description', [validators.Length(min=1, max=300), validators.DataRequired()])
 
 

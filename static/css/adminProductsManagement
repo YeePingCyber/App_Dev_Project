@@ -1,0 +1,19 @@
+.page-title{
+font-size: 200%;
+margin-left: 3%;
+}
+
+.add-account {
+    padding: 0.5% 1% 0.5% 1%;
+    background-color: black;
+    border: none;
+    color: white;
+    border-radius: 8px;
+    font-size: 100%;
+    float: right;
+    margin-right:3%;
+}
+
+.tom-navv {
+    position: static;
+}

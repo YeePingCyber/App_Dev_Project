@@ -1,0 +1,39 @@
+{% extends "adminBase.html" %}
+{% block title %}Tom Patterson - (Admin) Product Creation{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="../static/css/adminBase.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/adminAdminManagement.css">
+{% endblock %}
+
+{% block bodyContent %}
+{% from "includes/formHelper.html" import render_field %}
+    <div>
+        <b class="page-title">Product Creation</b>
+    </div>
+    <br>
+    <br>
+    <form method="POST" class="" action="">
+    <div class="form-product-field">
+            {{ render_field(form.name, class="form-product-field") }}
+    </div>
+    <div class="form-product-field">
+            {{ render_field(form.price, class="form-product-field") }}
+    </div>
+    <div class="form-product-field">
+            {{ render_field(form.quantity, class="form-product-field") }}
+    </div>
+    <div class="form-product-field">
+            {{ render_field(form.category, class="form-product-field") }}
+    </div>
+    <div class="form-product-field">
+            {{ render_field(form.discount, class="form-product-field") }}
+    </div>
+    <div class="form-product-field">
+            {{ render_field(form.description, class="form-product-field") }}
+    </div>
+    <input type="submit" value="Create A Product" class="">
+    </form>
+{% endblock %}
+
+
