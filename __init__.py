@@ -132,7 +132,43 @@ def cart():
         return render_template("cart_empty.html")
 
 
-# need fix this shit delete thing
+@app.route('/updateCart', methods=['POST'])
+def updateCart():
+    productA = {}
+    productB = {}
+    cart_dict = {"1":productA, "2":productB}
+
+    # use list so that i can delete by using method clear() while remaining the key
+    productAList = []
+    productBList = []
+    cartList = []
+    db = shelve.open("database/addtocart", "c")
+    try:
+        if "Add_to_cart" in db:
+            cart_dict = db["Add_to_cart"]
+        else:
+            db["Add_to_cart"] = cart_dict
+    except:
+        print("Error in retrieving Inventory from addtocart.db")
+
+    print(cart_dict)
+
+    # idea is when click add, creates addtocart object and save it
+
+    if request.method == "POST":
+        # doesnt really matter cos details of product are from the first item. this just for adding the quantity only.
+        # total price will be affected as its calculated within python
+        addtocart = Addtocart(1,1,1, 1,1, 1,1)
+        productA[addtocart.get_id()] = addtocart
+        cart_dict["1"].update(productA)
+
+        db["Add_to_cart"] = cart_dict
+        db.close()
+
+    return redirect(url_for("cart"))
+
+
+# can delete but must delete first item first, if not all will be deleted
 @app.route('/deleteCart/<int:id>', methods=['POST'])
 def delete_item(id):
     productA = {}
@@ -192,9 +228,13 @@ def delete_item(id):
 # need fix checkout too
 @app.route("/checkout", methods=['GET', 'POST'])
 def checkout():
-    cart_dict = {}
-    productA = []
-    productB = []
+    productA = {}
+    productB = {}
+    cart_dict = {"1": productA, "2": productB}
+
+    # use list so that i can delete by using method clear() while remaining the key
+    productAList = []
+    productBList = []
     cartList = []
     db = shelve.open("database/addtocart", "c")
     try:
@@ -205,15 +245,14 @@ def checkout():
     except:
         print("Error in retrieving Inventory from addtocart.db")
 
-    # organising it such that its [[productA],[productB]]
-    for x in cart_dict[1]:
-        productA.append(cart_dict[1][x])
+    for x in cart_dict["1"]:
+        productAList.append(cart_dict["1"][x])
 
-    for y in cart_dict[2]:
-        productB.append(cart_dict[2][y])
+    for y in cart_dict["2"]:
+        productBList.append(cart_dict["2"][y])
 
-    cartList.append(productA)
-    cartList.append(productB)
+    cartList.append(productAList)
+    cartList.append(productBList)
 
     subtotal = 0
     for i in cartList:
