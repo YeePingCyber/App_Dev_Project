@@ -1,7 +1,9 @@
 from flask import Flask, render_template, flash
 from flask import Flask, render_template, request, redirect, url_for
 import shelve
+import random
 import hashlib as hl
+from bs4 import BeautifulSoup
 from datetime import date
 from Customer import Customer
 from Admin import Admin
@@ -11,7 +13,7 @@ from addtocart import Addtocart
 from Auction import Auction
 from ProcessCart import PaymentProcess, ShippingProcess
 from UserBid import UserBid
-from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreateShipmentForm, CreatePaymentForm, CreateProductForm, CreateAddCartForm, CreateAuctionForm, UpdateAdminForm, CreateBidForm
+from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreateShipmentForm, CreatePaymentForm, CreateProductForm, CreateAddCartForm, CreateAuctionForm, UpdateAdminForm, CreateBidForm, CreateForgetPassForm
 # create product function
 from createProduct import load_product
 
@@ -29,13 +31,14 @@ except:
     print("Error in retrieving Inventory from inventory.db")
 
 
-# inventory = Product("Arkose 35L Modular Bacpack", "Everyday backpack + small camera insert", 120, 50, "Camera", 0, 1)
-# inventory_dict[3] = inventory
-# db["Inventory"] = inventory_dict
-#
-for x in inventory_dict:
-    print(inventory_dict[x])
-# db.close()
+inventory = Product("Arkose 35L Modular Bacpack", "Everyday backpack + small camera insert", 120, 50, "Camera", 0, 1)
+inventory_dict[0] = inventory
+db["Inventory"] = inventory_dict
+
+print(db["Inventory"])
+# for x in inventory_dict:
+#     print(inventory_dict[x])
+db.close()
 
 
 # Customer Side
@@ -90,9 +93,13 @@ def create_customer():
 
 @app.route("/cart")
 def cart():
-    cart_dict = {}
-    productA = []
-    productB = []
+    productA = {}
+    productB = {}
+    cart_dict = {"1":productA, "2":productB}
+
+    # use list so that i can delete by using method clear() while remaining the key
+    productAList = []
+    productBList = []
     cartList = []
     db = shelve.open("database/addtocart", "c")
     try:
@@ -103,36 +110,39 @@ def cart():
     except:
         print("Error in retrieving Inventory from addtocart.db")
 
-    # organising it such that its [[productA],[productB]]
-    for x in cart_dict[1]:
-        productA.append(cart_dict[1][x])
-
-    for y in cart_dict[2]:
-        productB.append(cart_dict[2][y])
-
-    cartList.append(productA)
-    cartList.append(productB)
-    print(cartList)
-
-    subtotal = 0
-
-    for i in cartList:
-        quantity = len(i)
-        product_total = i[0].get_price() * quantity
-        subtotal += product_total
-
-    #   product a = 5, product b = 2, subtotal correct
-
     db.close()
-    if len(cart_dict[1]) and len(cart_dict[2]) > 0:
+    print(cart_dict)
+    if len(cart_dict["1"]) or len(cart_dict["2"]) > 0:
+        # organising it such that its [[productA],[productB]]
+        for x in cart_dict["1"]:
+            productAList.append(cart_dict["1"][x])
+
+        for y in cart_dict["2"]:
+            productBList.append(cart_dict["2"][y])
+
+        cartList.append(productAList)
+        cartList.append(productBList)
+
+        subtotal = 0
+        for total in range(0, len(cartList)):
+            for x in cartList[total]:
+                subtotal += x.get_price()
+
         return render_template("cart.html", cartList=cartList, subtotal=subtotal)
     else:
         return render_template("cart_empty.html")
 
-# need fix this shit delete thing
-@app.route('/deleteCart/<id>', methods=['POST'])
-def delete_item(id):
-    cart_dict = {}
+
+@app.route('/updateCart', methods=['POST'])
+def updateCart():
+    productA = {}
+    productB = {}
+    cart_dict = {"1":productA, "2":productB}
+
+    # use list so that i can delete by using method clear() while remaining the key
+    productAList = []
+    productBList = []
+    cartList = []
     db = shelve.open("database/addtocart", "c")
     try:
         if "Add_to_cart" in db:
@@ -141,23 +151,92 @@ def delete_item(id):
             db["Add_to_cart"] = cart_dict
     except:
         print("Error in retrieving Inventory from addtocart.db")
-    cart_dict.pop(id)
 
+    print(cart_dict)
+
+    # idea is when click add, creates addtocart object and save it
+
+    if request.method == "POST":
+        # doesnt really matter cos details of product are from the first item. this just for adding the quantity only.
+        # total price will be affected as its calculated within python
+        addtocart = Addtocart(1,1,1, 1,1, 1,1)
+        productA[addtocart.get_id()] = addtocart
+        cart_dict["1"].update(productA)
+
+        db["Add_to_cart"] = cart_dict
+        db.close()
+
+    return redirect(url_for("cart"))
+
+
+# can delete but must delete first item first, if not all will be deleted
+@app.route('/deleteCart/<int:id>', methods=['POST'])
+def delete_item(id):
+    productA = {}
+    productB = {}
+    cart_dict = {"1": productA, "2": productB}
+
+    # use list so that i can delete by using method clear() while remaining the key
+    productAList = []
+    productBList = []
     cartList = []
-    for x in cart_dict:
-        cartList.append(cart_dict[x])
+    db = shelve.open("database/addtocart", "c")
+    try:
+        if "Add_to_cart" in db:
+            cart_dict = db["Add_to_cart"]
+        else:
+            db["Add_to_cart"] = cart_dict
+    except:
+        print("Error in retrieving Inventory from addtocart.db")
+
+    for x in cart_dict["1"]:
+        productAList.append(cart_dict["1"][x])
+
+    for y in cart_dict["2"]:
+        productBList.append(cart_dict["2"][y])
+
+    cartList.append(productAList)
+    cartList.append(productBList)
+
+    cartList[id].clear()
+    print(cart_dict)
+
+    # put it back into dictionary format to be saved in database
+    # getting the key
+    list_keyA = []
+    list_keyB = []
+
+    for x in cartList[0]:
+        list_keyB.append(x.get_id())
+
+    for x in cartList[1]:
+        list_keyB.append(x.get_id())
+
+    productAupdate = dict(zip(list_keyA, cartList[0]))
+    productBupdate = dict(zip(list_keyB, cartList[1]))
+    cart_dict = {"1":productAupdate, "2":productBupdate}
 
     db['Add_to_cart'] = cart_dict
+    print(cart_dict)
     db.close()
     if len(cartList) > 0:
         return redirect(url_for("cart"))
+
     else:
         return render_template("cart_empty.html")
+
 
 # need fix checkout too
 @app.route("/checkout", methods=['GET', 'POST'])
 def checkout():
-    cart_dict = {}
+    productA = {}
+    productB = {}
+    cart_dict = {"1": productA, "2": productB}
+
+    # use list so that i can delete by using method clear() while remaining the key
+    productAList = []
+    productBList = []
+    cartList = []
     db = shelve.open("database/addtocart", "c")
     try:
         if "Add_to_cart" in db:
@@ -167,13 +246,23 @@ def checkout():
     except:
         print("Error in retrieving Inventory from addtocart.db")
 
-    cartList = []
-    total = 0
-    for x in cart_dict:
-        cartList.append(cart_dict[x])
-        total += cart_dict[x].get_price()
+    for x in cart_dict["1"]:
+        productAList.append(cart_dict["1"][x])
 
-    grandtotal = total + 4
+    for y in cart_dict["2"]:
+        productBList.append(cart_dict["2"][y])
+
+    cartList.append(productAList)
+    cartList.append(productBList)
+
+    print(cartList)
+
+    subtotal = 0
+    for total in range(0, len(cartList)):
+        for x in cartList[total]:
+            subtotal += x.get_price()
+
+    grandtotal = subtotal + 4
 
     db.close()
     shipping_dict = {}
@@ -196,7 +285,7 @@ def checkout():
 
         return redirect(url_for("payment"))
 
-    return render_template("checkout.html", form=create_shipment_form, cart_list=cartList, subtotal=total, grandtotal=grandtotal)
+    return render_template("checkout.html", form=create_shipment_form, cartList=cartList, subtotal=subtotal, grandtotal=grandtotal)
 
 
 @app.route("/checkout/payment", methods=['GET', 'POST'])
@@ -319,8 +408,9 @@ def bag1():
     x = 0
     addtocartform = CreateAddCartForm(request.form)
     if request.method == "POST":
-        addtocart_dict = {}
         productA = {}
+        productB = {}
+        addtocart_dict = {"1":productA, "2":productB}
         db = shelve.open("database/addtocart", "c")
 
         try:
@@ -337,13 +427,12 @@ def bag1():
                               int(addtocartform.top.data))
 
         # key 0 stores product A, key 1 stores product B... {1:{},2:{}}
-        if addtocart.get_name() == "Arkose 24L Modular Bacpack":
+        if addtocart.get_name() == "Arkose 35L Modular Bacpack":
             productA[addtocart.get_id()] = addtocart
-            # need create key 1 first then update
-            # addtocart_dict[1] = productA
-            addtocart_dict[1].update(productA)
+            addtocart_dict["1"].update(productA)
 
         db["Add_to_cart"] = addtocart_dict
+        print(addtocart_dict)
         return redirect(url_for("cart"))
 
     return render_template("bag1.html", form=addtocartform, product=inventory_dict, x=x)
@@ -354,8 +443,9 @@ def bag2():
     x = 1
     addtocartform = CreateAddCartForm(request.form)
     if request.method == "POST":
-        addtocart_dict = {}
+        productA = {}
         productB = {}
+        addtocart_dict = {"1":productA, "2":productB}
         db = shelve.open("database/addtocart", "c")
 
         try:
@@ -371,14 +461,12 @@ def bag2():
                               addtocartform.category.data, int(addtocartform.discount.data),
                               int(addtocartform.top.data))
 
-        if addtocart.get_name() == "Arkose 20L Modular Bacpack":
+        if addtocart.get_name() == "Arkose 35L Modular Bacpack":
             productB[addtocart.get_id()] = addtocart
-            # need create key 2 first then update
-            # addtocart_dict[2] = productB
-            addtocart_dict[2].update(productB)
+            addtocart_dict["2"].update(productB)
 
         db["Add_to_cart"] = addtocart_dict
-
+        print(addtocart_dict)
         return redirect(url_for("cart"))
 
     return render_template("bag2.html", form=addtocartform, product=inventory_dict, x=x)
@@ -463,6 +551,46 @@ def delete_bid(id):
 
     return redirect(url_for('auction'))
 
+
+randomOTP = random.randint(111111, 999999)
+
+@app.route("/forgetPassword", methods=["POST", "GET"])
+def forget_password():
+    create_forget_form = CreateForgetPassForm(request.form)
+
+    # with open("templates/forgetPassword.html") as file:
+    #     soup = BeautifulSoup(file, "html.parser")
+    #
+    # print(soup.prettify())
+
+    db = shelve.open("database/user.db", "r")
+    users_dict = db['Users']
+    db.close()
+
+    if request.method == 'POST' and create_forget_form.validate():
+        userId = ""
+        for userKey, userValue in users_dict.items():
+            if create_forget_form.email.data == userValue.get_email():
+                userId = userKey
+                break
+
+        if create_forget_form.newPass.data == create_forget_form.confirmPass.data and create_forget_form.otp.data == str(randomOTP):
+            db = shelve.open("database/user.db", "w")
+            users_dict = db['Users']
+
+            users_dict.get(userId).set_password(create_forget_form.newPass.data)
+
+            db['Users'] = users_dict
+            db.close()
+
+            return redirect(url_for("log_in"))
+
+    return render_template("forgetPassword.html", form=create_forget_form, otpNum=randomOTP)
+
+
+@app.route("/game")
+def play_game():
+    return render_template("game.html")
 
 # Admin Side
 @app.route("/admin")

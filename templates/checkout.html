@@ -103,15 +103,16 @@
 
             <div class="cart-details">
                 <div class="product">
-                    {% for products in cart_list %}
+                    {% for products in cartList %}
+                    {% if (products | length) > 0 %}
                     <div class="d-flex justify-content-between align-items-center p-1">
                         <img class="product-thumbnail__image" src="../../static/images/1-urth-arkose-20l-backpack-grey_1000x@2x.png" width="64" height="64">
                         <div class="product__description">
-                            <span class="product__description__name">{{ products.get_name() }}</span>
+                            <span class="product__description__name">{{ products[0].get_name() }}</span>
                         </div>
-                        <p class="product__price"><span class="order-summary__emphasis">${{ products.get_price() }}</span></p>
+                        <p class="product__price"><span class="order-summary__emphasis">${{ products[0].get_price() }}</span></p>
                     </div>
-
+                    {% endif %}
                     {% endfor %}
                 </div>
 
@@ -144,9 +145,11 @@
                     </div>
 
                     <div class="c-cart-drawer__tree">
-                        <div class="c-cart-drawer__tree-header"><svg viewBox="0 0 15 16" xmlns="http://www.w3.org/2000/svg" class="c-cart-drawer__tree-icon"><path d="M7.69502.070361L7.7117 0l3.6375 7.19094L15 14.4224h-4.9669V16H5.35832v-1.344H0L7.69502.037205V.07036zM7.45957 14.1926V1.50403L.783203 14.1926H7.45957z" fill="#FFF" fill-rule="evenodd"></path></svg>
-                            <p class="c-cart-drawer__tree-title">Play a quick game and earn discounts</p>
-                        </div>
+                        <a href="/game">
+                            <div class="c-cart-drawer__tree-header"><svg viewBox="0 0 15 16" xmlns="http://www.w3.org/2000/svg" class="c-cart-drawer__tree-icon"><path d="M7.69502.070361L7.7117 0l3.6375 7.19094L15 14.4224h-4.9669V16H5.35832v-1.344H0L7.69502.037205V.07036zM7.45957 14.1926V1.50403L.783203 14.1926H7.45957z" fill="#FFF" fill-rule="evenodd"></path></svg>
+                                <p class="c-cart-drawer__tree-title"><span>Click Here</span> to play a quick game and earn discounts</p>
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>

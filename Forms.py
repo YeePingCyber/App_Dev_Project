@@ -95,3 +95,13 @@ class CreateAuctionForm(Form):
 
 class CreateBidForm(Form):
     bidAmount = IntegerField('', [validators.NumberRange(min=1, max=1000, message="The value should be higher than minimum amount"), validators.DataRequired()], render_kw={"placeholder": "Your Bid"})
+
+class CreateForgetPassForm(Form):
+    email = EmailField('', [validators.Email(), validators.DataRequired()], id="email", render_kw={"placeholder": "Email Address"})
+    newPass = PasswordField('', [validators.Length(min=8, max=150), validators.DataRequired(),
+                       validators.Optional(strip_whitespace=True)], id="NewPass", render_kw={"placeholder": "New Password"})
+    confirmPass = PasswordField('', [validators.Length(min=8, max=150), validators.DataRequired(),
+                       validators.Optional(strip_whitespace=True)], id="confirmPass", render_kw={"placeholder": "Confirm Password"})
+    otp = PasswordField('', [validators.Length(min=6, max=150), validators.DataRequired(),
+                       validators.Optional(strip_whitespace=True)], id="otpField", render_kw={"placeholder": "One Time Password"})
+

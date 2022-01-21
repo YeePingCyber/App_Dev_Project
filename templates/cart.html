@@ -20,6 +20,7 @@
 
             <div class="c-cart-template__products is-visible">
                 {% for products in cartList %}
+                {% if (products | length) > 0 %}
                     <div class="c-cart-products">
                         <div class="c-cart-product">
                             <div class="c-cart-product__image-col">
@@ -37,7 +38,7 @@
                                     <div class="o-quantity-selector c-cart-product__quantity">
                                         <div class="o-quantity-selector__inner">
                                             <div class="o-quantity-selector__input">
-                                                <form method="POST" class="d-flex">
+                                                <form method="POST" action="/updateCart" class="d-flex">
                                                     <button type=submit class="btn btn-warning">-</button>
                                                     <input type="number" class="o-input o-quantity-selector__input-field" value="{{ products | length }}">
                                                     <button type=submit class="btn btn-warning">+</button>
@@ -48,12 +49,13 @@
 
                                     <p class="c-cart-product__price-container"><span class="c-cart-product__price">Price:{{ products[0].get_price() }}<span>$</span></span><span class="c-cart-product__price">Total:{{ (products | length) * products[0].get_price() }}<span>$</span></span></p>
                                 </div>
-                                <form action="/deleteCart/{{ products[0].get_id() }}" method="POST">
+                                <form action="/deleteCart/{{ loop.index - 1 }}" method="POST">
                                     <button class="c-cart-product__remove is-desktop o-btn is-underline">Remove</button>
                                 </form>
                             </div>
                         </div>
                     </div>
+                {% endif %}
                 {% endfor %}
             </div>
 
@@ -61,7 +63,7 @@
             <p class="c-cart-template__subtotal o-heading is-size-4">
                 <span>Subtotal:</span>
                 <span>${{ subtotal }}</span>
-                <a class="btn btn-outline-primary" href="/" role="button">Return to Shop</a>
+                <a class="btn btn-outline-primary" href="/mainshop" role="button">Return to Shop</a>
                 <a class="btn btn-outline-primary" href="/checkout" role="button">Checkout</a>
             </p>
         </div>
