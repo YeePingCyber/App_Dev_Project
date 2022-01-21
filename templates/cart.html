@@ -49,7 +49,6 @@
 
                                     <p class="c-cart-product__price-container"><span class="c-cart-product__price">Price:{{ products[0].get_price() }}<span>$</span></span><span class="c-cart-product__price">Total:{{ (products | length) * products[0].get_price() }}<span>$</span></span></p>
                                 </div>
-                                
                                 <form action="/deleteCart/{{ loop.index - 1 }}" method="POST">
                                     <button class="c-cart-product__remove is-desktop o-btn is-underline">Remove</button>
                                 </form>
