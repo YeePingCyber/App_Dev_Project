@@ -103,7 +103,8 @@
 
             <div class="cart-details">
                 <div class="product">
-                    {% for products in cart_list %}
+                    {% for products in cartList %}
+                    {% if (products | length) > 0 %}
                     <div class="d-flex justify-content-between align-items-center p-1">
                         <img class="product-thumbnail__image" src="../../static/images/1-urth-arkose-20l-backpack-grey_1000x@2x.png" width="64" height="64">
                         <div class="product__description">
@@ -111,7 +112,7 @@
                         </div>
                         <p class="product__price"><span class="order-summary__emphasis">${{ products[0].get_price() }}</span></p>
                     </div>
-
+                    {% endif %}
                     {% endfor %}
                 </div>
 

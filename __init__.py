@@ -255,11 +255,12 @@ def checkout():
     cartList.append(productAList)
     cartList.append(productBList)
 
+    print(cartList)
+
     subtotal = 0
-    for i in cartList:
-        quantity = len(i)
-        product_total = i[0].get_price() * quantity
-        subtotal += product_total
+    for total in range(0, len(cartList)):
+        for x in cartList[total]:
+            subtotal += x.get_price()
 
     grandtotal = subtotal + 4
 
@@ -284,7 +285,7 @@ def checkout():
 
         return redirect(url_for("payment"))
 
-    return render_template("checkout.html", form=create_shipment_form, cart_list=cartList, subtotal=subtotal, grandtotal=grandtotal)
+    return render_template("checkout.html", form=create_shipment_form, cartList=cartList, subtotal=subtotal, grandtotal=grandtotal)
 
 
 @app.route("/checkout/payment", methods=['GET', 'POST'])
