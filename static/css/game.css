@@ -1,0 +1,11 @@
+.tom-navv {
+    position: static;
+}
+
+.game_card_container, .top_container{
+    display: flex;
+}
+
+.center_container{
+    text-align: center;
+}

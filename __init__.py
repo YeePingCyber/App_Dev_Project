@@ -31,13 +31,14 @@ except:
     print("Error in retrieving Inventory from inventory.db")
 
 
-# inventory = Product("Arkose 35L Modular Bacpack", "Everyday backpack + small camera insert", 120, 50, "Camera", 0, 1)
-# inventory_dict[3] = inventory
-# db["Inventory"] = inventory_dict
-#
-for x in inventory_dict:
-    print(inventory_dict[x])
-# db.close()
+inventory = Product("Arkose 35L Modular Bacpack", "Everyday backpack + small camera insert", 120, 50, "Camera", 0, 1)
+inventory_dict[0] = inventory
+db["Inventory"] = inventory_dict
+
+print(db["Inventory"])
+# for x in inventory_dict:
+#     print(inventory_dict[x])
+db.close()
 
 
 # Customer Side
@@ -425,7 +426,7 @@ def bag1():
                               int(addtocartform.top.data))
 
         # key 0 stores product A, key 1 stores product B... {1:{},2:{}}
-        if addtocart.get_name() == "Arkose 24L Modular Bacpack":
+        if addtocart.get_name() == "Arkose 35L Modular Bacpack":
             productA[addtocart.get_id()] = addtocart
             addtocart_dict["1"].update(productA)
 
@@ -459,7 +460,7 @@ def bag2():
                               addtocartform.category.data, int(addtocartform.discount.data),
                               int(addtocartform.top.data))
 
-        if addtocart.get_name() == "Arkose 20L Modular Bacpack":
+        if addtocart.get_name() == "Arkose 35L Modular Bacpack":
             productB[addtocart.get_id()] = addtocart
             addtocart_dict["2"].update(productB)
 
@@ -584,6 +585,10 @@ def forget_password():
 
     return render_template("forgetPassword.html", form=create_forget_form, otpNum=randomOTP)
 
+
+@app.route("/game")
+def play_game():
+    return render_template("game.html")
 
 # Admin Side
 @app.route("/admin")
