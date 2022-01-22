@@ -349,7 +349,13 @@ def checkout():
 
 @app.route("/checkout/payment", methods=['GET', 'POST'])
 def payment():
-    cart_dict = {}
+    productA = {}
+    productB = {}
+    cart_dict = {"1": productA, "2": productB}
+
+    productAList = []
+    productBList = []
+    cartList = []
     db = shelve.open("database/addtocart", "c")
     try:
         if "Add_to_cart" in db:
@@ -358,6 +364,24 @@ def payment():
             db["Add_to_cart"] = cart_dict
     except:
         print("Error in retrieving Inventory from addtocart.db")
+
+    for x in cart_dict["1"]:
+        productAList.append(cart_dict["1"][x])
+
+    for y in cart_dict["2"]:
+        productBList.append(cart_dict["2"][y])
+
+    cartList.append(productAList)
+    cartList.append(productBList)
+
+    subtotal = 0
+    for total in range(0, len(cartList)):
+        for x in cartList[total]:
+            subtotal += x.get_price()
+
+    grandtotal = subtotal + 4
+
+    db.close()
 
     shipping_dict = {}
     db = shelve.open("database/shipping", "c")
@@ -368,14 +392,6 @@ def payment():
             db["Shipping"] = shipping_dict
     except:
         print("Error in retrieving Inventory from shipping.db")
-
-    cartList = []
-    total = 0
-    for x in cart_dict:
-        cartList.append(cart_dict[x])
-        total += cart_dict[x].get_price()
-
-    grandtotal = total + 4
 
     payment_dict = {}
     create_payment_form = CreatePaymentForm(request.form)
@@ -400,7 +416,7 @@ def payment():
 
     db.close()
 
-    return render_template("payment.html", form=create_payment_form, cart_list=cartList, subtotal=total, grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict)
+    return render_template("payment.html", form=create_payment_form, cartList=cartList, subtotal=subtotal, grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict)
 
 
 @app.route("/checkout/paymentdone")
