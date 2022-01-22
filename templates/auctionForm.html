@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Tom Patterson - Shop{% endblock %}
+{% block title %}Tom Patterson - Create Bid{% endblock %}
 
 {% block css %}
     <link rel="stylesheet" type="text/css" href="../static/css/base.css">
@@ -7,6 +7,7 @@
 {% endblock %}
 
 {% block bodyContent %}
+{% from "includes/formHelper.html" import render_field %}
 <br>
 <br>
 <div class="container-login">
@@ -14,27 +15,19 @@
         <h1>Create Bid</h1>
         <br><br>
         <div class="form-login-field">
-            {{ render_field(form.login_email, class="form-login-field") }}
+
+            {{ render_field(form.bidAmount, class="form-check") }}
         </div>
         <br><br><br>
         <div class="form-login-field">
-            {{ render_field(form.login_password, class="form-login-field") }}
+
         </div>
         {% if error %}
         <p style="color: red; font-size: 80%;"><strong></strong> {{error}}</p>
         {% endif %}
         <br><br><br>
-        <button type="submit" name="submit_button" value="Log in" class="submit-login">Log in</button>
+        <button type="submit" name="makeBid" value="Submit" class="submit-login">Submit</button>
     </form>
-    <p class="register-link">
-        <a href="#" class="forgot-link-click">Forget password?</a>
-    </p>
-    <p class="register-link">
-        Not yet a member? Click <a href="/register" class="register-link-click">HERE</a> to register
-    </p>
-    <a href="/adminAccountCreation">admin</a>
-
-    <br><br>
 
     </div>
 {% endblock %}

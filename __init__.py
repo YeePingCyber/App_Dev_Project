@@ -472,6 +472,72 @@ def bag2():
     return render_template("bag2.html", form=addtocartform, product=inventory_dict, x=x)
 
 
+# @app.route("/auction", methods=['GET', 'POST'])
+# def auction():
+#     auction_dict = {}
+#     db = shelve.open('database/auction.db', 'c')
+#     auction_dict = db["Auction"]
+#     db.close()
+#
+#     bid_dict = {}
+#     db = shelve.open('database/UserBid.db', 'r')
+#
+#     try:
+#         bid_dict = db['UserBid']
+#     except:
+#         print("Error in retrieving userbid.db.")
+#
+#     db.close()
+#
+#     bid_list = []
+#     for key in bid_dict:
+#         user = bid_dict.get(key)
+#         bid_list.append(user)
+#
+#     print(bid_list)
+#
+#     today = date.today().strftime('%Y-%m-%d')
+#     ongoing = ""
+#
+#     for keys, values in auction_dict.items():
+#         start = date.strftime(values.get_start_date(), '%Y-%m-%d')
+#         end = date.strftime(values.get_end_date(), '%Y-%m-%d')
+#
+#         if start == today or today > start or start <= today and end <= today:
+#             ongoing = values
+#
+#     # check key values
+#     # for key in auction_dict:
+#     #     product = auction_dict.get(key)
+#     #     print(key)
+#
+#     create_bid_form = CreateBidForm(request.form)
+#     if request.method == 'POST' and create_bid_form.validate():
+#         bid_dict = {}
+#         db = shelve.open('database/UserBid.db', 'c')
+#
+#         try:
+#             bid_dict = db['UserBid']
+#         except:
+#             print("Error in retrieving userbid.db.")
+#
+#         bid_list = []
+#         for key in bid_dict:
+#             user = bid_dict.get(key)
+#             bid_list.append(user)
+#
+#         userbidID = UserBid(create_bid_form.bidAmount.data)
+#         bid_dict[userbidID.get_bidId()] = userbidID
+#         db['UserBid'] = bid_dict
+#
+#         # print(bid_dict)
+#         print("Test")
+#         db.close()
+#
+#         return render_template('auction.html', auction_dict=auction_dict, form=create_bid_form, bid_list=bid_list, ongoing=ongoing)
+#
+#     return render_template('auction.html',auction_dict=auction_dict, bid_list=bid_list, form=create_bid_form, ongoing=ongoing)
+
 @app.route("/auction", methods=['GET', 'POST'])
 def auction():
     auction_dict = {}
@@ -506,11 +572,11 @@ def auction():
         if start == today or today > start or start <= today and end <= today:
             ongoing = values
 
-    # check key values
-    # for key in auction_dict:
-    #     product = auction_dict.get(key)
-    #     print(key)
+    return render_template('auction.html',auction_dict=auction_dict, bid_list=bid_list, ongoing=ongoing)
 
+
+@app.route("/auctionForm", methods=['GET', 'POST'])
+def auctionForm():
     create_bid_form = CreateBidForm(request.form)
     if request.method == 'POST' and create_bid_form.validate():
         bid_dict = {}
@@ -521,10 +587,6 @@ def auction():
         except:
             print("Error in retrieving userbid.db.")
 
-        bid_list = []
-        for key in bid_dict:
-            user = bid_dict.get(key)
-            bid_list.append(user)
 
         userbidID = UserBid(create_bid_form.bidAmount.data)
         bid_dict[userbidID.get_bidId()] = userbidID
@@ -534,9 +596,8 @@ def auction():
         print("Test")
         db.close()
 
-        return render_template('auction.html', auction_dict=auction_dict, form=create_bid_form, bid_list=bid_list, ongoing=ongoing)
-
-    return render_template('auction.html',auction_dict=auction_dict, bid_list=bid_list, form=create_bid_form, ongoing=ongoing)
+        return redirect(url_for("auction"))
+    return render_template('auctionForm.html', form=create_bid_form)
 
 
 @app.route("/deleteBid/<id>", methods=["POST"])

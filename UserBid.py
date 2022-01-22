@@ -16,3 +16,7 @@ class UserBid:
 
     def get_bidId(self):
         return self.__bidId
+
+    def __str__(self):
+        s = "bid_amount == {}".format(self.get_bidAmount())
+        return s

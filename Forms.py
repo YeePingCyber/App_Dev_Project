@@ -95,6 +95,7 @@ class CreateAuctionForm(Form):
 
 class CreateBidForm(Form):
     bidAmount = IntegerField('', [validators.NumberRange(min=1, max=1000, message="The value should be higher than minimum amount"), validators.DataRequired()], render_kw={"placeholder": "Your Bid"})
+    #bidUser = StringField('', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "Username"})
 
 class CreateForgetPassForm(Form):
     email = EmailField('', [validators.Email(), validators.DataRequired()], id="email", render_kw={"placeholder": "Email Address"})
