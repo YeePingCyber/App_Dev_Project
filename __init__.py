@@ -111,7 +111,6 @@ def cart():
         print("Error in retrieving Inventory from addtocart.db")
 
     db.close()
-    print(cart_dict)
     if len(cart_dict["1"]) or len(cart_dict["2"]) > 0:
         # organising it such that its [[productA],[productB]]
         for x in cart_dict["1"]:
@@ -133,8 +132,8 @@ def cart():
         return render_template("cart_empty.html")
 
 
-@app.route('/updateCart', methods=['POST'])
-def updateCart():
+@app.route('/updateAddCart/<int:id>', methods=['POST'])
+def updateAddCart(id):
     productA = {}
     productB = {}
     cart_dict = {"1":productA, "2":productB}
@@ -151,7 +150,6 @@ def updateCart():
     except:
         print("Error in retrieving Inventory from addtocart.db")
 
-    print(cart_dict)
     for x in cart_dict["1"]:
         productAList.append(cart_dict["1"][x])
 
@@ -162,10 +160,13 @@ def updateCart():
     cartList.append(productBList)
 
     if request.method == "POST":
-        # need to be dynamic
-        addtocart = Addtocart(cartList[0][0].get_name(),cartList[0][0].get_description(),cartList[0][0].get_price(), 1,cartList[0][0].get_category(), cartList[0][0].get_discount(),cartList[0][0].get_top())    # name, description, price, quantity, category, discount, top
-        productA[addtocart.get_id()] = addtocart
-        cart_dict["1"].update(productA)
+        addtocart = Addtocart(cartList[id][0].get_name(),cartList[id][0].get_description(),cartList[id][0].get_price(), 1,cartList[id][0].get_category(), cartList[id][0].get_discount(),cartList[id][0].get_top())
+        if id == 0:
+            productA[addtocart.get_id()] = addtocart
+            cart_dict[str(id + 1)].update(productA)
+        if id == 1:
+            productB[addtocart.get_id()] = addtocart
+            cart_dict[str(id + 1)].update(productB)
 
         db["Add_to_cart"] = cart_dict
         db.close()
@@ -173,7 +174,63 @@ def updateCart():
     return redirect(url_for("cart"))
 
 
-# can delete but must delete first item first, if not all will be deleted. problem lies in jinja cart.html
+@app.route('/updateSubCart/<int:id>', methods=['POST'])
+def updateSubCart(id):
+    productA = {}
+    productB = {}
+    cart_dict = {"1":productA, "2":productB}
+
+    productAList = []
+    productBList = []
+    cartList = []
+    db = shelve.open("database/addtocart", "c")
+    try:
+        if "Add_to_cart" in db:
+            cart_dict = db["Add_to_cart"]
+        else:
+            db["Add_to_cart"] = cart_dict
+    except:
+        print("Error in retrieving Inventory from addtocart.db")
+
+    for x in cart_dict["1"]:
+        productAList.append(cart_dict["1"][x])
+
+    for y in cart_dict["2"]:
+        productBList.append(cart_dict["2"][y])
+
+    cartList.append(productAList)
+    cartList.append(productBList)
+
+    # put it back into dictionary format to be saved in database
+    # getting the key
+    list_keyA = []
+    list_keyB = []
+
+    for x in cartList[0]:
+        list_keyA.append(x.get_id())
+
+    for x in cartList[1]:
+        list_keyB.append(x.get_id())
+
+    if request.method == "POST":
+        print(cart_dict)
+        if id == 0:
+            productAList.pop()
+            productAupdate = dict(zip(list_keyA, cartList[0]))
+            productBupdate = dict(zip(list_keyB, cartList[1]))
+            cart_dict = {"1": productAupdate, "2": productBupdate}
+        if id == 1:
+            productBList.pop()
+            productAupdate = dict(zip(list_keyA, cartList[0]))
+            productBupdate = dict(zip(list_keyB, cartList[1]))
+            cart_dict = {"1": productAupdate, "2": productBupdate}
+
+        db["Add_to_cart"] = cart_dict
+        db.close()
+
+    return redirect(url_for("cart"))
+
+
 @app.route('/deleteCart/<int:id>', methods=['POST'])
 def delete_item(id):
     productA = {}
@@ -202,9 +259,7 @@ def delete_item(id):
     cartList.append(productAList)
     cartList.append(productBList)
 
-    print(cartList[id])
     cartList[id].clear()
-    print(cart_dict)
 
     # put it back into dictionary format to be saved in database
     # getting the key
@@ -212,7 +267,7 @@ def delete_item(id):
     list_keyB = []
 
     for x in cartList[0]:
-        list_keyB.append(x.get_id())
+        list_keyA.append(x.get_id())
 
     for x in cartList[1]:
         list_keyB.append(x.get_id())
@@ -222,9 +277,8 @@ def delete_item(id):
     cart_dict = {"1":productAupdate, "2":productBupdate}
 
     db['Add_to_cart'] = cart_dict
-    print(cart_dict)
     db.close()
-    if len(cartList) > 0:
+    if len(cart_dict["1"]) or len(cart_dict["2"]) > 0:
         return redirect(url_for("cart"))
 
     else:
