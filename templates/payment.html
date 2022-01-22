@@ -122,13 +122,14 @@
 
             <div class="cart-details">
                 <div class="product">
-                    {% for products in cart_list %}
+                    {% for products in cartList %}
                         <div class="d-flex justify-content-between align-items-center p-1">
+                            <span>{{ products | length }} x</span>
                             <img class="product-thumbnail__image" src="../../static/images/1-urth-arkose-20l-backpack-grey_1000x@2x.png" width="64" height="64">
                             <div class="product__description">
-                                <span class="product__description__name">{{ products.get_name() }}</span>
+                                <span class="product__description__name">{{ products[0].get_name() }}</span>
                             </div>
-                            <p class="product__price"><span class="order-summary__emphasis">${{ products.get_price() }}</span></p>
+                            <p class="product__price"><span class="order-summary__emphasis">${{ (products | length) * products[0].get_price() }}</span></p>
                         </div>
                     {% endfor %}
                 </div>
