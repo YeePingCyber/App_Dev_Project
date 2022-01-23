@@ -21,24 +21,24 @@ app = Flask(__name__)
 app.secret_key = "abc"
 
 inventory_dict = {}
-db = shelve.open("database/inventory", "c")
-try:
-    if "Inventory" in db:
-        inventory_dict = db["Inventory"]
-    else:
-        db["Inventory"] = inventory_dict
-except:
-    print("Error in retrieving Inventory from inventory.db")
+#db = shelve.open("database/inventory", "c")
+#try:
+ #   if "Inventory" in db:
+  #      inventory_dict = db["Inventory"]
+   # else:
+    #    db["Inventory"] = inventory_dict
+#except:
+ #   print("Error in retrieving Inventory from inventory.db")
 
 
-inventory = Product("Arkose 35L Modular Bacpack", "Everyday backpack + small camera insert", 120, 50, "Camera", 0, 1)
-inventory_dict[0] = inventory
-db["Inventory"] = inventory_dict
+#inventory = Product("Arkose 35L Modular Bacpack", "Everyday backpack + small camera insert", 120, 50, "Camera", 0, 1)
+#inventory_dict[0] = inventory
+#db["Inventory"] = inventory_dict
 
-print(db["Inventory"])
+#print(db["Inventory"])
 # for x in inventory_dict:
 #     print(inventory_dict[x])
-db.close()
+#db.close()
 
 
 # Customer Side
@@ -1109,7 +1109,35 @@ def update_admin(id):
 
 @app.route("/adminProductManagement")
 def admin_product_management():
-    return render_template("adminProductManagement.html")
+    db = shelve.open('database/inventory.db', 'r')
+    products_dict = db['Products']
+    db.close()
+    product_list = []
+    for products in products_dict:
+        product = products_dict[products]
+        product_list.append(product)
+    return render_template("adminProductManagement.html", count=len(product_list), product_list=product_list)
+
+@app.route("/adminProductCreation", methods = ["GET","POST"])
+def admin_product_creation():
+    create_product_form = CreateProductForm(request.form)
+    if request.method == 'POST' and create_product_form.validate():
+        product_dict = {}
+        db = shelve.open('database/inventory.db', 'c')
+        try:
+            product_dict = db['Products']
+        except:
+            print("Error in retrieving Products from inventory.db")
+
+        new_product = Product(create_product_form.name.data, create_product_form.price.data,
+                          create_product_form.quantity.data, create_product_form.category.data,
+                          create_product_form.discount.data, create_product_form.description.data)
+        product_dict[new_product.get_product_id()] = new_product
+        print(new_product.get_product_id())
+        db['Products'] = product_dict
+        db.close()
+        return redirect(url_for('admin_product_management'))
+    return render_template("adminProductCreation.html", form = create_product_form)
 
 
 if __name__ == "__main__":
