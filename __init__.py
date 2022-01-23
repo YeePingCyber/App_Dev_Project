@@ -815,7 +815,13 @@ def play_game():
 # Admin Side
 @app.route("/admin")
 def admin():
+    from datetime import datetime
+
+    # get current date
+    time_now = datetime.now()
+
     sales_dict = {}
+    salesList = []
     db = shelve.open("database/sales", "c")
     try:
         if "sales" in db:
@@ -825,11 +831,51 @@ def admin():
     except:
         print("Error in retrieving Sales from sales.db")
 
-    print(sales_dict)
+    db.close()
 
-    labels = ["Oct", "Nov", "Dec", "Jan", "Feb", "March"]
-    values = [25000, 20000, 30000, 25000, 40000, 100000]
-    return render_template("adminDashboard.html", top4=inventory_dict, labels=labels, values=values)
+    for x in sales_dict:
+        salesList.append(sales_dict[x])
+
+    print(salesList)
+    print(salesList[0].get_cart())
+
+    cartList = []
+    productAList = []
+    productBList = []
+    for sum in range(0, len(salesList)):
+        for x in salesList[sum].get_cart()["1"]:
+            productAList.append(salesList[sum].get_cart()["1"][x])
+
+        for y in salesList[sum].get_cart()["2"]:
+            productBList.append(salesList[sum].get_cart()["2"][y])
+
+    # all productA in 1 array, all productB in 1 array
+    cartList.append(productAList)
+    cartList.append(productBList)
+
+    try:
+        db = shelve.open('database/auction.db', 'r')
+        auction_dict = db["Auction"]
+        db.close()
+    except:
+        auction_dict = {}
+
+    auction_on = len(auction_dict)
+
+    # sort of working halfway
+    labels = []
+    values = []
+    subtotal = 0
+    for total in range(0, len(cartList)):
+        for x in cartList[total]:
+            subtotal += x.get_price()
+
+            values.append(subtotal)
+            labels.append(subtotal)
+
+    # labels = ["Oct", "Nov", "Dec", "Jan", "Feb", "March"]
+    # values = [25000, 20000, 30000, 25000, 40000, 100000]
+    return render_template("adminDashboard.html", top4=inventory_dict, labels=labels, values=values, subtotal=subtotal, date=time_now, auction_on=auction_on)
 
 
 @app.route("/adminAuction")
