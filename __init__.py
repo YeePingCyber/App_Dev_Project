@@ -305,6 +305,7 @@ def checkout():
     except:
         print("Error in retrieving Inventory from addtocart.db")
 
+    # organising it such that its [[productA],[productB]]
     for x in cart_dict["1"]:
         productAList.append(cart_dict["1"][x])
 
@@ -339,8 +340,9 @@ def checkout():
                                    create_shipment_form.first_name.data, create_shipment_form.last_name.data,
                                    create_shipment_form.address.data, create_shipment_form.postal_code.data,
                                    create_shipment_form.city.data, create_shipment_form.phone.data)
-        shipping_dict[0] = shipping
+        shipping_dict[shipping.get_shippingid()] = shipping
         db["Shipping"] = shipping_dict
+        print(shipping_dict)
 
         return redirect(url_for("payment"))
 
@@ -383,6 +385,7 @@ def payment():
 
     db.close()
 
+    # paymentProcess_dict = { key : (shipping + payment) object}
     shipping_dict = {}
     db = shelve.open("database/shipping", "c")
     try:

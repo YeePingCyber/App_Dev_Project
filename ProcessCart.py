@@ -13,11 +13,14 @@ class ShippingProcess:
         self.__phone = phone
         self.__shippingid = str(uuid4())
 
-    def get_id(self):
+    def get_shippingid(self):
         return self.__shippingid
 
     def get_email(self):
         return self.__email
+
+    def get_country(self):
+        return self.__country
 
     def get_firstname(self):
         return self.__first_name
@@ -31,6 +34,9 @@ class ShippingProcess:
     def get_postal(self):
         return self.__postal_code
 
+    def get_city(self):
+        return self.__city
+
     def get_phone(self):
         return self.__phone
 
@@ -43,6 +49,29 @@ class PaymentProcess:
         self.__ccv = ccv
         self.__paymentid = str(uuid4())
 
-    def get_card(self):
+    def get_paymentid(self):
+        return self.__paymentid
+
+    def get_cardnum(self):
         return self.__card_num
 
+    def get_namecard(self):
+        return self.__name_card
+
+    def get_expire(self):
+        return self.__expire
+
+    def get_ccv(self):
+        return self.__ccv
+
+
+class Sales(ShippingProcess, PaymentProcess):
+    def __init__(self, email, country, first_name, last_name, address, postal_code, city, phone, card_num, name_card, expire, ccv):
+        ShippingProcess.__init__(self, email, country, first_name, last_name, address, postal_code, city, phone)
+        PaymentProcess.__init__(self, card_num, name_card, expire, ccv)
+
+    def __str__(self):
+        return f"{self.get_shippingid(), self.get_paymentid(), self.get_email(), self.get_firstname(), self.get_lastname(), self.get_address(), self.get_postal(), self.get_city(), self.get_phone(), self.get_cardnum(), self.get_namecard(), self.get_expire(), self.get_ccv()}"
+
+
+# print(Sales("sz3yan@gmail.com", "SG", "Teo", "Sze Yan", "Montreal Drive", "754589", "Sembawang", "97924720", "0000", "Teo Sze Yan", "09/2/24", "542"))
