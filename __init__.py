@@ -11,7 +11,7 @@ from User import User
 from Product import Product
 from addtocart import Addtocart
 from Auction import Auction
-from ProcessCart import PaymentProcess, ShippingProcess
+from ProcessCart import PaymentProcess, ShippingProcess, Sales
 from UserBid import UserBid
 from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreateShipmentForm, CreatePaymentForm, CreateProductForm, CreateAddCartForm, CreateAuctionForm, UpdateAdminForm, CreateBidForm, CreateForgetPassForm
 # create product function
@@ -315,8 +315,6 @@ def checkout():
     cartList.append(productAList)
     cartList.append(productBList)
 
-    print(cartList)
-
     subtotal = 0
     for total in range(0, len(cartList)):
         for x in cartList[total]:
@@ -340,9 +338,8 @@ def checkout():
                                    create_shipment_form.first_name.data, create_shipment_form.last_name.data,
                                    create_shipment_form.address.data, create_shipment_form.postal_code.data,
                                    create_shipment_form.city.data, create_shipment_form.phone.data)
-        shipping_dict[shipping.get_shippingid()] = shipping
+        shipping_dict[0] = shipping
         db["Shipping"] = shipping_dict
-        print(shipping_dict)
 
         return redirect(url_for("payment"))
 
@@ -385,7 +382,6 @@ def payment():
 
     db.close()
 
-    # paymentProcess_dict = { key : (shipping + payment) object}
     shipping_dict = {}
     db = shelve.open("database/shipping", "c")
     try:
@@ -399,6 +395,8 @@ def payment():
     payment_dict = {}
     create_payment_form = CreatePaymentForm(request.form)
     if request.method == 'POST' and create_payment_form.validate():
+        # maybe dont need payment db cos user already in poayment page, and i want to join them.
+        # instead, use sales db then paymentProcess_dict = { key : (shipping + payment) object}
         db = shelve.open("database/payment", "c")
         try:
             if "payment" in db:
@@ -424,17 +422,13 @@ def payment():
 
 @app.route("/checkout/paymentdone")
 def paymentdone():
-    sales = {}
-    db = shelve.open("database/sales", "c")
-    try:
-        if "sales" in db:
-            sales = db["sales"]
-        else:
-            db["sales"] = sales
-    except:
-        print("Error in retrieving Sales from sales.db")
+    productA = {}
+    productB = {}
+    cart_dict = {"1": productA, "2": productB}
 
-    cart_dict = {}
+    productAList = []
+    productBList = []
+    cartList = []
     db = shelve.open("database/addtocart", "c")
     try:
         if "Add_to_cart" in db:
@@ -444,13 +438,23 @@ def paymentdone():
     except:
         print("Error in retrieving Inventory from addtocart.db")
 
-    cartList = []
-    total = 0
-    for x in cart_dict:
-        cartList.append(cart_dict[x])
-        total += cart_dict[x].get_price()
+    for x in cart_dict["1"]:
+        productAList.append(cart_dict["1"][x])
 
-    grandtotal = total + 4
+    for y in cart_dict["2"]:
+        productBList.append(cart_dict["2"][y])
+
+    cartList.append(productAList)
+    cartList.append(productBList)
+
+    subtotal = 0
+    for total in range(0, len(cartList)):
+        for x in cartList[total]:
+            subtotal += x.get_price()
+
+    grandtotal = subtotal + 4
+
+    db.close()
 
     shipping_dict = {}
     db = shelve.open("database/shipping", "c")
@@ -472,7 +476,26 @@ def paymentdone():
     except:
         print("Error in retrieving Sales from payment.db")
 
-    return render_template("paymentdone.html", subtotal=total, grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict, sales=sales, cart_list=cartList)
+    sales_dict = {}
+    db = shelve.open("database/sales", "c")
+    try:
+        if "sales" in db:
+            sales_dict = db["sales"]
+        else:
+            db["sales"] = sales_dict
+    except:
+        print("Error in retrieving Sales from sales.db")
+
+    combinedShippingnPayment = Sales(shipping_dict[0].get_email(), shipping_dict[0].get_country(),
+                                     shipping_dict[0].get_firstname(), shipping_dict[0].get_lastname(),
+                                     shipping_dict[0].get_address(), shipping_dict[0].get_postal(),
+                                     shipping_dict[0].get_city(), shipping_dict[0].get_phone(),
+                                     payment_dict[0].get_cardnum(), payment_dict[0].get_namecard(),
+                                     payment_dict[0].get_expire(), payment_dict[0].get_ccv())
+    sales_dict[payment_dict[0].get_paymentid()] = combinedShippingnPayment
+    db["sales"] = sales_dict
+    print(sales_dict)
+    return render_template("paymentdone.html", subtotal=subtotal, grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict, sales=sales_dict, cartList=cartList)
 
 
 # main shop
