@@ -3,7 +3,7 @@
 
 {% block css %}
     <link rel="stylesheet" type="text/css" href="../static/css/adminBase.css">
-    <link rel="stylesheet" type="text/css" href="../static/css/adminAdminManagement.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/adminProductsManagement.css">
 {% endblock %}
 
 {% block bodyContent %}
@@ -11,5 +11,14 @@
         <b class="page-title">Product Management</b>
         <a class="add-account" href="/adminProductCreation">Create a new product</a>
     </div>
+<hr style="height: 2px;">
+<div class="container-fluid">
+{% for product in product_list %}
+    <div class="products">
+        <img src="../static/images/default-product-image.png" class="product-pic"
+        <h1>hi</h1>
+    </div>
+{% endfor %}
+</div>
 {% endblock %}
 

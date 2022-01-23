@@ -2,3 +2,70 @@
 font-size: 200%;
 margin-left: 3%;
 }
+.container-product{
+margin-left: 10%;
+margin-right: 10%;
+margin-bottom: 10%;
+text-align: center;
+}
+
+.form-product-field{
+background-color: transparent;
+width: 50%;
+border-radius: 5px;
+margin: auto;
+font-size: 110%;
+text-align: center;
+}
+
+.form-product-field-number{
+background-color: transparent;
+width: 50%;
+border-radius: 5px;
+margin: auto;
+text-align: center;
+}
+
+input[type=email] {
+    border-bottom: 1px solid #000000;
+}
+
+input[type=password] {
+    border-bottom: 1px solid #000000;
+}
+
+input[type=date] {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #000000;
+}
+
+input[type=text] {
+
+    border: 1px solid #000000;
+}
+
+.upload-image{
+    margin-top: 0%;
+    margin-left: 3%;
+    margin-right: 5%;
+    float: left;
+    border: 1px solid;
+    width: 30%;
+}
+
+label{
+    font-size: 130%;
+    font-weight: bold;
+    text-align: left;
+    width: 150px;
+    display: inline-block;
+}
+
+.submit-product {
+    padding: 1% 2% 1% 2%;
+    background-color: black;
+    border: none;
+    color: white;
+    border-radius: 8px;
+}

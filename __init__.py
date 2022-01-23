@@ -824,7 +824,14 @@ def update_admin(id):
 
 @app.route("/adminProductManagement")
 def admin_product_management():
-    return render_template("adminProductManagement.html")
+    db = shelve.open('database/inventory.db', 'r')
+    products_dict = db['Products']
+    db.close()
+    product_list = []
+    for products in products_dict:
+        product = products_dict[products]
+        product_list.append(product)
+    return render_template("adminProductManagement.html", count=len(product_list), product_list=product_list)
 
 
 @app.route("/adminProductCreation", methods = ["GET","POST"])
@@ -834,7 +841,7 @@ def admin_product_creation():
         product_dict = {}
         db = shelve.open('database/inventory.db', 'c')
         try:
-            admin_dict = db['Inventory']
+            product_dict = db['Products']
         except:
             print("Error in retrieving Products from inventory.db")
 

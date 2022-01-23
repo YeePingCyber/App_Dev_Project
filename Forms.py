@@ -25,12 +25,12 @@ class CreateLoginForm(Form):
 
 
 class CreateProductForm(Form):
-    name = StringField('Name', [validators.Length(min=1, max=150), validators.DataRequired()])
-    price = FloatField('Price', [validators.DataRequired()])
-    quantity = IntegerField('Quantity', [validators.DataRequired()])
-    category = StringField('Category', [validators.Length(min=1, max=150), validators.DataRequired()])
-    discount = FloatField('Discount', [validators.DataRequired()])
-    description = TextAreaField('Description', [validators.Length(min=1, max=300), validators.DataRequired()])
+    name = StringField('Name: ', [validators.Length(min=1, max=70), validators.DataRequired()],  render_kw={"placeholder": "Product Name"})
+    price = FloatField('Price: ', [validators.DataRequired()],  render_kw={"placeholder": "Product price"})
+    quantity = IntegerField('Quantity: ', [validators.DataRequired()],  render_kw={"placeholder": "Quantity"})
+    category = StringField('Category: ', [validators.Length(min=1, max=150), validators.DataRequired()],  render_kw={"placeholder": "Category"})
+    discount = FloatField('Discount: ', [validators.DataRequired()],  render_kw={"placeholder": "Discount"})
+    description = TextAreaField('Description: ', [validators.Length(min=1, max=300), validators.DataRequired()],  render_kw={"placeholder": "Description"})
 
 
 class CreateAdminForm(Form):
