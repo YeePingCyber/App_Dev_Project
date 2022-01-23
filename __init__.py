@@ -491,11 +491,68 @@ def paymentdone():
                                      shipping_dict[0].get_address(), shipping_dict[0].get_postal(),
                                      shipping_dict[0].get_city(), shipping_dict[0].get_phone(),
                                      payment_dict[0].get_cardnum(), payment_dict[0].get_namecard(),
-                                     payment_dict[0].get_expire(), payment_dict[0].get_ccv())
+                                     payment_dict[0].get_expire(), payment_dict[0].get_ccv(),
+                                     cart_dict)
+
     sales_dict[payment_dict[0].get_paymentid()] = combinedShippingnPayment
     db["sales"] = sales_dict
     print(sales_dict)
+
     return render_template("paymentdone.html", subtotal=subtotal, grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict, sales=sales_dict, cartList=cartList)
+
+
+@app.route("/checkout/paymentdone/clear", methods=['POST'])
+def done_clear():
+    productA = {}
+    productB = {}
+    cart_dict = {"1": productA, "2": productB}
+
+    db1 = shelve.open("database/addtocart", "c")
+    try:
+        if "Add_to_cart" in db1:
+            cart_dict = db1["Add_to_cart"]
+        else:
+            db1["Add_to_cart"] = cart_dict
+    except:
+        print("Error in retrieving Inventory from addtocart.db")
+
+    shipping_dict = {}
+    db2 = shelve.open("database/shipping", "c")
+    try:
+        if "Shipping" in db2:
+            shipping_dict = db2["Shipping"]
+        else:
+            db2["Shipping"] = shipping_dict
+    except:
+        print("Error in retrieving Inventory from shipping.db")
+
+    payment_dict = {}
+    db3 = shelve.open("database/payment", "c")
+    try:
+        if "payment" in db3:
+            payment_dict = db3["payment"]
+        else:
+            db3["payment"] = payment_dict
+    except:
+        print("Error in retrieving Sales from payment.db")
+
+    # clearing so that next user will not see previous user details
+    productAupdate = {}
+    productBupdate = {}
+    cart_dict = {"1": productAupdate, "2": productBupdate}
+    db1['Add_to_cart'] = cart_dict
+
+    shipping_dict[0] = None
+    db2["Shipping"] = shipping_dict
+
+    payment_dict[0] = None
+    db3["payment"] = payment_dict
+
+    print(cart_dict)
+    print(shipping_dict)
+    print(payment_dict)
+
+    return redirect(url_for("home"))
 
 
 # main shop
@@ -754,9 +811,22 @@ def forget_password():
 def play_game():
     return render_template("game.html")
 
+
 # Admin Side
 @app.route("/admin")
 def admin():
+    sales_dict = {}
+    db = shelve.open("database/sales", "c")
+    try:
+        if "sales" in db:
+            sales_dict = db["sales"]
+        else:
+            db["sales"] = sales_dict
+    except:
+        print("Error in retrieving Sales from sales.db")
+
+    print(sales_dict)
+
     labels = ["Oct", "Nov", "Dec", "Jan", "Feb", "March"]
     values = [25000, 20000, 30000, 25000, 40000, 100000]
     return render_template("adminDashboard.html", top4=inventory_dict, labels=labels, values=values)

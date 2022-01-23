@@ -66,12 +66,16 @@ class PaymentProcess:
 
 
 class Sales(ShippingProcess, PaymentProcess):
-    def __init__(self, email, country, first_name, last_name, address, postal_code, city, phone, card_num, name_card, expire, ccv):
+    def __init__(self, email, country, first_name, last_name, address, postal_code, city, phone, card_num, name_card,expire, ccv, cart):
         ShippingProcess.__init__(self, email, country, first_name, last_name, address, postal_code, city, phone)
         PaymentProcess.__init__(self, card_num, name_card, expire, ccv)
+        self.__cart = cart
+
+    def get_cart(self):
+        return self.__cart
 
     def __str__(self):
-        return f"{self.get_shippingid(), self.get_paymentid(), self.get_email(), self.get_firstname(), self.get_lastname(), self.get_address(), self.get_postal(), self.get_city(), self.get_phone(), self.get_cardnum(), self.get_namecard(), self.get_expire(), self.get_ccv()}"
+        return f"{self.get_cart(), self.get_shippingid(), self.get_paymentid(), self.get_email(), self.get_firstname(), self.get_lastname(), self.get_address(), self.get_postal(), self.get_city(), self.get_phone(), self.get_cardnum(), self.get_namecard(), self.get_expire(), self.get_ccv()}"
 
-
-# print(Sales("sz3yan@gmail.com", "SG", "Teo", "Sze Yan", "Montreal Drive", "754589", "Sembawang", "97924720", "0000", "Teo Sze Yan", "09/2/24", "542"))
+# s = Sales("sz3yan@gmail.com", "SG", "Teo", "Sze Yan", "Montreal Drive", "754589", "Sembawang", "97924720", "0000", "Teo Sze Yan", "09/2/24", "542", {"1":{"a":1},"2":{}})
+# print(s.get_cart()["1"]["a"])
