@@ -15,8 +15,43 @@
 <div class="container-fluid">
 {% for product in product_list %}
     <div class="products">
-        <img src="../static/images/default-product-image.png" class="product-pic"
-        <h1>hi</h1>
+        <img src="../static/images/default-product-image.png" class="product-pic">
+        <p>ID: {{ product.get_product_id() }}</p>
+        <p>Name: {{ product.get_name() }}</p>
+        <p>Price: {{ product.get_price() }}</p>
+        <p>Quantity: {{ product.get_quantity() }}</p>
+        <p>Discount: {{ product.get_discount() }}</p>
+        <p>Description: {{ product.get_description() }}</p>
+        <div class="delete-button">
+            <button type="button" class="btn btn-danger"><a href="/adminProductUpdate/{{product.get_product_id()}}/" class="edit-button" style="color: white;">Edit</a></button>
+        </div>
+        <form action="{{url_for('delete_product', id=product.get_product_id())}}" method="POST">
+            <!-- will change to the X symbol ltr ~dylan -->
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{product.get_product_id()}}">
+                       Delete
+                </button>
+                <div class="modal" id="myModal_{{product.get_product_id()}}">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+
+                          <div class="modal-header">
+                            <h4 class="modal-title">Delete Confirmation</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                          </div>
+
+
+                          <div class="modal-body">
+                            Are you sure you want to delete {{ product.get_name() }}?
+                          </div>
+
+                          <div class="modal-footer">
+                            <input type="submit" value="Delete" class="btn btn-danger">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
     </div>
 {% endfor %}
 </div>
