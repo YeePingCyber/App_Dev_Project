@@ -37,49 +37,34 @@
                                 </tr>
                                 <tr>
                                     <td rowspan="3">Minimum Bid:<br>
-                                    {{ ongoing.get_minimum_amount() }}<br>
-                                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#makebid" aria-expanded="false" aria-controls="collapseExample">Place bid</button>
-                                        <div class="collapse" id="makebid">
-                                            <div class="card card-body">
-                                                <form method="POST" action="">
-                                                    <div class="form-group">
-                                                    {{ render_field(form.bidAmount, class="form-check") }}
-                                                    </div>
-
-                                                    <input type="submit" value="Submit" class="btn btn-primary">
-                                                </form>
-                                            </div>
-                                        </div><br>
+                                        {{ ongoing.get_minimum_amount() }}<br>
+                                        <a class="btn btn-primary" href="/auctionForm" role="button">
+                                            Make a bid
+                                        </a>
+                                        <br>
                                     </td>
                                 </tr>
                             </table>
 
 
-                        <form method="POST" action="/auction">
-                            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#offers" aria-expanded="false" aria-controls="collapseExample">Offers</button>
-                            <div class="collapse" id="offers">
-                                <div class="card card-body">
+                        <form>
+                            {% for user in bid_list %}
+                            <table>
+                                <tr><th>Price</th><th>Expiration</th><th>From</th></tr>
+                                <tr>
+                                    <td>{{ user.get_bidAmount() }}</td>
+                                    <td>Placeholder Date</td>
+                                    <td>{{ user.get_bidId() }}
 
-                                    {% for user in bid_list %}
-
-                                    <table>
-                                        <tr><th>Price</th><th>Expiration</th><th>From</th></tr>
-                                        <tr>
-                                            <td>{{ user.get_bidAmount() }}</td>
-                                            <td>Placeholder Date</td>
-                                            <td>{{ user.get_bidId() }}
-
-                                            </td>
-                                            <td>
-                                                <form action="{{url_for('delete_bid', id=user.get_bidId())}}" method="POST">
-                                            <button type="submit" class="btn btn-danger">Delete</button>
-                                            </form>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                   {% endfor %}
-                                </div>
-                            </div>
+                                    </td>
+                                    <td>
+                                        <form action="{{url_for('delete_bid', id=user.get_bidId())}}" method="POST">
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                    </td>
+                                </tr>
+                            </table>
+                           {% endfor %}
                         </form>
 
                     </div>

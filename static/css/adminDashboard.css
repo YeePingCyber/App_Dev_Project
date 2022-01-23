@@ -14,11 +14,13 @@
         max-width: 90%;
     }
 
-    .admin-title {
-        padding-bottom: 1.5em;
-        padding-top: 1rem;
-        border-bottom: 1px solid #dbd8d0;
-        margin-bottom: 1.25rem;
+    #admin_auction_title{
+        display: flex;
+        padding: 0% 2%;
+    }
+
+    hr{
+        margin: 0;
     }
 
     .product-grid__products {

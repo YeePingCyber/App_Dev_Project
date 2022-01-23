@@ -44,7 +44,7 @@
 
                 <div class="hehe" style="padding-top: 3em;">
                     <div class="form-row">
-                        <h2 class="section__title" tabindex="-1">{{ ship[0].get_id() }} Thank You {{ ship[0].get_lastname() }}</h2>
+                        <h2 class="section__title" tabindex="-1">{{ ship[0].get_shippingid() }} Thank You {{ ship[0].get_lastname() }}</h2>
 
                         <div class="card">
                             <div>Your order is confirmed</div>
@@ -73,7 +73,7 @@
                                 </tr>
                                 <tr>
                                     <td>{{ ship[0].get_email() }}</td>
-                                    <td>{{ payment[0].get_card() }}</td>
+                                    <td>{{ payment[0].get_namecard() }}</td>
                                 </tr>
                                 <tr>
                                     <th>Shipping Address</th>
@@ -94,7 +94,7 @@
                         </div>
 
                         <div class="step__footer">
-                            <button type="submit" class="btn btn-primary btn-danger" style="width: 187px; height: 58px;"><span class="btn__content">Continue Shopping</span></button>
+                            <a class="btn btn-primary btn-danger" href="/" role="button" style="width: 187px; height: 58px;">Continue Shopping</a>
                         </div>
                     </div>
                 </div>
