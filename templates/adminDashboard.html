@@ -34,9 +34,9 @@
                                     <div class="col-6">
                                         <div class="p-1">
                                             <div class="cardd white" style="background: linear-gradient(to right, rgba(243,144,52,1) , rgba(255,39,39,1));">
-                                                <h3 class="title">Auction</h3>
-                                                <p class="value">56</p>
-                                                <p class="remarks">Quantity</p>
+                                                <h3 class="title">Product Sales</h3>
+                                                <p class="value">${{ subtotal }}</p>
+                                                <p class="remarks">As of {{ date }}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -44,7 +44,7 @@
                                         <div class="p-1">
                                             <div class="cardd white" style="background: linear-gradient(to right, rgba(0,210,84,1), rgba(0,179,235,1));">
                                                 <h3 class="title">Trees Planted</h3>
-                                                <p class="value">240381</p>
+                                                <p class="value">{{ "%.0f" | format(subtotal / 5) }}</p>
                                                 <p class="remarks">Quantity</p>
                                             </div>
                                         </div>
@@ -52,8 +52,8 @@
                                     <div class="col-6">
                                         <div class="p-1">
                                             <div class="cardd">
-                                                <h3 class="title">Out of stock products</h3>
-                                                <p class="value">89.00</p>
+                                                <h3 class="title">Auction</h3>
+                                                <p class="value">{{ auction_on }}</p>
                                                 <p class="remarks">Quantity</p>
                                             </div>
                                         </div>
@@ -61,9 +61,10 @@
                                     <div class="col-6">
                                         <div class="p-1">
                                             <div class="cardd">
-                                                <h3 class="title">All Products</h3>
-                                                <p class="value">267.00</p>
-                                                <p class="remarks">Quantity</p>
+                                                <!--  need get from auction    -->
+                                                <h3 class="title">Auction Sales</h3>
+                                                <p class="value">${{ subtotal }}</p>
+                                                <p class="remarks">As of {{ date }}</p>
                                             </div>
                                         </div>
                                     </div>
