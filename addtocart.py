@@ -3,8 +3,8 @@ from uuid import uuid4
 
 
 class Addtocart(Product):
-    def __init__(self, name, description, price, quantity, category, discount, top):
-        super().__init__(name, description, price, quantity, category, discount, top)
+    def __init__(self, name, description, price, quantity, category, discount):
+        super().__init__(name, price, quantity, category, discount, description)
         self.__id = str(uuid4())
 
     def get_id(self):

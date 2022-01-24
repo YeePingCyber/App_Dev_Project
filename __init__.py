@@ -147,7 +147,7 @@ def updateAddCart(id):
     cartList.append(productBList)
 
     if request.method == "POST":
-        addtocart = Addtocart(cartList[id][0].get_name(),cartList[id][0].get_description(),cartList[id][0].get_price(), 1,cartList[id][0].get_category(), cartList[id][0].get_discount(),cartList[id][0].get_top())
+        addtocart = Addtocart(cartList[id][0].get_name(),cartList[id][0].get_description(),cartList[id][0].get_price(), 1,cartList[id][0].get_category(), cartList[id][0].get_discount())
         if id == 0:
             productA[addtocart.get_id()] = addtocart
             cart_dict[str(id + 1)].update(productA)
@@ -568,11 +568,10 @@ def bag1():
 
         addtocart = Addtocart(addtocartform.name.data, addtocartform.description.data,
                               int(addtocartform.price.data), int(addtocartform.quantity.data),
-                              addtocartform.category.data, int(addtocartform.discount.data),
-                              int(addtocartform.top.data))
+                              addtocartform.category.data, int(addtocartform.discount.data))
 
         # key 0 stores product A, key 1 stores product B... {1:{},2:{}}
-        if addtocart.get_name() == "Arkose 35L Modular Bacpack":
+        if addtocart.get_name() == addtocartform.name.data:
             productA[addtocart.get_id()] = addtocart
             addtocart_dict["1"].update(productA)
 
@@ -604,10 +603,9 @@ def bag2():
 
         addtocart = Addtocart(addtocartform.name.data, addtocartform.description.data,
                               int(addtocartform.price.data), int(addtocartform.quantity.data),
-                              addtocartform.category.data, int(addtocartform.discount.data),
-                              int(addtocartform.top.data))
+                              addtocartform.category.data, int(addtocartform.discount.data))
 
-        if addtocart.get_name() == "Arkose 20L Modular Bacpack":
+        if addtocart.get_name() == addtocartform.name.data:
             productB[addtocart.get_id()] = addtocart
             addtocart_dict["2"].update(productB)
 
@@ -1116,9 +1114,9 @@ def admin_product_creation():
         except:
             print("Error in retrieving Products from inventory.db")
 
-        new_product = Product(create_product_form.name.data, create_product_form.price.data,
-                          create_product_form.quantity.data, create_product_form.category.data,
-                          create_product_form.discount.data, create_product_form.description.data)
+        new_product = Product(create_product_form.name.data, int(create_product_form.price.data),
+                          int(create_product_form.quantity.data), create_product_form.category.data,
+                          int(create_product_form.discount.data), create_product_form.description.data)
         products_dict[new_product.get_product_id()] = new_product
         print(new_product.get_product_id())
         db['Products'] = products_dict
@@ -1135,9 +1133,9 @@ def update_product(id):
         products_dict = db["Products"]
 
         products_dict.get(id).set_name(update_product_form.name.data)
-        products_dict.get(id).set_price(update_product_form.price.data)
-        products_dict.get(id).set_quantity(update_product_form.quantity.data)
-        products_dict.get(id).set_discount(update_product_form.discount.data)
+        products_dict.get(id).set_price(int(update_product_form.price.data))
+        products_dict.get(id).set_quantity(int(update_product_form.quantity.data))
+        products_dict.get(id).set_discount(int(update_product_form.discount.data))
         products_dict.get(id).set_category(update_product_form.category.data)
         products_dict.get(id).set_description(update_product_form.description.data)
         db["Products"] = products_dict
