@@ -212,7 +212,7 @@
                                                   <td>{{ sales.get_firstname() }}</td>
                                                   <td>Done</td>
                                                   <td>
-                                                      ${{ sales.get_cart()[] }}
+                                                      ${{ store_c[loop.index - 1] }}
                                                   </td>
                                               </tr>
                                               {% endfor %}
@@ -247,10 +247,6 @@
                                             <tr>
                                                 <td><p class="value">Received orderes</p></td>
                                                 <td><p class="remarks">$20</p></td>
-                                            </tr>
-                                            <tr>
-                                                <td><p class="value">Total Cost</p></td>
-                                                <td><p class="remarks">$4600</p></td>
                                             </tr>
                                             <tr>
                                                 <td><p class="value">Total Cost</p></td>
