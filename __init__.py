@@ -826,7 +826,11 @@ def save_point(key):
 
         try:
             points = int(points_dict.get(key))
+
         except TypeError:
+            multiplier_dict = {"x5": 5, "x4": 4, "x3": 3, "x2": 2}
+
+            multiplier_dict.get(points_dict.get(key))
             pass
 
 
