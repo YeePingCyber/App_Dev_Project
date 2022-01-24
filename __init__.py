@@ -272,7 +272,6 @@ def delete_item(id):
         return render_template("cart_empty.html")
 
 
-# need fix checkout too
 @app.route("/checkout", methods=['GET', 'POST'])
 def checkout():
     productA = {}
@@ -820,8 +819,6 @@ def admin():
     for x in sales_dict:
         salesList.append(sales_dict[x])
 
-    print(salesList)
-
     cartList = []
     productAList = []
     productBList = []
@@ -837,6 +834,26 @@ def admin():
     cartList.append(productAList)
     cartList.append(productBList)
 
+    # get total of each customer purchase
+    c_total = 0
+    store_c = []
+    for i in range(0, len(salesList)):
+        for j in salesList[i].get_cart()["1"]:
+            c_total += salesList[i].get_cart()["1"][j].get_price()
+
+        for j in salesList[i].get_cart()["2"]:
+            c_total += salesList[i].get_cart()["2"][j].get_price()
+
+        store_c.append(c_total)
+        c_total = 0
+    print(store_c)
+
+    # getting total sales money
+    subtotal = 0
+    for total in range(0, len(cartList)):
+        for x in cartList[total]:
+            subtotal += x.get_price()
+
     try:
         db = shelve.open('database/auction.db', 'r')
         auction_dict = db["Auction"]
@@ -850,16 +867,9 @@ def admin():
     # labels = []
     # values = []
 
-    subtotal = 0
-    for total in range(0, len(cartList)):
-        for x in cartList[total]:
-            subtotal += x.get_price()
-
-        print(subtotal)
-
-    labels = ["Oct", "Nov", "Dec", "Jan", "Feb", "March"]
-    values = [25000, 20000, 30000, 25000, 40000, 100000]
-    return render_template("adminDashboard.html", top4=products_dict, labels=labels, values=values, subtotal=subtotal, date=time_now, auction_on=auction_on, salesList=salesList)
+    labels = ["Oct", "Nov"]
+    values = store_c
+    return render_template("adminDashboard.html", top4=products_dict, labels=labels, values=values, subtotal=subtotal, date=time_now, auction_on=auction_on, salesList=salesList, store_c=store_c)
 
 
 @app.route("/adminAuction")
