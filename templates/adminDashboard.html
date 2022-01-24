@@ -197,61 +197,26 @@
                                         });
                                     </script>
                                     <table class="table table-hover" id="dtBasicExample">
-                                          <thead>
-                                              <tr>
-                                                  <th scope="col">Order ID</th>
-                                                  <th scope="col">Customer</th>
-                                                  <th scope="col">Fufillment status</th>
-                                                  <th scope="col">Payment status</th>
-                                                  <th scope="col">Total</th>
-                                              </tr>
-                                          </thead>
-                                        <tbody id="myTable">
-                                              <tr>
-                                                  <th scope="row">1</th>
-                                                  <td>Mark</td>
-                                                  <td>Otto</td>
-                                                  <td>@mdo</td>
-                                                  <td>$6000</td>
-                                              </tr>
-                                              <tr>
-                                                  <th scope="row">2</th>
-                                                  <td>Jacob</td>
-                                                  <td>Thornton</td>
-                                                  <td>@fat</td>
-                                                  <td>$6000</td>
-                                              </tr>
-                                              <tr>
-                                                  <th scope="row">3</th>
-                                                  <td colspan="2">Larry the Bird</td>
-                                                  <td>@twitter</td>
-                                                  <td>$6000</td>
-                                              </tr>
-                                              <tr>
-                                                  <th scope="row">4</th>
-                                                  <td colspan="2">Larry the Bird</td>
-                                                  <td>@twitter</td>
-                                                  <td>$6000</td>
-                                              </tr>
-                                              <tr>
-                                                  <th scope="row">5</th>
-                                                  <td colspan="2">Larry the Bird</td>
-                                                  <td>@twitter</td>
-                                                  <td>$6000</td>
-                                              </tr>
-                                              <tr>
-                                                <th scope="row">6</th>
-                                                <td colspan="2">Larry the Bird</td>
-                                                <td>@twitter</td>
-                                                <td>$6000</td>
-                                            </tr>
+                                        <thead>
                                             <tr>
-                                                <th scope="row">7p</th>
-                                                <td colspan="2">Larry the Bird</td>
-                                                <td>@twitter</td>
-                                                <td>$6000</td>
+                                                <th scope="col">Order ID</th>
+                                                <th scope="col">Customer</th>
+                                                <th scope="col">Payment status</th>
+                                                <th scope="col">Total</th>
                                             </tr>
-                                          </tbody>
+                                        </thead>
+                                        <tbody id="myTable">
+                                              {% for sales in salesList %}
+                                              <tr>
+                                                  <th scope="row">{{ loop.index }}</th>
+                                                  <td>{{ sales.get_firstname() }}</td>
+                                                  <td>Done</td>
+                                                  <td>
+                                                      ${{ sales.get_cart()[] }}
+                                                  </td>
+                                              </tr>
+                                              {% endfor %}
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>

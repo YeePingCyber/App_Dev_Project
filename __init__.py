@@ -20,31 +20,18 @@ from createProduct import load_product
 app = Flask(__name__)
 app.secret_key = "abc"
 
-inventory_dict = {}
-#db = shelve.open("database/inventory", "c")
-#try:
- #   if "Inventory" in db:
-  #      inventory_dict = db["Inventory"]
-   # else:
-    #    db["Inventory"] = inventory_dict
-#except:
- #   print("Error in retrieving Inventory from inventory.db")
-
-
-#inventory = Product("Arkose 35L Modular Bacpack", "Everyday backpack + small camera insert", 120, 50, "Camera", 0, 1)
-#inventory_dict[0] = inventory
-#db["Inventory"] = inventory_dict
-
-#print(db["Inventory"])
-# for x in inventory_dict:
-#     print(inventory_dict[x])
-#db.close()
-
+db = shelve.open('database/inventory.db', 'r')
+products_dict = db['Products']
+db.close()
+product_list = []
+for products in products_dict:
+    product = products_dict[products]
+    product_list.append(product)
 
 # Customer Side
 @app.route("/")
 def home():
-    return render_template("home.html", top4=inventory_dict)
+    return render_template("home.html", top4=products_dict)
 
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -563,7 +550,7 @@ def mainshop():
 
 @app.route("/bag1", methods=['GET', 'POST'])
 def bag1():
-    x = 0
+    x = product_list[0].get_product_id()
     addtocartform = CreateAddCartForm(request.form)
     if request.method == "POST":
         productA = {}
@@ -593,12 +580,13 @@ def bag1():
         print(addtocart_dict)
         return redirect(url_for("cart"))
 
-    return render_template("bag1.html", form=addtocartform, product=inventory_dict, x=x)
+    return render_template("bag1.html", form=addtocartform, product=products_dict, x=x)
 
 
 @app.route("/bag2", methods=['GET', 'POST'])
 def bag2():
-    x = 1
+    print(product_list)
+    x = product_list[1].get_product_id()
     addtocartform = CreateAddCartForm(request.form)
     if request.method == "POST":
         productA = {}
@@ -627,7 +615,7 @@ def bag2():
         print(addtocart_dict)
         return redirect(url_for("cart"))
 
-    return render_template("bag2.html", form=addtocartform, product=inventory_dict, x=x)
+    return render_template("bag2.html", form=addtocartform, product=products_dict, x=x)
 
 
 # @app.route("/auction", methods=['GET', 'POST'])
@@ -816,8 +804,6 @@ def play_game():
 @app.route("/admin")
 def admin():
     from datetime import datetime
-
-    # get current date
     time_now = datetime.now()
 
     sales_dict = {}
@@ -837,11 +823,11 @@ def admin():
         salesList.append(sales_dict[x])
 
     print(salesList)
-    print(salesList[0].get_cart())
 
     cartList = []
     productAList = []
     productBList = []
+
     for sum in range(0, len(salesList)):
         for x in salesList[sum].get_cart()["1"]:
             productAList.append(salesList[sum].get_cart()["1"][x])
@@ -863,19 +849,19 @@ def admin():
     auction_on = len(auction_dict)
 
     # sort of working halfway
-    labels = []
-    values = []
+    # labels = []
+    # values = []
+
     subtotal = 0
     for total in range(0, len(cartList)):
         for x in cartList[total]:
             subtotal += x.get_price()
 
-            values.append(subtotal)
-            labels.append(subtotal)
+        print(subtotal)
 
-    # labels = ["Oct", "Nov", "Dec", "Jan", "Feb", "March"]
-    # values = [25000, 20000, 30000, 25000, 40000, 100000]
-    return render_template("adminDashboard.html", top4=inventory_dict, labels=labels, values=values, subtotal=subtotal, date=time_now, auction_on=auction_on)
+    labels = ["Oct", "Nov", "Dec", "Jan", "Feb", "March"]
+    values = [25000, 20000, 30000, 25000, 40000, 100000]
+    return render_template("adminDashboard.html", top4=products_dict, labels=labels, values=values, subtotal=subtotal, date=time_now, auction_on=auction_on, salesList=salesList)
 
 
 @app.route("/adminAuction")
@@ -1123,19 +1109,19 @@ def admin_product_management():
 def admin_product_creation():
     create_product_form = CreateProductForm(request.form)
     if request.method == 'POST' and create_product_form.validate():
-        product_dict = {}
+        products_dict = {}
         db = shelve.open('database/inventory.db', 'c')
         try:
-            product_dict = db['Products']
+            products_dict = db['Products']
         except:
             print("Error in retrieving Products from inventory.db")
 
         new_product = Product(create_product_form.name.data, create_product_form.price.data,
                           create_product_form.quantity.data, create_product_form.category.data,
                           create_product_form.discount.data, create_product_form.description.data)
-        product_dict[new_product.get_product_id()] = new_product
+        products_dict[new_product.get_product_id()] = new_product
         print(new_product.get_product_id())
-        db['Products'] = product_dict
+        db['Products'] = products_dict
         db.close()
         return redirect(url_for('admin_product_management'))
     return render_template("adminProductCreation.html", form = create_product_form)
@@ -1146,28 +1132,28 @@ def update_product(id):
     update_product_form = CreateProductForm(request.form)
     if request.method == 'POST' and update_product_form.validate():
         db = shelve.open("database/inventory.db", 'w')
-        product_dict = db["Products"]
+        products_dict = db["Products"]
 
-        product_dict.get(id).set_name(update_product_form.name.data)
-        product_dict.get(id).set_price(update_product_form.price.data)
-        product_dict.get(id).set_quantity(update_product_form.quantity.data)
-        product_dict.get(id).set_discount(update_product_form.discount.data)
-        product_dict.get(id).set_category(update_product_form.category.data)
-        product_dict.get(id).set_description(update_product_form.description.data)
-        db["Products"] = product_dict
+        products_dict.get(id).set_name(update_product_form.name.data)
+        products_dict.get(id).set_price(update_product_form.price.data)
+        products_dict.get(id).set_quantity(update_product_form.quantity.data)
+        products_dict.get(id).set_discount(update_product_form.discount.data)
+        products_dict.get(id).set_category(update_product_form.category.data)
+        products_dict.get(id).set_description(update_product_form.description.data)
+        db["Products"] = products_dict
         db.close()
         return redirect(url_for("admin_product_management"))
     else:
         db = shelve.open("database/inventory.db", 'r')
-        product_dict = db["Products"]
+        products_dict = db["Products"]
         db.close()
-        id = product_dict.get(id).get_product_id()
-        update_product_form.name.data = product_dict.get(id).get_name()
-        update_product_form.price.data = product_dict.get(id).get_price()
-        update_product_form.quantity.data = product_dict.get(id).get_quantity()
-        update_product_form.discount.data = product_dict.get(id).get_discount()
-        update_product_form.category.data = product_dict.get(id).get_category()
-        update_product_form.description.data = product_dict.get(id).get_description()
+        id = products_dict.get(id).get_product_id()
+        update_product_form.name.data = products_dict.get(id).get_name()
+        update_product_form.price.data = products_dict.get(id).get_price()
+        update_product_form.quantity.data = products_dict.get(id).get_quantity()
+        update_product_form.discount.data = products_dict.get(id).get_discount()
+        update_product_form.category.data = products_dict.get(id).get_category()
+        update_product_form.description.data = products_dict.get(id).get_description()
     return render_template("adminProductUpdate.html", form=update_product_form, product_id = id)
 
 
