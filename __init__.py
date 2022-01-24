@@ -837,6 +837,7 @@ def admin():
     # get total of each customer purchase
     c_total = 0
     store_c = []
+    forgraph = []
     for i in range(0, len(salesList)):
         for j in salesList[i].get_cart()["1"]:
             c_total += salesList[i].get_cart()["1"][j].get_price()
@@ -847,6 +848,17 @@ def admin():
         store_c.append(c_total)
         c_total = 0
     print(store_c)
+
+    forgraph = []
+    for i in range(0, len(salesList)):
+        for j in salesList[i].get_cart()["1"]:
+            c_total += salesList[i].get_cart()["1"][j].get_price()
+
+        for j in salesList[i].get_cart()["2"]:
+            c_total += salesList[i].get_cart()["2"][j].get_price()
+
+        forgraph.append(c_total)
+    print(forgraph)
 
     # getting total sales money
     subtotal = 0
@@ -863,12 +875,8 @@ def admin():
 
     auction_on = len(auction_dict)
 
-    # sort of working halfway
-    # labels = []
-    # values = []
-
-    labels = ["Oct", "Nov"]
-    values = store_c
+    labels = ["A", "B", "C", "D", "E", "F"]
+    values = forgraph
     return render_template("adminDashboard.html", top4=products_dict, labels=labels, values=values, subtotal=subtotal, date=time_now, auction_on=auction_on, salesList=salesList, store_c=store_c)
 
 
