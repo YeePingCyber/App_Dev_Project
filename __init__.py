@@ -13,7 +13,8 @@ from addtocart import Addtocart
 from Auction import Auction
 from ProcessCart import PaymentProcess, ShippingProcess, Sales
 from UserBid import UserBid
-from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreateShipmentForm, CreatePaymentForm, CreateProductForm, CreateAddCartForm, CreateAuctionForm, UpdateAdminForm, CreateBidForm, CreateForgetPassForm
+from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreateShipmentForm, CreatePaymentForm, \
+    CreateProductForm, CreateAddCartForm, CreateAuctionForm, UpdateAdminForm, CreateBidForm, CreateForgetPassForm
 # create product function
 from createProduct import load_product
 
@@ -28,6 +29,7 @@ for products in products_dict:
     product = products_dict[products]
     product_list.append(product)
 
+
 # Customer Side
 @app.route("/")
 def home():
@@ -41,17 +43,20 @@ def log_in():
     if request.method == 'POST' and create_log_in_form.validate():
         db = shelve.open('database/user.db', 'r')
         users_dict = db['Users']
-        hashed_password = hl.pbkdf2_hmac('sha256', str(create_log_in_form.login_password.data).encode(), b'salt', 100000).hex()
+        hashed_password = hl.pbkdf2_hmac('sha256', str(create_log_in_form.login_password.data).encode(), b'salt',
+                                         100000).hex()
         for user in users_dict:
-            if users_dict[user].get_email().upper() == create_log_in_form.login_email.data.upper() and users_dict[user].get_password() == hashed_password:
+            if users_dict[user].get_email().upper() == create_log_in_form.login_email.data.upper() and users_dict[
+                user].get_password() == hashed_password:
                 if isinstance(users_dict[user], Customer):
                     return redirect(url_for('home'))
                 elif isinstance(users_dict[user], Admin):
                     return redirect((url_for('admin')))
-            elif users_dict[user].get_email() != create_log_in_form.login_email.data or users_dict[user].get_password() != hashed_password:
+            elif users_dict[user].get_email() != create_log_in_form.login_email.data or users_dict[
+                user].get_password() != hashed_password:
                 error = "Invalid email or password"
         db.close()
-    return render_template("loginpage.html", form=create_log_in_form, error= error)
+    return render_template("loginpage.html", form=create_log_in_form, error=error)
 
 
 @app.route("/register", methods=['GET', 'POST'])
@@ -82,7 +87,7 @@ def create_customer():
 def cart():
     productA = {}
     productB = {}
-    cart_dict = {"1":productA, "2":productB}
+    cart_dict = {"1": productA, "2": productB}
 
     # use list so that i can delete by using method clear() while remaining the key
     productAList = []
@@ -123,7 +128,7 @@ def cart():
 def updateAddCart(id):
     productA = {}
     productB = {}
-    cart_dict = {"1":productA, "2":productB}
+    cart_dict = {"1": productA, "2": productB}
 
     productAList = []
     productBList = []
@@ -147,7 +152,9 @@ def updateAddCart(id):
     cartList.append(productBList)
 
     if request.method == "POST":
-        addtocart = Addtocart(cartList[id][0].get_name(),cartList[id][0].get_description(),cartList[id][0].get_price(), 1,cartList[id][0].get_category(), cartList[id][0].get_discount(),cartList[id][0].get_top())
+        addtocart = Addtocart(cartList[id][0].get_name(), cartList[id][0].get_description(),
+                              cartList[id][0].get_price(), 1, cartList[id][0].get_category(),
+                              cartList[id][0].get_discount(), cartList[id][0].get_top())
         if id == 0:
             productA[addtocart.get_id()] = addtocart
             cart_dict[str(id + 1)].update(productA)
@@ -165,7 +172,7 @@ def updateAddCart(id):
 def updateSubCart(id):
     productA = {}
     productB = {}
-    cart_dict = {"1":productA, "2":productB}
+    cart_dict = {"1": productA, "2": productB}
 
     productAList = []
     productBList = []
@@ -261,7 +268,7 @@ def delete_item(id):
 
     productAupdate = dict(zip(list_keyA, cartList[0]))
     productBupdate = dict(zip(list_keyB, cartList[1]))
-    cart_dict = {"1":productAupdate, "2":productBupdate}
+    cart_dict = {"1": productAupdate, "2": productBupdate}
 
     db['Add_to_cart'] = cart_dict
     db.close()
@@ -330,7 +337,8 @@ def checkout():
 
         return redirect(url_for("payment"))
 
-    return render_template("checkout.html", form=create_shipment_form, cartList=cartList, subtotal=subtotal, grandtotal=grandtotal)
+    return render_template("checkout.html", form=create_shipment_form, cartList=cartList, subtotal=subtotal,
+                           grandtotal=grandtotal)
 
 
 @app.route("/checkout/payment", methods=['GET', 'POST'])
@@ -404,7 +412,8 @@ def payment():
 
     db.close()
 
-    return render_template("payment.html", form=create_payment_form, cartList=cartList, subtotal=subtotal, grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict)
+    return render_template("payment.html", form=create_payment_form, cartList=cartList, subtotal=subtotal,
+                           grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict)
 
 
 @app.route("/checkout/paymentdone")
@@ -485,7 +494,8 @@ def paymentdone():
     db["sales"] = sales_dict
     print(sales_dict)
 
-    return render_template("paymentdone.html", subtotal=subtotal, grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict, sales=sales_dict, cartList=cartList)
+    return render_template("paymentdone.html", subtotal=subtotal, grandtotal=grandtotal, ship=shipping_dict,
+                           payment=payment_dict, sales=sales_dict, cartList=cartList)
 
 
 @app.route("/checkout/paymentdone/clear", methods=['POST'])
@@ -555,7 +565,7 @@ def bag1():
     if request.method == "POST":
         productA = {}
         productB = {}
-        addtocart_dict = {"1":productA, "2":productB}
+        addtocart_dict = {"1": productA, "2": productB}
         db = shelve.open("database/addtocart", "c")
 
         try:
@@ -591,7 +601,7 @@ def bag2():
     if request.method == "POST":
         productA = {}
         productB = {}
-        addtocart_dict = {"1":productA, "2":productB}
+        addtocart_dict = {"1": productA, "2": productB}
         db = shelve.open("database/addtocart", "c")
 
         try:
@@ -696,6 +706,9 @@ def auction():
 
     try:
         bid_dict = db['UserBid']
+        # for x in bid_dict:
+        #     key = bid_dict.get(x)
+        #     print(key)
     except:
         print("Error in retrieving userbid.db.")
 
@@ -706,7 +719,8 @@ def auction():
         user = bid_dict.get(key)
         bid_list.append(user)
 
-    print(bid_list)
+    #print(bid_list)
+    bid_list.pop()
 
     today = date.today().strftime('%Y-%m-%d')
     ongoing = ""
@@ -718,12 +732,14 @@ def auction():
         if start == today or today > start or start <= today and end <= today:
             ongoing = values
 
-    return render_template('auction.html',auction_dict=auction_dict, bid_list=bid_list, ongoing=ongoing)
+    return render_template('auction.html', auction_dict=auction_dict, bid_list=bid_list, ongoing=ongoing)
 
 
 @app.route("/auctionForm", methods=['GET', 'POST'])
 def auctionForm():
     create_bid_form = CreateBidForm(request.form)
+    print(create_bid_form)
+    print("JUST PRINT SOMETHING")
     if request.method == 'POST' and create_bid_form.validate():
         bid_dict = {}
         db = shelve.open('database/UserBid.db', 'c')
@@ -733,13 +749,14 @@ def auctionForm():
         except:
             print("Error in retrieving userbid.db.")
 
-
-        userbidID = UserBid(create_bid_form.bidAmount.data)
+        userbidID = UserBid(create_bid_form.bid_amount.data, create_bid_form.bid_user.data)
+        #print(userbidID)
         bid_dict[userbidID.get_bidId()] = userbidID
         db['UserBid'] = bid_dict
 
-        # print(bid_dict)
-        print("Test")
+        # for x in bid_dict:
+        #     print(x)
+
         db.close()
 
         return redirect(url_for("auction"))
@@ -761,6 +778,7 @@ def delete_bid(id):
 
 randomOTP = random.randint(111111, 999999)
 
+
 @app.route("/forgetPassword", methods=["POST", "GET"])
 def forget_password():
     create_forget_form = CreateForgetPassForm(request.form)
@@ -781,7 +799,8 @@ def forget_password():
                 userId = userKey
                 break
 
-        if create_forget_form.newPass.data == create_forget_form.confirmPass.data and create_forget_form.otp.data == str(randomOTP):
+        if create_forget_form.newPass.data == create_forget_form.confirmPass.data and create_forget_form.otp.data == str(
+                randomOTP):
             db = shelve.open("database/user.db", "w")
             users_dict = db['Users']
 
@@ -861,7 +880,8 @@ def admin():
 
     labels = ["Oct", "Nov", "Dec", "Jan", "Feb", "March"]
     values = [25000, 20000, 30000, 25000, 40000, 100000]
-    return render_template("adminDashboard.html", top4=products_dict, labels=labels, values=values, subtotal=subtotal, date=time_now, auction_on=auction_on, salesList=salesList)
+    return render_template("adminDashboard.html", top4=products_dict, labels=labels, values=values, subtotal=subtotal,
+                           date=time_now, auction_on=auction_on, salesList=salesList)
 
 
 @app.route("/adminAuction")
@@ -1057,7 +1077,8 @@ def update_admin(id):
         db = shelve.open('database/user.db', 'w')
         users_dict = db['Users']
         admin = users_dict.get(id)
-        hashed_password = hl.pbkdf2_hmac('sha256', str(update_admin_form.current_password.data).encode(), b'salt', 100000).hex()
+        hashed_password = hl.pbkdf2_hmac('sha256', str(update_admin_form.current_password.data).encode(), b'salt',
+                                         100000).hex()
         if update_admin_form.current_password.data == "":
             admin.set_first_name(update_admin_form.first_name.data)
             admin.set_last_name(update_admin_form.last_name.data)
@@ -1090,7 +1111,7 @@ def update_admin(id):
         update_admin_form.last_name.data = admin.get_last_name()
         update_admin_form.email.data = admin.get_email()
         update_admin_form.employee_id.data = admin.get_employee_id()
-    return render_template("adminAdminUpdate.html", form=update_admin_form, error = error)
+    return render_template("adminAdminUpdate.html", form=update_admin_form, error=error)
 
 
 @app.route("/adminProductManagement")
@@ -1105,7 +1126,7 @@ def admin_product_management():
     return render_template("adminProductManagement.html", count=len(product_list), product_list=product_list)
 
 
-@app.route("/adminProductCreation", methods = ["GET","POST"])
+@app.route("/adminProductCreation", methods=["GET", "POST"])
 def admin_product_creation():
     create_product_form = CreateProductForm(request.form)
     if request.method == 'POST' and create_product_form.validate():
@@ -1117,14 +1138,14 @@ def admin_product_creation():
             print("Error in retrieving Products from inventory.db")
 
         new_product = Product(create_product_form.name.data, create_product_form.price.data,
-                          create_product_form.quantity.data, create_product_form.category.data,
-                          create_product_form.discount.data, create_product_form.description.data)
+                              create_product_form.quantity.data, create_product_form.category.data,
+                              create_product_form.discount.data, create_product_form.description.data)
         products_dict[new_product.get_product_id()] = new_product
         print(new_product.get_product_id())
         db['Products'] = products_dict
         db.close()
         return redirect(url_for('admin_product_management'))
-    return render_template("adminProductCreation.html", form = create_product_form)
+    return render_template("adminProductCreation.html", form=create_product_form)
 
 
 @app.route("/adminProductUpdate/<id>/", methods=['GET', 'POST'])
@@ -1154,7 +1175,7 @@ def update_product(id):
         update_product_form.discount.data = products_dict.get(id).get_discount()
         update_product_form.category.data = products_dict.get(id).get_category()
         update_product_form.description.data = products_dict.get(id).get_description()
-    return render_template("adminProductUpdate.html", form=update_product_form, product_id = id)
+    return render_template("adminProductUpdate.html", form=update_product_form, product_id=id)
 
 
 @app.route('/deleteProduct/<id>', methods=['POST'])
