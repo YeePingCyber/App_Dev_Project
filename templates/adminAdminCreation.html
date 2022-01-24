@@ -39,7 +39,9 @@
       <div class="form-login-field">
         {{ render_field(form.email, class="form-login-field") }}
       </div>
-
+      {% if code == 1 %}
+        <p style="color: red; font-size: 80%;"><strong></strong> Duplicate email in use </p>
+      {% endif %}
       <br><br><br>
 
       <div class="form-login-field">

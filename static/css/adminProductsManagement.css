@@ -36,9 +36,24 @@ margin: 1.5% 1.5% 1.5% 1.5%;
 .delete-button{
 width:8%;
 color: white:
+float: right;
+display: inline-block;
 }
 
 .prod_id{
 text-align: left;
 margin-left: 3.5%;
+}
+
+.prod-info{
+margin-left: 5%;
+}
+
+.btn btn-danger{
+display: inline-block;
+float: right;
+}
+
+p{
+font-size: 130%;
 }

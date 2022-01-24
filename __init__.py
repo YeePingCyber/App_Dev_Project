@@ -56,9 +56,19 @@ def log_in():
 
 @app.route("/register", methods=['GET', 'POST'])
 def create_customer():
+    errortwo = ""
+    code = 0
     create_customer_form = CreateCustomerForm(request.form)
     if request.method == 'POST' and create_customer_form.validate():
-        if create_customer_form.register_password.data == create_customer_form.confirm_password.data:
+        user_dict = {}
+        db = shelve.open('database/user.db','r')
+        user_dict = db['Users']
+        for user in user_dict:
+            if create_customer_form.email.data.upper() == user_dict[user].get_email().upper():
+                errortwo = "There is an existing email registered"
+                code = 1
+                break
+        if create_customer_form.register_password.data == create_customer_form.confirm_password.data and code == 0:
             customer_dict = {}
             db = shelve.open('database/user.db', 'c')
             try:
@@ -75,7 +85,7 @@ def create_customer():
             return redirect(url_for('log_in'))
         else:
             print("Password does not match!")
-    return render_template("register.html", form=create_customer_form)
+    return render_template("register.html", form=create_customer_form, erorrtwo = errortwo, code = code)
 
 
 @app.route("/cart")
@@ -1041,9 +1051,16 @@ def delete_admin(id):
 
 @app.route("/adminAccountCreation", methods=['GET', 'POST'])
 def admin_creation():
+    code = 0
     create_admin_form = CreateAdminForm(request.form)
     if request.method == 'POST' and create_admin_form.validate():
-        if create_admin_form.register_password.data == create_admin_form.confirm_password.data:
+        db = shelve.open('database/user.db','r')
+        user_dict = db['Users']
+        for user in user_dict:
+            if create_admin_form.email.data.upper() == user_dict[user].get_email().upper():
+                code = 1
+                break
+        if create_admin_form.register_password.data == create_admin_form.confirm_password.data and code == 0:
             admin_dict = {}
             db = shelve.open('database/user.db', 'c')
             try:
@@ -1061,20 +1078,26 @@ def admin_creation():
             return redirect(url_for('admin_admin_management'))
         else:
             print("Password does not match!")
-    return render_template("adminAdminCreation.html", form=create_admin_form)
+    return render_template("adminAdminCreation.html", form=create_admin_form, code = code)
 
 
 @app.route("/adminAdminUpdate/<int:id>/", methods=["GET", "POST"])
 def update_admin(id):
     update_admin_form = UpdateAdminForm(request.form)
     error = ""
+    code = 0
     if request.method == 'POST' and update_admin_form.validate():
         users_dict = {}
         db = shelve.open('database/user.db', 'w')
         users_dict = db['Users']
         admin = users_dict.get(id)
+        # Make uuids for customers and admins the same method to retrieve
+        for user in users_dict:
+            if update_admin_form.email.data.upper() == users_dict[user].get_email().upper() and id != users_dict[user].get_admin_id():
+                code = 1
+                break
         hashed_password = hl.pbkdf2_hmac('sha256', str(update_admin_form.current_password.data).encode(), b'salt', 100000).hex()
-        if update_admin_form.current_password.data == "":
+        if update_admin_form.current_password.data == "" and code == 0:
             admin.set_first_name(update_admin_form.first_name.data)
             admin.set_last_name(update_admin_form.last_name.data)
             admin.set_email(update_admin_form.email.data)
@@ -1082,7 +1105,7 @@ def update_admin(id):
             db['Users'] = users_dict
             db.close()
             return redirect(url_for('admin_admin_management'))
-        elif update_admin_form.current_password.data != "":
+        elif update_admin_form.current_password.data != "" and code == 0:
             if hashed_password == admin.get_password():
                 admin.set_first_name(update_admin_form.first_name.data)
                 admin.set_last_name(update_admin_form.last_name.data)
@@ -1106,7 +1129,7 @@ def update_admin(id):
         update_admin_form.last_name.data = admin.get_last_name()
         update_admin_form.email.data = admin.get_email()
         update_admin_form.employee_id.data = admin.get_employee_id()
-    return render_template("adminAdminUpdate.html", form=update_admin_form, error = error)
+    return render_template("adminAdminUpdate.html", form=update_admin_form, error = error, code = code)
 
 
 @app.route("/adminProductManagement")

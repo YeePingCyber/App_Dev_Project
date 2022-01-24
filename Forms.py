@@ -1,5 +1,5 @@
 from wtforms import Form, StringField, RadioField, SelectField, TextAreaField, HiddenField, validators
-from wtforms.fields import EmailField, DateField, FloatField, IntegerField, PasswordField
+from wtforms.fields import EmailField, DateField, FloatField, IntegerField, PasswordField, BooleanField
 import shelve
 from Product import Product
 
@@ -31,6 +31,7 @@ class CreateProductForm(Form):
     category = StringField('Category: ', [validators.Length(min=1, max=150), validators.DataRequired()],  render_kw={"placeholder": "Category"})
     discount = FloatField('Discount: ', [validators.DataRequired()],  render_kw={"placeholder": "Discount"})
     description = TextAreaField('Description: ', [validators.Length(min=1, max=300), validators.DataRequired()],  render_kw={"placeholder": "Description"})
+    top = BooleanField('Top product')
 
 
 class CreateAdminForm(Form):
