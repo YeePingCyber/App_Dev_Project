@@ -13,6 +13,7 @@ from addtocart import Addtocart
 from Auction import Auction
 from ProcessCart import PaymentProcess, ShippingProcess, Sales
 from UserBid import UserBid
+from Game import PlayerStatus, generate_points
 from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreateShipmentForm, CreatePaymentForm, CreateProductForm, CreateAddCartForm, CreateAuctionForm, UpdateAdminForm, CreateBidForm, CreateForgetPassForm
 # create product function
 from createProduct import load_product
@@ -703,6 +704,9 @@ def auction():
 
     try:
         bid_dict = db['UserBid']
+        # for x in bid_dict:
+        #     key = bid_dict.get(x)
+        #     print(key)
     except:
         print("Error in retrieving userbid.db.")
 
@@ -713,7 +717,8 @@ def auction():
         user = bid_dict.get(key)
         bid_list.append(user)
 
-    print(bid_list)
+    #print(bid_list)
+    bid_list.pop()
 
     today = date.today().strftime('%Y-%m-%d')
     ongoing = ""
@@ -725,28 +730,31 @@ def auction():
         if start == today or today > start or start <= today and end <= today:
             ongoing = values
 
-    return render_template('auction.html',auction_dict=auction_dict, bid_list=bid_list, ongoing=ongoing)
+    return render_template('auction.html', auction_dict=auction_dict, bid_list=bid_list, ongoing=ongoing)
 
 
 @app.route("/auctionForm", methods=['GET', 'POST'])
 def auctionForm():
     create_bid_form = CreateBidForm(request.form)
+    print(create_bid_form)
+    print("JUST PRINT SOMETHING")
     if request.method == 'POST' and create_bid_form.validate():
         bid_dict = {}
-        db = shelve.open('database/UserBid.db', 'c')
+        db = shelve.open('database/userbid.db', 'c')
 
         try:
             bid_dict = db['UserBid']
         except:
             print("Error in retrieving userbid.db.")
 
-
-        userbidID = UserBid(create_bid_form.bidAmount.data)
+        userbidID = UserBid(create_bid_form.bid_amount.data, create_bid_form.bid_user.data)
+        #print(userbidID)
         bid_dict[userbidID.get_bidId()] = userbidID
         db['UserBid'] = bid_dict
 
-        # print(bid_dict)
-        print("Test")
+        # for x in bid_dict:
+        #     print(x)
+
         db.close()
 
         return redirect(url_for("auction"))
@@ -804,7 +812,36 @@ def forget_password():
 
 @app.route("/game")
 def play_game():
-    return render_template("game.html")
+
+    with shelve.open("database/game.db", "c") as db:
+        try:
+            points_dict = db['Points']
+        except:
+            print("Error in retrieving game.db.")
+
+        point_list = generate_points()
+
+        db['Points'] = point_list
+
+        print(db['Points'])
+
+    return render_template("game.html", point_list=point_list)
+
+
+@app.route("/game/<int:key>", methods=["POST"])
+def save_point(key):
+
+    with shelve.open("database/game.db", "r") as db:
+        points_dict = db['Points']
+
+        try:
+            points = int(points_dict.get(key))
+
+        except TypeError:
+            multiplier_dict = {"x5": 5, "x4": 4, "x3": 3, "x2": 2}
+
+            multiplier_dict.get(points_dict.get(key))
+            pass
 
 
 # Admin Side

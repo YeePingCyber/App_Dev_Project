@@ -3,30 +3,30 @@
 
 {% block css %}
     <link rel="stylesheet" type="text/css" href="../static/css/base.css">
-    <link rel="stylesheet" type="text/css" href="../static/css/login.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/auctionForm.css">
 {% endblock %}
 
 {% block bodyContent %}
 {% from "includes/formHelper.html" import render_field %}
 <br>
 <br>
-<div class="container-login">
-    <form method="POST" class="form">
+<div id="container">
+    <form method="post">
         <h1>Create Bid</h1>
         <br><br>
-        <div class="form-login-field">
-
-            {{ render_field(form.bidAmount, class="form-check") }}
+        <div class="form-container" id="bidAmount">
+            <div>
+              {{ render_field(form.bid_amount, class="form-container") }}
+            </div>
         </div>
         <br><br><br>
-        <div class="form-login-field">
-
+        <div class="form-container" id="bidUser">
+            <div>
+              {{ render_field(form.bid_user, class="form-container") }}
+            </div>
         </div>
-        {% if error %}
-        <p style="color: red; font-size: 80%;"><strong></strong> {{error}}</p>
-        {% endif %}
         <br><br><br>
-        <button type="submit" name="makeBid" value="Submit" class="submit-login">Submit</button>
+        <button type="submit" value="Submit" class="submit-login">Submit</button>
     </form>
 
     </div>
