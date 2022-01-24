@@ -13,6 +13,7 @@ from addtocart import Addtocart
 from Auction import Auction
 from ProcessCart import PaymentProcess, ShippingProcess, Sales
 from UserBid import UserBid
+from Game import PlayerStatus, generate_points
 from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreateShipmentForm, CreatePaymentForm, CreateProductForm, CreateAddCartForm, CreateAuctionForm, UpdateAdminForm, CreateBidForm, CreateForgetPassForm
 # create product function
 from createProduct import load_product
@@ -738,7 +739,7 @@ def auctionForm():
     create_bid_form = CreateBidForm(request.form)
     if request.method == 'POST' and create_bid_form.validate():
         bid_dict = {}
-        db = shelve.open('database/UserBid.db', 'c')
+        db = shelve.open('database/userbid.db', 'c')
 
         try:
             bid_dict = db['UserBid']
@@ -809,7 +810,32 @@ def forget_password():
 
 @app.route("/game")
 def play_game():
-    return render_template("game.html")
+
+    with shelve.open("database/game.db", "c") as db:
+        try:
+            points_dict = db['Points']
+        except:
+            print("Error in retrieving game.db.")
+
+        point_list = generate_points()
+
+        db['Points'] = point_list
+
+        print(db['Points'])
+
+    return render_template("game.html", point_list=point_list)
+
+
+@app.route("/game/<int:key>", methods=["POST"])
+def save_point(key):
+
+    with shelve.open("database/game.db", "r") as db:
+        points_dict = db['Points']
+
+        try:
+            points = int(points_dict.get(key))
+        except TypeError:
+            pass
 
 
 # Admin Side

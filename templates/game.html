@@ -23,32 +23,79 @@
 
     <div class="bottom_container">
         <div class="center_container">
-            <p>Pick a Box</p>
-            <p>1 Chance = 10 Credit points</p>
+            <p class="center_para">Pick a Box</p>
+            <p class="center_para">1 Chance = 10 Credit points</p>
         </div>
         <div class="game_card_container">
             <div class="game_box_container" id="game_box1">
-                <div class="front">
-                    <p>hi</p>
+                <div class="card_front">
+                    <button class="card_front card_button" id="button_box1">
+                        <svg class="question_mark" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                         width="27.774px" height="27.774px" viewBox="0 0 27.774 27.774" style="enable-background:new 0 0 27.774 27.774;"
+                         xml:space="preserve">
+                            <g>
+                                <path d="M10.398,22.811h4.618v4.964h-4.618V22.811z M21.058,1.594C19.854,0.532,17.612,0,14.33,0c-3.711,0-6.205,0.514-7.482,1.543
+                                    c-1.277,1.027-1.916,3.027-1.916,6L4.911,8.551h4.577l-0.02-1.049c0-1.424,0.303-2.377,0.907-2.854
+                                    c0.604-0.477,1.814-0.717,3.632-0.717c1.936,0,3.184,0.228,3.74,0.676c0.559,0.451,0.837,1.457,0.837,3.017
+                                    c0,1.883-0.745,3.133-2.237,3.752l-1.797,0.766c-1.882,0.781-3.044,1.538-3.489,2.27c-0.442,0.732-0.665,2.242-0.665,4.529h4.68
+                                    v-0.646c0-1.41,0.987-2.533,2.965-3.365c2.03-0.861,3.343-1.746,3.935-2.651c0.592-0.908,0.888-2.498,0.888-4.771
+                                    C22.863,4.625,22.261,2.655,21.058,1.594z"/>
+                            </g>
+                        </svg>
+                    </button>
                 </div>
-                <div class="back">
-                    <p>bye</p>
+                <div class="card_back">
+                    <h4>You earned...</h4>
+
+                    <p id="card_back_para1">{{ (point_list[0].values()|list)[0] }} points</p>
+                    <button type="button">Claim</button>
                 </div>
             </div>
             <div class="game_box_container" id="game_box2">
-                <div class="front">
-                    <p>hi</p>
+                <div class="card_front">
+                    <button class="card_front card_button" id="button_box2">
+                        <svg class="question_mark" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                         width="27.774px" height="27.774px" viewBox="0 0 27.774 27.774" style="enable-background:new 0 0 27.774 27.774;"
+                         xml:space="preserve">
+                            <g>
+                                <path d="M10.398,22.811h4.618v4.964h-4.618V22.811z M21.058,1.594C19.854,0.532,17.612,0,14.33,0c-3.711,0-6.205,0.514-7.482,1.543
+                                    c-1.277,1.027-1.916,3.027-1.916,6L4.911,8.551h4.577l-0.02-1.049c0-1.424,0.303-2.377,0.907-2.854
+                                    c0.604-0.477,1.814-0.717,3.632-0.717c1.936,0,3.184,0.228,3.74,0.676c0.559,0.451,0.837,1.457,0.837,3.017
+                                    c0,1.883-0.745,3.133-2.237,3.752l-1.797,0.766c-1.882,0.781-3.044,1.538-3.489,2.27c-0.442,0.732-0.665,2.242-0.665,4.529h4.68
+                                    v-0.646c0-1.41,0.987-2.533,2.965-3.365c2.03-0.861,3.343-1.746,3.935-2.651c0.592-0.908,0.888-2.498,0.888-4.771
+                                    C22.863,4.625,22.261,2.655,21.058,1.594z"/>
+                            </g>
+                        </svg>
+                    </button>
                 </div>
-                <div class="back">
-                    <p>bye</p>
+                <div class="card_back">
+                    <h4>You earned...</h4>
+                    <p id="card_back_para2">{{ (point_list[1].values()|list)[0] }} points</p>
+                    <button type="button">Claim</button>
                 </div>
             </div>
             <div class="game_box_container" id="game_box3">
-                <div class="front">
-                    <p>hi</p>
+                <div class="card_front">
+                    <button class="card_front card_button" id="button_box3">
+                        <svg class="question_mark" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                         width="27.774px" height="27.774px" viewBox="0 0 27.774 27.774" style="enable-background:new 0 0 27.774 27.774;"
+                         xml:space="preserve">
+                            <g>
+                                <path d="M10.398,22.811h4.618v4.964h-4.618V22.811z M21.058,1.594C19.854,0.532,17.612,0,14.33,0c-3.711,0-6.205,0.514-7.482,1.543
+                                    c-1.277,1.027-1.916,3.027-1.916,6L4.911,8.551h4.577l-0.02-1.049c0-1.424,0.303-2.377,0.907-2.854
+                                    c0.604-0.477,1.814-0.717,3.632-0.717c1.936,0,3.184,0.228,3.74,0.676c0.559,0.451,0.837,1.457,0.837,3.017
+                                    c0,1.883-0.745,3.133-2.237,3.752l-1.797,0.766c-1.882,0.781-3.044,1.538-3.489,2.27c-0.442,0.732-0.665,2.242-0.665,4.529h4.68
+                                    v-0.646c0-1.41,0.987-2.533,2.965-3.365c2.03-0.861,3.343-1.746,3.935-2.651c0.592-0.908,0.888-2.498,0.888-4.771
+                                    C22.863,4.625,22.261,2.655,21.058,1.594z"/>
+                            </g>
+                        </svg>
+                    </button>
                 </div>
-                <div class="back">
-                    <p>bye</p>
+
+                <div class="card_back">
+                    <h4>You earned...</h4>
+                    <p id="card_back_para3">{{ (point_list[2].values()|list)[0] }} points</p>
+                    <button type="button">Claim</button>
                 </div>
             </div>
         </div>
