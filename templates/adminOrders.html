@@ -3,9 +3,72 @@
 
 {% block css %}
     <link rel="stylesheet" type="text/css" href="../static/css/adminBase.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/adminOrder.css">
 {% endblock %}
 
 {% block bodyContent %}
-    <h1>Orders</h1>
+    <div id="admin_order_title">
+        <h1>Orders</h1>
+        <div class="search_bar">
+            <form>
+                <input type="search" placeholder="Search" aria-label="Search">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="orders_container">
+        <div class="top_container">
+            <button>All</button>
+            <button>Pending</button>
+            <button>Shipping</button>
+        </div>
+
+        <div class="bottom_container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="user_order">
+                        <div class="user_order_top">
+                            <div class="user_order_username">
+                                <p>Username 1</p>
+                            </div>
+                            <div class="user_order_orderId">
+                                <p>Order ID: <span>00000000</span></p>
+                            </div>
+                        </div>
+                        <div>
+                            <div>
+                                <img src="../static/images/blackBag2.png" alt="Product Image">
+                                <p>Product Name</p>
+                                <p>x1</p>
+                            </div>
+                            <div>
+                                <span>View More</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div>
+                                <button>Arrange Shipment</button>
+                            </div>
+                            <div>
+                                <button>view Detail</button>
+                            </div>
+                            <div>
+                                <button>Cancel Order</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-6">
+                    <div class="user_order">
+                        g
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 

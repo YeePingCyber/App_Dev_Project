@@ -1,19 +1,23 @@
 import random
 
 class PlayerStatus:
-    def __init__(self, customerID, playableDate):
+    def __init__(self, customerID, today, nextDay):
         self.__customerID = customerID
         self.__totalPoints = 0
-        self.__playableDate = playableDate
+        self.__today = today
+        self.__nextDay = nextDay
 
     def set_customer_id(self, customerID):
         self.__customerID = customerID
 
-    def set_total_points(self, totalPoints):
-        self.__totalPoints = totalPoints
+    def set_today(self, today):
+        self.__today = today
 
-    def set_playable_date(self, playableDate):
-        self.__playableDate = playableDate
+    def set_total_zero(self):
+        self.__totalPoints = 0
+
+    def set_next_day(self, nextDay):
+        self.__nextDay = nextDay
 
     def get_customer_id(self):
         return self.__customerID
@@ -21,13 +25,22 @@ class PlayerStatus:
     def get_total_points(self):
         return self.__totalPoints
 
-    def get_playable_date(self):
-        return self.__playableDate
+    def get_today(self):
+        return self.__today
+
+    def get_next_day(self):
+        return self.__nextDay
+
+    def calculate_total_points(self, points=0, multiplier=0):
+        if points == 0:
+            self.__totalPoints *= multiplier
+        else:
+            self.__totalPoints += points
 
 
 # Function for a list of different amount of points
 def generate_points():
-    points_and_multiplier = {0:"x5", 1:"x4", 2:"x3", 3:"x2", 4:"500", 5:"400", 6:"300", 7:"200", 8:"100"}
+    points_and_multiplier = {0:"x5", 1:"x4", 2:"x3", 3:"x2", 4:"50", 5:"40", 6:"30", 7:"20", 8:"10"}
 
     point_list = []
 
@@ -41,9 +54,9 @@ def generate_points():
 
     return point_list
 
-h = generate_points()
-print(h)
-print(list(h[0].keys())[0])
-print(list(h[0].values())[0])
+# h = generate_points()
+# print(h)
+# print(list(h[0].keys())[0])
+# print(list(h[0].values())[0])
 
 # list(point_list[0].keys())

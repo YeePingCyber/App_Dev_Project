@@ -1,51 +1,66 @@
-#admin_auction_title{
-    display: flex;
-    padding: 0% 2%;
-}
+/* NYP Y1S2 2021 - 2022 APP DEVELOPMENT PROJECT
 
-hr{
-    margin: 0;
-}
+   Structure of adminAuction.css
+   |
+   ├─ 1. admin auction header
+   ├─ 2. Content
 
-table{
-    text-align: center;
-    margin-top: 2%;
-    background-color: white;
-    box-shadow: 0px 0px 20px rgba(0,0,0, 0.3);
-    border-radius: 15px;
-}
+    /* --------------------------------------------------------------------------
+        1. admin auction header
+    -------------------------------------------------------------------------- */
 
-#addAuction_btn{
-    width: 9%;
-    float: right;
-    position: absolute;
-    margin-left: 80%;
-    margin-top: 1.3%;
-    text-align: center;
-    background-color: #C4C4C4;
-    padding: 0.3%;
-}
+    #admin_auction_title{
+        display: flex;
+        padding: 0% 2%;
+    }
 
-#ongoing_title{
-    color: #5BB700;
-}
+    hr{
+        margin: 0;
+    }
 
-#upcoming_title{
-    color: #E56E00;
-}
+    /* --------------------------------------------------------------------------
+        2. content
+    -------------------------------------------------------------------------- */
 
-.ongoing, .upcoming{
-    margin: 2% 5%;
-    width: 90%;
-}
+    table{
+        text-align: center;
+        margin-top: 2%;
+        background-color: white;
+        box-shadow: 0px 0px 20px rgba(0,0,0, 0.3);
+        border-radius: 15px;
+    }
 
-#update_btn{
-    width: 25%;
-    height: 25%;
-    margin-right: 3%;
-    padding: 1.5%;
-}
+    #addAuction_btn{
+        width: 9%;
+        float: right;
+        position: absolute;
+        margin-left: 80%;
+        margin-top: 1.3%;
+        text-align: center;
+        background-color: #C4C4C4;
+        padding: 0.3%;
+    }
 
-svg{
-    width: 2.5em;
-}
+    #ongoing_title{
+        color: #5BB700;
+    }
+
+    #upcoming_title{
+        color: #E56E00;
+    }
+
+    .ongoing, .upcoming{
+        margin: 2% 5%;
+        width: 90%;
+    }
+
+    #update_btn{
+        width: 25%;
+        height: 25%;
+        margin-right: 3%;
+        padding: 1.5%;
+    }
+
+    svg{
+        width: 2.5em;
+    }
