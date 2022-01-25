@@ -4,7 +4,7 @@ import shelve
 import random
 import hashlib as hl
 from bs4 import BeautifulSoup
-from datetime import date
+from datetime import date, datetime, timedelta
 from Customer import Customer
 from Admin import Admin
 from User import User
@@ -866,40 +866,109 @@ def forget_password():
 def play_game():
 
     with shelve.open("database/game.db", "c") as db:
+
         try:
-            points_dict = db['Points']
+            leaderboard_dict = db["Leaderboard"]
+            print(leaderboard_dict)
+            for key, values in leaderboard_dict.items():
+                if key == "fakeID":
+
+                    if values.get_total_points() == 0:
+                        leaderboard_points = ""
+                    else:
+                        leaderboard_points = values.get_total_points()
         except:
-            print("Error in retrieving game.db.")
+            leaderboard_points = ""
 
-        point_list = generate_points()
+        with shelve.open("database/game.db", "c") as db:
+            try:
+                points_list = db['Points']
 
-        db['Points'] = point_list
+            except:
+                print("Error in retrieving Points.")
 
-        print(db['Points'])
+            if leaderboard_points == "":
+                stayWhile = True
 
-    return render_template("game.html", point_list=point_list)
+                while stayWhile:
+                    count = 0
+                    point_list = generate_points()
+                    for j in point_list:
+
+                        try:
+                            count += 1
+                            if int(list(j.values())[0]) and count == len(point_list):
+                                print("change false")
+                                stayWhile = False
+                        except:
+                            break
+            else:
+                point_list = generate_points()
+
+            db['Points'] = point_list
+
+            print(db['Points'])
+
+    return render_template("game.html", point_list=point_list, points=leaderboard_points)
 
 
 @app.route("/game/<int:key>", methods=["POST"])
 def save_point(key):
 
+    points = ""
+    value = ''
+    multiply = 0
     with shelve.open("database/game.db", "r") as db:
-        points_dict = db['Points']
+        points_list = db['Points']
+
+        for i in points_list:
+            if key == list(i.keys())[0]:
+                value = i.get(key)
+                break
 
         try:
-            points = int(points_dict.get(key))
-
-        except TypeError:
+            points = int(value)
+        except:
             multiplier_dict = {"x5": 5, "x4": 4, "x3": 3, "x2": 2}
 
-            multiplier_dict.get(points_dict.get(key))
-            pass
+            multiply = multiplier_dict.get(value)
+
+        with shelve.open("database/game.db", "c") as db2:
+            game_user_dict = {}
+            try:
+                game_user_dict = db2["Leaderboard"]
+            except:
+                print("Error in retrieving game.db.")
+
+            today = date.today().strftime('%Y-%m-%d')
+            next_day = (datetime.today() + timedelta(days=1)).strftime('%Y-%m-%d')
+
+            if game_user_dict.get("fakeID"):
+                player_status = game_user_dict.get("fakeID")
+            else:
+                player_status = PlayerStatus("fakeID", today, next_day)
+
+            try:
+                if int(points) > 0:
+                    player_status.calculate_total_points(points)
+            except:
+                player_status.calculate_total_points(0, multiply)
+
+            # player_status.set_total_zero()
+
+            game_user_dict[player_status.get_customer_id()] = player_status
+
+            db2["Leaderboard"] = game_user_dict
+
+            print(player_status.get_total_points())
+
+    return redirect(url_for("checkout"))
 
 
 # Admin Side
 @app.route("/admin")
 def admin():
-    from datetime import datetime
+    # from datetime import datetime
     time_now = datetime.now()
 
     sales_dict = {}
@@ -947,22 +1016,7 @@ def admin():
         c_total = 0
     print(store_c)
 
-    forgraphvalue = []
-    for i in range(0, len(salesList)):
-        for j in salesList[i].get_cart()["1"]:
-            c_total += salesList[i].get_cart()["1"][j].get_price()
 
-        for j in salesList[i].get_cart()["2"]:
-            c_total += salesList[i].get_cart()["2"][j].get_price()
-
-        forgraphvalue.append(c_total)
-
-    forgraphlabel = []
-    for k in range(0, len(salesList)):
-        forgraphlabel.append(k)
-
-    labels = forgraphlabel
-    values = forgraphvalue
 
     # getting total sales money
     subtotal = 0
@@ -977,13 +1031,45 @@ def admin():
     except:
         auction_dict = {}
 
-    auction_on = len(auction_dict)
+    today = date.today().strftime('%Y-%m-%d')
+    upcoming = []
+    ongoing = []
+    print(auction_dict)
+    for keys, values in auction_dict.items():
+        start = date.strftime(values.get_start_date(), '%Y-%m-%d')
+        end = date.strftime(values.get_end_date(), '%Y-%m-%d')
+        if start == today or today > start or start <= today and end <= today:
+            ongoing.append(values)
+
+    print(ongoing)
+    auction_on = len(ongoing)
 
     db = shelve.open("database/inventory.db", 'r')
     products_dict = db["Products"]
     db.close()
 
-    return render_template("adminDashboard.html", top4=products_dict, labels=labels, values=values, subtotal=subtotal, date=time_now, auction_on=auction_on, salesList=salesList, store_c=store_c)
+    forgraphvalue = []
+    for i in range(0, len(salesList)):
+        for j in salesList[i].get_cart()["1"]:
+            c_total += salesList[i].get_cart()["1"][j].get_price()
+
+        for j in salesList[i].get_cart()["2"]:
+            c_total += salesList[i].get_cart()["2"][j].get_price()
+
+        forgraphvalue.append(c_total)
+
+    forgraphlabel = []
+    for k in range(1, len(salesList)+1):
+        forgraphlabel.append(k)
+
+    labels = forgraphlabel
+    values = forgraphvalue
+
+    orders_quantity = len(salesList)
+
+    print(salesList)
+
+    return render_template("adminDashboard.html", top4=products_dict, labels=labels, values=values, subtotal=subtotal, date=time_now, auction_on=auction_on, salesList=salesList, store_c=store_c, orders_quantity=orders_quantity)
 
 
 @app.route("/adminAuction")
@@ -1009,7 +1095,6 @@ def admin_auction():
                 ongoing = values
             elif start > today and end > today:
                 upcoming.append(values)
-
     return render_template("adminAuction.html", ongoing=ongoing, upcoming=upcoming)
 
 

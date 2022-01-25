@@ -109,12 +109,12 @@ class CreatePaymentForm(Form):
 
 
 class CreateAuctionForm(Form):
-    product_name = StringField('', [validators.Length(min=1, max=200), validators.DataRequired()], id="pName", render_kw={"placeholder": "Product Name"})
-    base_amount = IntegerField('', [validators.NumberRange(min=1, max=100, message="The value should be between 1 - 100"), validators.DataRequired()], id="bAmt", render_kw={"placeholder": "Base Amount"})
-    minimum_amount = IntegerField('', [validators.NumberRange(min=10, max=100, message="The value should be between 10 - 100"), validators.DataRequired()], id="mAmt", render_kw={"placeholder": "Minimum Amount"})
+    product_name = StringField('', [validators.Length(min=1, max=200, message="The length needs to be between 1 and 200"), validators.DataRequired(message="Product Name cannot be empty")], id="pName", render_kw={"placeholder": "Product Name"})
+    base_amount = IntegerField('', [validators.NumberRange(min=1, max=100, message="The value should be between 1 - 100"), validators.DataRequired(message="Base Amount cannot be empty")], id="bAmt", render_kw={"placeholder": "Base Amount"})
+    minimum_amount = IntegerField('', [validators.NumberRange(min=10, max=100, message="The value should be between 10 - 100"), validators.DataRequired(message="Minimum Amount cannot be empty")], id="mAmt", render_kw={"placeholder": "Minimum Amount"})
     start_date = DateField('', format='%Y-%m-%d', render_kw={"placeholder": "DD/MM/YYYY"})
     end_date = DateField('', format='%Y-%m-%d', render_kw={"placeholder": "DD/MM/YYYY"})
-    description = TextAreaField('', [validators.DataRequired()], id="desc",  render_kw={"rows": "5", "cols": "30", "placeholder": "Enter prduct description"})
+    description = TextAreaField('', [validators.DataRequired(message="Description cannot be empty")], id="desc",  render_kw={"rows": "5", "cols": "30", "placeholder": "Enter prduct description"})
 
 
 class CreateBidForm(Form):

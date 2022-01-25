@@ -3,9 +3,100 @@
 
 {% block css %}
     <link rel="stylesheet" type="text/css" href="../static/css/adminBase.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/adminOrder.css">
 {% endblock %}
 
 {% block bodyContent %}
-    <h1>Orders</h1>
+    <div id="admin_order_title">
+        <h1>Orders</h1>
+        <div class="search_bar">
+            <form>
+                <input type="search" placeholder="Search" aria-label="Search">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="orders_container">
+        <div class="top_container">
+            <button>All</button>
+            <button>Pending</button>
+            <button>Shipping</button>
+        </div>
+
+        <div class="bottom_container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="user_order">
+                        <div class="user_order_top">
+                            <div class="user_order_username">
+                                <p>Username 1</p>
+                            </div>
+                            <div class="user_order_orderId">
+                                <p>Order ID: <span>00000000</span></p>
+                            </div>
+                        </div>
+                        <div class="user_order_center">
+                            <div class="user_order_details">
+                                <img class="user_order_img" src="../static/images/blackBag2.png" alt="Product Image">
+                                <p class="user_order_product_name">Product Name</p>
+                                <p class="user_order_quantity">x1</p>
+                            </div>
+                            <div class="user_order_view_more">
+                                <span>View More</span>
+                            </div>
+                        </div>
+                        <div class="user_order_bottom">
+                            <div class="user_order_bottom_btn">
+                                <button class="arrange_btn">Arrange Shipment</button>
+                            </div>
+                            <div class="user_order_bottom_btn">
+                                <button class="view_btn">view Detail</button>
+                            </div>
+                            <div class="user_order_bottom_btn">
+                                <button class="cancel_btn">Cancel Order</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-6">
+                    <div class="user_order">
+                        <div class="user_order_top">
+                            <div class="user_order_username">
+                                <p>Username 1</p>
+                            </div>
+                            <div class="user_order_orderId">
+                                <p>Order ID: <span>00000000</span></p>
+                            </div>
+                        </div>
+                        <div class="user_order_center">
+                            <div class="user_order_details">
+                                <img class="user_order_img" src="../static/images/blackBag2.png" alt="Product Image">
+                                <p class="user_order_product_name">Product Name</p>
+                                <p class="user_order_quantity">x1</p>
+                            </div>
+                            <div class="user_order_view_more">
+                                <span>View More</span>
+                            </div>
+                        </div>
+                        <div class="user_order_bottom">
+                            <div class="user_order_bottom_btn">
+                                <button class="arrange_btn">Arrange Shipment</button>
+                            </div>
+                            <div class="user_order_bottom_btn">
+                                <button class="view_btn">view Detail</button>
+                            </div>
+                            <div class="user_order_bottom_btn">
+                                <button class="cancel_btn">Cancel Order</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
