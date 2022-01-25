@@ -23,16 +23,16 @@
                 {{ render_field(form.name, class="form-product-field") }}
         </div>
             <br>
-        <div class="form-product-field-number">
-                {{ render_field(form.price, class="form-product-field-number") }}
+        <div class="form-product-field">
+                {{ render_field(form.price, class="form-product-field") }}
         </div>
             <br>
-        <div class="form-product-field-number">
-                {{ render_field(form.quantity, class="form-product-field-number") }}
+        <div class="form-product-field">
+                {{ render_field(form.quantity, class="form-product-field") }}
         </div>
             <br>
-        <div class="form-product-field-number">
-                {{ render_field(form.discount, class="form-product-field-number") }}
+        <div class="form-product-field">
+                {{ render_field(form.discount, class="form-product-field") }}
         </div>
             <br>
         <div class="form-product-field">
@@ -41,6 +41,9 @@
             <br>
         <div class="form-product-field">
             {{ render_field(form.description, class="form-product-field") }}
+        </div>
+        <div class="form-product-field-top">
+            {{ render_field(form.top, class="form-product-field") }}
         </div>
             <br>
         <input type="submit" value="Save and update" class="submit-product">

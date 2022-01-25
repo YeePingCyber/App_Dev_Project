@@ -3,7 +3,7 @@ font-size: 200%;
 margin-left: 3%;
 }
 .container-product{
-margin-left: 10%;
+margin-left: 20%;
 margin-right: 10%;
 margin-bottom: 10%;
 text-align: center;
@@ -15,14 +15,6 @@ width: 50%;
 border-radius: 5px;
 margin: auto;
 font-size: 110%;
-text-align: center;
-}
-
-.form-product-field-number{
-background-color: transparent;
-width: 50%;
-border-radius: 5px;
-margin: auto;
 text-align: center;
 }
 
@@ -68,4 +60,22 @@ label{
     border: none;
     color: white;
     border-radius: 8px;
+    margin-right: 0%;
+    display: inline-block;
+}
+
+.cancel-product {
+    padding: 1% 2% 1% 2%;
+    background-color: black;
+    border: none;
+    color: white;
+    border-radius: 8px;
+    margin-right: 1%;
+    display: inline-block;
+}
+
+.form-product-field-top{
+margin: 0 auto;
+    height: 140%;
+    width: 50%;
 }

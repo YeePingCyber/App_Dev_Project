@@ -48,7 +48,7 @@
                                 {{ render_field(form.price, value=product[x].get_price()) }}
                                 {{ render_field(form.quantity, value=1) }}
                                 {{ render_field(form.category, value=product[x].get_category()) }}
-                                {{ render_field(form.discount, value=0) }}
+                                {{ render_field(form.discount, value=product[x].get_discount()) }}
                                 {{ render_field(form.top, value=product[x].get_top()) }}
                                 <input type=submit value="Add to Cart">
                             </form>
