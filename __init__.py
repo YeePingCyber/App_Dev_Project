@@ -699,11 +699,6 @@ def bag2():
 
 @app.route("/auction", methods=['GET', 'POST'])
 def auction():
-    auction_dict = {}
-    db = shelve.open('database/auction.db', 'c')
-    auction_dict = db["Auction"]
-    db.close()
-
     bid_dict = {}
     db = shelve.open('database/UserBid.db', 'c')
 
@@ -723,8 +718,11 @@ def auction():
         user = bid_dict.get(key)
         bid_list.append(user)
 
-    #print(bid_list)
 
+    auction_dict = {}
+    db = shelve.open('database/auction.db', 'c')
+    auction_dict = db["Auction"]
+    db.close()
 
     today = date.today().strftime('%Y-%m-%d')
     ongoing = ""

@@ -28,15 +28,15 @@
 
                 <div class="col-md-6">
                     <div class="product-info">
-                            <h3>{{ ongoing.get_name() }}</h3>
-                            <p id="title">White Lyocell Canvas Bag</p>
+                            <h3 class="product-title">{{ ongoing.get_name() }}</h3>
+                            <p class="product-subtitle">{{ ongoing.get_description() }}</p>
                             <table class="bid-table">
                                 <tr>
-                                    <td>Sale ends at {{ ongoing.get_end_date() }}</td>
+                                    <td id="bidLine"><p class="product-text">Sale ends at {{ ongoing.get_end_date() }}</p></td>
                                 </tr>
                                 <tr>
-                                    <td rowspan="3">Minimum Bid:<br>
-                                        {{ ongoing.get_minimum_amount() }}<br>
+                                    <td rowspan="3" class="product-text">Minimum Bid:<br>
+                                        <p id="minAmt">{{ ongoing.get_minimum_amount() }}</p>
                                         <a class="btn btn-primary" href="/auctionForm" role="button">
                                             Make a bid
                                         </a>
@@ -45,27 +45,42 @@
                                 </tr>
                             </table>
 
-                        <form>
-                            <table class="offer-table">
-                                <tr><th>Price</th><th>Expiration</th><th>From</th><th>Delete</th><th>Update</th></tr>
-                                {% for user in bid_list %}
-                                <tr>
-                                    <td>{{ user.get_bidAmount() }}</td>
-                                    <td>Placeholder Date</td>
-                                    <td>{{ user.get_bidUser() }}
-                                    </td>
-                                    <td>
-                                        <form action="{{url_for('delete_bid', id=user.get_bidId())}}" method="POST">
-                                            <button type="submit" class="btn btn-danger">Delete</button>
-                                        </form>
-                                    </td>
-                                    <td>
-                                        <a href="/updateBid/{{ user.get_bidId() }}" class="btn btn-warning">Update</a>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </table>
-                        </form>
+                    <div class="accordion" id="offer-table">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#offer" aria-expanded="true" aria-controls="collapseOne">
+                            Offers
+                            </button>
+                            </h2>
+                            <div id="offer" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#offer-table">
+                            <div class="accordion-body">
+                                <form>
+                                    <table class="offer-table">
+                                        <tr><th>Price</th><th>Expiration</th><th>From</th><th>Delete</th><th>Update</th></tr>
+                                        {% for user in bid_list %}
+                                        <tr>
+                                            <td class="product-text">{{ user.get_bidAmount() }}</td>
+                                            <td class="product-text">Placeholder Date</td>
+                                            <td class="product-text">{{ user.get_bidUser() }}
+                                            </td>
+                                            <td>
+                                            <form action="{{url_for('delete_bid', id=user.get_bidId())}}" method="POST">
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </form>
+                                            </td>
+                                            <td>
+                                            <a href="/updateBid/{{ user.get_bidId() }}" class="btn btn-warning">Update</a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </table>
+                                </form>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+
+
                     </div>
                 </div>
             </div>
