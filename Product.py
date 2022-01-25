@@ -3,14 +3,14 @@ import uuid
 
 
 class Product(Goods):
-    def __init__(self, name, price, quantity, category, discount, description):
+    def __init__(self, name, price, quantity, category, discount, description, top):
         super().__init__(name, description, price, quantity)
         self.product_id = self.generate_product_id()
         self.__discount = discount
         self.__discounted_price = price - price * self.__discount
         self.__category = category
         self.__sold_units = 0
-        self.__top = 0
+        self.__top = top
 
     def set_category(self, category):
         self.__category = category

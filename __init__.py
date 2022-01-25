@@ -21,17 +21,12 @@ from createProduct import load_product
 app = Flask(__name__)
 app.secret_key = "abc"
 
-db = shelve.open('database/inventory.db', 'r')
-products_dict = db['Products']
-db.close()
-product_list = []
-for products in products_dict:
-    product = products_dict[products]
-    product_list.append(product)
-
 # Customer Side
 @app.route("/")
 def home():
+    db = shelve.open("database/inventory.db", 'w')
+    products_dict = db["Products"]
+    db.close()
     return render_template("home.html", top4=products_dict)
 
 
@@ -578,7 +573,8 @@ def bag1():
 
         addtocart = Addtocart(addtocartform.name.data, addtocartform.description.data,
                               int(addtocartform.price.data), int(addtocartform.quantity.data),
-                              addtocartform.category.data, int(addtocartform.discount.data))
+                              addtocartform.category.data, int(addtocartform.discount.data),
+                              int(addtocartform.top.data))
 
         # key 0 stores product A, key 1 stores product B... {1:{},2:{}}
         if addtocart.get_name() == addtocartform.name.data:
@@ -613,7 +609,8 @@ def bag2():
 
         addtocart = Addtocart(addtocartform.name.data, addtocartform.description.data,
                               int(addtocartform.price.data), int(addtocartform.quantity.data),
-                              addtocartform.category.data, int(addtocartform.discount.data))
+                              addtocartform.category.data, int(addtocartform.discount.data),
+                              int(addtocartform.top.data))
 
         if addtocart.get_name() == addtocartform.name.data:
             productB[addtocart.get_id()] = addtocart
@@ -907,6 +904,9 @@ def admin():
         forgraph.append(c_total)
     print(forgraph)
 
+    labels = ["A", "B", "C", "D", "E", "F"]
+    values = forgraph
+
     # getting total sales money
     subtotal = 0
     for total in range(0, len(cartList)):
@@ -922,8 +922,10 @@ def admin():
 
     auction_on = len(auction_dict)
 
-    labels = ["A", "B", "C", "D", "E", "F"]
-    values = forgraph
+    db = shelve.open("database/inventory.db", 'w')
+    products_dict = db["Products"]
+    db.close()
+
     return render_template("adminDashboard.html", top4=products_dict, labels=labels, values=values, subtotal=subtotal, date=time_now, auction_on=auction_on, salesList=salesList, store_c=store_c)
 
 
@@ -1194,7 +1196,7 @@ def admin_product_creation():
 
         new_product = Product(create_product_form.name.data, int(create_product_form.price.data),
                           int(create_product_form.quantity.data), create_product_form.category.data,
-                          int(create_product_form.discount.data), create_product_form.description.data)
+                          int(create_product_form.discount.data), create_product_form.description.data, 0)
         products_dict[new_product.get_product_id()] = new_product
         print(new_product.get_product_id())
         db['Products'] = products_dict
@@ -1216,6 +1218,8 @@ def update_product(id):
         products_dict.get(id).set_discount(int(update_product_form.discount.data))
         products_dict.get(id).set_category(update_product_form.category.data)
         products_dict.get(id).set_description(update_product_form.description.data)
+        if update_product_form.top.data:
+            products_dict.get(id).set_top(1)
         db["Products"] = products_dict
         db.close()
         return redirect(url_for("admin_product_management"))
