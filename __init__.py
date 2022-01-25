@@ -153,7 +153,7 @@ def updateAddCart(id):
     cartList.append(productBList)
 
     if request.method == "POST":
-        addtocart = Addtocart(cartList[id][0].get_name(),cartList[id][0].get_description(),cartList[id][0].get_price(), 1,cartList[id][0].get_category(), cartList[id][0].get_discount())
+        addtocart = Addtocart(cartList[id][0].get_name(),cartList[id][0].get_description(),cartList[id][0].get_price(), 1,cartList[id][0].get_category(), cartList[id][0].get_discount(), cartList[id][0].get_top())
         if id == 0:
             productA[addtocart.get_id()] = addtocart
             cart_dict[str(id + 1)].update(productA)
@@ -552,6 +552,14 @@ def done_clear():
 def mainshop():
     return render_template("mainshop.html")
 
+db = shelve.open("database/inventory.db", 'w')
+products_dict = db["Products"]
+db.close()
+
+product_list = []
+for i in products_dict:
+    product_list.append(products_dict[i])
+
 
 @app.route("/bag1", methods=['GET', 'POST'])
 def bag1():
@@ -881,7 +889,6 @@ def admin():
     # get total of each customer purchase
     c_total = 0
     store_c = []
-    forgraph = []
     for i in range(0, len(salesList)):
         for j in salesList[i].get_cart()["1"]:
             c_total += salesList[i].get_cart()["1"][j].get_price()
@@ -893,7 +900,7 @@ def admin():
         c_total = 0
     print(store_c)
 
-    forgraph = []
+    forgraphvalue = []
     for i in range(0, len(salesList)):
         for j in salesList[i].get_cart()["1"]:
             c_total += salesList[i].get_cart()["1"][j].get_price()
@@ -901,11 +908,14 @@ def admin():
         for j in salesList[i].get_cart()["2"]:
             c_total += salesList[i].get_cart()["2"][j].get_price()
 
-        forgraph.append(c_total)
-    print(forgraph)
+        forgraphvalue.append(c_total)
 
-    labels = ["A", "B", "C", "D", "E", "F"]
-    values = forgraph
+    forgraphlabel = []
+    for k in range(0, len(salesList)):
+        forgraphlabel.append(k)
+
+    labels = forgraphlabel
+    values = forgraphvalue
 
     # getting total sales money
     subtotal = 0
@@ -922,7 +932,7 @@ def admin():
 
     auction_on = len(auction_dict)
 
-    db = shelve.open("database/inventory.db", 'w')
+    db = shelve.open("database/inventory.db", 'r')
     products_dict = db["Products"]
     db.close()
 
