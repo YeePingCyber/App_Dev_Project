@@ -779,6 +779,39 @@ def delete_bid(id):
     return redirect(url_for('auction'))
 
 
+@app.route("/updateBid/<id>/", methods=['GET', 'POST'])
+def update_bid(id):
+    update_bid_form = CreateBidForm(request.form)
+    if request.method == 'POST' and update_bid_form.validate():
+        bid_dict = {}
+        db = shelve.open('database/UserBid.db', 'w')
+        bid_dict = db['UserBid']
+
+        bid = bid_dict.get(id)
+        bid.set_bidAmount(update_bid_form.bid_amount.data)
+        bid.set_bidUser(update_bid_form.bid_user.data)
+
+        db['UserBid'] = bid_dict
+        db.close()
+        for x in bid_dict:
+            print(x)
+            val = bid_dict.get(x)
+            print(val)
+
+        return redirect(url_for('auction'))
+    else:
+        bid_dict = {}
+        db = shelve.open('database/UserBid.db', 'r')
+        bid_dict = db['UserBid']
+        db.close()
+        customer = bid_dict.get(id)
+        update_bid_form.bid_amount.data = customer.get_bidAmount()
+        update_bid_form.bid_user.data = customer.get_bidUser()
+
+        return render_template('updateBid.html', form=update_bid_form)
+
+
+
 randomOTP = random.randint(111111, 999999)
 
 @app.route("/forgetPassword", methods=["POST", "GET"])

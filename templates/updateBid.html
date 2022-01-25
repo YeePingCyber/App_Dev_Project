@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Tom Patterson - Update Bid{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="../../static/css/base.css">
+    <link rel="stylesheet" type="text/css" href="../../static/css/auctionForm.css">
+{% endblock %}
+
+{% block bodyContent %}
+{% from "includes/formHelper.html" import render_field %}
+<br>
+<br>
+<div id="container">
+    <form method="post">
+        <h1>Create Bid</h1>
+        <br><br>
+        <div class="form-container" id="bidAmount">
+            <div>
+              {{ render_field(form.bid_amount, class="form-container") }}
+            </div>
+        </div>
+        <br><br><br>
+        <div class="form-container" id="bidUser">
+            <div>
+              {{ render_field(form.bid_user, class="form-container") }}
+            </div>
+        </div>
+        <br><br><br>
+        <button type="submit" value="Submit" class="submit-login">Submit</button>
+    </form>
+
+    </div>
+{% endblock %}

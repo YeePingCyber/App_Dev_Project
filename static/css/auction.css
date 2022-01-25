@@ -42,7 +42,17 @@
         border: 1px solid black;
     }
 
+    .offer-table {
+        width: 70%;
+        margin-top: 2vh;
+        margin-bottom: 2vh;
+    }
 
+    .offer-table td {
+        border: 1px solid black;
+        padding: 3px;
+        text-align: center;
+    }
     /* --------------------------------------------------------------------------
         4. Other FreeLance Work
     -------------------------------------------------------------------------- */
