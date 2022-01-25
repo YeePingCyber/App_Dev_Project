@@ -26,5 +26,5 @@ class UserBid:
         return self.__bidId
 
     def __str__(self):
-        s = "bid_amount for name {} == {}".format(self.get_bidUser(), self.get_bidAmount())
+        s = "bid_amount for name {}, id {} == {}".format(self.get_bidUser(), self.__bidId, self.get_bidAmount())
         return s

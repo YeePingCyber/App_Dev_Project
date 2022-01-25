@@ -689,7 +689,7 @@ def auction():
     db.close()
 
     bid_dict = {}
-    db = shelve.open('database/UserBid.db', 'r')
+    db = shelve.open('database/UserBid.db', 'c')
 
     try:
         bid_dict = db['UserBid']
@@ -703,11 +703,12 @@ def auction():
 
     bid_list = []
     for key in bid_dict:
+        #bid_dict.pop()
         user = bid_dict.get(key)
         bid_list.append(user)
 
     #print(bid_list)
-    bid_list.pop()
+
 
     today = date.today().strftime('%Y-%m-%d')
     ongoing = ""
@@ -725,7 +726,6 @@ def auction():
 @app.route("/auctionForm", methods=['GET', 'POST'])
 def auctionForm():
     create_bid_form = CreateBidForm(request.form)
-    print(create_bid_form)
     print("JUST PRINT SOMETHING")
     if request.method == 'POST' and create_bid_form.validate():
         bid_dict = {}
@@ -737,7 +737,7 @@ def auctionForm():
             print("Error in retrieving userbid.db.")
 
         userbidID = UserBid(create_bid_form.bid_amount.data, create_bid_form.bid_user.data)
-        #print(userbidID)
+        print(userbidID)
         bid_dict[userbidID.get_bidId()] = userbidID
         db['UserBid'] = bid_dict
 
