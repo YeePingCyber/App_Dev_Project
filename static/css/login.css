@@ -73,3 +73,12 @@ width: 15%;
 color:black;
 font-weight: bold;
 }
+
+.form-login-field-file{
+background-color: transparent;
+border: none;
+width: 50%;
+border-radius: 1px;
+margin: 0 auto;
+
+}

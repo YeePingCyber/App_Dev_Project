@@ -17,9 +17,20 @@ from Game import PlayerStatus, generate_points
 from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreateShipmentForm, CreatePaymentForm, CreateProductForm, CreateAddCartForm, CreateAuctionForm, UpdateAdminForm, CreateBidForm, CreateForgetPassForm
 # create product function
 from createProduct import load_product
+import os
 
 app = Flask(__name__)
 app.secret_key = "abc"
+
+
+def save_picture(form_picture, id):
+    f_name, f_ext = os.path.splitext(form_picture.filename)
+    picture_name = str(id) + str(f_ext)
+    picture_path = os.path.join(app.root_path, "static", picture_name)
+    form_picture.save(picture_path)
+    print("saved")
+    return picture_name
+
 
 # Customer Side
 @app.route("/")
@@ -55,6 +66,7 @@ def create_customer():
     errortwo = ""
     code = 0
     create_customer_form = CreateCustomerForm(request.form)
+
     if request.method == 'POST' and create_customer_form.validate():
         user_dict = {}
         db = shelve.open('database/user.db','r')
@@ -74,6 +86,10 @@ def create_customer():
             new_customer = Customer(create_customer_form.first_name.data, create_customer_form.last_name.data,
                                     create_customer_form.birthdate.data, create_customer_form.email.data,
                                     create_customer_form.register_password.data)
+            if create_customer_form.profile_pic.data:
+                print("Saved?")
+                picture_file = save_picture(create_customer_form.profile_pic.data, new_customer.get_customer_id())
+                print("Def saved")
             customer_dict[new_customer.get_customer_id()] = new_customer
             print(new_customer.get_password())
             db['Users'] = customer_dict

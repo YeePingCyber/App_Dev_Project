@@ -1,20 +1,43 @@
 from wtforms import Form, StringField, RadioField, SelectField, TextAreaField, HiddenField, validators
-from wtforms.fields import EmailField, DateField, FloatField, IntegerField, PasswordField, BooleanField
+from wtforms.fields import EmailField, DateField, FloatField, IntegerField, PasswordField, BooleanField, FileField
+from wtforms.validators import ValidationError, NumberRange
 import shelve
+import os
 from Product import Product
 
-
+def validate_password(form, register_password):
+    special_count = 0
+    char_list = []
+    char_list = list(register_password.data)
+    print(char_list)
+    special_list = ['!','@','#','$','%','&','*']
+    for char in special_list:
+        for char2 in char_list:
+            if char == char2:
+                print(char)
+                special_count += 1
+        print(special_count)
+    if special_count == 0:
+        raise ValidationError('Password must contain a mix of letters, numbers and special characters')
 class CreateCustomerForm(Form):
-    first_name = StringField('', [validators.Length(min=1, max=150), validators.DataRequired()],
+
+    def validate_image(form, image):
+        ext = os.path.splitext(image.filename)[1]
+        valid_ext = ['.jpg','.png','.jpeg']
+        if ext not in valid_ext:
+            raise ValidationError('Unsupported filetype ')
+
+    first_name = StringField('', [validators.Length(min=1, max=50), validators.DataRequired()],
                              render_kw={"placeholder": "First Name"})
-    last_name = StringField('', [validators.Length(min=1, max=150), validators.DataRequired()],
+    last_name = StringField('', [validators.Length(min=1, max=50), validators.DataRequired()],
                             render_kw={"placeholder": "Last Name"})
     email = EmailField('', [validators.Email(), validators.DataRequired()], render_kw={"placeholder": "Email"})
     birthdate = DateField('', format='%Y-%m-%d', render_kw={"placeholder": "DD/MM/YYYY"})
-    register_password = PasswordField('', [validators.Length(min=8, max=15), validators.DataRequired(), validators.EqualTo('confirm_password', message='Passwords must match')],
+    register_password = PasswordField('', [validators.Length(min=8, max=15), validators.DataRequired(), validators.EqualTo('confirm_password', message='Passwords must match'), validate_password],
                                       render_kw={"placeholder": "Password"})
     confirm_password = PasswordField('', [validators.Length(min=8, max=15), validators.DataRequired()],
                                      render_kw={"placeholder": "Confirm Password"})
+    profile_pic = FileField('')
 
 
 class CreateLoginForm(Form):
@@ -27,18 +50,18 @@ class CreateLoginForm(Form):
 class CreateProductForm(Form):
     name = StringField('Name: ', [validators.Length(min=1, max=70), validators.DataRequired()],  render_kw={"placeholder": "Product Name"})
     price = FloatField('Price: ', [validators.DataRequired()],  render_kw={"placeholder": "Product price"})
-    quantity = IntegerField('Quantity: ', [validators.DataRequired()],  render_kw={"placeholder": "Quantity"})
+    quantity = IntegerField('Quantity: ', [validators.DataRequired(), NumberRange(min=1, max=50)],  render_kw={"placeholder": "Quantity"})
     category = StringField('Category: ', [validators.Length(min=1, max=150), validators.DataRequired()],  render_kw={"placeholder": "Category"})
-    discount = FloatField('Discount: ', [validators.DataRequired()],  render_kw={"placeholder": "Discount"})
+    discount = FloatField('Discount: ', [validators.DataRequired(), NumberRange(min=1, max=99)],  render_kw={"placeholder": "Discount"})
     description = TextAreaField('Description: ', [validators.Length(min=1, max=300), validators.DataRequired()],  render_kw={"placeholder": "Description"})
     top = BooleanField('Top product')
 
 
 class CreateAdminForm(Form):
-    first_name = StringField('', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "First Name"})
-    last_name = StringField('', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "Last Name"})
+    first_name = StringField('', [validators.Length(min=1, max=50), validators.DataRequired()], render_kw={"placeholder": "First Name"})
+    last_name = StringField('', [validators.Length(min=1, max=50), validators.DataRequired()], render_kw={"placeholder": "Last Name"})
     email = EmailField('', [validators.Email(), validators.DataRequired()], render_kw={"placeholder": "Email"})
-    register_password = PasswordField('', [validators.Length(min=8, max=15), validators.DataRequired(),validators.EqualTo('confirm_password', message='Passwords must match')],render_kw={"placeholder": "Password"})
+    register_password = PasswordField('', [validators.Length(min=8, max=15), validators.DataRequired(),validators.EqualTo('confirm_password', message='Passwords must match'),validate_password],render_kw={"placeholder": "Password"})
     confirm_password = PasswordField('', [validators.Length(min=8, max=15), validators.DataRequired()],render_kw={"placeholder": "Confirm Password"})
     employee_id = StringField('', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "Employee ID"})
 
@@ -47,7 +70,7 @@ class UpdateAdminForm(Form):
     first_name = StringField('', [validators.Length(min=1, max=150)], render_kw={"placeholder": "First Name"})
     last_name = StringField('', [validators.Length(min=1, max=150)], render_kw={"placeholder": "Last Name"})
     email = EmailField('', [validators.Email()], render_kw={"placeholder": "Email"})
-    current_password = PasswordField('',[validators.Length(min=8, max=15), validators.Optional(strip_whitespace=True)],render_kw={"placeholder": "Current Password"})
+    current_password = PasswordField('',[validators.Length(min=8, max=15), validators.Optional(strip_whitespace=True), validate_password],render_kw={"placeholder": "Current Password"})
     new_password = PasswordField('',[validators.Length(min=8, max=15), validators.Optional(strip_whitespace=True)],render_kw={"placeholder": "New Password"})
     employee_id = StringField('', [validators.Length(min=1, max=150)], render_kw={"placeholder": "Employee ID"})
 

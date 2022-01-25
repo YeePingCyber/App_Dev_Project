@@ -23,13 +23,14 @@ width:40%;
 display: inline-block;
 margin-left: 6%;
 border: 1px solid black;
+margin-bottom: 2%;
 }
 
 .product-pic{
 float: left;
 width:40%;
 height:90%;
-box-shadow: 0px 5px 20px -2px gray;
+box-shadow: 0px 3px 5px -2px gray;
 margin: 1.5% 1.5% 1.5% 1.5%;
 }
 
