@@ -1283,6 +1283,10 @@ def update_admin(id):
             admin.set_last_name(update_admin_form.last_name.data)
             admin.set_email(update_admin_form.email.data)
             admin.set_employee_id(update_admin_form.employee_id.data)
+            if update_admin_form.profile_pic.data:
+                print("Saved?")
+                picture_file = save_picture(update_admin_form.profile_pic.data, admin.get_admin_id())
+                print("Def saved")
             db['Users'] = users_dict
             db.close()
             return redirect(url_for('admin_admin_management'))
@@ -1293,6 +1297,10 @@ def update_admin(id):
                 admin.set_email(update_admin_form.email.data)
                 admin.set_employee_id(update_admin_form.employee_id.data)
                 admin.set_password(update_admin_form.new_password.data)
+                if update_admin_form.profile_pic.data:
+                    print("Saved?")
+                    picture_file = save_picture(update_admin_form.profile_pic.data, admin.get_admin_id())
+                    print("Def saved")
                 db['Users'] = users_dict
                 db.close()
                 return redirect(url_for('admin_admin_management'))
