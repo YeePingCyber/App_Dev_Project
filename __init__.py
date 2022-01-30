@@ -882,52 +882,58 @@ def forget_password():
 
 @app.route("/game")
 def play_game():
+    try:
+        if session["customer_session"] != "":
+            with shelve.open("database/game.db", "c") as db:
 
-    with shelve.open("database/game.db", "c") as db:
+                try:
+                    leaderboard_dict = db["Leaderboard"]
+                    print(leaderboard_dict)
+                    for key, values in leaderboard_dict.items():
+                        if key == session["customer_session"]:
 
-        try:
-            leaderboard_dict = db["Leaderboard"]
-            print(leaderboard_dict)
-            for key, values in leaderboard_dict.items():
-                if key == "fakeID":
+                            if values.get_total_points() == 0:
+                                leaderboard_points = ""
+                            else:
+                                leaderboard_points = values.get_total_points()
+                        else:
+                            leaderboard_points = ""
+                except:
+                    leaderboard_points = ""
 
-                    if values.get_total_points() == 0:
-                        leaderboard_points = ""
+                with shelve.open("database/game.db", "c") as db:
+
+                    try:
+                        points_list = db['Points']
+                    except:
+                        print("Error in retrieving Points.")
+
+                    if leaderboard_points == "":
+                        stayWhile = True
+
+                        while stayWhile:
+                            count = 0
+
+                            points_list = generate_points()
+
+                            for j in points_list:
+
+                                try:
+                                    count += 1
+                                    if int(list(j.values())[0]) and count == len(points_list):
+                                        print("change false")
+                                        stayWhile = False
+                                except:
+                                    break
                     else:
-                        leaderboard_points = values.get_total_points()
-        except:
-            leaderboard_points = ""
+                        points_list = generate_points()
 
-        with shelve.open("database/game.db", "c") as db:
-            try:
-                points_list = db['Points']
+                    db['Points'] = points_list
 
-            except:
-                print("Error in retrieving Points.")
+            return render_template("game.html", points_list=points_list, points=leaderboard_points)
 
-            if leaderboard_points == "":
-                stayWhile = True
-
-                while stayWhile:
-                    count = 0
-                    point_list = generate_points()
-                    for j in point_list:
-
-                        try:
-                            count += 1
-                            if int(list(j.values())[0]) and count == len(point_list):
-                                print("change false")
-                                stayWhile = False
-                        except:
-                            break
-            else:
-                point_list = generate_points()
-
-            db['Points'] = point_list
-
-            print(db['Points'])
-
-    return render_template("game.html", point_list=point_list, points=leaderboard_points)
+    except KeyError:
+        return redirect(url_for("log_in"))
 
 
 @app.route("/game/<int:key>", methods=["POST"])
@@ -961,10 +967,10 @@ def save_point(key):
             today = date.today().strftime('%Y-%m-%d')
             next_day = (datetime.today() + timedelta(days=1)).strftime('%Y-%m-%d')
 
-            if game_user_dict.get("fakeID"):
-                player_status = game_user_dict.get("fakeID")
+            if game_user_dict.get(session["customer_session"]):
+                player_status = game_user_dict.get(session["customer_session"])
             else:
-                player_status = PlayerStatus("fakeID", today, next_day)
+                player_status = PlayerStatus(session["customer_session"], today, next_day)
 
             try:
                 if int(points) > 0:

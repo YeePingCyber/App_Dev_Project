@@ -17,8 +17,22 @@
                 <a href="/checkout" >< Back</a>
             </div>
             <div>
-                <p>Points: <span>000000</span></p>
-                <p>Credits: <span>{{ points }}</span></p>
+                <p>
+                    Points:
+                    <span>
+                        {% if points == 0 or points == "" %}
+                            0
+                        {% else %}
+                            {{ points }}
+                        {% endif %}
+                    </span>
+                </p>
+                <p>
+                    Credits:
+                    <span>
+                        0
+                    </span>
+                </p>
             </div>
         </div>
         <div class="top_right_container">
@@ -102,8 +116,8 @@
                 </div>
                 <div class="card_back">
                     <h4>You earned...</h4>
-                    <p id="card_back_para1">{{ (point_list[0].values()|list)[0] }} points</p>
-                    <form action="/game/{{ (point_list[0].keys()|list)[0] }}" method="POST">
+                    <p id="card_back_para1">{{ (points_list[0].values()|list)[0] }} points</p>
+                    <form action="/game/{{ (points_list[0].keys()|list)[0] }}" method="POST">
                         <button class="claim_btn" type="submit">Claim</button>
                     </form>
 
@@ -128,8 +142,8 @@
                 </div>
                 <div class="card_back">
                     <h4>You earned...</h4>
-                    <p id="card_back_para2">{{ (point_list[1].values()|list)[0] }} points</p>
-                    <form action="/game/{{ (point_list[1].keys()|list)[0] }}" method="POST">
+                    <p id="card_back_para2">{{ (points_list[1].values()|list)[0] }} points</p>
+                    <form action="/game/{{ (points_list[1].keys()|list)[0] }}" method="POST">
                         <button class="claim_btn" type="submit">Claim</button>
                     </form>
                 </div>
@@ -154,8 +168,8 @@
 
                 <div class="card_back">
                     <h4>You earned...</h4>
-                    <p id="card_back_para3">{{ (point_list[2].values()|list)[0] }} points</p>
-                    <form action="/game/{{ (point_list[2].keys()|list)[0] }}" method="POST">
+                    <p id="card_back_para3">{{ (points_list[2].values()|list)[0] }} points</p>
+                    <form action="/game/{{ (points_list[2].keys()|list)[0] }}" method="POST">
                         <button class="claim_btn" type="submit">Claim</button>
                     </form>
                 </div>
