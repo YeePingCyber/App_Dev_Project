@@ -989,6 +989,11 @@ def save_point(key):
     return redirect(url_for("checkout"))
 
 
+@app.route("/leaderboard")
+def leaderboard():
+    return render_template("leaderboard.html")
+
+
 # Admin Side
 @app.route("/admin")
 def admin():
