@@ -56,7 +56,7 @@
     /* --------------------------------------------------------------------------
         3. leaderboard bottom container
     -------------------------------------------------------------------------- */
-    .leader_bottom_container{
+    .leaderboard_bottom_container{
         display:flex;
         width: 100%;
         margin-top: 2%;
@@ -123,4 +123,8 @@
 
     #rewards_table{
         width: 100%;
+    }
+
+    .rank_place{
+        font-weight: bold;
     }
