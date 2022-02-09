@@ -1,5 +1,5 @@
 from flask import Flask, render_template, flash
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 import shelve
 import random
 import hashlib as hl
@@ -52,8 +52,25 @@ def log_in():
         for user in users_dict:
             if users_dict[user].get_email().upper() == create_log_in_form.login_email.data.upper() and users_dict[user].get_password() == hashed_password:
                 if isinstance(users_dict[user], Customer):
+
+                    # Session for customer
+                    session["customer_session"] = users_dict[user].get_customer_id()
+                    print(session["customer_session"])
+
+                    # Delete Customer session
+                    # session.pop("customer_session")
+                    # print(session["customer_session"])
+
                     return redirect(url_for('home'))
                 elif isinstance(users_dict[user], Admin):
+
+                    # Session for admin
+                    session["admin_session"] = users_dict[user].get_admin_id()
+
+                    # Delete Admin session
+                    # session.pop("admin_session")
+                    # print(session["customer_session"])
+
                     return redirect((url_for('admin')))
             elif users_dict[user].get_email() != create_log_in_form.login_email.data or users_dict[user].get_password() != hashed_password:
                 error = "Invalid email or password"
@@ -72,6 +89,7 @@ def create_customer():
         db = shelve.open('database/user.db','r')
         user_dict = db['Users']
         for user in user_dict:
+            print(user)
             if create_customer_form.email.data.upper() == user_dict[user].get_email().upper():
                 errortwo = "There is an existing email registered"
                 code = 1
@@ -825,7 +843,6 @@ def update_bid(id):
         return render_template('updateBid.html', form=update_bid_form)
 
 
-
 randomOTP = random.randint(111111, 999999)
 
 @app.route("/forgetPassword", methods=["POST", "GET"])
@@ -835,6 +852,7 @@ def forget_password():
     # with open("templates/forgetPassword.html") as file:
     #     soup = BeautifulSoup(file, "html.parser")
     #
+    # print(soup.find())
     # print(soup.prettify())
 
     db = shelve.open("database/user.db", "r")
@@ -864,52 +882,58 @@ def forget_password():
 
 @app.route("/game")
 def play_game():
+    try:
+        if session["customer_session"] != "":
+            with shelve.open("database/game.db", "c") as db:
 
-    with shelve.open("database/game.db", "c") as db:
+                try:
+                    leaderboard_dict = db["Leaderboard"]
+                    print(leaderboard_dict)
+                    for key, values in leaderboard_dict.items():
+                        if key == session["customer_session"]:
 
-        try:
-            leaderboard_dict = db["Leaderboard"]
-            print(leaderboard_dict)
-            for key, values in leaderboard_dict.items():
-                if key == "fakeID":
+                            if values.get_total_points() == 0:
+                                leaderboard_points = ""
+                            else:
+                                leaderboard_points = values.get_total_points()
+                        else:
+                            leaderboard_points = ""
+                except:
+                    leaderboard_points = ""
 
-                    if values.get_total_points() == 0:
-                        leaderboard_points = ""
+                with shelve.open("database/game.db", "c") as db:
+
+                    try:
+                        points_list = db['Points']
+                    except:
+                        print("Error in retrieving Points.")
+
+                    if leaderboard_points == "":
+                        stayWhile = True
+
+                        while stayWhile:
+                            count = 0
+
+                            points_list = generate_points()
+
+                            for j in points_list:
+
+                                try:
+                                    count += 1
+                                    if int(list(j.values())[0]) and count == len(points_list):
+                                        print("change false")
+                                        stayWhile = False
+                                except:
+                                    break
                     else:
-                        leaderboard_points = values.get_total_points()
-        except:
-            leaderboard_points = ""
+                        points_list = generate_points()
 
-        with shelve.open("database/game.db", "c") as db:
-            try:
-                points_list = db['Points']
+                    db['Points'] = points_list
 
-            except:
-                print("Error in retrieving Points.")
+            return render_template("game.html", points_list=points_list, points=leaderboard_points)
 
-            if leaderboard_points == "":
-                stayWhile = True
-
-                while stayWhile:
-                    count = 0
-                    point_list = generate_points()
-                    for j in point_list:
-
-                        try:
-                            count += 1
-                            if int(list(j.values())[0]) and count == len(point_list):
-                                print("change false")
-                                stayWhile = False
-                        except:
-                            break
-            else:
-                point_list = generate_points()
-
-            db['Points'] = point_list
-
-            print(db['Points'])
-
-    return render_template("game.html", point_list=point_list, points=leaderboard_points)
+    except KeyError:
+        return redirect(url_for("log_in"))
 
 
 @app.route("/game/<int:key>", methods=["POST"])
@@ -943,10 +967,10 @@ def save_point(key):
             today = date.today().strftime('%Y-%m-%d')
             next_day = (datetime.today() + timedelta(days=1)).strftime('%Y-%m-%d')
 
-            if game_user_dict.get("fakeID"):
-                player_status = game_user_dict.get("fakeID")
+            if game_user_dict.get(session["customer_session"]):
+                player_status = game_user_dict.get(session["customer_session"])
             else:
-                player_status = PlayerStatus("fakeID", today, next_day)
+                player_status = PlayerStatus(session["customer_session"], today, next_day)
 
             try:
                 if int(points) > 0:
@@ -963,6 +987,11 @@ def save_point(key):
             print(player_status.get_total_points())
 
     return redirect(url_for("checkout"))
+
+
+@app.route("/leaderboard")
+def leaderboard():
+    return render_template("leaderboard.html")
 
 
 # Admin Side

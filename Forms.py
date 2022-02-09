@@ -10,7 +10,7 @@ def validate_password(form, register_password):
     char_list = []
     char_list = list(register_password.data)
     print(char_list)
-    special_list = ['!','@','#','$','%','&','*']
+    special_list = ['!','@','#','$','%','&','*',"_"]
     for char in special_list:
         for char2 in char_list:
             if char == char2:

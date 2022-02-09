@@ -42,7 +42,7 @@
 
     .top_right_container{
         width:50%;
-        margin: 5.9% 0% 2% 42.5%;
+        margin: 5% 0% 2% 42.5%;
         float: right;
     }
 
@@ -55,6 +55,10 @@
         transform-style: preserve-3d;
         background-color: lightgrey;
         cursor: pointer;
+    }
+
+    #leaderboard_link_container{
+        margin-top: 5%;
     }
 
     /* --------------------------------------------------------------------------
@@ -113,16 +117,19 @@
 
     #backLink{
      margin-bottom: 3.5%;
-     text-decoration: underline;
      font-size: 1.2em;
      font-weight: bold;
+    }
+
+    #back_btn:hover{
+        text-decoration: underline;
     }
 
     #modal_cross{
         background-color: transparent;
         border: none;
-        height: 3em;
-        width: 3em;
+        height: 2.1em;
+        width: 2.1em;
 
     }
 
@@ -145,4 +152,11 @@
         background-color: white;
         color: black;
         box-shadow:  2px 3px 5px gray;
-}
+    }
+
+    #leaderboard_link{
+        background-color: black;
+        color: white;
+        margin-top: 2%;
+        padding: 2.5% 8.5%;
+    }
