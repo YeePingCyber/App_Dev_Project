@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Tom Patterson - Customer Account {% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="../static/css/adminBase.css">
+<link rel="stylesheet" type="text/css" href="../static/css/login.css">
+{% endblock %}
+
+{% block bodyContent %}
+{% from "includes/formHelper.html" import render_field %}
+<br>
+<br>
+<div class="container-login">
+  <div class="col">
+    <form method="POST" class="form-login" action="">
+      <h1>Update Admin</h1>
+      <br><br>
+      <img src="../../static/images/Default_picture.jpg" class="profile-pic">
+      <br><br><br>
+      <div class="form-login-field-file">
+        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+        Upload your profile picture:
+        {{ render_field(form.profile_pic, class="form-control-file") }}
+      </div>
+      <br><br><br>
+      <div class="form-login-field">
+        {{ render_field(form.first_name, class="form-login-field") }}
+      </div>
+
+      <br><br><br>
+
+      <div class="form-login-field">
+        {{ render_field(form.last_name, class="form-login-field") }}
+      </div>
+
+      <br><br><br>
+
+      <div class="form-login-field">
+        {{ render_field(form.employee_id, class="form-login-field") }}
+      </div>
+
+      <br><br><br>
+
+      <div class="form-login-field">
+        {{ render_field(form.email, class="form-login-field") }}
+      </div>
+       {% if code == 1 %}
+        <p style="color: red; font-size: 80%;"><strong></strong> Duplicate email in use </p>
+      {% endif %}
+
+      <br><br><hr>
+      <h2>Change your password</h2>
+      <br><br>
+      <div class="form-login-field">
+        {{ render_field(form.current_password, class="form-login-field") }}
+      </div>
+      {% if error %}
+      <p style="color: red; font-size: 80%;"><strong></strong> {{error}}</p>
+      {% endif %}
+      <br><br><br>
+
+      <div class="form-login-field">
+        {{ render_field(form.new_password, class="form-login-field") }}
+      </div>
+
+      <br><br><br>
+      <input type="submit" value="Save Changes" class="submit-login">
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -5,6 +5,7 @@ import shelve
 import os
 from Product import Product
 
+
 def validate_password(form, register_password):
     special_count = 0
     char_list = []
@@ -19,6 +20,8 @@ def validate_password(form, register_password):
         print(special_count)
     if special_count == 0:
         raise ValidationError('Password must contain a mix of letters, numbers and special characters')
+
+
 class CreateCustomerForm(Form):
 
     def validate_image(form, image):
@@ -39,6 +42,19 @@ class CreateCustomerForm(Form):
                                      render_kw={"placeholder": "Confirm Password"})
     profile_pic = FileField('')
 
+
+class UpdateCustomerForm(Form):
+    first_name = StringField('', [validators.Length(min=1, max=50), validators.DataRequired()],
+                             render_kw={"placeholder": "First Name"})
+    last_name = StringField('', [validators.Length(min=1, max=50), validators.DataRequired()],
+                            render_kw={"placeholder": "Last Name"})
+    email = EmailField('', [validators.Email(), validators.DataRequired()], render_kw={"placeholder": "Email"})
+    birthdate = DateField('', format='%Y-%m-%d', render_kw={"placeholder": "DD/MM/YYYY"})
+    current_password = PasswordField('',[validators.Length(min=8, max=15), validators.Optional(strip_whitespace=True), validate_password],
+                                     render_kw={"placeholder": "Current Password"})
+    new_password = PasswordField('',[validators.Length(min=8, max=15), validators.Optional(strip_whitespace=True), validate_password],
+                                 render_kw={"placeholder": "New Password"})
+    profile_pic = FileField('')
 
 class CreateLoginForm(Form):
     login_email = EmailField('', [validators.Email(), validators.DataRequired()],
