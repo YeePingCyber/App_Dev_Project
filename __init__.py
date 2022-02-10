@@ -1318,11 +1318,12 @@ def forget_password():
 def play_game():
     try:
         if session["customer_session"] != "":
+
             with shelve.open("database/game.db", "c") as db:
 
                 try:
                     leaderboard_dict = db["Leaderboard"]
-                    print(leaderboard_dict)
+
                     for key, values in leaderboard_dict.items():
                         if key == session["customer_session"]:
 
@@ -1330,10 +1331,13 @@ def play_game():
                                 leaderboard_points = ""
                             else:
                                 leaderboard_points = values.get_total_points()
+                                break
+
                         else:
                             leaderboard_points = ""
                 except:
                     leaderboard_points = ""
+
 
                 with shelve.open("database/game.db", "c") as db:
 
@@ -1343,6 +1347,7 @@ def play_game():
                         print("Error in retrieving Points.")
 
                     if leaderboard_points == "":
+
                         stayWhile = True
 
                         while stayWhile:
@@ -1364,6 +1369,7 @@ def play_game():
 
                     db['Points'] = points_list
 
+            print(leaderboard_points)
             return render_template("game.html", points_list=points_list, points=leaderboard_points)
 
     except KeyError:
@@ -1425,7 +1431,42 @@ def save_point(key):
 
 @app.route("/leaderboard")
 def leaderboard():
-    return render_template("leaderboard.html")
+    # sorted_list = []
+    username_list = []
+    users_dict = {}
+    with shelve.open("database/game.db", "r") as db:
+        try:
+            game_user_dict = db["Leaderboard"]
+        except:
+            print("Error in retrieving game.db.")
+
+        def sort_by_points(player):
+            return player.get_total_points()
+
+        sorted_list = sorted(game_user_dict.values(), key=sort_by_points, reverse=True)
+        print(sorted_list)
+
+        for p in sorted_list:
+            print(p.get_total_points())
+
+    with shelve.open("database/user.db", "r") as db2:
+        try:
+            users_dict = db2['Users']
+        except:
+            print("Error in retrieving user.db.")
+
+        try:
+            for player in sorted_list:
+                # print(users_dict.get(player.get_customer_id()).get_first_name(), users_dict.get(player.get_customer_id()).get_last_name())
+                username_list.append(users_dict.get(player.get_customer_id()).get_last_name())
+
+            session_user = users_dict.get(session["customer_session"])
+            print(session_user.get_last_name())
+        except IndexError:
+            sorted_list = []
+            username_list = []
+
+    return render_template("leaderboard.html", sorted_list=sorted_list, username_list=username_list, session_user=session_user)
 
 
 # Admin Side
