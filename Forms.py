@@ -87,7 +87,7 @@ class UpdateAdminForm(Form):
     first_name = StringField('', [validators.Length(min=1, max=150)], render_kw={"placeholder": "First Name"})
     last_name = StringField('', [validators.Length(min=1, max=150)], render_kw={"placeholder": "Last Name"})
     email = EmailField('', [validators.Email()], render_kw={"placeholder": "Email"})
-    current_password = PasswordField('',[validators.Length(min=8, max=15), validators.Optional(strip_whitespace=True), validate_password],render_kw={"placeholder": "Current Password"})
+    current_password = PasswordField('',[validators.Length(min=8, max=15), validators.Optional(strip_whitespace=True)],render_kw={"placeholder": "Current Password"})
     new_password = PasswordField('',[validators.Length(min=8, max=15), validators.Optional(strip_whitespace=True), validate_password],render_kw={"placeholder": "New Password"})
     employee_id = StringField('', [validators.Length(min=1, max=150)], render_kw={"placeholder": "Employee ID"})
     profile_pic = FileField('')
