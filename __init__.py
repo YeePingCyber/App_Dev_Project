@@ -181,8 +181,6 @@ def create_customer():
 
 @app.route("/cart")
 def cart():
-    # if got session, run the following
-    # need store {customer_session : add to cart}
     if "customer_session" in session:
         print(session["customer_session"])
         db = shelve.open("database/inventory.db", 'w')
@@ -199,7 +197,6 @@ def cart():
 
         cart_dict = dict(zip(listofKeys, listofDict))
 
-        # use list so that i can delete by using method clear() while remaining the key
         productAList = []
         productBList = []
         productCList = []
@@ -283,7 +280,6 @@ def cart():
 
         cart_dict = dict(zip(listofKeys, listofDict))
 
-        # use list so that i can delete by using method clear() while remaining the key
         productAList = []
         productBList = []
         productCList = []
@@ -472,8 +468,6 @@ def updateSubCart(id):
     cartList.append(productEList)
     cartList.append(productFList)
 
-    # put it back into dictionary format to be saved in database
-    # getting the key
     list_keyA = []
     list_keyB = []
     list_keyC = []
@@ -578,7 +572,6 @@ def delete_item(id):
 
     cart_dict = dict(zip(listofKeys, listofDict))
 
-    # use list so that i can delete by using method clear() while remaining the key
     productAList = []
     productBList = []
     productCList = []
@@ -622,8 +615,6 @@ def delete_item(id):
 
     cartList[id].clear()
 
-    # put it back into dictionary format to be saved in database
-    # getting the key
     list_keyA = []
     list_keyB = []
     list_keyC = []
@@ -699,7 +690,6 @@ def checkout():
     except:
         print("Error in retrieving Inventory from addtocart.db")
 
-    # organising it such that its [[productA],[productB]]
     for x in cart_dict["1"]:
         productAList.append(cart_dict["1"][x])
 
@@ -835,8 +825,6 @@ def payment():
     payment_dict = {}
     create_payment_form = CreatePaymentForm(request.form)
     if request.method == 'POST' and create_payment_form.validate():
-        # maybe dont need payment db cos user already in poayment page, and i want to join them.
-        # instead, use sales db then paymentProcess_dict = { key : (shipping + payment) object}
         db = shelve.open("database/payment", "c")
         try:
             if "payment" in db:
@@ -1016,7 +1004,6 @@ def done_clear():
     except:
         print("Error in retrieving Sales from payment.db")
 
-    # clearing so that next user will not see previous user details
     productAupdate = {}
     productBupdate = {}
     productCupdate = {}
@@ -1031,10 +1018,6 @@ def done_clear():
 
     payment_dict[0] = None
     db3["payment"] = payment_dict
-
-    print(cart_dict)
-    print(shipping_dict)
-    print(payment_dict)
 
     return redirect(url_for("home"))
 
@@ -1496,8 +1479,6 @@ def admin():
         c_total = 0
     print(store_c)
 
-
-
     # getting total sales money
     subtotal = 0
     for total in range(0, len(cartList)):
@@ -1544,9 +1525,7 @@ def admin():
 
     labels = forgraphlabel
     values = forgraphvalue
-
     orders_quantity = len(salesList)
-
     print(salesList)
 
     return render_template("adminDashboard.html", top4=products_dict, labels=labels, values=values, subtotal=subtotal, date=time_now, auction_on=auction_on, salesList=salesList, store_c=store_c, orders_quantity=orders_quantity)
