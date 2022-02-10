@@ -14,7 +14,7 @@ from Auction import Auction
 from ProcessCart import PaymentProcess, ShippingProcess, Sales
 from UserBid import UserBid
 from Game import PlayerStatus, generate_points
-from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreateShipmentForm, CreatePaymentForm, CreateProductForm, CreateAddCartForm, CreateAuctionForm, UpdateAdminForm, CreateBidForm, CreateForgetPassForm, UpdateCustomerForm
+from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreateShipmentForm, CreatePaymentForm, CreateProductForm, CreateAddCartForm, CreateAuctionForm, UpdateAdminForm, CreateBidForm, CreateForgetPassForm, UpdateCustomerForm, CreateProductView
 # create product function
 from createProduct import load_product
 import os
@@ -184,12 +184,52 @@ def create_customer():
 @app.route("/cart")
 def cart():
     # if got session, run the following
-    # problem is if no session then how
-    if session["customer_session"]: 
+    # need store {customer_session : add to cart}
+    if "customer_session" in session:
         print(session["customer_session"])
         productA = {}
         productB = {}
         cart_dict = {"1":productA, "2":productB}
+
+        # use list so that i can delete by using method clear() while remaining the key
+        productAList = []
+        productBList = []
+        cartList = []
+        db = shelve.open("database/addtocart", "c")
+        try:
+            if "Add_to_cart" in db:
+                cart_dict = db["Add_to_cart"]
+            else:
+                db["Add_to_cart"] = cart_dict
+        except:
+            print("Error in retrieving Inventory from addtocart.db")
+
+        db.close()
+        if len(cart_dict["1"]) or len(cart_dict["2"]) > 0:
+            # organising it such that its [[productA],[productB]]
+            for x in cart_dict["1"]:
+                productAList.append(cart_dict["1"][x])
+
+            for y in cart_dict["2"]:
+                productBList.append(cart_dict["2"][y])
+
+            cartList.append(productAList)
+            cartList.append(productBList)
+
+            subtotal = 0
+            for total in range(0, len(cartList)):
+                for x in cartList[total]:
+                    subtotal += x.get_price()
+
+            return render_template("cart.html", cartList=cartList, subtotal=subtotal)
+        else:
+            return render_template("cart_empty.html")
+
+    else:
+        # add to cart item is added to the session. not the no session.
+        productA = {}
+        productB = {}
+        cart_dict = {"1": productA, "2": productB}
 
         # use list so that i can delete by using method clear() while remaining the key
         productAList = []
@@ -651,23 +691,28 @@ def done_clear():
 # main shop
 @app.route("/mainshop", methods=['GET', 'POST'])
 def mainshop():
+    global temp_product_id
     db = shelve.open("database/inventory.db", 'w')
     products_dict = db["Products"]
-    return render_template("mainshop.html", products = products_dict)
+
+    productview = CreateProductView(request.form)
+    if request.method == "POST":
+        print(productview.product_id.data)
+        temp_product_id = productview.product_id.data
+        return redirect(url_for("bagbase"))
+
+    return render_template("mainshop.html", products = products_dict, form = productview)
 
 
-db = shelve.open("database/inventory.db", 'w')
-products_dict = db["Products"]
-db.close()
-
-product_list = []
-for i in products_dict:
-    product_list.append(products_dict[i])
+@app.route("/bagbase", methods=['GET', 'POST'])
+def bagbase():
+    db = shelve.open("database/inventory.db", 'w')
+    products_dict = db["Products"]
+    db.close()
 
 
-@app.route("/bag1", methods=['GET', 'POST'])
-def bag1():
-    x = product_list[0].get_product_id()
+    x = temp_product_id
+
     addtocartform = CreateAddCartForm(request.form)
     if request.method == "POST":
         productA = {}
@@ -697,42 +742,7 @@ def bag1():
         print(addtocart_dict)
         return redirect(url_for("cart"))
 
-    return render_template("bag1.html", form=addtocartform, products=products_dict, x=x)
-
-
-@app.route("/bag2", methods=['GET', 'POST'])
-def bag2():
-    print(product_list)
-    x = product_list[1].get_product_id()
-    addtocartform = CreateAddCartForm(request.form)
-    if request.method == "POST":
-        productA = {}
-        productB = {}
-        addtocart_dict = {"1":productA, "2":productB}
-        db = shelve.open("database/addtocart", "c")
-
-        try:
-            if "Add_to_cart" in db:
-                addtocart_dict = db["Add_to_cart"]
-            else:
-                db["Add_to_cart"] = addtocart_dict
-        except:
-            print("Error in retrieving Inventory from addtocart.db")
-
-        addtocart = Addtocart(addtocartform.name.data, addtocartform.description.data,
-                              int(addtocartform.price.data), int(addtocartform.quantity.data),
-                              addtocartform.category.data, int(addtocartform.discount.data),
-                              int(addtocartform.top.data))
-
-        if addtocart.get_name() == addtocartform.name.data:
-            productB[addtocart.get_id()] = addtocart
-            addtocart_dict["2"].update(productB)
-
-        db["Add_to_cart"] = addtocart_dict
-        print(addtocart_dict)
-        return redirect(url_for("cart"))
-
-    return render_template("bag2.html", form=addtocartform, product=products_dict, x=x)
+    return render_template("bagbase.html", form=addtocartform, products=products_dict, x=x)
 
 
 # @app.route("/auction", methods=['GET', 'POST'])

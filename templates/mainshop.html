@@ -54,16 +54,19 @@
 
     <div class="navEmpty"></div>
     <div class="product-view">
+        {% from "includes/formHelper.html" import render_field %}
           <div class="container-fluid">
                 <div class="row">
                     {% for product in products %}
-                    <div class="col-md-3">
-                        <div class="product-item"><div class="product-image"><a href="/bag1"><img src="../static/images/1-urth-arkose-20l-backpack-grey_1000x@2x.png" alt="Arkose 20L Modular Bag"></a></div></div>
+                    <form class="col-md-3" method="POST">
+                        <div class="product-item"><div class="product-image"><img src="../static/images/1-urth-arkose-20l-backpack-grey_1000x@2x.png" alt="Arkose 20L Modular Bag"></div></div>
                         <div class="product-price">
+                            {{ render_field(form.product_id, value=products[product].get_product_id()) }}
                             <h5>{{ products[product].get_name() }}</h5>
                             <p><span>$</span>{{ products[product].get_price() }}</p>
+                            <button type=submit class="btn btn-warning">View Information</button>
                         </div>
-                    </div>
+                    </form>
                     {% endfor %}
                 </div>
           </div>
