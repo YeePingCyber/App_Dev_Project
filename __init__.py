@@ -222,16 +222,16 @@ def cart():
                 productBList.append(cart_dict["2"][y])
 
             for z in cart_dict["3"]:
-                productBList.append(cart_dict["3"][z])
+                productCList.append(cart_dict["3"][z])
 
             for a in cart_dict["4"]:
-                productBList.append(cart_dict["4"][a])
+                productDList.append(cart_dict["4"][a])
 
             for b in cart_dict["5"]:
-                productBList.append(cart_dict["5"][b])
+                productEList.append(cart_dict["5"][b])
 
             for c in cart_dict["6"]:
-                productBList.append(cart_dict["6"][c])
+                productFList.append(cart_dict["6"][c])
 
             cartList.append(productAList)
             cartList.append(productBList)
@@ -286,16 +286,16 @@ def cart():
                 productBList.append(cart_dict["2"][y])
 
             for z in cart_dict["3"]:
-                productBList.append(cart_dict["3"][z])
+                productCList.append(cart_dict["3"][z])
 
             for a in cart_dict["4"]:
-                productBList.append(cart_dict["4"][a])
+                productDList.append(cart_dict["4"][a])
 
             for b in cart_dict["5"]:
-                productBList.append(cart_dict["5"][b])
+                productEList.append(cart_dict["5"][b])
 
             for c in cart_dict["6"]:
-                productBList.append(cart_dict["6"][c])
+                productFList.append(cart_dict["6"][c])
 
             cartList.append(productAList)
             cartList.append(productBList)
@@ -348,16 +348,16 @@ def updateAddCart(id):
         productBList.append(cart_dict["2"][y])
 
     for z in cart_dict["3"]:
-        productBList.append(cart_dict["3"][z])
+        productCList.append(cart_dict["3"][z])
 
     for a in cart_dict["4"]:
-        productBList.append(cart_dict["4"][a])
+        productDList.append(cart_dict["4"][a])
 
     for b in cart_dict["5"]:
-        productBList.append(cart_dict["5"][b])
+        productEList.append(cart_dict["5"][b])
 
     for c in cart_dict["6"]:
-        productBList.append(cart_dict["6"][c])
+        productFList.append(cart_dict["6"][c])
 
     cartList.append(productAList)
     cartList.append(productBList)
@@ -374,6 +374,18 @@ def updateAddCart(id):
         if id == 1:
             productB[addtocart.get_id()] = addtocart
             cart_dict[str(id + 1)].update(productB)
+        if id == 2:
+            productC[addtocart.get_id()] = addtocart
+            cart_dict[str(id + 1)].update(productC)
+        if id == 3:
+            productD[addtocart.get_id()] = addtocart
+            cart_dict[str(id + 1)].update(productD)
+        if id == 4:
+            productE[addtocart.get_id()] = addtocart
+            cart_dict[str(id + 1)].update(productE)
+        if id == 5:
+            productF[addtocart.get_id()] = addtocart
+            cart_dict[str(id + 1)].update(productF)
 
         db["Add_to_cart"] = cart_dict
         db.close()
@@ -415,16 +427,16 @@ def updateSubCart(id):
         productBList.append(cart_dict["2"][y])
 
     for z in cart_dict["3"]:
-        productBList.append(cart_dict["3"][z])
+        productCList.append(cart_dict["3"][z])
 
     for a in cart_dict["4"]:
-        productBList.append(cart_dict["4"][a])
+        productDList.append(cart_dict["4"][a])
 
     for b in cart_dict["5"]:
-        productBList.append(cart_dict["5"][b])
+        productEList.append(cart_dict["5"][b])
 
     for c in cart_dict["6"]:
-        productBList.append(cart_dict["6"][c])
+        productFList.append(cart_dict["6"][c])
 
     cartList.append(productAList)
     cartList.append(productBList)
@@ -466,55 +478,55 @@ def updateSubCart(id):
             productAList.pop()
             productAupdate = dict(zip(list_keyA, cartList[0]))
             productBupdate = dict(zip(list_keyB, cartList[1]))
-            productCupdate = dict(zip(list_keyB, cartList[2]))
-            productDupdate = dict(zip(list_keyB, cartList[3]))
-            productEupdate = dict(zip(list_keyB, cartList[4]))
-            productFupdate = dict(zip(list_keyB, cartList[5]))
+            productCupdate = dict(zip(list_keyC, cartList[2]))
+            productDupdate = dict(zip(list_keyD, cartList[3]))
+            productEupdate = dict(zip(list_keyE, cartList[4]))
+            productFupdate = dict(zip(list_keyF, cartList[5]))
             cart_dict = {"1": productAupdate, "2": productBupdate, "3": productCupdate, "4": productDupdate, "5": productEupdate, "6": productFupdate}
         if id == 1:
             productBList.pop()
             productAupdate = dict(zip(list_keyA, cartList[0]))
             productBupdate = dict(zip(list_keyB, cartList[1]))
-            productCupdate = dict(zip(list_keyB, cartList[2]))
-            productDupdate = dict(zip(list_keyB, cartList[3]))
-            productEupdate = dict(zip(list_keyB, cartList[4]))
-            productFupdate = dict(zip(list_keyB, cartList[5]))
+            productCupdate = dict(zip(list_keyC, cartList[2]))
+            productDupdate = dict(zip(list_keyD, cartList[3]))
+            productEupdate = dict(zip(list_keyE, cartList[4]))
+            productFupdate = dict(zip(list_keyF, cartList[5]))
             cart_dict = {"1": productAupdate, "2": productBupdate, "3": productCupdate, "4": productDupdate,"5": productEupdate, "6": productFupdate}
         if id == 2:
             productCList.pop()
             productAupdate = dict(zip(list_keyA, cartList[0]))
             productBupdate = dict(zip(list_keyB, cartList[1]))
-            productCupdate = dict(zip(list_keyB, cartList[2]))
-            productDupdate = dict(zip(list_keyB, cartList[3]))
-            productEupdate = dict(zip(list_keyB, cartList[4]))
-            productFupdate = dict(zip(list_keyB, cartList[5]))
+            productCupdate = dict(zip(list_keyC, cartList[2]))
+            productDupdate = dict(zip(list_keyD, cartList[3]))
+            productEupdate = dict(zip(list_keyE, cartList[4]))
+            productFupdate = dict(zip(list_keyF, cartList[5]))
             cart_dict = {"1": productAupdate, "2": productBupdate, "3": productCupdate, "4": productDupdate,"5": productEupdate, "6": productFupdate}
         if id == 3:
             productDList.pop()
             productAupdate = dict(zip(list_keyA, cartList[0]))
             productBupdate = dict(zip(list_keyB, cartList[1]))
-            productCupdate = dict(zip(list_keyB, cartList[2]))
-            productDupdate = dict(zip(list_keyB, cartList[3]))
-            productEupdate = dict(zip(list_keyB, cartList[4]))
-            productFupdate = dict(zip(list_keyB, cartList[5]))
+            productCupdate = dict(zip(list_keyC, cartList[2]))
+            productDupdate = dict(zip(list_keyD, cartList[3]))
+            productEupdate = dict(zip(list_keyE, cartList[4]))
+            productFupdate = dict(zip(list_keyF, cartList[5]))
             cart_dict = {"1": productAupdate, "2": productBupdate, "3": productCupdate, "4": productDupdate,"5": productEupdate, "6": productFupdate}
         if id == 4:
             productEList.pop()
             productAupdate = dict(zip(list_keyA, cartList[0]))
             productBupdate = dict(zip(list_keyB, cartList[1]))
-            productCupdate = dict(zip(list_keyB, cartList[2]))
-            productDupdate = dict(zip(list_keyB, cartList[3]))
-            productEupdate = dict(zip(list_keyB, cartList[4]))
-            productFupdate = dict(zip(list_keyB, cartList[5]))
+            productCupdate = dict(zip(list_keyC, cartList[2]))
+            productDupdate = dict(zip(list_keyD, cartList[3]))
+            productEupdate = dict(zip(list_keyE, cartList[4]))
+            productFupdate = dict(zip(list_keyF, cartList[5]))
             cart_dict = {"1": productAupdate, "2": productBupdate, "3": productCupdate, "4": productDupdate,"5": productEupdate, "6": productFupdate}
         if id == 5:
             productFList.pop()
             productAupdate = dict(zip(list_keyA, cartList[0]))
             productBupdate = dict(zip(list_keyB, cartList[1]))
-            productCupdate = dict(zip(list_keyB, cartList[2]))
-            productDupdate = dict(zip(list_keyB, cartList[3]))
-            productEupdate = dict(zip(list_keyB, cartList[4]))
-            productFupdate = dict(zip(list_keyB, cartList[5]))
+            productCupdate = dict(zip(list_keyC, cartList[2]))
+            productDupdate = dict(zip(list_keyD, cartList[3]))
+            productEupdate = dict(zip(list_keyE, cartList[4]))
+            productFupdate = dict(zip(list_keyF, cartList[5]))
             cart_dict = {"1": productAupdate, "2": productBupdate, "3": productCupdate, "4": productDupdate,"5": productEupdate, "6": productFupdate}
 
         db["Add_to_cart"] = cart_dict
@@ -558,16 +570,16 @@ def delete_item(id):
         productBList.append(cart_dict["2"][y])
 
     for z in cart_dict["3"]:
-        productBList.append(cart_dict["3"][z])
+        productCList.append(cart_dict["3"][z])
 
     for a in cart_dict["4"]:
-        productBList.append(cart_dict["4"][a])
+        productDList.append(cart_dict["4"][a])
 
     for b in cart_dict["5"]:
-        productBList.append(cart_dict["5"][b])
+        productEList.append(cart_dict["5"][b])
 
     for c in cart_dict["6"]:
-        productBList.append(cart_dict["6"][c])
+        productFList.append(cart_dict["6"][c])
 
     cartList.append(productAList)
     cartList.append(productBList)
@@ -658,16 +670,16 @@ def checkout():
         productBList.append(cart_dict["2"][y])
 
     for z in cart_dict["3"]:
-        productBList.append(cart_dict["3"][z])
+        productCList.append(cart_dict["3"][z])
 
     for a in cart_dict["4"]:
-        productBList.append(cart_dict["4"][a])
+        productDList.append(cart_dict["4"][a])
 
     for b in cart_dict["5"]:
-        productBList.append(cart_dict["5"][b])
+        productEList.append(cart_dict["5"][b])
 
     for c in cart_dict["6"]:
-        productBList.append(cart_dict["6"][c])
+        productFList.append(cart_dict["6"][c])
 
     cartList.append(productAList)
     cartList.append(productBList)
@@ -741,16 +753,16 @@ def payment():
         productBList.append(cart_dict["2"][y])
 
     for z in cart_dict["3"]:
-        productBList.append(cart_dict["3"][z])
+        productCList.append(cart_dict["3"][z])
 
     for a in cart_dict["4"]:
-        productBList.append(cart_dict["4"][a])
+        productDList.append(cart_dict["4"][a])
 
     for b in cart_dict["5"]:
-        productBList.append(cart_dict["5"][b])
+        productEList.append(cart_dict["5"][b])
 
     for c in cart_dict["6"]:
-        productBList.append(cart_dict["6"][c])
+        productFList.append(cart_dict["6"][c])
 
     cartList.append(productAList)
     cartList.append(productBList)
@@ -840,16 +852,16 @@ def paymentdone():
         productBList.append(cart_dict["2"][y])
 
     for z in cart_dict["3"]:
-        productBList.append(cart_dict["3"][z])
+        productCList.append(cart_dict["3"][z])
 
     for a in cart_dict["4"]:
-        productBList.append(cart_dict["4"][a])
+        productDList.append(cart_dict["4"][a])
 
     for b in cart_dict["5"]:
-        productBList.append(cart_dict["5"][b])
+        productEList.append(cart_dict["5"][b])
 
     for c in cart_dict["6"]:
-        productBList.append(cart_dict["6"][c])
+        productFList.append(cart_dict["6"][c])
 
     cartList.append(productAList)
     cartList.append(productBList)
