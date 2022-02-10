@@ -25,18 +25,18 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Rewards</h5>
-                            <button type="button" id="modal_cross" class="close" data-dismiss="modal" aria-label="Close">
+                            <button type="button" class="modal_cross" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">
                                     <svg class="cross_svg" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	                                     viewBox="0 0 100 100" style="enable-background:new 0 0 94.926 94.926;"
 	                                    xml:space="preserve">
-                                    <g>
-                                        <path d="M55.931,47.463L94.306,9.09c0.826-0.827,0.826-2.167,0-2.994L88.833,0.62C88.436,0.224,87.896,0,87.335,0
-                                            c-0.562,0-1.101,0.224-1.498,0.62L47.463,38.994L9.089,0.62c-0.795-0.795-2.202-0.794-2.995,0L0.622,6.096
-                                            c-0.827,0.827-0.827,2.167,0,2.994l38.374,38.373L0.622,85.836c-0.827,0.827-0.827,2.167,0,2.994l5.473,5.476
-                                            c0.397,0.396,0.936,0.62,1.498,0.62s1.1-0.224,1.497-0.62l38.374-38.374l38.374,38.374c0.397,0.396,0.937,0.62,1.498,0.62
-                                            s1.101-0.224,1.498-0.62l5.473-5.476c0.826-0.827,0.826-2.167,0-2.994L55.931,47.463z"/>
-                                    </g>
+                                        <g>
+                                            <path d="M55.931,47.463L94.306,9.09c0.826-0.827,0.826-2.167,0-2.994L88.833,0.62C88.436,0.224,87.896,0,87.335,0
+                                                c-0.562,0-1.101,0.224-1.498,0.62L47.463,38.994L9.089,0.62c-0.795-0.795-2.202-0.794-2.995,0L0.622,6.096
+                                                c-0.827,0.827-0.827,2.167,0,2.994l38.374,38.373L0.622,85.836c-0.827,0.827-0.827,2.167,0,2.994l5.473,5.476
+                                                c0.397,0.396,0.936,0.62,1.498,0.62s1.1-0.224,1.497-0.62l38.374-38.374l38.374,38.374c0.397,0.396,0.937,0.62,1.498,0.62
+                                                s1.101-0.224,1.498-0.62l5.473-5.476c0.826-0.827,0.826-2.167,0-2.994L55.931,47.463z"/>
+                                        </g>
                                     </svg>
                                 </span>
                             </button>
@@ -68,6 +68,9 @@
                                             <p><span class="rank_place">6th - 10th:</span> 5% Discount</p>
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td colspan="2" style="border-top: 1.5px solid black;"><span style="font-weight: bold;">NOTE:</span> We will inform you by sending you an email for your discount code</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -77,18 +80,49 @@
         </div>
     </div>
 
+    <div id="current_position">
+        <h5>Your current position:</h5>
+        <p>
+            {% for a in range(0, (username_list|length)) %}
+            {% if username_list[a] == session_user.get_last_name() %}
+            {% if a == 0 %}
+            {{ a+1 }}st
+            {% elif a == 1 %}
+            {{ a+1 }}nd
+            {% elif a == 2 %}
+            {{ a+1 }}rd
+            {% else %}
+            {{ a+1 }}th
+            {% endif %}
+            {% endif %}
+            {% endfor %}
+        </p>
+    </div>
+
     <div class="leaderboard_bottom_container">
         <div class="palladium" id="second_place">
             <div class="palladium_rank">
                 <div class="palladium_place">
                     <h1>2</h1>
                 </div>
-                <div class="palladium_points">
+                <div>
                     <div>
-                        <span>Username 2</span>
+                        <span>
+                            {% if (username_list|length) >= 2 %}
+                                <span class="palladium_username">{{ username_list[1] }}</span>
+                            {% else %}
+                                No user has played the game
+                            {% endif %}
+                        </span>
                     </div>
                     <div>
-                        <span>Points 2</span>
+                        <span>
+                            {% if (sorted_list|length) >= 2 %}
+                                <span class="palladium_points">Points:</span> {{ sorted_list[1].get_total_points() }}
+                            {% else %}
+                                No points recorded
+                            {% endif %}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -101,12 +135,24 @@
                 <div class="palladium_place">
                     <h1>1</h1>
                 </div>
-                <div class="palladium_points">
+                <div>
                     <div>
-                        <span>Username 1</span>
+                        <span>
+                            {% if (username_list|length) >= 1 %}
+                                <span class="palladium_username">{{ username_list[0] }}</span>
+                            {% else %}
+                                No user has played the game
+                            {% endif %}
+                        </span>
                     </div>
                     <div>
-                        <span>Points 1</span>
+                        <span>
+                            {% if (sorted_list|length) >= 1 %}
+                                <span class="palladium_points">Points:</span> {{ sorted_list[0].get_total_points() }}
+                            {% else %}
+                                No points recorded
+                            {% endif %}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -119,12 +165,24 @@
                 <div class="palladium_place">
                     <h1>3</h1>
                 </div>
-                <div class="palladium_points">
+                <div>
                     <div>
-                        <span>Username 3</span>
+                        <span>
+                            {% if (username_list|length) >= 3 %}
+                                <span class="palladium_username">{{ username_list[2] }}</span>
+                            {% else %}
+                                No third player found
+                            {% endif %}
+                        </span>
                     </div>
                     <div>
-                        <span>Points 3</span>
+                        <span>
+                            {% if (sorted_list|length) >= 3 %}
+                                <span class="palladium_points">Points:</span> {{ sorted_list[2].get_total_points() }}
+                            {% else %}
+                                No points recorded
+                            {% endif %}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -134,7 +192,5 @@
         </div>
     </div>
 
-    <div>
 
-    </div>
 {% endblock %}
