@@ -188,14 +188,19 @@ def cart():
 
     if "customer_session" in session:
         print(session["customer_session"])
-        productA = {}
-        productB = {}
-        productC = {}
-        productD = {}
-        productE = {}
-        productF = {}
+        db = shelve.open("database/inventory.db", 'w')
+        products_dict = db["Products"]
+        db.close()
 
-        cart_dict = {"1": productA, "2": productB, "3": productC, "4": productD, "5": productE, "6": productF}
+        listofDict = []
+        listofKeys = []
+
+        for i in range(1, len(products_dict) + 1):
+            listofKeys.append(str(i))
+            i = dict()
+            listofDict.append(i)
+
+        cart_dict = dict(zip(listofKeys, listofDict))
 
         # use list so that i can delete by using method clear() while remaining the key
         productAList = []
@@ -246,20 +251,24 @@ def cart():
                 for x in cartList[total]:
                     subtotal += x.get_price()
 
-            return render_template("cart.html", cartList=cartList, subtotal=subtotal, inventory=inventory)
+            return render_template("cart.html", cartList=cartList, subtotal=subtotal)
         else:
             return render_template("cart_empty.html")
 
     else:
-        # add to cart item is added to the session. not the no session.
-        productA = {}
-        productB = {}
-        productC = {}
-        productD = {}
-        productE = {}
-        productF = {}
+        db = shelve.open("database/inventory.db", 'w')
+        products_dict = db["Products"]
+        db.close()
 
-        cart_dict = {"1": productA, "2": productB, "3": productC, "4": productD, "5": productE, "6": productF}
+        listofDict = []
+        listofKeys = []
+
+        for i in range(1, len(products_dict) + 1):
+            listofKeys.append(str(i))
+            i = dict()
+            listofDict.append(i)
+
+        cart_dict = dict(zip(listofKeys, listofDict))
 
         # use list so that i can delete by using method clear() while remaining the key
         productAList = []
@@ -317,14 +326,19 @@ def cart():
 
 @app.route('/updateAddCart/<int:id>', methods=['POST'])
 def updateAddCart(id):
-    productA = {}
-    productB = {}
-    productC = {}
-    productD = {}
-    productE = {}
-    productF = {}
+    db = shelve.open("database/inventory.db", 'w')
+    products_dict = db["Products"]
+    db.close()
 
-    cart_dict = {"1": productA, "2": productB, "3": productC, "4": productD, "5": productE, "6": productF}
+    listofDict = []
+    listofKeys = []
+
+    for i in range(1, len(products_dict) + 1):
+        listofKeys.append(str(i))
+        i = dict()
+        listofDict.append(i)
+
+    cart_dict = dict(zip(listofKeys, listofDict))
 
     productAList = []
     productBList = []
@@ -370,23 +384,17 @@ def updateAddCart(id):
     if request.method == "POST":
         addtocart = Addtocart(cartList[id][0].get_name(),cartList[id][0].get_description(),cartList[id][0].get_price(), 1,cartList[id][0].get_category(), cartList[id][0].get_discount(), cartList[id][0].get_top())
         if id == 0:
-            productA[addtocart.get_id()] = addtocart
-            cart_dict[str(id + 1)].update(productA)
+            cart_dict["1"][addtocart.get_id()] = addtocart
         if id == 1:
-            productB[addtocart.get_id()] = addtocart
-            cart_dict[str(id + 1)].update(productB)
+            cart_dict["2"][addtocart.get_id()] = addtocart
         if id == 2:
-            productC[addtocart.get_id()] = addtocart
-            cart_dict[str(id + 1)].update(productC)
+            cart_dict["3"][addtocart.get_id()] = addtocart
         if id == 3:
-            productD[addtocart.get_id()] = addtocart
-            cart_dict[str(id + 1)].update(productD)
+            cart_dict["4"][addtocart.get_id()] = addtocart
         if id == 4:
-            productE[addtocart.get_id()] = addtocart
-            cart_dict[str(id + 1)].update(productE)
+            cart_dict["5"][addtocart.get_id()] = addtocart
         if id == 5:
-            productF[addtocart.get_id()] = addtocart
-            cart_dict[str(id + 1)].update(productF)
+            cart_dict["6"][addtocart.get_id()] = addtocart
 
         db["Add_to_cart"] = cart_dict
         db.close()
@@ -396,14 +404,19 @@ def updateAddCart(id):
 
 @app.route('/updateSubCart/<int:id>', methods=['POST'])
 def updateSubCart(id):
-    productA = {}
-    productB = {}
-    productC = {}
-    productD = {}
-    productE = {}
-    productF = {}
+    db = shelve.open("database/inventory.db", 'w')
+    products_dict = db["Products"]
+    db.close()
 
-    cart_dict = {"1": productA, "2": productB, "3": productC, "4": productD, "5": productE, "6": productF}
+    listofDict = []
+    listofKeys = []
+
+    for i in range(1, len(products_dict) + 1):
+        listofKeys.append(str(i))
+        i = dict()
+        listofDict.append(i)
+
+    cart_dict = dict(zip(listofKeys, listofDict))
 
     productAList = []
     productBList = []
@@ -538,14 +551,19 @@ def updateSubCart(id):
 
 @app.route('/deleteCart/<int:id>', methods=['POST'])
 def delete_item(id):
-    productA = {}
-    productB = {}
-    productC = {}
-    productD = {}
-    productE = {}
-    productF = {}
+    db = shelve.open("database/inventory.db", 'w')
+    products_dict = db["Products"]
+    db.close()
 
-    cart_dict = {"1": productA, "2": productB, "3": productC, "4": productD, "5": productE, "6": productF}
+    listofDict = []
+    listofKeys = []
+
+    for i in range(1, len(products_dict) + 1):
+        listofKeys.append(str(i))
+        i = dict()
+        listofDict.append(i)
+
+    cart_dict = dict(zip(listofKeys, listofDict))
 
     # use list so that i can delete by using method clear() while remaining the key
     productAList = []
@@ -637,14 +655,19 @@ def delete_item(id):
 
 @app.route("/checkout", methods=['GET', 'POST'])
 def checkout():
-    productA = {}
-    productB = {}
-    productC = {}
-    productD = {}
-    productE = {}
-    productF = {}
+    db = shelve.open("database/inventory.db", 'w')
+    products_dict = db["Products"]
+    db.close()
 
-    cart_dict = {"1": productA, "2": productB, "3": productC, "4": productD, "5": productE, "6": productF}
+    listofDict = []
+    listofKeys = []
+
+    for i in range(1, len(products_dict) + 1):
+        listofKeys.append(str(i))
+        i = dict()
+        listofDict.append(i)
+
+    cart_dict = dict(zip(listofKeys, listofDict))
 
     # use list so that i can delete by using method clear() while remaining the key
     productAList = []
@@ -722,14 +745,19 @@ def checkout():
 
 @app.route("/checkout/payment", methods=['GET', 'POST'])
 def payment():
-    productA = {}
-    productB = {}
-    productC = {}
-    productD = {}
-    productE = {}
-    productF = {}
+    db = shelve.open("database/inventory.db", 'w')
+    products_dict = db["Products"]
+    db.close()
 
-    cart_dict = {"1": productA, "2": productB, "3": productC, "4": productD, "5": productE, "6": productF}
+    listofDict = []
+    listofKeys = []
+
+    for i in range(1, len(products_dict) + 1):
+        listofKeys.append(str(i))
+        i = dict()
+        listofDict.append(i)
+
+    cart_dict = dict(zip(listofKeys, listofDict))
 
     productAList = []
     productBList = []
@@ -821,14 +849,19 @@ def payment():
 
 @app.route("/checkout/paymentdone")
 def paymentdone():
-    productA = {}
-    productB = {}
-    productC = {}
-    productD = {}
-    productE = {}
-    productF = {}
+    db = shelve.open("database/inventory.db", 'w')
+    products_dict = db["Products"]
+    db.close()
 
-    cart_dict = {"1": productA, "2": productB, "3": productC, "4": productD, "5": productE, "6": productF}
+    listofDict = []
+    listofKeys = []
+
+    for i in range(1, len(products_dict) + 1):
+        listofKeys.append(str(i))
+        i = dict()
+        listofDict.append(i)
+
+    cart_dict = dict(zip(listofKeys, listofDict))
 
     productAList = []
     productBList = []
@@ -927,14 +960,19 @@ def paymentdone():
 
 @app.route("/checkout/paymentdone/clear", methods=['POST'])
 def done_clear():
-    productA = {}
-    productB = {}
-    productC = {}
-    productD = {}
-    productE = {}
-    productF = {}
+    db = shelve.open("database/inventory.db", 'w')
+    products_dict = db["Products"]
+    db.close()
 
-    cart_dict = {"1": productA, "2": productB, "3": productC, "4": productD, "5": productE, "6": productF}
+    listofDict = []
+    listofKeys = []
+
+    for i in range(1, len(products_dict) + 1):
+        listofKeys.append(str(i))
+        i = dict()
+        listofDict.append(i)
+
+    cart_dict = dict(zip(listofKeys, listofDict))
 
     db1 = shelve.open("database/addtocart", "c")
     try:
@@ -1025,7 +1063,6 @@ def bagbase():
     addtocartform = CreateAddCartForm(request.form)
     if request.method == "POST":
         addtocart_dict = dict(zip(listofKeys, listofDict))
-        print(addtocart_dict)
         db = shelve.open("database/addtocart", "c")
 
         try:
