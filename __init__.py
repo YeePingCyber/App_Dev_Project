@@ -1373,8 +1373,17 @@ def play_game():
 
                 db['Points'] = points_list
 
-        print(leaderboard_points)
-        return render_template("game.html", points_list=points_list, points=leaderboard_points)
+        with shelve.open('database/user.db', 'r') as db:
+            try:
+                users_details_dict = db['Users']
+            except:
+                print("Error in retrieving user.db.")
+
+            user_details = users_details_dict.get(session["customer_session"])
+            user_credit_points = user_details.get_points()
+
+
+        return render_template("game.html", points_list=points_list, points=leaderboard_points, credit_points=user_credit_points)
     else:
         return redirect(url_for("log_in"))
 

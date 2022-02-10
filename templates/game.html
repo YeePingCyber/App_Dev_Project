@@ -30,7 +30,7 @@
                 <p>
                     Credits:
                     <span>
-                        0
+                        {{ credit_points }}
                     </span>
                 </p>
             </div>
@@ -100,10 +100,24 @@
             <p class="center_para">1 Chance = 10 Credit points</p>
         </div>
         <div class="game_card_container">
+            {% if credit_points < 10 %}
+            <script>alert("You do not have any more credit points to play")</script>
+            {% endif %}
+
             {% for i in range(0, (points_list|length))%}
+                {% if credit_points < 10 %}
+                <div class="game_box_container">
+                {% else %}
                 <div class="game_box_container" id="game_box{{i+1}}">
+                {% endif %}
+
                     <div class="card_front">
+                        {% if credit_points < 10 %}
+                        <button class="card_front card_button" style="cursor: not-allowed;" disabled>
+                        {% else %}
                         <button class="card_front card_button" id="button_box{{i+1}}">
+                        {% endif %}
+
                             <svg class="question_mark" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                              width="27.774px" height="27.774px" viewBox="0 0 27.774 27.774" style="enable-background:new 0 0 27.774 27.774;"
                              xml:space="preserve">
