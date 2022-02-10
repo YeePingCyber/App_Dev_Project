@@ -185,6 +185,7 @@ def create_customer():
 def cart():
     # if got session, run the following
     # need store {customer_session : add to cart}
+
     if "customer_session" in session:
         print(session["customer_session"])
         productA = {}
@@ -245,7 +246,7 @@ def cart():
                 for x in cartList[total]:
                     subtotal += x.get_price()
 
-            return render_template("cart.html", cartList=cartList, subtotal=subtotal)
+            return render_template("cart.html", cartList=cartList, subtotal=subtotal, inventory=inventory)
         else:
             return render_template("cart_empty.html")
 
@@ -1012,18 +1013,19 @@ def bagbase():
         productList.append(products_dict[x])
     db.close()
 
+    listofDict = []
+    listofKeys = []
+
+    for i in range(1, len(products_dict) + 1):
+        listofKeys.append(str(i))
+        i = dict()
+        listofDict.append(i)
+
     x = temp_product_id
     addtocartform = CreateAddCartForm(request.form)
     if request.method == "POST":
-        # limit to only 6 products for sales. too many too cluttered
-        productA = {}
-        productB = {}
-        productC = {}
-        productD = {}
-        productE = {}
-        productF = {}
-
-        addtocart_dict = {"1":productA, "2":productB, "3":productC, "4":productD, "5":productE, "6":productF}
+        addtocart_dict = dict(zip(listofKeys, listofDict))
+        print(addtocart_dict)
         db = shelve.open("database/addtocart", "c")
 
         try:
@@ -1040,28 +1042,22 @@ def bagbase():
                               int(addtocartform.top.data))
 
         if addtocart.get_name() == productList[0].get_name():
-            productA[addtocart.get_id()] = addtocart
-            addtocart_dict["1"].update(productA)
+            addtocart_dict["1"][addtocart.get_id()] = addtocart
 
         elif addtocart.get_name() == productList[1].get_name():
-            productB[addtocart.get_id()] = addtocart
-            addtocart_dict["2"].update(productB)
+            addtocart_dict["2"][addtocart.get_id()] = addtocart
 
         elif addtocart.get_name() == productList[2].get_name():
-            productC[addtocart.get_id()] = addtocart
-            addtocart_dict["3"].update(productC)
+            addtocart_dict["3"][addtocart.get_id()] = addtocart
 
         elif addtocart.get_name() == productList[3].get_name():
-            productD[addtocart.get_id()] = addtocart
-            addtocart_dict["4"].update(productD)
+            addtocart_dict["4"][addtocart.get_id()] = addtocart
 
         elif addtocart.get_name() == productList[4].get_name():
-            productE[addtocart.get_id()] = addtocart
-            addtocart_dict["5"].update(productE)
+            addtocart_dict["5"][addtocart.get_id()] = addtocart
 
         elif addtocart.get_name() == productList[5].get_name():
-            productF[addtocart.get_id()] = addtocart
-            addtocart_dict["6"].update(productF)
+            addtocart_dict["6"][addtocart.get_id()] = addtocart
 
         db["Add_to_cart"] = addtocart_dict
         print(addtocart_dict)
