@@ -50,7 +50,7 @@ class UpdateCustomerForm(Form):
                             render_kw={"placeholder": "Last Name"})
     email = EmailField('', [validators.Email(), validators.DataRequired()], render_kw={"placeholder": "Email"})
     birthdate = DateField('', format='%Y-%m-%d', render_kw={"placeholder": "DD/MM/YYYY"})
-    current_password = PasswordField('',[validators.Length(min=8, max=15), validators.Optional(strip_whitespace=True), validate_password],
+    current_password = PasswordField('',[validators.Length(min=8, max=15), validators.Optional(strip_whitespace=True)],
                                      render_kw={"placeholder": "Current Password"})
     new_password = PasswordField('',[validators.Length(min=8, max=15), validators.Optional(strip_whitespace=True), validate_password],
                                  render_kw={"placeholder": "New Password"})

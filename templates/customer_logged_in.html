@@ -2,8 +2,8 @@
 {% block title %}Tom Patterson - Customer Account {% endblock %}
 
 {% block css %}
-<link rel="stylesheet" type="text/css" href="../static/css/adminBase.css">
-<link rel="stylesheet" type="text/css" href="../static/css/login.css">
+<link rel="stylesheet" type="text/css" href="../../static/css/base.css">
+<link rel="stylesheet" type="text/css" href="../../static/css/login.css">
 {% endblock %}
 
 {% block bodyContent %}
@@ -13,7 +13,7 @@
 <div class="container-login">
   <div class="col">
     <form method="POST" class="form-login" action="">
-      <h1>Update Admin</h1>
+      <h1>Your Account</h1>
       <br><br>
       <img src="../../static/images/Default_picture.jpg" class="profile-pic">
       <br><br><br>
@@ -36,7 +36,7 @@
       <br><br><br>
 
       <div class="form-login-field">
-        {{ render_field(form.employee_id, class="form-login-field") }}
+        {{ render_field(form.birthdate, class="form-login-field") }}
       </div>
 
       <br><br><br>
@@ -54,8 +54,8 @@
       <div class="form-login-field">
         {{ render_field(form.current_password, class="form-login-field") }}
       </div>
-      {% if error %}
-      <p style="color: red; font-size: 80%;"><strong></strong> {{error}}</p>
+      {% if pw_code == 1 %}
+      <p style="color: red; font-size: 80%;"><strong>Wrong Password</strong></p>
       {% endif %}
       <br><br><br>
 
@@ -64,6 +64,7 @@
       </div>
 
       <br><br><br>
+      <a href=" {{ url_for('log_out') }}" class="submit-login">Log Out</a>
       <input type="submit" value="Save Changes" class="submit-login">
     </form>
   </div>

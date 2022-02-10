@@ -45,101 +45,99 @@ def home():
 def log_in():
     error = ""
     create_log_in_form = CreateLoginForm(request.form)
-    if request.method == 'POST' and create_log_in_form.validate():
-        db = shelve.open('database/user.db', 'r')
-        users_dict = db['Users']
-        hashed_password = hl.pbkdf2_hmac('sha256', str(create_log_in_form.login_password.data).encode(), b'salt', 100000).hex()
-        for user in users_dict:
-            if users_dict[user].get_email().upper() == create_log_in_form.login_email.data.upper() and users_dict[user].get_password() == hashed_password:
-                if isinstance(users_dict[user], Customer):
+    if "customer_session" in session:
+        return redirect(url_for('customer_logged_in'))
+    else:
+        if request.method == 'POST' and create_log_in_form.validate():
+            db = shelve.open('database/user.db', 'r')
+            users_dict = db['Users']
+            hashed_password = hl.pbkdf2_hmac('sha256', str(create_log_in_form.login_password.data).encode(), b'salt', 100000).hex()
+            for user in users_dict:
+                if users_dict[user].get_email().upper() == create_log_in_form.login_email.data.upper() and users_dict[user].get_password() == hashed_password:
+                    if isinstance(users_dict[user], Customer):
 
-                    # Session for customer
-                    session["customer_session"] = users_dict[user].get_customer_id()
-                    print(session["customer_session"])
+                        # Session for customer
+                        session["customer_session"] = users_dict[user].get_customer_id()
+                        print(session["customer_session"])
 
-                    # Delete Customer session
-                    # session.pop("customer_session")
-                    # print(session["customer_session"])
+                        # Delete Customer session
+                        # session.pop("customer_session")
+                        # print(session["customer_session"])
 
-                    return redirect(url_for('customer_logged_in'))
-                elif isinstance(users_dict[user], Admin):
+                        return redirect(url_for('customer_logged_in'))
+                    elif isinstance(users_dict[user], Admin):
 
-                    # Session for admin
-                    session["admin_session"] = users_dict[user].get_admin_id()
+                        # Session for admin
+                        session["admin_session"] = users_dict[user].get_admin_id()
 
-                    # Delete Admin session
-                    # session.pop("admin_session")
-                    # print(session["customer_session"])
+                        # Delete Admin session
+                        # session.pop("admin_session")
+                        # print(session["customer_session"])
 
-                    return redirect((url_for('admin')))
-            elif users_dict[user].get_email() != create_log_in_form.login_email.data or users_dict[user].get_password() != hashed_password:
-                error = "Invalid email or password"
-        db.close()
-    return render_template("loginpage.html", form=create_log_in_form, error= error)
+                        return redirect((url_for('admin')))
+                elif users_dict[user].get_email() != create_log_in_form.login_email.data or users_dict[user].get_password() != hashed_password:
+                    error = "Invalid email or password"
+            db.close()
+        return render_template("loginpage.html", form=create_log_in_form, error= error)
 
 
-@app.route("/user")
+@app.route("/logout", methods=['GET'])
+def log_out():
+    session.pop("customer_session", None)
+    return redirect(url_for('log_in'))
+
+@app.route("/user",  methods=['GET', 'POST'])
 def customer_logged_in():
+    code = 0
+    pw_code = 0
+    error = ""
+    update_customer_form = UpdateCustomerForm(request.form)
     if "customer_session" in session:
         customer = session["customer_session"]
-        db = shelve.open('database/user.db', 'r')
+        db = shelve.open('database/user.db', 'w')
         users_dict = db['Users']
         customer_user = users_dict.get(customer)
-        return f"<h1>{customer_user.get_first_name()}<h1>"
-    update_admin_form = UpdateAdminForm(request.form)
-    """"
-    update_customer_form = UpdateCustomerForm(request.form)
-    error = ""
-    code = 0
-    if request.method == 'POST' and update_customer_form.validate():
-        # Make uuids for customers and admins the same method to retrieve
-        for user in users_dict:
-            if update_customer_form.email.data.upper() == users_dict[user].get_email().upper() and customer != users_dict[user].get_admin_id():
-                code = 1
-                break
-        hashed_password = hl.pbkdf2_hmac('sha256', str(update_admin_form.current_password.data).encode(), b'salt', 100000).hex()
-        if update_customer_form.current_password.data == "" and code == 0:
-            admin.set_first_name(update_admin_form.first_name.data)
-            admin.set_last_name(update_admin_form.last_name.data)
-            admin.set_email(update_admin_form.email.data)
-            admin.set_employee_id(update_admin_form.employee_id.data)
-            if update_admin_form.profile_pic.data:
-                print("Saved?")
-                picture_file = save_picture(update_admin_form.profile_pic.data, admin.get_admin_id())
-                print("Def saved")
-            db['Users'] = users_dict
-            db.close()
-            return redirect(url_for('admin_admin_management'))
-        elif update_admin_form.current_password.data != "" and code == 0:
-            if hashed_password == admin.get_password():
-                admin.set_first_name(update_admin_form.first_name.data)
-                admin.set_last_name(update_admin_form.last_name.data)
-                admin.set_email(update_admin_form.email.data)
-                admin.set_employee_id(update_admin_form.employee_id.data)
-                admin.set_password(update_admin_form.new_password.data)
-                if update_admin_form.profile_pic.data:
-                    print("Saved?")
-                    picture_file = save_picture(update_admin_form.profile_pic.data, admin.get_admin_id())
-                    print("Def saved")
+        if request.method == "POST" and update_customer_form.validate():
+            for user in users_dict:
+                if isinstance(users_dict[user], Customer):
+                    if update_customer_form.email.data.upper() == users_dict[user].get_email().upper() and customer != users_dict[user].get_customer_id():
+                        code = 1
+                        break
+                if isinstance(users_dict[user], Admin):
+                    if update_customer_form.email.data.upper() == users_dict[user].get_email().upper() and customer != users_dict[user].get_admin_id():
+                        code = 1
+                        break
+            hashed_password = hl.pbkdf2_hmac('sha256', str(update_customer_form.current_password.data).encode(), b'salt', 100000).hex()
+            if update_customer_form.current_password.data == "" and code == 0:
+                customer_user.set_first_name(update_customer_form.first_name.data)
+                customer_user.set_last_name(update_customer_form.last_name.data)
+                customer_user.set_email(update_customer_form.email.data)
+                customer_user.set_birthdate(update_customer_form.birthdate.data)
                 db['Users'] = users_dict
                 db.close()
-                return redirect(url_for('admin_admin_management'))
-            elif hashed_password != admin.get_password():
+                return redirect(url_for('home'))
+            elif update_customer_form.current_password.data != "" and code == 0 and hashed_password == customer_user.get_password():
+                if hashed_password == customer_user.get_password():
+                    customer_user.set_first_name(update_customer_form.first_name.data)
+                    customer_user.set_last_name(update_customer_form.last_name.data)
+                    customer_user.set_email(update_customer_form.email.data)
+                    customer_user.set_birthdate(update_customer_form.birthdate.data)
+                    customer_user.set_password(update_customer_form.new_password.data)
+                    db['Users'] = users_dict
+                    db.close()
+                    return redirect(url_for('home'))
+            else:
+                pw_code = 1
                 error = "Wrong password entered"
-
+        else:
+            update_customer_form.first_name.data = customer_user.get_first_name()
+            update_customer_form.last_name.data = customer_user.get_last_name()
+            update_customer_form.email.data = customer_user.get_email()
+            update_customer_form.birthdate.data = customer_user.get_birth_date()
+        return render_template("customer_logged_in.html", form = update_customer_form, error = error, code = code, pw_code = pw_code)
     else:
-        users_dict = {}
-        db = shelve.open('database/user.db', 'r')
-        users_dict = db['Users']
-        db.close()
+        return redirect(url_for('home'))
 
-        admin = users_dict.get(id)
-        update_admin_form.first_name.data = admin.get_first_name()
-        update_admin_form.last_name.data = admin.get_last_name()
-        update_admin_form.email.data = admin.get_email()
-        update_admin_form.employee_id.data = admin.get_employee_id()
-    return render_template("adminAdminUpdate.html", form=update_admin_form, error = error, code = code)
-"""
 
 @app.route("/register", methods=['GET', 'POST'])
 def create_customer():
