@@ -184,6 +184,7 @@ def create_customer():
 @app.route("/cart")
 def cart():
     # if got session, run the following
+    # problem is if no session then how
     if session["customer_session"]: 
         print(session["customer_session"])
         productA = {}
@@ -650,7 +651,10 @@ def done_clear():
 # main shop
 @app.route("/mainshop", methods=['GET', 'POST'])
 def mainshop():
-    return render_template("mainshop.html")
+    db = shelve.open("database/inventory.db", 'w')
+    products_dict = db["Products"]
+    return render_template("mainshop.html", products = products_dict)
+
 
 db = shelve.open("database/inventory.db", 'w')
 products_dict = db["Products"]
@@ -693,7 +697,7 @@ def bag1():
         print(addtocart_dict)
         return redirect(url_for("cart"))
 
-    return render_template("bag1.html", form=addtocartform, product=products_dict, x=x)
+    return render_template("bag1.html", form=addtocartform, products=products_dict, x=x)
 
 
 @app.route("/bag2", methods=['GET', 'POST'])
@@ -1467,6 +1471,11 @@ def update_product(id):
             products_dict.get(id).set_top(1)
         db["Products"] = products_dict
         db.close()
+
+        db1 = shelve.open("database/addtocart", "c")
+        addtocart_dict = db1["Add_to_cart"]
+        print(addtocart_dict)
+
         return redirect(url_for("admin_product_management"))
     else:
         db = shelve.open("database/inventory.db", 'r')
