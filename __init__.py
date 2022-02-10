@@ -183,43 +183,46 @@ def create_customer():
 
 @app.route("/cart")
 def cart():
-    productA = {}
-    productB = {}
-    cart_dict = {"1":productA, "2":productB}
+    # if got session, run the following
+    if session["customer_session"]: 
+        print(session["customer_session"])
+        productA = {}
+        productB = {}
+        cart_dict = {"1":productA, "2":productB}
 
-    # use list so that i can delete by using method clear() while remaining the key
-    productAList = []
-    productBList = []
-    cartList = []
-    db = shelve.open("database/addtocart", "c")
-    try:
-        if "Add_to_cart" in db:
-            cart_dict = db["Add_to_cart"]
+        # use list so that i can delete by using method clear() while remaining the key
+        productAList = []
+        productBList = []
+        cartList = []
+        db = shelve.open("database/addtocart", "c")
+        try:
+            if "Add_to_cart" in db:
+                cart_dict = db["Add_to_cart"]
+            else:
+                db["Add_to_cart"] = cart_dict
+        except:
+            print("Error in retrieving Inventory from addtocart.db")
+
+        db.close()
+        if len(cart_dict["1"]) or len(cart_dict["2"]) > 0:
+            # organising it such that its [[productA],[productB]]
+            for x in cart_dict["1"]:
+                productAList.append(cart_dict["1"][x])
+
+            for y in cart_dict["2"]:
+                productBList.append(cart_dict["2"][y])
+
+            cartList.append(productAList)
+            cartList.append(productBList)
+
+            subtotal = 0
+            for total in range(0, len(cartList)):
+                for x in cartList[total]:
+                    subtotal += x.get_price()
+
+            return render_template("cart.html", cartList=cartList, subtotal=subtotal)
         else:
-            db["Add_to_cart"] = cart_dict
-    except:
-        print("Error in retrieving Inventory from addtocart.db")
-
-    db.close()
-    if len(cart_dict["1"]) or len(cart_dict["2"]) > 0:
-        # organising it such that its [[productA],[productB]]
-        for x in cart_dict["1"]:
-            productAList.append(cart_dict["1"][x])
-
-        for y in cart_dict["2"]:
-            productBList.append(cart_dict["2"][y])
-
-        cartList.append(productAList)
-        cartList.append(productBList)
-
-        subtotal = 0
-        for total in range(0, len(cartList)):
-            for x in cartList[total]:
-                subtotal += x.get_price()
-
-        return render_template("cart.html", cartList=cartList, subtotal=subtotal)
-    else:
-        return render_template("cart_empty.html")
+            return render_template("cart_empty.html")
 
 
 @app.route('/updateAddCart/<int:id>', methods=['POST'])
