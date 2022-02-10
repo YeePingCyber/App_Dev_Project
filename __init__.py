@@ -38,7 +38,10 @@ def home():
     db = shelve.open("database/inventory.db", 'w')
     products_dict = db["Products"]
     db.close()
-    return render_template("home.html", top4=products_dict)
+
+    db = shelve.open("database/trees.db", "c")
+    trees = db["Trees"]
+    return render_template("home.html", top4=products_dict, trees=trees)
 
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -78,7 +81,12 @@ def log_in():
                 elif users_dict[user].get_email() != create_log_in_form.login_email.data or users_dict[user].get_password() != hashed_password:
                     error = "Invalid email or password"
             db.close()
-        return render_template("loginpage.html", form=create_log_in_form, error= error)
+
+        db = shelve.open("database/trees.db", "c")
+        trees = db["Trees"]
+        db.close()
+
+        return render_template("loginpage.html", form=create_log_in_form, error= error, trees=trees)
 
 
 @app.route("/logout", methods=['GET'])
@@ -134,7 +142,12 @@ def customer_logged_in():
             update_customer_form.last_name.data = customer_user.get_last_name()
             update_customer_form.email.data = customer_user.get_email()
             update_customer_form.birthdate.data = customer_user.get_birth_date()
-        return render_template("customer_logged_in.html", form = update_customer_form, error = error, code = code, pw_code = pw_code)
+
+        db = shelve.open("database/trees.db", "c")
+        trees = db["Trees"]
+        db.close()
+
+        return render_template("customer_logged_in.html", form = update_customer_form, error = error, code = code, pw_code = pw_code, trees=trees)
     else:
         return redirect(url_for('home'))
 
@@ -181,6 +194,10 @@ def create_customer():
 
 @app.route("/cart")
 def cart():
+    db = shelve.open("database/trees.db", "c")
+    trees = db["Trees"]
+    db.close()
+
     if "customer_session" in session:
         print(session["customer_session"])
         db = shelve.open("database/inventory.db", 'w')
@@ -261,11 +278,15 @@ def cart():
                 for x in cartList[total]:
                     subtotal += x.get_price()
 
-            return render_template("cart.html", cartList=cartList, subtotal=subtotal)
+            return render_template("cart.html", cartList=cartList, subtotal=subtotal, trees=trees)
         else:
-            return render_template("cart_empty.html")
+            return render_template("cart_empty.html", trees=trees)
 
     else:
+        db = shelve.open("database/trees.db", "c")
+        trees = db["Trees"]
+        db.close()
+
         db = shelve.open("database/inventory.db", 'w')
         products_dict = db["Products"]
         db.close()
@@ -328,9 +349,13 @@ def cart():
                 for x in cartList[total]:
                     subtotal += x.get_price()
 
-            return render_template("cart.html", cartList=cartList, subtotal=subtotal)
+            db = shelve.open("database/trees.db", "c")
+            trees = db["Trees"]
+            db.close()
+
+            return render_template("cart.html", cartList=cartList, subtotal=subtotal, trees=trees)
         else:
-            return render_template("cart_empty.html")
+            return render_template("cart_empty.html", trees=trees)
 
 
 @app.route('/updateAddCart/<int:id>', methods=['POST'])
@@ -743,7 +768,11 @@ def checkout():
 
         return redirect(url_for("payment"))
 
-    return render_template("checkout.html", form=create_shipment_form, cartList=cartList, subtotal=subtotal, grandtotal=grandtotal)
+    db = shelve.open("database/trees.db", "c")
+    trees = db["Trees"]
+    db.close()
+
+    return render_template("checkout.html", form=create_shipment_form, cartList=cartList, subtotal=subtotal, grandtotal=grandtotal, trees=trees)
 
 
 @app.route("/checkout/payment", methods=['GET', 'POST'])
@@ -845,7 +874,11 @@ def payment():
 
     db.close()
 
-    return render_template("payment.html", form=create_payment_form, cartList=cartList, subtotal=subtotal, grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict)
+    db = shelve.open("database/trees.db", "c")
+    trees = db["Trees"]
+    db.close()
+
+    return render_template("payment.html", form=create_payment_form, cartList=cartList, subtotal=subtotal, grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict, trees=trees)
 
 
 @app.route("/checkout/paymentdone")
@@ -956,7 +989,11 @@ def paymentdone():
     db["sales"] = sales_dict
     print(sales_dict)
 
-    return render_template("paymentdone.html", subtotal=subtotal, grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict, sales=sales_dict, cartList=cartList)
+    db = shelve.open("database/trees.db", "c")
+    trees = db["Trees"]
+    db.close()
+
+    return render_template("paymentdone.html", subtotal=subtotal, grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict, sales=sales_dict, cartList=cartList, trees=trees)
 
 
 @app.route("/checkout/paymentdone/clear", methods=['POST'])
@@ -1035,7 +1072,11 @@ def mainshop():
         temp_product_id = productview.product_id.data
         return redirect(url_for("bagbase"))
 
-    return render_template("mainshop.html", products = products_dict, form = productview)
+    db = shelve.open("database/trees.db", "c")
+    trees = db["Trees"]
+    db.close()
+
+    return render_template("mainshop.html", products = products_dict, form = productview, trees=trees)
 
 
 @app.route("/bagbase", methods=['GET', 'POST'])
@@ -1095,8 +1136,12 @@ def bagbase():
         db["Add_to_cart"] = addtocart_dict
         print(addtocart_dict)
         return redirect(url_for("cart"))
+    
+    db = shelve.open("database/trees.db", "c")
+    trees = db["Trees"]
+    db.close()
 
-    return render_template("bagbase.html", form=addtocartform, products=products_dict, x=x)
+    return render_template("bagbase.html", form=addtocartform, products=products_dict, x=x, trees=trees)
 
 
 # @app.route("/auction", methods=['GET', 'POST'])
@@ -1202,7 +1247,11 @@ def auction():
         if start == today or today > start or start <= today and end <= today:
             ongoing = values
 
-    return render_template('auction.html', auction_dict=auction_dict, bid_list=bid_list, ongoing=ongoing)
+    db = shelve.open("database/trees.db", "c")
+    trees = db["Trees"]
+    db.close()
+
+    return render_template('auction.html', auction_dict=auction_dict, bid_list=bid_list, ongoing=ongoing, trees=trees)
 
 
 @app.route("/auctionForm", methods=['GET', 'POST'])
@@ -1311,7 +1360,11 @@ def forget_password():
 
             return redirect(url_for("log_in"))
 
-    return render_template("forgetPassword.html", form=create_forget_form, otpNum=randomOTP)
+    db = shelve.open("database/trees.db", "c")
+    trees = db["Trees"]
+    db.close()
+
+    return render_template("forgetPassword.html", form=create_forget_form, otpNum=randomOTP, trees=trees)
 
 
 @app.route("/game")
@@ -1431,7 +1484,6 @@ def leaderboard():
 # Admin Side
 @app.route("/admin")
 def admin():
-    # from datetime import datetime
     time_now = datetime.now()
 
     sales_dict = {}
@@ -1453,6 +1505,10 @@ def admin():
     cartList = []
     productAList = []
     productBList = []
+    productCList = []
+    productDList = []
+    productEList = []
+    productFList = []
 
     for sum in range(0, len(salesList)):
         for x in salesList[sum].get_cart()["1"]:
@@ -1461,9 +1517,25 @@ def admin():
         for y in salesList[sum].get_cart()["2"]:
             productBList.append(salesList[sum].get_cart()["2"][y])
 
-    # all productA in 1 array, all productB in 1 array
+        for y in salesList[sum].get_cart()["3"]:
+            productBList.append(salesList[sum].get_cart()["3"][y])
+
+        for y in salesList[sum].get_cart()["4"]:
+            productBList.append(salesList[sum].get_cart()["4"][y])
+
+        for y in salesList[sum].get_cart()["5"]:
+            productBList.append(salesList[sum].get_cart()["5"][y])
+
+        for y in salesList[sum].get_cart()["6"]:
+            productBList.append(salesList[sum].get_cart()["6"][y])
+            
+
     cartList.append(productAList)
     cartList.append(productBList)
+    cartList.append(productCList)
+    cartList.append(productDList)
+    cartList.append(productEList)
+    cartList.append(productFList)
 
     # get total of each customer purchase
     c_total = 0
@@ -1475,6 +1547,18 @@ def admin():
         for j in salesList[i].get_cart()["2"]:
             c_total += salesList[i].get_cart()["2"][j].get_price()
 
+        for j in salesList[i].get_cart()["3"]:
+            c_total += salesList[i].get_cart()["3"][j].get_price()
+
+        for j in salesList[i].get_cart()["4"]:
+            c_total += salesList[i].get_cart()["4"][j].get_price()
+
+        for j in salesList[i].get_cart()["5"]:
+            c_total += salesList[i].get_cart()["5"][j].get_price()
+
+        for j in salesList[i].get_cart()["6"]:
+            c_total += salesList[i].get_cart()["6"][j].get_price()
+
         store_c.append(c_total)
         c_total = 0
     print(store_c)
@@ -1484,6 +1568,10 @@ def admin():
     for total in range(0, len(cartList)):
         for x in cartList[total]:
             subtotal += x.get_price()
+
+    db = shelve.open("database/trees.db", "c")
+    db["Trees"] = subtotal / 5
+    db.close()
 
     try:
         db = shelve.open('database/auction.db', 'r')
@@ -1495,14 +1583,12 @@ def admin():
     today = date.today().strftime('%Y-%m-%d')
     upcoming = []
     ongoing = []
-    print(auction_dict)
     for keys, values in auction_dict.items():
         start = date.strftime(values.get_start_date(), '%Y-%m-%d')
         end = date.strftime(values.get_end_date(), '%Y-%m-%d')
         if start == today or today > start or start <= today and end <= today:
             ongoing.append(values)
 
-    print(ongoing)
     auction_on = len(ongoing)
 
     db = shelve.open("database/inventory.db", 'r')
