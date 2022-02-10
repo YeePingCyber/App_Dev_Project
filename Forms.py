@@ -56,6 +56,7 @@ class UpdateCustomerForm(Form):
                                  render_kw={"placeholder": "New Password"})
     profile_pic = FileField('')
 
+
 class CreateLoginForm(Form):
     login_email = EmailField('', [validators.Email(), validators.DataRequired()],
                              render_kw={"placeholder": "Email Address"})
@@ -90,6 +91,10 @@ class UpdateAdminForm(Form):
     new_password = PasswordField('',[validators.Length(min=8, max=15), validators.Optional(strip_whitespace=True), validate_password],render_kw={"placeholder": "New Password"})
     employee_id = StringField('', [validators.Length(min=1, max=150)], render_kw={"placeholder": "Employee ID"})
     profile_pic = FileField('')
+
+
+class CreateProductView(Form):
+    product_id = HiddenField("")
 
 
 class CreateAddCartForm(Form):
