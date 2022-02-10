@@ -10,25 +10,16 @@ def validate_password(form, register_password):
     special_count = 0
     char_list = []
     char_list = list(register_password.data)
-    print(char_list)
     special_list = ['!','@','#','$','%','&','*',"_"]
     for char in special_list:
         for char2 in char_list:
             if char == char2:
-                print(char)
                 special_count += 1
-        print(special_count)
     if special_count == 0:
         raise ValidationError('Password must contain a mix of letters, numbers and special characters')
 
 
 class CreateCustomerForm(Form):
-
-    def validate_image(form, image):
-        ext = os.path.splitext(image.filename)[1]
-        valid_ext = ['.jpg','.png','.jpeg']
-        if ext not in valid_ext:
-            raise ValidationError('Unsupported filetype ')
 
     first_name = StringField('', [validators.Length(min=1, max=50), validators.DataRequired()],
                              render_kw={"placeholder": "First Name"})

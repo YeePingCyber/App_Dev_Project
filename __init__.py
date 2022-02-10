@@ -165,12 +165,23 @@ def create_customer():
             new_customer = Customer(create_customer_form.first_name.data, create_customer_form.last_name.data,
                                     create_customer_form.birthdate.data, create_customer_form.email.data,
                                     create_customer_form.register_password.data)
-            if create_customer_form.profile_pic.data:
-                print("Saved?")
-                picture_file = save_picture(create_customer_form.profile_pic.data, new_customer.get_customer_id())
-                print("Def saved")
             customer_dict[new_customer.get_customer_id()] = new_customer
-            print(new_customer.get_password())
+            """
+            if create_customer_form.profile_pic.data is not None:
+                pic = create_customer_form.profile_pic.data
+                fn = pic.filename.split(".")
+                ext = fn[len(fn)-1]
+                if ext == ".jpg":
+                    pic_name = str(new_customer.get_customer_id()) + str(ext)
+                    try:
+                        pic.save(os.path.join("static/profile_pics/", pic_name))
+                        print("saved")
+                    except:
+                        print("upload failed")
+            else:
+                print("not saved")
+            """
+
             db['Users'] = customer_dict
             db.close()
             return redirect(url_for('log_in'))
