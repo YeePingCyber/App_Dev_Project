@@ -15,10 +15,13 @@
     <br>
     <br>
     <div class = "container-product">
-        <p class="prod_id">id = {{ product_id }}</p>
         <img src="../../static/images/default-product-image.png" class="upload-image">
         <br>
-        <form method="POST" class="" action="">
+        <form method="POST" class="" action="" enctype="multipart/form-data">
+        <div class="form-login-field">
+        {{ render_field(form.product_pic, class="form-product-field") }}
+        </div>
+            <br>
         <div class="form-product-field">
                 {{ render_field(form.name, class="form-product-field") }}
         </div>
@@ -40,13 +43,12 @@
         </div>
             <br>
         <div class="form-product-field">
+            &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
             {{ render_field(form.description, class="form-product-field") }}
         </div>
-        <div class="form-product-field-top">
-            {{ render_field(form.top, class="form-product-field") }}
-        </div>
             <br>
-        <input type="submit" value="Save and update" class="submit-product">
+        <button class="cancel-product"><a href="/adminProductManagement" style="color:white;">Cancel</a></button>
+        <input type="submit" value="Update Product" class="submit-product">
         </form>
     </div>
 {% endblock %}

@@ -12,12 +12,17 @@
 <br>
 <div class="container-login">
   <div class="col">
-    <form method="POST" class="form-login" action="">
+    <form method="POST" class="form-login" enctype="multipart/form-data">
       <h1>Register</h1>
       <br><br>
       <img src="../static/images/Default_picture.jpg" class="profile-pic">
       <br><br><br>
-
+      <div class="form-login-field-file">
+        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+        Upload your profile picture:
+        {{ render_field(form.profile_pic, class="form-control-file") }}
+      </div>
+      <br><br><br>
       <div class="form-login-field-date">
         {{ render_field(form.birthdate, class="form-login-field-date") }}
       </div>

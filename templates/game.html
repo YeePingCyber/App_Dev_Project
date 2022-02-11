@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Tom Patterson - Forget Password{% endblock %}
+{% block title %}Tom Patterson - Mini game{% endblock %}
 
 {% block css %}
     <link rel="stylesheet" type="text/css" href="../static/css/base.css">
@@ -13,11 +13,84 @@
 {% block bodyContent %}
     <div class="top_container">
         <div class="top_left_container">
-            <p>Points: <span>000000</span></p>
-            <p>Credits: <span>000000</span></p>
+            <div id="backLink">
+                <a href="/checkout" id="back_btn">< Back</a>
+            </div>
+            <div id="points_credits">
+                <p>
+                    Points:
+                    <span>
+                        {% if points == 0 or points == "" %}
+                            0
+                        {% else %}
+                            {{ points }}
+                        {% endif %}
+                    </span>
+                </p>
+                <p>
+                    Credits:
+                    <span>
+                        {{ credit_points }}
+                    </span>
+                </p>
+            </div>
         </div>
         <div class="top_right_container">
-            <button id="HTPBtn">How to Play?</button>
+            <div>
+                <button id="HTPBtn" data-toggle="modal" data-target="#exampleModal">How to Play?</button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">How to Play?</h5>
+                                <button type="button" class="modal_cross" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">
+                                        <svg class="cross_svg" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                             viewBox="0 0 100 100" style="enable-background:new 0 0 94.926 94.926;"
+                                             xml:space="preserve">
+                                            <g>
+                                                <path d="M55.931,47.463L94.306,9.09c0.826-0.827,0.826-2.167,0-2.994L88.833,0.62C88.436,0.224,87.896,0,87.335,0
+                                                    c-0.562,0-1.101,0.224-1.498,0.62L47.463,38.994L9.089,0.62c-0.795-0.795-2.202-0.794-2.995,0L0.622,6.096
+                                                    c-0.827,0.827-0.827,2.167,0,2.994l38.374,38.373L0.622,85.836c-0.827,0.827-0.827,2.167,0,2.994l5.473,5.476
+                                                    c0.397,0.396,0.936,0.62,1.498,0.62s1.1-0.224,1.497-0.62l38.374-38.374l38.374,38.374c0.397,0.396,0.937,0.62,1.498,0.62
+                                                    s1.101-0.224,1.498-0.62l5.473-5.476c0.826-0.827,0.826-2.167,0-2.994L55.931,47.463z"/>
+                                            </g>
+                                        </svg>
+                                    </span>
+                                </button>
+                            </div>
+
+                            <div class="modal-body">
+                                <ol>
+                                    <li>Earn credit points by buying our bags</li>
+                                    <li>Use the credit points to exchange for chance</li>
+                                    <li>Select a box and earn points or multiplier</li>
+                                    <li>
+                                        There are...
+                                        <ul>
+                                            <li>x5 multiplier</li>
+                                            <li>x4 multiplier</li>
+                                            <li>x3 multiplier</li>
+                                            <li>x2 multiplier</li>
+                                            <li>50 points</li>
+                                            <li>40 points</li>
+                                            <li>30 points</li>
+                                            <li>20 points</li>
+                                            <li>10 points</li>
+                                        </ul>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="leaderboard_link_container">
+                <a href="/leaderboard" id="leaderboard_link">Leaderboard</a>
+            </div>
         </div>
     </div>
 
@@ -27,77 +100,162 @@
             <p class="center_para">1 Chance = 10 Credit points</p>
         </div>
         <div class="game_card_container">
-            <div class="game_box_container" id="game_box1">
-                <div class="card_front">
-                    <button class="card_front card_button" id="button_box1">
-                        <svg class="question_mark" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                         width="27.774px" height="27.774px" viewBox="0 0 27.774 27.774" style="enable-background:new 0 0 27.774 27.774;"
-                         xml:space="preserve">
-                            <g>
-                                <path d="M10.398,22.811h4.618v4.964h-4.618V22.811z M21.058,1.594C19.854,0.532,17.612,0,14.33,0c-3.711,0-6.205,0.514-7.482,1.543
-                                    c-1.277,1.027-1.916,3.027-1.916,6L4.911,8.551h4.577l-0.02-1.049c0-1.424,0.303-2.377,0.907-2.854
-                                    c0.604-0.477,1.814-0.717,3.632-0.717c1.936,0,3.184,0.228,3.74,0.676c0.559,0.451,0.837,1.457,0.837,3.017
-                                    c0,1.883-0.745,3.133-2.237,3.752l-1.797,0.766c-1.882,0.781-3.044,1.538-3.489,2.27c-0.442,0.732-0.665,2.242-0.665,4.529h4.68
-                                    v-0.646c0-1.41,0.987-2.533,2.965-3.365c2.03-0.861,3.343-1.746,3.935-2.651c0.592-0.908,0.888-2.498,0.888-4.771
-                                    C22.863,4.625,22.261,2.655,21.058,1.594z"/>
-                            </g>
-                        </svg>
-                    </button>
-                </div>
-                <div class="card_back">
-                    <h4>You earned...</h4>
+            {% if credit_points < 10 %}
+            <script>alert("You do not have any more credit points to play")</script>
+            {% endif %}
 
-                    <p id="card_back_para1">{{ (point_list[0].values()|list)[0] }} points</p>
-                    <button type="button">Claim</button>
-                </div>
-            </div>
-            <div class="game_box_container" id="game_box2">
-                <div class="card_front">
-                    <button class="card_front card_button" id="button_box2">
-                        <svg class="question_mark" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                         width="27.774px" height="27.774px" viewBox="0 0 27.774 27.774" style="enable-background:new 0 0 27.774 27.774;"
-                         xml:space="preserve">
-                            <g>
-                                <path d="M10.398,22.811h4.618v4.964h-4.618V22.811z M21.058,1.594C19.854,0.532,17.612,0,14.33,0c-3.711,0-6.205,0.514-7.482,1.543
-                                    c-1.277,1.027-1.916,3.027-1.916,6L4.911,8.551h4.577l-0.02-1.049c0-1.424,0.303-2.377,0.907-2.854
-                                    c0.604-0.477,1.814-0.717,3.632-0.717c1.936,0,3.184,0.228,3.74,0.676c0.559,0.451,0.837,1.457,0.837,3.017
-                                    c0,1.883-0.745,3.133-2.237,3.752l-1.797,0.766c-1.882,0.781-3.044,1.538-3.489,2.27c-0.442,0.732-0.665,2.242-0.665,4.529h4.68
-                                    v-0.646c0-1.41,0.987-2.533,2.965-3.365c2.03-0.861,3.343-1.746,3.935-2.651c0.592-0.908,0.888-2.498,0.888-4.771
-                                    C22.863,4.625,22.261,2.655,21.058,1.594z"/>
-                            </g>
-                        </svg>
-                    </button>
-                </div>
-                <div class="card_back">
-                    <h4>You earned...</h4>
-                    <p id="card_back_para2">{{ (point_list[1].values()|list)[0] }} points</p>
-                    <button type="button">Claim</button>
-                </div>
-            </div>
-            <div class="game_box_container" id="game_box3">
-                <div class="card_front">
-                    <button class="card_front card_button" id="button_box3">
-                        <svg class="question_mark" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                         width="27.774px" height="27.774px" viewBox="0 0 27.774 27.774" style="enable-background:new 0 0 27.774 27.774;"
-                         xml:space="preserve">
-                            <g>
-                                <path d="M10.398,22.811h4.618v4.964h-4.618V22.811z M21.058,1.594C19.854,0.532,17.612,0,14.33,0c-3.711,0-6.205,0.514-7.482,1.543
-                                    c-1.277,1.027-1.916,3.027-1.916,6L4.911,8.551h4.577l-0.02-1.049c0-1.424,0.303-2.377,0.907-2.854
-                                    c0.604-0.477,1.814-0.717,3.632-0.717c1.936,0,3.184,0.228,3.74,0.676c0.559,0.451,0.837,1.457,0.837,3.017
-                                    c0,1.883-0.745,3.133-2.237,3.752l-1.797,0.766c-1.882,0.781-3.044,1.538-3.489,2.27c-0.442,0.732-0.665,2.242-0.665,4.529h4.68
-                                    v-0.646c0-1.41,0.987-2.533,2.965-3.365c2.03-0.861,3.343-1.746,3.935-2.651c0.592-0.908,0.888-2.498,0.888-4.771
-                                    C22.863,4.625,22.261,2.655,21.058,1.594z"/>
-                            </g>
-                        </svg>
-                    </button>
+            {% for i in range(0, (points_list|length))%}
+                {% if credit_points < 10 %}
+                <div class="game_box_container">
+                {% else %}
+                <div class="game_box_container" id="game_box{{i+1}}">
+                {% endif %}
+
+                    <div class="card_front">
+                        {% if credit_points < 10 %}
+                        <button class="card_front card_button" style="cursor: not-allowed;" disabled>
+                        {% else %}
+                        <button class="card_front card_button" id="button_box{{i+1}}">
+                        {% endif %}
+
+                            <svg class="question_mark" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                             width="27.774px" height="27.774px" viewBox="0 0 27.774 27.774" style="enable-background:new 0 0 27.774 27.774;"
+                             xml:space="preserve">
+                                <g>
+                                    <path d="M10.398,22.811h4.618v4.964h-4.618V22.811z M21.058,1.594C19.854,0.532,17.612,0,14.33,0c-3.711,0-6.205,0.514-7.482,1.543
+                                        c-1.277,1.027-1.916,3.027-1.916,6L4.911,8.551h4.577l-0.02-1.049c0-1.424,0.303-2.377,0.907-2.854
+                                        c0.604-0.477,1.814-0.717,3.632-0.717c1.936,0,3.184,0.228,3.74,0.676c0.559,0.451,0.837,1.457,0.837,3.017
+                                        c0,1.883-0.745,3.133-2.237,3.752l-1.797,0.766c-1.882,0.781-3.044,1.538-3.489,2.27c-0.442,0.732-0.665,2.242-0.665,4.529h4.68
+                                        v-0.646c0-1.41,0.987-2.533,2.965-3.365c2.03-0.861,3.343-1.746,3.935-2.651c0.592-0.908,0.888-2.498,0.888-4.771
+                                        C22.863,4.625,22.261,2.655,21.058,1.594z"/>
+                                </g>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="card_back">
+                        <h4>You earned...</h4>
+                        <p id="card_back_para1">{{ (points_list[i].values()|list)[0] }} points</p>
+
+                        <!-- Button trigger modal -->
+                        <button type="button" class="claim_btn" data-toggle="modal" data-target="#exampleModalCenter{{i+1}}">
+                          Claim
+                        </button>
+
+                    </div>
                 </div>
 
-                <div class="card_back">
-                    <h4>You earned...</h4>
-                    <p id="card_back_para3">{{ (point_list[2].values()|list)[0] }} points</p>
-                    <button type="button">Claim</button>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModalCenter{{i+1}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Congratulation!</h5>
+                                <!--<button type="button" class="modal_cross" data-dismiss="modal" aria-label="Close">-->
+                                <!--    <span aria-hidden="true">-->
+                                <!--        <svg class="cross_svg" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"-->
+                                <!--             viewBox="0 0 100 100" style="enable-background:new 0 0 94.926 94.926;"-->
+                                <!--             xml:space="preserve">-->
+                                <!--            <g>-->
+                                <!--                <path d="M55.931,47.463L94.306,9.09c0.826-0.827,0.826-2.167,0-2.994L88.833,0.62C88.436,0.224,87.896,0,87.335,0-->
+                                <!--                    c-0.562,0-1.101,0.224-1.498,0.62L47.463,38.994L9.089,0.62c-0.795-0.795-2.202-0.794-2.995,0L0.622,6.096-->
+                                <!--                    c-0.827,0.827-0.827,2.167,0,2.994l38.374,38.373L0.622,85.836c-0.827,0.827-0.827,2.167,0,2.994l5.473,5.476-->
+                                <!--                    c0.397,0.396,0.936,0.62,1.498,0.62s1.1-0.224,1.497-0.62l38.374-38.374l38.374,38.374c0.397,0.396,0.937,0.62,1.498,0.62-->
+                                <!--                    s1.101-0.224,1.498-0.62l5.473-5.476c0.826-0.827,0.826-2.167,0-2.994L55.931,47.463z"/>-->
+                                <!--            </g>-->
+                                <!--        </svg>-->
+                                <!--    </span>-->
+                                <!--</button>-->
+                            </div>
+                            <div class="modal-body">
+                                    You have claimed {{ (points_list[i].values()|list)[0] }} points
+                            </div>
+                            <div class="modal-footer">
+                                <form action="/game/{{ (points_list[i].keys()|list)[0] }}" method="POST">
+                                    <button class="btn" type="submit">Claim</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            {% endfor %}
+
+            <!--<div class="game_box_container" id="game_box1">-->
+            <!--    <div class="card_front">-->
+            <!--        <button class="card_front card_button" id="button_box1">-->
+            <!--            <svg class="question_mark" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"-->
+            <!--             width="27.774px" height="27.774px" viewBox="0 0 27.774 27.774" style="enable-background:new 0 0 27.774 27.774;"-->
+            <!--             xml:space="preserve">-->
+            <!--                <g>-->
+            <!--                    <path d="M10.398,22.811h4.618v4.964h-4.618V22.811z M21.058,1.594C19.854,0.532,17.612,0,14.33,0c-3.711,0-6.205,0.514-7.482,1.543-->
+            <!--                        c-1.277,1.027-1.916,3.027-1.916,6L4.911,8.551h4.577l-0.02-1.049c0-1.424,0.303-2.377,0.907-2.854-->
+            <!--                        c0.604-0.477,1.814-0.717,3.632-0.717c1.936,0,3.184,0.228,3.74,0.676c0.559,0.451,0.837,1.457,0.837,3.017-->
+            <!--                        c0,1.883-0.745,3.133-2.237,3.752l-1.797,0.766c-1.882,0.781-3.044,1.538-3.489,2.27c-0.442,0.732-0.665,2.242-0.665,4.529h4.68-->
+            <!--                        v-0.646c0-1.41,0.987-2.533,2.965-3.365c2.03-0.861,3.343-1.746,3.935-2.651c0.592-0.908,0.888-2.498,0.888-4.771-->
+            <!--                        C22.863,4.625,22.261,2.655,21.058,1.594z"/>-->
+            <!--                </g>-->
+            <!--            </svg>-->
+            <!--        </button>-->
+            <!--    </div>-->
+            <!--    <div class="card_back">-->
+            <!--        <h4>You earned...</h4>-->
+            <!--        <p id="card_back_para1">{{ (points_list[0].values()|list)[0] }} points</p>-->
+            <!--        <form action="/game/{{ (points_list[0].keys()|list)[0] }}" method="POST">-->
+            <!--            <button class="claim_btn" type="submit">Claim</button>-->
+            <!--        </form>-->
+
+            <!--    </div>-->
+            <!--</div>-->
+            <!--<div class="game_box_container" id="game_box2">-->
+            <!--    <div class="card_front">-->
+            <!--        <button class="card_front card_button" id="button_box2">-->
+            <!--            <svg class="question_mark" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"-->
+            <!--             width="27.774px" height="27.774px" viewBox="0 0 27.774 27.774" style="enable-background:new 0 0 27.774 27.774;"-->
+            <!--             xml:space="preserve">-->
+            <!--                <g>-->
+            <!--                    <path d="M10.398,22.811h4.618v4.964h-4.618V22.811z M21.058,1.594C19.854,0.532,17.612,0,14.33,0c-3.711,0-6.205,0.514-7.482,1.543-->
+            <!--                        c-1.277,1.027-1.916,3.027-1.916,6L4.911,8.551h4.577l-0.02-1.049c0-1.424,0.303-2.377,0.907-2.854-->
+            <!--                        c0.604-0.477,1.814-0.717,3.632-0.717c1.936,0,3.184,0.228,3.74,0.676c0.559,0.451,0.837,1.457,0.837,3.017-->
+            <!--                        c0,1.883-0.745,3.133-2.237,3.752l-1.797,0.766c-1.882,0.781-3.044,1.538-3.489,2.27c-0.442,0.732-0.665,2.242-0.665,4.529h4.68-->
+            <!--                        v-0.646c0-1.41,0.987-2.533,2.965-3.365c2.03-0.861,3.343-1.746,3.935-2.651c0.592-0.908,0.888-2.498,0.888-4.771-->
+            <!--                        C22.863,4.625,22.261,2.655,21.058,1.594z"/>-->
+            <!--                </g>-->
+            <!--            </svg>-->
+            <!--        </button>-->
+            <!--    </div>-->
+            <!--    <div class="card_back">-->
+            <!--        <h4>You earned...</h4>-->
+            <!--        <p id="card_back_para2">{{ (points_list[1].values()|list)[0] }} points</p>-->
+            <!--        <form action="/game/{{ (points_list[1].keys()|list)[0] }}" method="POST">-->
+            <!--            <button class="claim_btn" type="submit">Claim</button>-->
+            <!--        </form>-->
+            <!--    </div>-->
+            <!--</div>-->
+            <!--<div class="game_box_container" id="game_box3">-->
+            <!--    <div class="card_front">-->
+            <!--        <button class="card_front card_button" id="button_box3">-->
+            <!--            <svg class="question_mark" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"-->
+            <!--             width="27.774px" height="27.774px" viewBox="0 0 27.774 27.774" style="enable-background:new 0 0 27.774 27.774;"-->
+            <!--             xml:space="preserve">-->
+            <!--                <g>-->
+            <!--                    <path d="M10.398,22.811h4.618v4.964h-4.618V22.811z M21.058,1.594C19.854,0.532,17.612,0,14.33,0c-3.711,0-6.205,0.514-7.482,1.543-->
+            <!--                        c-1.277,1.027-1.916,3.027-1.916,6L4.911,8.551h4.577l-0.02-1.049c0-1.424,0.303-2.377,0.907-2.854-->
+            <!--                        c0.604-0.477,1.814-0.717,3.632-0.717c1.936,0,3.184,0.228,3.74,0.676c0.559,0.451,0.837,1.457,0.837,3.017-->
+            <!--                        c0,1.883-0.745,3.133-2.237,3.752l-1.797,0.766c-1.882,0.781-3.044,1.538-3.489,2.27c-0.442,0.732-0.665,2.242-0.665,4.529h4.68-->
+            <!--                        v-0.646c0-1.41,0.987-2.533,2.965-3.365c2.03-0.861,3.343-1.746,3.935-2.651c0.592-0.908,0.888-2.498,0.888-4.771-->
+            <!--                        C22.863,4.625,22.261,2.655,21.058,1.594z"/>-->
+            <!--                </g>-->
+            <!--            </svg>-->
+            <!--        </button>-->
+            <!--    </div>-->
+
+            <!--    <div class="card_back">-->
+            <!--        <h4>You earned...</h4>-->
+            <!--        <p id="card_back_para3">{{ (points_list[2].values()|list)[0] }} points</p>-->
+            <!--        <form action="/game/{{ (points_list[2].keys()|list)[0] }}" method="POST">-->
+            <!--            <button class="claim_btn" type="submit">Claim</button>-->
+            <!--        </form>-->
+            <!--    </div>-->
+            <!--</div>-->
         </div>
     </div>
 {% endblock %}

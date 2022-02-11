@@ -16,7 +16,11 @@
     <div class = "container-product">
         <img src="../static/images/default-product-image.png" class="upload-image">
         <br>
-        <form method="POST" class="" action="">
+        <form method="POST" class="" action="" enctype="multipart/form-data">
+        <div class="form-login-field">
+        {{ render_field(form.product_pic, class="form-product-field") }}
+        </div>
+            <br>
         <div class="form-product-field">
                 {{ render_field(form.name, class="form-product-field") }}
         </div>
@@ -38,6 +42,7 @@
         </div>
             <br>
         <div class="form-product-field">
+            &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
             {{ render_field(form.description, class="form-product-field") }}
         </div>
             <br>

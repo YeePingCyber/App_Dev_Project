@@ -9,19 +9,6 @@
 {% block bodyContent %}
     <div class="d-flex justify-content-between" id="admin_auction_title">
           <h1>Sales</h1>
-          <!-- Example single danger button -->
-            <div class="btn-group">
-              <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Action
-              </button>
-              <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <a class="dropdown-item" href="#">Something else here</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Separated link</a>
-              </div>
-            </div>
     </div><hr/>
 
     <div class="wrapp">
@@ -54,7 +41,7 @@
                                             <div class="cardd">
                                                 <h3 class="title">Auction</h3>
                                                 <p class="value">{{ auction_on }}</p>
-                                                <p class="remarks">Quantity</p>
+                                                <p class="remarks">Going On</p>
                                             </div>
                                         </div>
                                     </div>
@@ -63,7 +50,7 @@
                                             <div class="cardd">
                                                 <!--  need get from auction    -->
                                                 <h3 class="title">Auction Sales</h3>
-                                                <p class="value">${{ subtotal }}</p>
+                                                <p class="value">$0</p>
                                                 <p class="remarks">As of {{ date }}</p>
                                             </div>
                                         </div>
@@ -82,7 +69,7 @@
                               data: {
                                 labels: {{ labels | tojson }},
                                 datasets: [{
-                                  label: "Earnings",
+                                  label: "Earnings from Product Sales",
                                   lineTension: 0.3,
                                   backgroundColor: "rgba(78, 115, 223, 0.05)",
                                   borderColor: "rgba(78, 115, 223, 1)",
@@ -212,7 +199,7 @@
                                                   <td>{{ sales.get_firstname() }}</td>
                                                   <td>Done</td>
                                                   <td>
-                                                      ${{ store_c[loop.index - 1] }}
+                                                      ${{ customer_totalList[loop.index - 1] }}
                                                   </td>
                                               </tr>
                                               {% endfor %}
@@ -224,38 +211,34 @@
                         <div class="col-lg-3 col-md-6">
                             <div class="p-1">
                                 <div class="cardd">
-                                    <h3 class="title">Purchase Orders</h3>
+                                    <h3 class="title">Top Orders</h3>
                                     <table class="table table-hover">
                                         <tr>
-                                            <td><p class="value">Received orderes</p></td>
-                                            <td><p class="remarks">$20</p></td>
+                                            <td><p class="value">Received orders</p></td>
+                                            <td><p class="remarks">{{ orders_quantity }}</p></td>
                                         </tr>
                                         <tr>
                                             <td><p class="value">Total Cost</p></td>
-                                            <td><p class="remarks">$4600</p></td>
+                                            <td><p class="remarks">${{ subtotal }}</p></td>
                                         </tr>
                                     </table>
 
                                     <table class="table table-hover">
                                         <thead>
                                               <tr>
-                                                  <th scope="col">Order ID</th>
-                                                  <th scope="col">Customer</th>
+                                                  <th scope="col">Above $500</th>
+                                                  <th scope="col">Total</th>
                                               </tr>
                                         </thead>
                                         <tbody>
+                                            {% for sales in salesList %}
+                                            {% if customer_totalList[loop.index - 1] > 500 %}
                                             <tr>
-                                                <td><p class="value">Received orderes</p></td>
-                                                <td><p class="remarks">$20</p></td>
+                                                <td><p class="value">Order Id {{ loop.index }}</p></td>
+                                                <td><p class="remarks">${{ customer_totalList[loop.index - 1] }}</p></td>
                                             </tr>
-                                            <tr>
-                                                <td><p class="value">Total Cost</p></td>
-                                                <td><p class="remarks">$4600</p></td>
-                                            </tr>
-                                            <tr>
-                                                <td><p class="value">Total Cost</p></td>
-                                                <td><p class="remarks">$4600</p></td>
-                                            </tr>
+                                            {% endif %}
+                                            {% endfor %}
                                         </tbody>
 
                                     </table>
@@ -270,9 +253,9 @@
                                         {% for top in top4 %}
                                             {% if top4[top].get_top() == 1 %}
                                                 <div class="top-items__card">
-                                                    <a class="thumbnail" href=""><img src="../static/images/1-Urth-Norite-24L-Backpack-Combo-Grey-1614664835017_300x@2x.png"/></a>
+                                                    <a class="thumbnail" href="/adminProductUpdate/{{top4[top].get_product_id()}}/"><img src="../static/images/1-Urth-Norite-24L-Backpack-Combo-Grey-1614664835017_300x@2x.png"/></a>
                                                     <div class="top-items__card-detail">
-                                                        <a href=""> {{ top4[top].get_name() }} </a>
+                                                        <a href="/adminProductUpdate/{{top4[top].get_product_id()}}/"> {{ top4[top].get_name() }} </a>
                                                         <div class="top-items__card-price">
                                                             <p><span>${{ top4[top].get_price() }}</span></p>
                                                         </div>

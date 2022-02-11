@@ -1,0 +1,159 @@
+/* NYP Y1S2 2021 - 2022 APP DEVELOPMENT PROJECT
+
+   Structure of game.css
+   |
+   ├─ 1. navigation bar
+   ├─ 2. leaderboard top container
+   ├─ 3. leaderboard center container
+   ├─ 3. leaderboard bottom container
+   ├─ 4. modal
+   ├─ 5. responsive
+
+    /* --------------------------------------------------------------------------
+        1. navigation bar
+    -------------------------------------------------------------------------- */
+
+    .tom-navv {
+        position: static;
+    }
+
+    /* --------------------------------------------------------------------------
+        2. leaderboard top container
+    -------------------------------------------------------------------------- */
+    .leaderboard_top_container{
+        display: flex;
+        width: 100%;
+        text-align: center;
+        margin-top: 2%;
+    }
+
+    .leaderboard_top_left_container, .leaderboard_top_center_container, .leaderboard_top_right_container{
+        width: 33.333333333%;
+    }
+
+    .leaderboard_top_center_container{
+        margin: 1.2% 0%;
+    }
+
+    .leaderboard_top_left_container, .leaderboard_top_right_container{
+        margin: 2% 0%;
+    }
+
+    .leaderboard_top_left_container{
+        font-size: 1.2em;
+    }
+
+    #back_btn{
+     margin-bottom: 3.5%;
+     font-size: 1em;
+     font-weight: bold;
+    }
+
+    #back_btn:hover{
+        text-decoration: underline;
+    }
+
+    #rewards_btn{
+        background-color: black;
+        color: white;
+        border: none;
+        height: 100%;
+        width: 25%;
+    }
+
+    /* --------------------------------------------------------------------------
+        3. leaderboard center container
+    -------------------------------------------------------------------------- */
+    #current_position{
+        margin-left: 14.5%;
+        padding: 1.5% 0% 0.4% 2%;
+        border: 1.5px solid black;
+        width: 20%;
+        font-size: 1.1em;
+    }
+
+    /* --------------------------------------------------------------------------
+        4. leaderboard bottom container
+    -------------------------------------------------------------------------- */
+    .leaderboard_bottom_container{
+        display:flex;
+        width: 100%;
+        margin-top: 2%;
+    }
+
+    .palladium{
+        width: 33.3333333333333%;
+    }
+
+    .palladium_place{
+        margin-right: 2.5%;
+    }
+
+    .palladium_username, .palladium_points{
+        font-weight: 500;
+    }
+
+    #second_place .palladium_bar{
+        background-color: #C0C0C0;
+        width: 5em;
+        height: 15em;
+        margin-left: 74.5%;
+        margin-top: 1%;
+    }
+
+    #second_place .palladium_rank{
+        margin-top: 19%;
+        display:flex;
+        margin-left: 73.6%;
+    }
+
+    #first_place .palladium_bar{
+        background-color: #FFD700;
+        width: 5em;
+        height: 20em;
+        margin-left: 42.5%;
+        margin-top: 1%;
+    }
+
+    #first_place .palladium_rank{
+        display:flex;
+        margin-left: 40%;
+    }
+
+    #third_place .palladium_bar{
+        background-color: #CD7F32;
+        width: 5em;
+        height: 10em;
+        margin-left: 8.5%;
+        margin-top: 1%;
+    }
+
+    #third_place .palladium_rank{
+        margin-top: 38%;
+        display:flex;
+        margin-left: 6.5%;
+    }
+
+    /* --------------------------------------------------------------------------
+        4. modal
+    -------------------------------------------------------------------------- */
+    .modal_cross{
+        background-color: transparent;
+        border: none;
+        height: 2.1em;
+        width: 2.1em;
+
+    }
+
+    .cross_svg{
+        height:1.5em;
+        width:1.5em;
+    }
+
+    #rewards_table{
+        width: 100%;
+    }
+
+    .rank_place{
+        font-weight: bold;
+    }

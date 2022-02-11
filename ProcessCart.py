@@ -76,6 +76,3 @@ class Sales(ShippingProcess, PaymentProcess):
 
     def __str__(self):
         return f"{self.get_cart(), self.get_shippingid(), self.get_paymentid(), self.get_email(), self.get_firstname(), self.get_lastname(), self.get_address(), self.get_postal(), self.get_city(), self.get_phone(), self.get_cardnum(), self.get_namecard(), self.get_expire(), self.get_ccv()}"
-
-# s = Sales("sz3yan@gmail.com", "SG", "Teo", "Sze Yan", "Montreal Drive", "754589", "Sembawang", "97924720", "0000", "Teo Sze Yan", "09/2/24", "542", {"1":{"a":1},"2":{}})
-# print(s.get_cart()["1"]["a"])

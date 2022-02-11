@@ -1,20 +1,51 @@
 from wtforms import Form, StringField, RadioField, SelectField, TextAreaField, HiddenField, validators
-from wtforms.fields import EmailField, DateField, FloatField, IntegerField, PasswordField, BooleanField
+from wtforms.fields import EmailField, DateField, FloatField, IntegerField, PasswordField, BooleanField, FileField
+from wtforms.validators import ValidationError, NumberRange
 import shelve
+import os
 from Product import Product
 
 
+def validate_password(form, register_password):
+    special_count = 0
+    char_list = []
+    char_list = list(register_password.data)
+    special_list = ['!','@','#','$','%','&','*',"_"]
+    for char in special_list:
+        for char2 in char_list:
+            if char == char2:
+                special_count += 1
+    if special_count == 0:
+        raise ValidationError('Password must contain a mix of letters, numbers and special characters')
+
+
 class CreateCustomerForm(Form):
-    first_name = StringField('', [validators.Length(min=1, max=150), validators.DataRequired()],
+
+    first_name = StringField('', [validators.Length(min=1, max=50), validators.DataRequired()],
                              render_kw={"placeholder": "First Name"})
-    last_name = StringField('', [validators.Length(min=1, max=150), validators.DataRequired()],
+    last_name = StringField('', [validators.Length(min=1, max=50), validators.DataRequired()],
                             render_kw={"placeholder": "Last Name"})
     email = EmailField('', [validators.Email(), validators.DataRequired()], render_kw={"placeholder": "Email"})
     birthdate = DateField('', format='%Y-%m-%d', render_kw={"placeholder": "DD/MM/YYYY"})
-    register_password = PasswordField('', [validators.Length(min=8, max=15), validators.DataRequired(), validators.EqualTo('confirm_password', message='Passwords must match')],
+    register_password = PasswordField('', [validators.Length(min=8, max=15), validators.DataRequired(), validators.EqualTo('confirm_password', message='Passwords must match'), validate_password],
                                       render_kw={"placeholder": "Password"})
     confirm_password = PasswordField('', [validators.Length(min=8, max=15), validators.DataRequired()],
                                      render_kw={"placeholder": "Confirm Password"})
+    profile_pic = FileField('')
+
+
+class UpdateCustomerForm(Form):
+    first_name = StringField('', [validators.Length(min=1, max=50), validators.DataRequired()],
+                             render_kw={"placeholder": "First Name"})
+    last_name = StringField('', [validators.Length(min=1, max=50), validators.DataRequired()],
+                            render_kw={"placeholder": "Last Name"})
+    email = EmailField('', [validators.Email(), validators.DataRequired()], render_kw={"placeholder": "Email"})
+    birthdate = DateField('', format='%Y-%m-%d', render_kw={"placeholder": "DD/MM/YYYY"})
+    current_password = PasswordField('',[validators.Length(min=8, max=15), validators.Optional(strip_whitespace=True)],
+                                     render_kw={"placeholder": "Current Password"})
+    new_password = PasswordField('',[validators.Length(min=8, max=15), validators.Optional(strip_whitespace=True), validate_password],
+                                 render_kw={"placeholder": "New Password"})
+    profile_pic = FileField('')
 
 
 class CreateLoginForm(Form):
@@ -27,20 +58,22 @@ class CreateLoginForm(Form):
 class CreateProductForm(Form):
     name = StringField('Name: ', [validators.Length(min=1, max=70), validators.DataRequired()],  render_kw={"placeholder": "Product Name"})
     price = FloatField('Price: ', [validators.DataRequired()],  render_kw={"placeholder": "Product price"})
-    quantity = IntegerField('Quantity: ', [validators.DataRequired()],  render_kw={"placeholder": "Quantity"})
+    quantity = IntegerField('Quantity: ', [validators.DataRequired(), NumberRange(min=1, max=50)],  render_kw={"placeholder": "Quantity"})
     category = StringField('Category: ', [validators.Length(min=1, max=150), validators.DataRequired()],  render_kw={"placeholder": "Category"})
-    discount = FloatField('Discount: ', [validators.DataRequired()],  render_kw={"placeholder": "Discount"})
+    discount = FloatField('Discount: ', [validators.DataRequired(), NumberRange(min=1, max=99)],  render_kw={"placeholder": "Discount"})
     description = TextAreaField('Description: ', [validators.Length(min=1, max=300), validators.DataRequired()],  render_kw={"placeholder": "Description"})
     top = BooleanField('Top product')
+    product_pic = FileField('Upload product picture:')
 
 
 class CreateAdminForm(Form):
-    first_name = StringField('', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "First Name"})
-    last_name = StringField('', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "Last Name"})
+    first_name = StringField('', [validators.Length(min=1, max=50), validators.DataRequired()], render_kw={"placeholder": "First Name"})
+    last_name = StringField('', [validators.Length(min=1, max=50), validators.DataRequired()], render_kw={"placeholder": "Last Name"})
     email = EmailField('', [validators.Email(), validators.DataRequired()], render_kw={"placeholder": "Email"})
-    register_password = PasswordField('', [validators.Length(min=8, max=15), validators.DataRequired(),validators.EqualTo('confirm_password', message='Passwords must match')],render_kw={"placeholder": "Password"})
+    register_password = PasswordField('', [validators.Length(min=8, max=15), validators.DataRequired(),validators.EqualTo('confirm_password', message='Passwords must match'),validate_password],render_kw={"placeholder": "Password"})
     confirm_password = PasswordField('', [validators.Length(min=8, max=15), validators.DataRequired()],render_kw={"placeholder": "Confirm Password"})
     employee_id = StringField('', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "Employee ID"})
+    profile_pic = FileField('')
 
 
 class UpdateAdminForm(Form):
@@ -48,8 +81,13 @@ class UpdateAdminForm(Form):
     last_name = StringField('', [validators.Length(min=1, max=150)], render_kw={"placeholder": "Last Name"})
     email = EmailField('', [validators.Email()], render_kw={"placeholder": "Email"})
     current_password = PasswordField('',[validators.Length(min=8, max=15), validators.Optional(strip_whitespace=True)],render_kw={"placeholder": "Current Password"})
-    new_password = PasswordField('',[validators.Length(min=8, max=15), validators.Optional(strip_whitespace=True)],render_kw={"placeholder": "New Password"})
+    new_password = PasswordField('',[validators.Length(min=8, max=15), validators.Optional(strip_whitespace=True), validate_password],render_kw={"placeholder": "New Password"})
     employee_id = StringField('', [validators.Length(min=1, max=150)], render_kw={"placeholder": "Employee ID"})
+    profile_pic = FileField('')
+
+
+class CreateProductView(Form):
+    product_id = HiddenField("")
 
 
 class CreateAddCartForm(Form):
@@ -86,12 +124,12 @@ class CreatePaymentForm(Form):
 
 
 class CreateAuctionForm(Form):
-    product_name = StringField('', [validators.Length(min=1, max=200), validators.DataRequired()], id="pName", render_kw={"placeholder": "Product Name"})
-    base_amount = IntegerField('', [validators.NumberRange(min=1, max=100, message="The value should be between 1 - 100"), validators.DataRequired()], id="bAmt", render_kw={"placeholder": "Base Amount"})
-    minimum_amount = IntegerField('', [validators.NumberRange(min=10, max=100, message="The value should be between 10 - 100"), validators.DataRequired()], id="mAmt", render_kw={"placeholder": "Minimum Amount"})
+    product_name = StringField('', [validators.Length(min=1, max=200, message="The length needs to be between 1 and 200"), validators.DataRequired(message="Product Name cannot be empty")], id="pName", render_kw={"placeholder": "Product Name"})
+    base_amount = IntegerField('', [validators.NumberRange(min=1, max=100, message="The value should be between 1 - 100"), validators.DataRequired(message="Base Amount cannot be empty")], id="bAmt", render_kw={"placeholder": "Base Amount"})
+    minimum_amount = IntegerField('', [validators.NumberRange(min=10, max=100, message="The value should be between 10 - 100"), validators.DataRequired(message="Minimum Amount cannot be empty")], id="mAmt", render_kw={"placeholder": "Minimum Amount"})
     start_date = DateField('', format='%Y-%m-%d', render_kw={"placeholder": "DD/MM/YYYY"})
     end_date = DateField('', format='%Y-%m-%d', render_kw={"placeholder": "DD/MM/YYYY"})
-    description = TextAreaField('', [validators.DataRequired()], id="desc",  render_kw={"rows": "5", "cols": "30", "placeholder": "Enter prduct description"})
+    description = TextAreaField('', [validators.DataRequired(message="Description cannot be empty")], id="desc",  render_kw={"rows": "5", "cols": "30", "placeholder": "Enter prduct description"})
 
 
 class CreateBidForm(Form):

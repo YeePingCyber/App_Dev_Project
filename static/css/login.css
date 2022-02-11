@@ -55,6 +55,10 @@ font-weight: bold;
     border-radius: 8px;
 }
 
+a.submit-login {
+color: white;
+}
+
 .register-link{
 font-size:60%;
 }
@@ -65,6 +69,7 @@ color:blue;
 
 .profile-pic{
 border-radius: 50%;
+border: 1px solid black;
 height: 15%;
 width: 15%;
 }
@@ -73,3 +78,13 @@ width: 15%;
 color:black;
 font-weight: bold;
 }
+
+.form-login-field-file{
+background-color: transparent;
+border: none;
+width: 50%;
+border-radius: 1px;
+margin: 0 auto;
+
+}
+

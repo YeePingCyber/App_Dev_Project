@@ -2,10 +2,8 @@
 {% block title %}Tom Patterson - Shop{% endblock %}
 
 {% block css %}
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="js/OwlCarousel2-2.3.4/dist/assets/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" type="text/css" href="../static/css/base.css">
-    <link rel="stylesheet" type="text/css" href="../static/css/mainshop.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/bag1.css">
 {% endblock %}
 
 {% block bodyContent %}
@@ -30,26 +28,27 @@
                 </div>
                 <div class="col-md-6">
                     <div class="product-info">
-                    <h3>Tom Patterson<br>{{ product[x].get_name() }}</h3>
-                    <p id="title">{{ product[x].get_description() }}</p>
+                    <h3>Tom Patterson<br>{{ products[x].get_name() }}</h3>
+                    <p id="title">{{ products[x].get_description() }}</p>
                     <hr>
-
+                    <h5>${{ products[x].get_price() }}</h5>
                     <p>Free Shipping and Returns</p>
 
                     <div class="product-help">
-                        <p>Check availability</p>
-                        <p>Contact us at +65 12345678</p>
-                        <p>placeholder 1</p>
-                        <p>placeholder 2</p>
+                        <a href="/productFAQ"><p>Check availability</p></a>
+                        <a href="/productFAQ"><p>Product Details</p></a>
+                        <a href="/productFAQ"><p>Customer Support Page</p></a>
+                        <a href="/productFAQ"><p>Contact us at +65 12345678</p></a>
                         <table>
                             <form method=post action="">
-                                {{ render_field(form.name, value=product[x].get_name()) }}
-                                {{ render_field(form.description, value=product[x].get_description()) }}
-                                {{ render_field(form.price, value=product[x].get_price()) }}
+                                {{ render_field(form.product_id, value=products[x].get_product_id()) }}
+                                {{ render_field(form.name, value=products[x].get_name()) }}
+                                {{ render_field(form.description, value=products[x].get_description()) }}
+                                {{ render_field(form.price, value=products[x].get_price()) }}
                                 {{ render_field(form.quantity, value=1) }}
-                                {{ render_field(form.category, value=product[x].get_category()) }}
-                                {{ render_field(form.discount, value=product[x].get_discount()) }}
-                                {{ render_field(form.top, value=product[x].get_top()) }}
+                                {{ render_field(form.category, value=products[x].get_category()) }}
+                                {{ render_field(form.discount, value=products[x].get_discount()) }}
+                                {{ render_field(form.top, value=products[x].get_top()) }}
                                 <input type=submit value="Add to Cart">
                             </form>
                         </table>
