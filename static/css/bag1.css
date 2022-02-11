@@ -7,7 +7,7 @@
    ├─ 3. creator-showcase
 
     /* --------------------------------------------------------------------------
-        1. product img
+        1. header
     -------------------------------------------------------------------------- */
 
     .shopHeader {
@@ -16,3 +16,35 @@
         margin-right: auto;
         text-align: center;
     }
+
+/* --------------------------------------------------------------------------
+        2. product img (left div)
+    -------------------------------------------------------------------------- */
+
+    .product-img {
+        width: 60%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+
+/* --------------------------------------------------------------------------
+        3. product info (right div)
+    -------------------------------------------------------------------------- */
+
+.add-button {
+    padding: 1% 2% 1% 2%;
+    background-color: black;
+    border: none;
+    color: white;
+    border-radius: 8px;
+}
+
+.product-help {
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    border: 0.1em solid;
+    border-collapse: separate;
+    border-color: #d6d5d2;
+    border-radius: 8px;
+}

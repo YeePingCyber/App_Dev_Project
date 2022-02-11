@@ -42,7 +42,7 @@
     }
 
     .bid-table {
-        width: 70%;
+        width: 90%;
         margin-top: 2vh;
         margin-bottom: 2vh;
         border: 0.1em solid;
@@ -74,7 +74,7 @@
     }
 
     .accordion {
-        width: 70%;
+        width: 90%;
     }
 
     .accordion-button {
@@ -89,7 +89,7 @@
     }
 
     .offer-table {
-        width: 70%;
+        width: 85%;
         margin-top: 2vh;
         margin-bottom: 2vh;
     }
