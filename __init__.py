@@ -360,14 +360,10 @@ def updateAddCart(id):
             addtocart = Addtocart(cartList[id][0].get_name(), cartList[id][0].get_description(),
                                   cartList[id][0].get_price(), 1, cartList[id][0].get_category(),
                                   cartList[id][0].get_discount(), cartList[id][0].get_top())
-            if id == 0:
-                cart_dict["1"][addtocart.get_id()] = addtocart
-            if id == 1:
-                cart_dict["2"][addtocart.get_id()] = addtocart
-            if id == 2:
-                cart_dict["3"][addtocart.get_id()] = addtocart
-            if id == 3:
-                cart_dict["4"][addtocart.get_id()] = addtocart
+
+            for x in cart_dict:
+                if id == int(x) - 1:
+                    cart_dict[x][addtocart.get_id()] = addtocart
 
             db["Add_to_cart"] = cart_dict
             db.close()
@@ -406,14 +402,9 @@ def updateAddCart(id):
             addtocart = Addtocart(cartList[id][0].get_name(), cartList[id][0].get_description(),
                                   cartList[id][0].get_price(), 1, cartList[id][0].get_category(),
                                   cartList[id][0].get_discount(), cartList[id][0].get_top())
-            if id == 0:
-                cart_dict["1"][addtocart.get_id()] = addtocart
-            if id == 1:
-                cart_dict["2"][addtocart.get_id()] = addtocart
-            if id == 2:
-                cart_dict["3"][addtocart.get_id()] = addtocart
-            if id == 3:
-                cart_dict["4"][addtocart.get_id()] = addtocart
+            for x in cart_dict:
+                if id == int(x) - 1:
+                    cart_dict[x][addtocart.get_id()] = addtocart
 
             db["Add_to_cartnosession"] = cart_dict
             db.close()
@@ -478,29 +469,30 @@ def updateSubCart(id):
 
         if request.method == "POST":
             print(cart_dict)
+            print(cartList)
             if id == 0:
-                cartList[0].pop()
+                cartList[id].pop()
                 productAupdate = dict(zip(list_keyA, cartList[0]))
                 productBupdate = dict(zip(list_keyB, cartList[1]))
                 productCupdate = dict(zip(list_keyC, cartList[2]))
                 productDupdate = dict(zip(list_keyD, cartList[3]))
                 cart_dict = {"1": productAupdate, "2": productBupdate, "3": productCupdate, "4": productDupdate}
             if id == 1:
-                cartList[1].pop()
+                cartList[id].pop()
                 productAupdate = dict(zip(list_keyA, cartList[0]))
                 productBupdate = dict(zip(list_keyB, cartList[1]))
                 productCupdate = dict(zip(list_keyC, cartList[2]))
                 productDupdate = dict(zip(list_keyD, cartList[3]))
                 cart_dict = {"1": productAupdate, "2": productBupdate, "3": productCupdate, "4": productDupdate}
             if id == 2:
-                cartList[2].pop()
+                cartList[id].pop()
                 productAupdate = dict(zip(list_keyA, cartList[0]))
                 productBupdate = dict(zip(list_keyB, cartList[1]))
                 productCupdate = dict(zip(list_keyC, cartList[2]))
                 productDupdate = dict(zip(list_keyD, cartList[3]))
                 cart_dict = {"1": productAupdate, "2": productBupdate, "3": productCupdate, "4": productDupdate}
             if id == 3:
-                cartList[3].pop()
+                cartList[id].pop()
                 productAupdate = dict(zip(list_keyA, cartList[0]))
                 productBupdate = dict(zip(list_keyB, cartList[1]))
                 productCupdate = dict(zip(list_keyC, cartList[2]))
@@ -1228,16 +1220,17 @@ def done_clear():
         except:
             print("Error in retrieving Sales from payment.db")
 
-        productAupdate = {}
-        productBupdate = {}
-        productCupdate = {}
-        productDupdate = {}
-        cart_dict = {"1": productAupdate, "2": productBupdate, "3": productCupdate, "4": productDupdate}
-        db1['Add_to_cart'] = cart_dict
+        nlistofDict = []
+        nlistofKeys = []
+        for i in range(1, len(products_dict) + 1):
+            nlistofKeys.append(str(i))
+            i = dict()
+            nlistofDict.append(i)
+        cart_dict = dict(zip(nlistofKeys, nlistofDict))
 
+        db1['Add_to_cart'] = cart_dict
         shipping_dict[0] = None
         db2["Shipping"] = shipping_dict
-
         payment_dict[0] = None
         db3["payment"] = payment_dict
 
@@ -1281,16 +1274,17 @@ def done_clear():
         except:
             print("Error in retrieving Sales from payment.db")
 
-        productAupdate = {}
-        productBupdate = {}
-        productCupdate = {}
-        productDupdate = {}
-        cart_dict = {"1": productAupdate, "2": productBupdate, "3": productCupdate, "4": productDupdate}
-        db1['Add_to_cartnosession'] = cart_dict
+        nlistofDict = []
+        nlistofKeys = []
+        for i in range(1, len(products_dict) + 1):
+            nlistofKeys.append(str(i))
+            i = dict()
+            nlistofDict.append(i)
+        cart_dict = dict(zip(nlistofKeys, nlistofDict))
 
+        db1['Add_to_cartnosession'] = cart_dict
         shipping_dict[0] = None
         db2["Shipping"] = shipping_dict
-
         payment_dict[0] = None
         db3["payment"] = payment_dict
 
@@ -1363,17 +1357,9 @@ def bagbase():
                                   addtocartform.category.data, int(addtocartform.discount.data),
                                   int(addtocartform.top.data))
 
-            if addtocart.get_name() == productList[0].get_name():
-                addtocart_dict["1"][addtocart.get_id()] = addtocart
-
-            elif addtocart.get_name() == productList[1].get_name():
-                addtocart_dict["2"][addtocart.get_id()] = addtocart
-
-            elif addtocart.get_name() == productList[2].get_name():
-                addtocart_dict["3"][addtocart.get_id()] = addtocart
-
-            elif addtocart.get_name() == productList[3].get_name():
-                addtocart_dict["4"][addtocart.get_id()] = addtocart
+            for x, j in zip(productList, range(1, len(productList)+1)):
+                if addtocart.get_name() == x.get_name():
+                    addtocart_dict[str(j)][addtocart.get_id()] = addtocart
 
             db["Add_to_cart"] = addtocart_dict
             return redirect(url_for("cart"))
@@ -1407,17 +1393,9 @@ def bagbase():
                                   addtocartform.category.data, int(addtocartform.discount.data),
                                   int(addtocartform.top.data))
 
-            if addtocart.get_name() == productList[0].get_name():
-                addtocart_dict["1"][addtocart.get_id()] = addtocart
-
-            elif addtocart.get_name() == productList[1].get_name():
-                addtocart_dict["2"][addtocart.get_id()] = addtocart
-
-            elif addtocart.get_name() == productList[2].get_name():
-                addtocart_dict["3"][addtocart.get_id()] = addtocart
-
-            elif addtocart.get_name() == productList[3].get_name():
-                addtocart_dict["4"][addtocart.get_id()] = addtocart
+            for x, j in zip(productList, range(1, len(productList) + 1)):
+                if addtocart.get_name() == x.get_name():
+                    addtocart_dict[str(j)][addtocart.get_id()] = addtocart
 
             db["Add_to_cartnosession"] = addtocart_dict
             return redirect(url_for("cart"))
