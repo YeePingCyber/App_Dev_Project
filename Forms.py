@@ -45,7 +45,7 @@ class UpdateCustomerForm(Form):
                                      render_kw={"placeholder": "Current Password"})
     new_password = PasswordField('',[validators.Length(min=8, max=15), validators.Optional(strip_whitespace=True), validate_password],
                                  render_kw={"placeholder": "New Password"})
-    profile_pic = FileField('')
+    profile_pic = FileField('profile_pic', validators.DataRequired())
 
 
 class CreateLoginForm(Form):

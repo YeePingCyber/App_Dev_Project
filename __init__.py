@@ -15,6 +15,7 @@ from ProcessCart import PaymentProcess, ShippingProcess, Sales
 from UserBid import UserBid
 from Game import PlayerStatus, generate_points
 from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreateShipmentForm, CreatePaymentForm, CreateProductForm, CreateAddCartForm, CreateAuctionForm, UpdateAdminForm, CreateBidForm, CreateForgetPassForm, UpdateCustomerForm, CreateProductView
+from werkzeug.datastructures import CombinedMultiDict
 # create product function
 from createProduct import load_product
 import os
@@ -163,7 +164,10 @@ def customer_logged_in():
 def create_customer():
     errortwo = ""
     code = 0
-    create_customer_form = CreateCustomerForm(request.form)
+    create_customer_form = CreateCustomerForm(CombinedMultiDict((request.files, request.form)))
+    db = shelve.open("database/trees.db", "c")
+    trees = db["Trees"]
+    db.close()
 
     if request.method == 'POST' and create_customer_form.validate():
         user_dict = {}
@@ -187,14 +191,16 @@ def create_customer():
                                     create_customer_form.register_password.data)
             customer_dict[new_customer.get_customer_id()] = new_customer
 
-            if create_customer_form.profile_pic.data.filename != "":
+            if "profile_pic" in request.files:
                 pic = create_customer_form.profile_pic.data
                 fn = pic.filename.split(".")
                 ext = fn[len(fn)-1]
-                if ext == ".jpg":
+                print(ext)
+                print("hi")
+                if ext == "jpg":
                     pic_name = str(new_customer.get_customer_id()) + str(ext)
                     try:
-                        pic.save(os.path.join("static/profile_pics/", pic_name))
+                        pic.save(os.path.join("static/images/profile_pics/", pic_name))
                         print("saved")
                     except:
                         print("upload failed")
@@ -206,7 +212,8 @@ def create_customer():
             return redirect(url_for('log_in'))
         else:
             print("Password does not match!")
-    return render_template("register.html", form=create_customer_form, erorrtwo=errortwo, code=code)
+
+    return render_template("register.html", form=create_customer_form, erorrtwo=errortwo, code=code, trees = trees)
 
 
 @app.route("/cart")
