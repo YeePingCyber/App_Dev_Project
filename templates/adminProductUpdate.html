@@ -4,7 +4,7 @@
 {% block css %}
     <link rel="stylesheet" type="text/css" href="../../static/css/adminBase.css">
     <link rel="stylesheet" type="text/css" href="../../static/css/adminProductsManagement.css">
-    <link rel="stylesheet" type="text/css" href="../../static/css/adminProductCreation.css">
+    <link rel="stylesheet" type="text/css" href="../../static/css/adminProductUpdate.css">
 {% endblock %}
 
 {% block bodyContent %}
@@ -15,10 +15,14 @@
     <br>
     <br>
     <div class = "container-product">
-        <img src="../../static/images/default-product-image.png" class="upload-image">
+        {% if product.get_picture() %}
+      <img src="../../static/images/product_pics/{{ product.get_picture() }}" class="product-pic">
+      {% else %}
+      <img src="../../static/images/default-product-image.jpg" class="product-pic">
+      {% endif %}
         <br>
         <form method="POST" class="" action="" enctype="multipart/form-data">
-        <div class="form-login-field">
+        <div class="form-product-field">
         {{ render_field(form.product_pic, class="form-product-field") }}
         </div>
             <br>
@@ -43,7 +47,6 @@
         </div>
             <br>
         <div class="form-product-field">
-            &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
             {{ render_field(form.description, class="form-product-field") }}
         </div>
             <br>

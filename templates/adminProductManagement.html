@@ -15,8 +15,11 @@
 <div class="container-fluid">
 {% for product in product_list %}
     <div class="products">
-        <img src="../static/images/default-product-image.png" class="product-pic">
-        <div class="prod-info">
+       {% if product.get_picture() %}
+            <img src="../../static/images/product_pics/{{ product.get_picture() }}" class="product-pic">
+            {% else %}
+            <img src="../../static/images/default-product-image.jpg" class="product-pic">
+            {% endif %}
             <br>
             <p>&nbsp ID: {{ product.get_product_id() }}</p>
             <p>&nbsp Name: {{ product.get_name() }}</p>
@@ -24,13 +27,11 @@
             <p>&nbsp Quantity: {{ product.get_quantity() }}</p>
             <p>&nbsp Discount: {{ product.get_discount() }}</p>
             <p>&nbsp Description: {{ product.get_description() }}</p>
-        </div>
-        <br>
-        <div class="delete-button">
+
+        <form action="{{url_for('delete_product', id=product.get_product_id())}}" method="POST">
+            <div class="delete-button">
             <button type="button" class="btn btn-danger"><a href="/adminProductUpdate/{{product.get_product_id()}}/" class="edit-button" style="color: white; float: right;">Edit</a></button>
         </div>
-        <form action="{{url_for('delete_product', id=product.get_product_id())}}" method="POST">
-            <!-- will change to the X symbol ltr ~dylan -->
                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{product.get_product_id()}}">
                        Delete
                 </button>

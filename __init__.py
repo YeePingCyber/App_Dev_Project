@@ -111,7 +111,7 @@ def customer_logged_in():
         db = shelve.open('database/user.db', 'w')
         users_dict = db['Users']
         customer_user = users_dict.get(customer)
-        path = "../static/images/profile_pics/"+str(customer_user.get_customer_id())+".jpg"
+        path = "../static/images/profile_pics/"+str(customer_user.get_picture())
         # print(path)
         if customer_user.get_picture() is not None:
             picture_status = 1
@@ -134,7 +134,7 @@ def customer_logged_in():
                 pic = update_customer_form.profile_pic.data
                 fn = pic.filename.split(".")
                 ext = fn[len(fn)-1]
-                if ext == "jpg":
+                if ext == "jpg" or ext == "png":
                     pic_name = str(customer_user.get_customer_id()) + "." + str(ext)
                     try:
                         customer_user.set_picture(pic_name)
@@ -216,7 +216,7 @@ def create_customer():
                 pic = create_customer_form.profile_pic.data
                 fn = pic.filename.split(".")
                 ext = fn[len(fn)-1]
-                if ext == "jpg":
+                if ext == "jpg" or ext == "png":
                     pic_name = str(new_customer.get_customer_id()) + "." + str(ext)
                     try:
                         new_customer.set_picture(pic_name)
@@ -1862,7 +1862,8 @@ def admin_creation():
                 pic = create_admin_form.profile_pic.data
                 fn = pic.filename.split(".")
                 ext = fn[len(fn)-1]
-                if ext == "jpg":
+                if ext == "jpg" or ext == "png":
+                    print("hi")
                     pic_name = str(new_admin.get_admin_id()) + "." + str(ext)
                     try:
                         new_admin.set_picture(pic_name)
@@ -1872,6 +1873,7 @@ def admin_creation():
                         print("upload failed")
             if "profile_picture" not in request.files:
                 print("not saved")
+            print(new_admin.get_picture())
             db['Users'] = admin_dict
             db.close()
             return redirect(url_for('admin_admin_management'))
@@ -1885,11 +1887,12 @@ def update_admin(id):
     update_admin_form = UpdateAdminForm(CombinedMultiDict((request.files, request.form)))
     error = ""
     code = 0
+    db = shelve.open('database/user.db', 'w')
+    users_dict = db['Users']
+    admin = users_dict.get(id)
     if request.method == 'POST' and update_admin_form.validate():
         users_dict = {}
-        db = shelve.open('database/user.db', 'w')
-        users_dict = db['Users']
-        admin = users_dict.get(id)
+
         # Make uuids for customers and admins the same method to retrieve
         for user in users_dict:
             if update_admin_form.email.data.upper() == users_dict[user].get_email().upper() and id != users_dict[
@@ -1902,7 +1905,7 @@ def update_admin(id):
                 pic = update_admin_form.profile_pic.data
                 fn = pic.filename.split(".")
                 ext = fn[len(fn)-1]
-                if ext == "jpg":
+                if ext == "jpg" or ext == "png":
                     pic_name = str(admin.get_admin_id()) + "." + str(ext)
                     try:
                         admin.set_picture(pic_name)
@@ -1952,7 +1955,7 @@ def update_admin(id):
         update_admin_form.last_name.data = admin.get_last_name()
         update_admin_form.email.data = admin.get_email()
         update_admin_form.employee_id.data = admin.get_employee_id()
-    return render_template("adminAdminUpdate.html", form=update_admin_form, error=error, code=code)
+    return render_template("adminAdminUpdate.html", form=update_admin_form, error=error, code=code, admin=admin)
 
 
 @app.route("/adminAccount", methods=["GET", "POST"])
@@ -1967,7 +1970,7 @@ def admin_logged_in():
         db = shelve.open('database/user.db', 'w')
         users_dict = db['Users']
         admin_user = users_dict.get(admin)
-        path = "../static/images/profile_pics/"+str(admin_user.get_admin_id())+".jpg"
+        path = "../static/images/profile_pics/"+str(admin_user.get_picture())
         print(path)
         if admin_user.get_picture() is not None:
             picture_status = 1
@@ -1990,7 +1993,7 @@ def admin_logged_in():
                 pic = update_admin_form.profile_pic.data
                 fn = pic.filename.split(".")
                 ext = fn[len(fn)-1]
-                if ext == "jpg":
+                if ext == "jpg" or ext == "png":
                     pic_name = str(admin_user.get_admin_id()) + "." + str(ext)
                     try:
                         admin_user.set_picture(pic_name)
@@ -2068,7 +2071,7 @@ def admin_product_creation():
             pic = create_product_form.product_pic.data
             fn = pic.filename.split(".")
             ext = fn[len(fn)-1]
-            if ext == "jpg":
+            if ext == "jpg" or ext == "png":
                 pic_name = str(new_product.get_product_id()) + "." + str(ext)
                 try:
                     new_product.set_picture(pic_name)
@@ -2088,15 +2091,16 @@ def admin_product_creation():
 @app.route("/adminProductUpdate/<id>/", methods=['GET', 'POST'])
 def update_product(id):
     update_product_form = CreateProductForm(CombinedMultiDict((request.files, request.form)))
+    db = shelve.open("database/inventory.db", 'w')
+    products_dict = db["Products"]
+    product = products_dict.get(id)
     if request.method == 'POST' and update_product_form.validate():
-        db = shelve.open("database/inventory.db", 'w')
-        products_dict = db["Products"]
-        product = products_dict.get(id)
+
         if "product_pic" in request.files:
             pic = update_product_form.product_pic.data
             fn = pic.filename.split(".")
             ext = fn[len(fn)-1]
-            if ext == "jpg":
+            if ext == "jpg" or ext == "png":
                 pic_name = str(product.get_product_id()) + "." + str(ext)
                 try:
                     product.set_picture(pic_name)
@@ -2129,7 +2133,7 @@ def update_product(id):
         update_product_form.discount.data = products_dict.get(id).get_discount()
         update_product_form.category.data = products_dict.get(id).get_category()
         update_product_form.description.data = products_dict.get(id).get_description()
-    return render_template("adminProductUpdate.html", form=update_product_form, product_id=id)
+    return render_template("adminProductUpdate.html", form=update_product_form, product_id=id, product=product)
 
 
 @app.route('/deleteProduct/<id>', methods=['POST'])

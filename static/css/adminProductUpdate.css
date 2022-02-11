@@ -1,0 +1,89 @@
+.page-title{
+font-size: 200%;
+margin-left: 3%;
+}
+.container-product{
+margin-left: 20%;
+margin-right: 10%;
+margin-bottom: 10%;
+text-align: center;
+}
+
+.form-product-field{
+background-color: transparent;
+width: 50%;
+border-radius: 5px;
+margin: 0 auto;
+font-size: 110%;
+text-align: center;
+}
+
+input[type=email] {
+    border-bottom: 1px solid #000000;
+}
+
+input[type=password] {
+    border-bottom: 1px solid #000000;
+}
+
+input[type=date] {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #000000;
+}
+
+input[type=text] {
+
+    border: 1px solid #000000;
+}
+
+.upload-image{
+    margin-top: 0%;
+    margin-left: 3%;
+    margin-right: 5%;
+    float: left;
+    border: 1px solid;
+    width: 30%;
+}
+
+label{
+    font-size: 130%;
+    font-weight: bold;
+    text-align: center;
+    width: 400px;
+    margin: 0 auto;
+    display: inline-block;
+}
+
+.submit-product {
+    padding: 1% 2% 1% 2%;
+    background-color: black;
+    border: none;
+    color: white;
+    border-radius: 8px;
+    margin-right: 0%;
+    display: inline-block;
+}
+
+.cancel-product {
+    padding: 1% 2% 1% 2%;
+    background-color: black;
+    border: none;
+    color: white;
+    border-radius: 8px;
+    margin-right: 1%;
+    display: inline-block;
+}
+
+.form-product-field-top{
+margin: 0 auto;
+    height: 140%;
+    width: 50%;
+}
+.form-login-field-file{
+background-color: transparent;
+border: none;
+width: 50%;
+margin: 0 auto;
+
+}
