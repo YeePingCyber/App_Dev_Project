@@ -1,10 +1,13 @@
+from flask import Flask, render_template, flash
 from flask import Flask, render_template, request, redirect, url_for, session
 import shelve
 import random
 import hashlib as hl
+from bs4 import BeautifulSoup
 from datetime import date, datetime, timedelta
 from Customer import Customer
 from Admin import Admin
+from User import User
 from Product import Product
 from addtocart import Addtocart
 from Auction import Auction
@@ -12,6 +15,9 @@ from ProcessCart import PaymentProcess, ShippingProcess, Sales
 from UserBid import UserBid
 from Game import PlayerStatus, generate_points
 from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreateShipmentForm, CreatePaymentForm, CreateProductForm, CreateAddCartForm, CreateAuctionForm, UpdateAdminForm, CreateBidForm, CreateForgetPassForm, UpdateCustomerForm, CreateProductView
+# create product function
+from werkzeug.datastructures import CombinedMultiDict
+from createProduct import load_product
 import os
 
 app = Flask(__name__)
@@ -30,14 +36,12 @@ def save_picture(form_picture, id):
 # Customer Side
 @app.route("/")
 def home():
-    db = shelve.open("database/trees.db", "c")
-    trees = db["Trees"]
-    db.close()
-
     db = shelve.open("database/inventory.db", 'w')
     products_dict = db["Products"]
     db.close()
 
+    db = shelve.open("database/trees.db", "c")
+    trees = db["Trees"]
     return render_template("home.html", top4=products_dict, trees=trees)
 
 
@@ -158,13 +162,12 @@ def customer_logged_in():
 
 @app.route("/register", methods=['GET', 'POST'])
 def create_customer():
+    errortwo = ""
+    code = 0
+    create_customer_form = CreateCustomerForm(CombinedMultiDict((request.files, request.form)))
     db = shelve.open("database/trees.db", "c")
     trees = db["Trees"]
     db.close()
-
-    errortwo = ""
-    code = 0
-    create_customer_form = CreateCustomerForm(request.form)
 
     if request.method == 'POST' and create_customer_form.validate():
         user_dict = {}
@@ -188,14 +191,16 @@ def create_customer():
                                     create_customer_form.register_password.data)
             customer_dict[new_customer.get_customer_id()] = new_customer
 
-            if create_customer_form.profile_pic.data.filename != "":
+            if "profile_pic" in request.files:
                 pic = create_customer_form.profile_pic.data
                 fn = pic.filename.split(".")
                 ext = fn[len(fn)-1]
-                if ext == ".jpg":
+                print(ext)
+                print("hi")
+                if ext == "jpg":
                     pic_name = str(new_customer.get_customer_id()) + str(ext)
                     try:
-                        pic.save(os.path.join("static/profile_pics/", pic_name))
+                        pic.save(os.path.join("static/images/profile_pics/", pic_name))
                         print("saved")
                     except:
                         print("upload failed")
@@ -207,7 +212,8 @@ def create_customer():
             return redirect(url_for('log_in'))
         else:
             print("Password does not match!")
-    return render_template("register.html", form=create_customer_form, erorrtwo=errortwo, code=code, trees=trees)
+
+    return render_template("register.html", form=create_customer_form, erorrtwo=errortwo, code=code, trees = trees)
 
 
 @app.route("/cart")
@@ -225,7 +231,6 @@ def cart():
         db = shelve.open("database/user.db", "w")
         users_dict = db["Users"]
         customer_user = users_dict.get(customer)
-        db.close()
 
         listofDict = []
         listofKeys = []
