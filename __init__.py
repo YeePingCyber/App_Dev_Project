@@ -178,12 +178,23 @@ def create_customer():
             new_customer = Customer(create_customer_form.first_name.data, create_customer_form.last_name.data,
                                     create_customer_form.birthdate.data, create_customer_form.email.data,
                                     create_customer_form.register_password.data)
-            if create_customer_form.profile_pic.data:
-                print("Saved?")
-                picture_file = save_picture(create_customer_form.profile_pic.data, new_customer.get_customer_id())
-                print("Def saved")
             customer_dict[new_customer.get_customer_id()] = new_customer
-            print(new_customer.get_password())
+            """
+            if create_customer_form.profile_pic.data is not None:
+                pic = create_customer_form.profile_pic.data
+                fn = pic.filename.split(".")
+                ext = fn[len(fn)-1]
+                if ext == ".jpg":
+                    pic_name = str(new_customer.get_customer_id()) + str(ext)
+                    try:
+                        pic.save(os.path.join("static/profile_pics/", pic_name))
+                        print("saved")
+                    except:
+                        print("upload failed")
+            else:
+                print("not saved")
+            """
+
             db['Users'] = customer_dict
             db.close()
             return redirect(url_for('log_in'))
@@ -1369,63 +1380,64 @@ def forget_password():
 
 @app.route("/game")
 def play_game():
-    try:
-        if session["customer_session"] != "":
+    if "customer_session" in session:
+        with shelve.open("database/game.db", "c") as db:
+            try:
+                leaderboard_dict = db["Leaderboard"]
+
+                for key, values in leaderboard_dict.items():
+                    if key == session["customer_session"]:
+
+                        if values.get_total_points() == 0:
+                            leaderboard_points = ""
+                        else:
+                            leaderboard_points = values.get_total_points()
+                            break
+
+                    else:
+                        leaderboard_points = ""
+            except:
+                leaderboard_points = ""
 
             with shelve.open("database/game.db", "c") as db:
 
                 try:
-                    leaderboard_dict = db["Leaderboard"]
-
-                    for key, values in leaderboard_dict.items():
-                        if key == session["customer_session"]:
-
-                            if values.get_total_points() == 0:
-                                leaderboard_points = ""
-                            else:
-                                leaderboard_points = values.get_total_points()
-                                break
-
-                        else:
-                            leaderboard_points = ""
+                    points_list = db['Points']
                 except:
-                    leaderboard_points = ""
+                    print("Error in retrieving Points.")
 
+                if leaderboard_points == "":
+                    stayWhile = True
 
-                with shelve.open("database/game.db", "c") as db:
-
-                    try:
-                        points_list = db['Points']
-                    except:
-                        print("Error in retrieving Points.")
-
-                    if leaderboard_points == "":
-
-                        stayWhile = True
-
-                        while stayWhile:
-                            count = 0
-
-                            points_list = generate_points()
-
-                            for j in points_list:
-
-                                try:
-                                    count += 1
-                                    if int(list(j.values())[0]) and count == len(points_list):
-                                        print("change false")
-                                        stayWhile = False
-                                except:
-                                    break
-                    else:
+                    while stayWhile:
+                        count = 0
                         points_list = generate_points()
 
-                    db['Points'] = points_list
+                        for j in points_list:
+                            try:
+                                count += 1
+                                if int(list(j.values())[0]) and count == len(points_list):
+                                    print("change false")
+                                    stayWhile = False
+                            except:
+                                break
+                else:
+                    points_list = generate_points()
 
-            print(leaderboard_points)
-            return render_template("game.html", points_list=points_list, points=leaderboard_points)
+                db['Points'] = points_list
 
-    except KeyError:
+        with shelve.open('database/user.db', 'r') as db:
+            try:
+                users_details_dict = db['Users']
+            except:
+                print("Error in retrieving user.db.")
+
+            user_details = users_details_dict.get(session["customer_session"])
+            user_credit_points = user_details.get_points()
+
+
+        return render_template("game.html", points_list=points_list, points=leaderboard_points, credit_points=user_credit_points)
+    else:
         return redirect(url_for("log_in"))
 
 
@@ -1484,43 +1496,44 @@ def save_point(key):
 
 @app.route("/leaderboard")
 def leaderboard():
-    # sorted_list = []
-    username_list = []
-    users_dict = {}
-    with shelve.open("database/game.db", "r") as db:
-        try:
-            game_user_dict = db["Leaderboard"]
-        except:
-            print("Error in retrieving game.db.")
+    if "customer_session" in session:
+        username_list = []
+        users_dict = {}
+        with shelve.open("database/game.db", "r") as db:
+            try:
+                game_user_dict = db["Leaderboard"]
+            except:
+                print("Error in retrieving game.db.")
 
-        def sort_by_points(player):
-            return player.get_total_points()
+            def sort_by_points(player):
+                return player.get_total_points()
 
-        sorted_list = sorted(game_user_dict.values(), key=sort_by_points, reverse=True)
-        print(sorted_list)
+            sorted_list = sorted(game_user_dict.values(), key=sort_by_points, reverse=True)
+            print(sorted_list)
 
-        for p in sorted_list:
-            print(p.get_total_points())
+            for p in sorted_list:
+                print(p.get_total_points())
 
-    with shelve.open("database/user.db", "r") as db2:
-        try:
-            users_dict = db2['Users']
-        except:
-            print("Error in retrieving user.db.")
+        with shelve.open("database/user.db", "r") as db2:
+            try:
+                users_dict = db2['Users']
+            except:
+                print("Error in retrieving user.db.")
 
-        try:
-            for player in sorted_list:
-                # print(users_dict.get(player.get_customer_id()).get_first_name(), users_dict.get(player.get_customer_id()).get_last_name())
-                username_list.append(users_dict.get(player.get_customer_id()).get_last_name())
+            try:
+                for player in sorted_list:
+                    # print(users_dict.get(player.get_customer_id()).get_first_name(), users_dict.get(player.get_customer_id()).get_last_name())
+                    username_list.append(users_dict.get(player.get_customer_id()).get_last_name())
 
-            session_user = users_dict.get(session["customer_session"])
-            print(session_user.get_last_name())
-        except IndexError:
-            sorted_list = []
-            username_list = []
+                session_user = users_dict.get(session["customer_session"])
+                print(session_user.get_last_name())
+            except IndexError:
+                sorted_list = []
+                username_list = []
 
-    return render_template("leaderboard.html", sorted_list=sorted_list, username_list=username_list, session_user=session_user)
-
+        return render_template("leaderboard.html", sorted_list=sorted_list, username_list=username_list, session_user=session_user)
+    else:
+        return redirect(url_for("log_in"))
 
 # Admin Side
 @app.route("/admin")
@@ -1762,6 +1775,9 @@ def delete_auction(id):
 
 @app.route("/adminOrders")
 def admin_orders():
+    with shelve.open('database/user.db', 'r') as db:
+        print(db['Users'])
+
     return render_template("adminOrders.html")
 
 
@@ -1906,66 +1922,66 @@ def update_admin(id):
         update_admin_form.employee_id.data = admin.get_employee_id()
     return render_template("adminAdminUpdate.html", form=update_admin_form, error = error, code = code)
 
-"""
-@app.route("/adminAdminUpdate/<int:id>/", methods=["GET", "POST"])
-def update_admin(id):
+
+@app.route("/adminAccount", methods=["GET", "POST"])
+def admin_logged_in():
     update_admin_form = UpdateAdminForm(request.form)
     error = ""
     code = 0
-    if request.method == 'POST' and update_admin_form.validate():
-        users_dict = {}
+
+    if "admin_session" in session:
+        admin = session["admin_session"]
         db = shelve.open('database/user.db', 'w')
         users_dict = db['Users']
-        admin = users_dict.get(id)
-        # Make uuids for customers and admins the same method to retrieve
-        for user in users_dict:
-            if update_admin_form.email.data.upper() == users_dict[user].get_email().upper() and id != users_dict[user].get_admin_id():
-                code = 1
-                break
-        hashed_password = hl.pbkdf2_hmac('sha256', str(update_admin_form.current_password.data).encode(), b'salt', 100000).hex()
-        if update_admin_form.current_password.data == "" and code == 0:
-            admin.set_first_name(update_admin_form.first_name.data)
-            admin.set_last_name(update_admin_form.last_name.data)
-            admin.set_email(update_admin_form.email.data)
-            admin.set_employee_id(update_admin_form.employee_id.data)
-            if update_admin_form.profile_pic.data:
-                print("Saved?")
-                picture_file = save_picture(update_admin_form.profile_pic.data, admin.get_admin_id())
-                print("Def saved")
-            db['Users'] = users_dict
-            db.close()
-            return redirect(url_for('admin_admin_management'))
-        elif update_admin_form.current_password.data != "" and code == 0:
-            if hashed_password == admin.get_password():
-                admin.set_first_name(update_admin_form.first_name.data)
-                admin.set_last_name(update_admin_form.last_name.data)
-                admin.set_email(update_admin_form.email.data)
-                admin.set_employee_id(update_admin_form.employee_id.data)
-                admin.set_password(update_admin_form.new_password.data)
-                if update_admin_form.profile_pic.data:
-                    print("Saved?")
-                    picture_file = save_picture(update_admin_form.profile_pic.data, admin.get_admin_id())
-                    print("Def saved")
+        admin_user = users_dict.get(admin)
+        if request.method == 'POST' and update_admin_form.validate():
+            # Make uuids for customers and admins the same method to retrieve
+            for user in users_dict:
+                    if isinstance(users_dict[user], Customer):
+                        if update_admin_form.email.data.upper() == users_dict[user].get_email().upper() and admin != users_dict[user].get_customer_id():
+                            code = 1
+                            break
+                    if isinstance(users_dict[user], Admin):
+                        if update_admin_form.email.data.upper() == users_dict[user].get_email().upper() and admin != users_dict[user].get_admin_id():
+                            code = 1
+                            break
+            hashed_password = hl.pbkdf2_hmac('sha256', str(update_admin_form.current_password.data).encode(), b'salt', 100000).hex()
+            if update_admin_form.current_password.data == "" and code == 0:
+                admin_user.set_first_name(update_admin_form.first_name.data)
+                admin_user.set_last_name(update_admin_form.last_name.data)
+                admin_user.set_email(update_admin_form.email.data)
+                admin_user.set_employee_id(update_admin_form.employee_id.data)
                 db['Users'] = users_dict
                 db.close()
                 return redirect(url_for('admin_admin_management'))
-            elif hashed_password != admin.get_password():
-                error = "Wrong password entered"
+            elif update_admin_form.current_password.data != "" and code == 0:
+                if hashed_password == admin_user.get_password():
+                    admin_user.set_first_name(update_admin_form.first_name.data)
+                    admin_user.set_last_name(update_admin_form.last_name.data)
+                    admin_user.set_email(update_admin_form.email.data)
+                    admin_user.set_employee_id(update_admin_form.employee_id.data)
+                    admin_user.set_password(update_admin_form.new_password.data)
+                    db['Users'] = users_dict
+                    db.close()
+                    return redirect(url_for('admin_admin_management'))
+                elif hashed_password != admin.get_password():
+                    error = "Wrong password entered"
 
+        else:
+            update_admin_form.first_name.data = admin_user.get_first_name()
+            update_admin_form.last_name.data = admin_user.get_last_name()
+            update_admin_form.email.data = admin_user.get_email()
+            update_admin_form.employee_id.data = admin_user.get_employee_id()
+        return render_template("adminAccount.html", form=update_admin_form, error = error, code = code)
     else:
-        users_dict = {}
-        db = shelve.open('database/user.db', 'r')
-        users_dict = db['Users']
-        db.close()
+        return redirect(url_for('log_in'))
 
-        admin = users_dict.get(id)
-        update_admin_form.first_name.data = admin.get_first_name()
-        update_admin_form.last_name.data = admin.get_last_name()
-        update_admin_form.email.data = admin.get_email()
-        update_admin_form.employee_id.data = admin.get_employee_id()
-    return render_template("adminAdminUpdate.html", form=update_admin_form, error = error, code = code)
 
-"""
+@app.route("/adminlogout", methods=['GET'])
+def admin_log_out():
+    session.pop("admin_session", None)
+    return redirect(url_for('log_in'))
+
 
 @app.route("/adminProductManagement")
 def admin_product_management():
