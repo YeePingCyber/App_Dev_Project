@@ -238,8 +238,6 @@ def cart():
         productBList = []
         productCList = []
         productDList = []
-        productEList = []
-        productFList = []
         cartList = []
         db = shelve.open("database/addtocart", "c")
         try:
@@ -318,8 +316,6 @@ def cart():
         productBList = []
         productCList = []
         productDList = []
-        productEList = []
-        productFList = []
         cartList = []
 
         db = shelve.open("database/addtocartnosession", "c")
@@ -330,6 +326,18 @@ def cart():
                 db["Add_to_cartnosession"] = cart_dict
         except:
             print("Error in retrieving Inventory from addtocart.db")
+
+        for x in cart_dict["1"]:
+            cart_dict["1"][x].set_price(products_dict['8aa0ef4f7e2d61d3'].get_price())
+
+        for x in cart_dict["2"]:
+            cart_dict["2"][x].set_price(products_dict['3c004b46c976e909'].get_price())
+
+        for x in cart_dict["3"]:
+            cart_dict["3"][x].set_price(products_dict['9e508840c03c7102'].get_price())
+
+        for x in cart_dict["4"]:
+            cart_dict["4"][x].set_price(products_dict['a66f2140b7b2a3a2'].get_price())
 
         db.close()
         if len(cart_dict["1"]) or len(cart_dict["2"]) or len(cart_dict["3"]) or len(cart_dict["4"]) > 0:
@@ -349,8 +357,6 @@ def cart():
             cartList.append(productBList)
             cartList.append(productCList)
             cartList.append(productDList)
-            cartList.append(productEList)
-            cartList.append(productFList)
 
             subtotal = 0
             for total in range(0, len(cartList)):
