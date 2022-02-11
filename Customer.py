@@ -41,6 +41,5 @@ class Customer(User):
     def get_customer_id(self):
         return self.__customer_id
 
-    # How do you guys want to calculate points?
     def calculate_points(self, cost):
         self.__points = round(cost/5)

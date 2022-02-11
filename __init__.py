@@ -15,11 +15,9 @@ from ProcessCart import PaymentProcess, ShippingProcess, Sales
 from UserBid import UserBid
 from Game import PlayerStatus, generate_points
 from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreateShipmentForm, CreatePaymentForm, CreateProductForm, CreateAddCartForm, CreateAuctionForm, UpdateAdminForm, CreateBidForm, CreateForgetPassForm, UpdateCustomerForm, CreateProductView
-# create product function
 from werkzeug.datastructures import CombinedMultiDict
-from createProduct import load_product
 import os
-from PIL import Image
+# from PIL import Image
 
 app = Flask(__name__)
 app.secret_key = "abc"
@@ -112,7 +110,7 @@ def customer_logged_in():
         users_dict = db['Users']
         customer_user = users_dict.get(customer)
         path = "../static/images/profile_pics/"+str(customer_user.get_customer_id())+".jpg"
-        print(path)
+        # print(path)
         if customer_user.get_picture() is not None:
             picture_status = 1
 
@@ -1041,9 +1039,10 @@ def paymentdone():
     db.close()
 
     if "customer_session" in session:
+        # do not delete this customer I use it for calculating the credit points
         customer = session["customer_session"]
-        db = shelve.open("database/user.db", "w")
-        users_dict = db["Users"]
+        db1 = shelve.open("database/user.db", "w")
+        users_dict = db1["Users"]
         customer_user = users_dict.get(customer)
 
         listofDict = []
@@ -1119,6 +1118,12 @@ def paymentdone():
 
         sales_dict[payment_dict[0].get_paymentid()] = combinedShippingnPayment
         db["sales"] = sales_dict
+
+        # Calculating credit points
+        customer_user.calculate_points(grandtotal)
+        users_dict[customer] = customer_user
+        db1["Users"] = users_dict
+        db1.close()
 
         return render_template("paymentdone.html", subtotal=subtotal, grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict, sales=sales_dict, cartList=cartList, trees=trees)
 
@@ -1644,8 +1649,11 @@ def play_game():
             user_details = users_details_dict.get(session["customer_session"])
             user_credit_points = user_details.get_points()
 
+        db = shelve.open("database/trees.db", "c")
+        trees = db["Trees"]
+
         return render_template("game.html", points_list=points_list, points=leaderboard_points,
-                               credit_points=user_credit_points)
+                               credit_points=user_credit_points, trees=trees)
     else:
         return redirect(url_for("log_in"))
 
@@ -1735,12 +1743,15 @@ def leaderboard():
 
                 session_user = users_dict.get(session["customer_session"])
                 print(session_user.get_last_name())
-            except IndexError:
+
+            except:
                 sorted_list = []
                 username_list = []
 
-        return render_template("leaderboard.html", sorted_list=sorted_list, username_list=username_list,
-                               session_user=session_user)
+        db = shelve.open("database/trees.db", "c")
+        trees = db["Trees"]
+
+        return render_template("leaderboard.html", sorted_list=sorted_list, username_list=username_list, trees=trees)
     else:
         return redirect(url_for("log_in"))
 
@@ -1863,9 +1874,15 @@ def admin_auction():
             start = date.strftime(values.get_start_date(), '%Y-%m-%d')
             end = date.strftime(values.get_end_date(), '%Y-%m-%d')
 
-            if start == today or today > start or start <= today and end <= today:
-                ongoing = values
+            if (start == today or today > start or start <= today) and end <= today:
+                if today > end:
+                    print("empty")
+                    ongoing = ""
+                else:
+                    print("ongoing")
+                    ongoing = values
             elif start > today and end > today:
+                print("upcoming")
                 upcoming.append(values)
     return render_template("adminAuction.html", ongoing=ongoing, upcoming=upcoming)
 
@@ -1948,10 +1965,19 @@ def delete_auction(id):
 
 @app.route("/adminOrders")
 def admin_orders():
-    with shelve.open('database/user.db', 'r') as db:
-        print(db['Users'])
 
-    return render_template("adminOrders.html")
+    with shelve.open('database/sales', 'r') as db:
+        print(db["sales"])
+        try:
+            if "sales" in db:
+                sales_dict = db["sales"]
+        except:
+            print("Error in retrieving Sales from sales.db")
+
+        for keys, values in sales_dict.items():
+            print(values)
+
+    return render_template("adminOrders.html", sales_dict=sales_dict)
 
 
 @app.route("/adminCustomerManagement")
@@ -2316,6 +2342,11 @@ def delete_product(id):
     db['Products'] = products_dict
     db.close()
     return redirect(url_for('admin_product_management'))
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template("errorPage.html"), 404
 
 
 if __name__ == "__main__":
