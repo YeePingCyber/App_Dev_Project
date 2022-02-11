@@ -1,13 +1,10 @@
-from flask import Flask, render_template, flash
 from flask import Flask, render_template, request, redirect, url_for, session
 import shelve
 import random
 import hashlib as hl
-from bs4 import BeautifulSoup
 from datetime import date, datetime, timedelta
 from Customer import Customer
 from Admin import Admin
-from User import User
 from Product import Product
 from addtocart import Addtocart
 from Auction import Auction
@@ -15,8 +12,6 @@ from ProcessCart import PaymentProcess, ShippingProcess, Sales
 from UserBid import UserBid
 from Game import PlayerStatus, generate_points
 from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreateShipmentForm, CreatePaymentForm, CreateProductForm, CreateAddCartForm, CreateAuctionForm, UpdateAdminForm, CreateBidForm, CreateForgetPassForm, UpdateCustomerForm, CreateProductView
-# create product function
-from createProduct import load_product
 import os
 
 app = Flask(__name__)
@@ -35,12 +30,14 @@ def save_picture(form_picture, id):
 # Customer Side
 @app.route("/")
 def home():
+    db = shelve.open("database/trees.db", "c")
+    trees = db["Trees"]
+    db.close()
+
     db = shelve.open("database/inventory.db", 'w')
     products_dict = db["Products"]
     db.close()
 
-    db = shelve.open("database/trees.db", "c")
-    trees = db["Trees"]
     return render_template("home.html", top4=products_dict, trees=trees)
 
 
@@ -161,6 +158,10 @@ def customer_logged_in():
 
 @app.route("/register", methods=['GET', 'POST'])
 def create_customer():
+    db = shelve.open("database/trees.db", "c")
+    trees = db["Trees"]
+    db.close()
+
     errortwo = ""
     code = 0
     create_customer_form = CreateCustomerForm(request.form)
@@ -206,7 +207,7 @@ def create_customer():
             return redirect(url_for('log_in'))
         else:
             print("Password does not match!")
-    return render_template("register.html", form=create_customer_form, erorrtwo=errortwo, code=code)
+    return render_template("register.html", form=create_customer_form, erorrtwo=errortwo, code=code, trees=trees)
 
 
 @app.route("/cart")
@@ -224,6 +225,7 @@ def cart():
         db = shelve.open("database/user.db", "w")
         users_dict = db["Users"]
         customer_user = users_dict.get(customer)
+        db.close()
 
         listofDict = []
         listofKeys = []
@@ -247,31 +249,15 @@ def cart():
         except:
             print("Error in retrieving Inventory from addtocart.db")
 
-        for x in cart_dict["1"]:
-            cart_dict["1"][x].set_price(products_dict['8aa0ef4f7e2d61d3'].get_price())
-
-        for x in cart_dict["2"]:
-            cart_dict["2"][x].set_price(products_dict['3c004b46c976e909'].get_price())
-
-        for x in cart_dict["3"]:
-            cart_dict["3"][x].set_price(products_dict['9e508840c03c7102'].get_price())
-
-        for x in cart_dict["4"]:
-            cart_dict["4"][x].set_price(products_dict['a66f2140b7b2a3a2'].get_price())
-
+        for i, j in zip(cart_dict, products_dict):
+            for y in cart_dict[i]:
+                cart_dict[i][y].set_price(products_dict[j].get_price())
         db.close()
+
         if len(cart_dict["1"]) or len(cart_dict["2"]) or len(cart_dict["3"]) or len(cart_dict["4"]) > 0:
-            for x in cart_dict["1"]:
-                cartList[0].append(cart_dict["1"][x])
-
-            for y in cart_dict["2"]:
-                cartList[1].append(cart_dict["2"][y])
-
-            for z in cart_dict["3"]:
-                cartList[2].append(cart_dict["3"][z])
-
-            for a in cart_dict["4"]:
-                cartList[3].append(cart_dict["4"][a])
+            for i in cart_dict:
+                for y in cart_dict[i]:
+                    cartList[int(i) - 1].append(cart_dict[i][y])
 
             subtotal = 0
             for total in range(0, len(cartList)):
@@ -307,31 +293,15 @@ def cart():
         except:
             print("Error in retrieving Inventory from addtocart.db")
 
-        for x in cart_dict["1"]:
-            cart_dict["1"][x].set_price(products_dict['8aa0ef4f7e2d61d3'].get_price())
-
-        for x in cart_dict["2"]:
-            cart_dict["2"][x].set_price(products_dict['3c004b46c976e909'].get_price())
-
-        for x in cart_dict["3"]:
-            cart_dict["3"][x].set_price(products_dict['9e508840c03c7102'].get_price())
-
-        for x in cart_dict["4"]:
-            cart_dict["4"][x].set_price(products_dict['a66f2140b7b2a3a2'].get_price())
-
+        for i, j in zip(cart_dict, products_dict):
+            for y in cart_dict[i]:
+                cart_dict[i][y].set_price(products_dict[j].get_price())
         db.close()
+
         if len(cart_dict["1"]) or len(cart_dict["2"]) or len(cart_dict["3"]) or len(cart_dict["4"]) > 0:
-            for x in cart_dict["1"]:
-                cartList[0].append(cart_dict["1"][x])
-
-            for y in cart_dict["2"]:
-                cartList[1].append(cart_dict["2"][y])
-
-            for z in cart_dict["3"]:
-                cartList[2].append(cart_dict["3"][z])
-
-            for a in cart_dict["4"]:
-                cartList[3].append(cart_dict["4"][a])
+            for i in cart_dict:
+                for y in cart_dict[i]:
+                    cartList[int(i) - 1].append(cart_dict[i][y])
 
             subtotal = 0
             for total in range(0, len(cartList)):
@@ -377,17 +347,9 @@ def updateAddCart(id):
         except:
             print("Error in retrieving Inventory from addtocart.db")
 
-        for x in cart_dict["1"]:
-            cartList[0].append(cart_dict["1"][x])
-
-        for y in cart_dict["2"]:
-            cartList[1].append(cart_dict["2"][y])
-
-        for z in cart_dict["3"]:
-            cartList[2].append(cart_dict["3"][z])
-
-        for a in cart_dict["4"]:
-            cartList[3].append(cart_dict["4"][a])
+        for i in cart_dict:
+            for y in cart_dict[i]:
+                cartList[int(i) - 1].append(cart_dict[i][y])
 
         if request.method == "POST":
             addtocart = Addtocart(cartList[id][0].get_name(), cartList[id][0].get_description(),
@@ -431,17 +393,9 @@ def updateAddCart(id):
         except:
             print("Error in retrieving Inventory from addtocart.db")
 
-        for x in cart_dict["1"]:
-            cartList[0].append(cart_dict["1"][x])
-
-        for y in cart_dict["2"]:
-            cartList[1].append(cart_dict["2"][y])
-
-        for z in cart_dict["3"]:
-            cartList[2].append(cart_dict["3"][z])
-
-        for a in cart_dict["4"]:
-            cartList[3].append(cart_dict["4"][a])
+        for i in cart_dict:
+            for y in cart_dict[i]:
+                cartList[int(i) - 1].append(cart_dict[i][y])
 
         if request.method == "POST":
             addtocart = Addtocart(cartList[id][0].get_name(), cartList[id][0].get_description(),
@@ -496,17 +450,9 @@ def updateSubCart(id):
         except:
             print("Error in retrieving Inventory from addtocart.db")
 
-        for x in cart_dict["1"]:
-            cartList[0].append(cart_dict["1"][x])
-
-        for y in cart_dict["2"]:
-            cartList[1].append(cart_dict["2"][y])
-
-        for z in cart_dict["3"]:
-            cartList[2].append(cart_dict["3"][z])
-
-        for a in cart_dict["4"]:
-            cartList[3].append(cart_dict["4"][a])
+        for i in cart_dict:
+            for y in cart_dict[i]:
+                cartList[int(i) - 1].append(cart_dict[i][y])
 
         list_keyA = []
         list_keyB = []
@@ -584,17 +530,9 @@ def updateSubCart(id):
         except:
             print("Error in retrieving Inventory from addtocart.db")
 
-        for x in cart_dict["1"]:
-            cartList[0].append(cart_dict["1"][x])
-
-        for y in cart_dict["2"]:
-            cartList[1].append(cart_dict["2"][y])
-
-        for z in cart_dict["3"]:
-            cartList[2].append(cart_dict["3"][z])
-
-        for a in cart_dict["4"]:
-            cartList[3].append(cart_dict["4"][a])
+        for i in cart_dict:
+            for y in cart_dict[i]:
+                cartList[int(i) - 1].append(cart_dict[i][y])
 
         list_keyA = []
         list_keyB = []
@@ -688,17 +626,9 @@ def delete_item(id):
         except:
             print("Error in retrieving Inventory from addtocart.db")
 
-        for x in cart_dict["1"]:
-            cartList[0].append(cart_dict["1"][x])
-
-        for y in cart_dict["2"]:
-            cartList[1].append(cart_dict["2"][y])
-
-        for z in cart_dict["3"]:
-            cartList[2].append(cart_dict["3"][z])
-
-        for a in cart_dict["4"]:
-            cartList[3].append(cart_dict["4"][a])
+        for i in cart_dict:
+            for y in cart_dict[i]:
+                cartList[int(i) - 1].append(cart_dict[i][y])
 
         cartList[id].clear()
 
@@ -756,17 +686,9 @@ def delete_item(id):
         except:
             print("Error in retrieving Inventory from addtocart.db")
 
-        for x in cart_dict["1"]:
-            cartList[0].append(cart_dict["1"][x])
-
-        for y in cart_dict["2"]:
-            cartList[1].append(cart_dict["2"][y])
-
-        for z in cart_dict["3"]:
-            cartList[2].append(cart_dict["3"][z])
-
-        for a in cart_dict["4"]:
-            cartList[3].append(cart_dict["4"][a])
+        for i in cart_dict:
+            for y in cart_dict[i]:
+                cartList[int(i) - 1].append(cart_dict[i][y])
 
         cartList[id].clear()
 
@@ -840,17 +762,9 @@ def checkout():
         except:
             print("Error in retrieving Inventory from addtocart.db")
 
-        for x in cart_dict["1"]:
-            cartList[0].append(cart_dict["1"][x])
-
-        for y in cart_dict["2"]:
-            cartList[1].append(cart_dict["2"][y])
-
-        for z in cart_dict["3"]:
-            cartList[2].append(cart_dict["3"][z])
-
-        for a in cart_dict["4"]:
-            cartList[3].append(cart_dict["4"][a])
+        for i in cart_dict:
+            for y in cart_dict[i]:
+                cartList[int(i) - 1].append(cart_dict[i][y])
 
         subtotal = 0
         for total in range(0, len(cartList)):
@@ -905,17 +819,9 @@ def checkout():
         except:
             print("Error in retrieving Inventory from addtocart.db")
 
-        for x in cart_dict["1"]:
-            cartList[0].append(cart_dict["1"][x])
-
-        for y in cart_dict["2"]:
-            cartList[1].append(cart_dict["2"][y])
-
-        for z in cart_dict["3"]:
-            cartList[2].append(cart_dict["3"][z])
-
-        for a in cart_dict["4"]:
-            cartList[3].append(cart_dict["4"][a])
+        for i in cart_dict:
+            for y in cart_dict[i]:
+                cartList[int(i) - 1].append(cart_dict[i][y])
 
         subtotal = 0
         for total in range(0, len(cartList)):
@@ -986,17 +892,9 @@ def payment():
         except:
             print("Error in retrieving Inventory from addtocart.db")
 
-        for x in cart_dict["1"]:
-            cartList[0].append(cart_dict["1"][x])
-
-        for y in cart_dict["2"]:
-            cartList[1].append(cart_dict["2"][y])
-
-        for z in cart_dict["3"]:
-            cartList[2].append(cart_dict["3"][z])
-
-        for a in cart_dict["4"]:
-            cartList[3].append(cart_dict["4"][a])
+        for i in cart_dict:
+            for y in cart_dict[i]:
+                cartList[int(i) - 1].append(cart_dict[i][y])
 
         subtotal = 0
         for total in range(0, len(cartList)):
@@ -1060,17 +958,9 @@ def payment():
         except:
             print("Error in retrieving Inventory from addtocart.db")
 
-        for x in cart_dict["1"]:
-            cartList[0].append(cart_dict["1"][x])
-
-        for y in cart_dict["2"]:
-            cartList[1].append(cart_dict["2"][y])
-
-        for z in cart_dict["3"]:
-            cartList[2].append(cart_dict["3"][z])
-
-        for a in cart_dict["4"]:
-            cartList[3].append(cart_dict["4"][a])
+        for i in cart_dict:
+            for y in cart_dict[i]:
+                cartList[int(i) - 1].append(cart_dict[i][y])
 
         subtotal = 0
         for total in range(0, len(cartList)):
@@ -1151,17 +1041,9 @@ def paymentdone():
         except:
             print("Error in retrieving Inventory from addtocart.db")
 
-        for x in cart_dict["1"]:
-            cartList[0].append(cart_dict["1"][x])
-
-        for y in cart_dict["2"]:
-            cartList[1].append(cart_dict["2"][y])
-
-        for z in cart_dict["3"]:
-            cartList[2].append(cart_dict["3"][z])
-
-        for a in cart_dict["4"]:
-            cartList[3].append(cart_dict["4"][a])
+        for i in cart_dict:
+            for y in cart_dict[i]:
+                cartList[int(i) - 1].append(cart_dict[i][y])
 
         subtotal = 0
         for total in range(0, len(cartList)):
@@ -1236,17 +1118,9 @@ def paymentdone():
         except:
             print("Error in retrieving Inventory from addtocart.db")
 
-        for x in cart_dict["1"]:
-            cartList[0].append(cart_dict["1"][x])
-
-        for y in cart_dict["2"]:
-            cartList[1].append(cart_dict["2"][y])
-
-        for z in cart_dict["3"]:
-            cartList[2].append(cart_dict["3"][z])
-
-        for a in cart_dict["4"]:
-            cartList[3].append(cart_dict["4"][a])
+        for i in cart_dict:
+            for y in cart_dict[i]:
+                cartList[int(i) - 1].append(cart_dict[i][y])
 
         subtotal = 0
         for total in range(0, len(cartList)):
@@ -1428,6 +1302,7 @@ def mainshop():
 
     db = shelve.open("database/inventory.db", 'w')
     products_dict = db["Products"]
+    db.close()
 
     productview = CreateProductView(request.form)
     if request.method == "POST":
