@@ -43,6 +43,8 @@ def home():
 
     db = shelve.open("database/trees.db", "c")
     trees = db["Trees"]
+
+    print("I __ App Development")
     return render_template("home.html", top4=products_dict, trees=trees)
 
 
