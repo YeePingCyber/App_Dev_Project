@@ -186,8 +186,8 @@ def create_customer():
                                     create_customer_form.birthdate.data, create_customer_form.email.data,
                                     create_customer_form.register_password.data)
             customer_dict[new_customer.get_customer_id()] = new_customer
-            """
-            if create_customer_form.profile_pic.data is not None:
+
+            if create_customer_form.profile_pic.data.filename != "":
                 pic = create_customer_form.profile_pic.data
                 fn = pic.filename.split(".")
                 ext = fn[len(fn)-1]
@@ -200,7 +200,6 @@ def create_customer():
                         print("upload failed")
             else:
                 print("not saved")
-            """
 
             db['Users'] = customer_dict
             db.close()
