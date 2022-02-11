@@ -54,9 +54,11 @@ def log_in():
         if request.method == 'POST' and create_log_in_form.validate():
             db = shelve.open('database/user.db', 'r')
             users_dict = db['Users']
-            hashed_password = hl.pbkdf2_hmac('sha256', str(create_log_in_form.login_password.data).encode(), b'salt', 100000).hex()
+            hashed_password = hl.pbkdf2_hmac('sha256', str(create_log_in_form.login_password.data).encode(), b'salt',
+                                             100000).hex()
             for user in users_dict:
-                if users_dict[user].get_email().upper() == create_log_in_form.login_email.data.upper() and users_dict[user].get_password() == hashed_password:
+                if users_dict[user].get_email().upper() == create_log_in_form.login_email.data.upper() and users_dict[
+                    user].get_password() == hashed_password:
                     if isinstance(users_dict[user], Customer):
 
                         # Session for customer
@@ -78,7 +80,8 @@ def log_in():
                         # print(session["customer_session"])
 
                         return redirect((url_for('admin')))
-                elif users_dict[user].get_email() != create_log_in_form.login_email.data or users_dict[user].get_password() != hashed_password:
+                elif users_dict[user].get_email() != create_log_in_form.login_email.data or users_dict[
+                    user].get_password() != hashed_password:
                     error = "Invalid email or password"
             db.close()
 
@@ -86,7 +89,7 @@ def log_in():
         trees = db["Trees"]
         db.close()
 
-        return render_template("loginpage.html", form=create_log_in_form, error= error, trees=trees)
+        return render_template("loginpage.html", form=create_log_in_form, error=error, trees=trees)
 
 
 @app.route("/logout", methods=['GET'])
@@ -95,7 +98,7 @@ def log_out():
     return redirect(url_for('log_in'))
 
 
-@app.route("/user",  methods=['GET', 'POST'])
+@app.route("/user", methods=['GET', 'POST'])
 def customer_logged_in():
     code = 0
     pw_code = 0
@@ -109,14 +112,17 @@ def customer_logged_in():
         if request.method == "POST" and update_customer_form.validate():
             for user in users_dict:
                 if isinstance(users_dict[user], Customer):
-                    if update_customer_form.email.data.upper() == users_dict[user].get_email().upper() and customer != users_dict[user].get_customer_id():
+                    if update_customer_form.email.data.upper() == users_dict[user].get_email().upper() and customer != \
+                            users_dict[user].get_customer_id():
                         code = 1
                         break
                 if isinstance(users_dict[user], Admin):
-                    if update_customer_form.email.data.upper() == users_dict[user].get_email().upper() and customer != users_dict[user].get_admin_id():
+                    if update_customer_form.email.data.upper() == users_dict[user].get_email().upper() and customer != \
+                            users_dict[user].get_admin_id():
                         code = 1
                         break
-            hashed_password = hl.pbkdf2_hmac('sha256', str(update_customer_form.current_password.data).encode(), b'salt', 100000).hex()
+            hashed_password = hl.pbkdf2_hmac('sha256', str(update_customer_form.current_password.data).encode(),
+                                             b'salt', 100000).hex()
             if update_customer_form.current_password.data == "" and code == 0:
                 customer_user.set_first_name(update_customer_form.first_name.data)
                 customer_user.set_last_name(update_customer_form.last_name.data)
@@ -148,7 +154,8 @@ def customer_logged_in():
         trees = db["Trees"]
         db.close()
 
-        return render_template("customer_logged_in.html", form = update_customer_form, error = error, code = code, pw_code = pw_code, trees=trees)
+        return render_template("customer_logged_in.html", form=update_customer_form, error=error, code=code,
+                               pw_code=pw_code, trees=trees)
     else:
         return redirect(url_for('home'))
 
@@ -161,7 +168,7 @@ def create_customer():
 
     if request.method == 'POST' and create_customer_form.validate():
         user_dict = {}
-        db = shelve.open('database/user.db','r')
+        db = shelve.open('database/user.db', 'r')
         user_dict = db['Users']
         for user in user_dict:
             print(user)
@@ -201,7 +208,7 @@ def create_customer():
             return redirect(url_for('log_in'))
         else:
             print("Password does not match!")
-    return render_template("register.html", form=create_customer_form, erorrtwo = errortwo, code = code)
+    return render_template("register.html", form=create_customer_form, erorrtwo=errortwo, code=code)
 
 
 @app.route("/cart")
@@ -425,7 +432,9 @@ def updateAddCart(id):
         cartList.append(productDList)
 
         if request.method == "POST":
-            addtocart = Addtocart(cartList[id][0].get_name(),cartList[id][0].get_description(),cartList[id][0].get_price(), 1,cartList[id][0].get_category(), cartList[id][0].get_discount(), cartList[id][0].get_top())
+            addtocart = Addtocart(cartList[id][0].get_name(), cartList[id][0].get_description(),
+                                  cartList[id][0].get_price(), 1, cartList[id][0].get_category(),
+                                  cartList[id][0].get_discount(), cartList[id][0].get_top())
             if id == 0:
                 cart_dict["1"][addtocart.get_id()] = addtocart
             if id == 1:
@@ -487,7 +496,9 @@ def updateAddCart(id):
         cartList.append(productDList)
 
         if request.method == "POST":
-            addtocart = Addtocart(cartList[id][0].get_name(),cartList[id][0].get_description(),cartList[id][0].get_price(), 1,cartList[id][0].get_category(), cartList[id][0].get_discount(), cartList[id][0].get_top())
+            addtocart = Addtocart(cartList[id][0].get_name(), cartList[id][0].get_description(),
+                                  cartList[id][0].get_price(), 1, cartList[id][0].get_category(),
+                                  cartList[id][0].get_discount(), cartList[id][0].get_top())
             if id == 0:
                 cart_dict["1"][addtocart.get_id()] = addtocart
             if id == 1:
@@ -572,7 +583,6 @@ def updateSubCart(id):
         for x in cartList[3]:
             list_keyD.append(x.get_id())
 
-
         if request.method == "POST":
             print(cart_dict)
             if id == 0:
@@ -608,7 +618,7 @@ def updateSubCart(id):
             db.close()
 
         return redirect(url_for("cart"))
-    
+
     else:
         db = shelve.open("database/inventory.db", 'w')
         products_dict = db["Products"]
@@ -671,7 +681,6 @@ def updateSubCart(id):
 
         for x in cartList[3]:
             list_keyD.append(x.get_id())
-
 
         if request.method == "POST":
             print(cart_dict)
@@ -761,7 +770,6 @@ def delete_item(id):
         for a in cart_dict["4"]:
             productDList.append(cart_dict["4"][a])
 
-
         cartList.append(productAList)
         cartList.append(productBList)
         cartList.append(productCList)
@@ -786,7 +794,6 @@ def delete_item(id):
         for x in cartList[3]:
             list_keyD.append(x.get_id())
 
-
         productAupdate = dict(zip(list_keyA, cartList[0]))
         productBupdate = dict(zip(list_keyB, cartList[1]))
         productCupdate = dict(zip(list_keyB, cartList[2]))
@@ -800,7 +807,7 @@ def delete_item(id):
 
         else:
             return render_template("cart_empty.html", trees=trees)
-    
+
     else:
         db = shelve.open("database/inventory.db", 'w')
         products_dict = db["Products"]
@@ -846,7 +853,6 @@ def delete_item(id):
         for a in cart_dict["4"]:
             productDList.append(cart_dict["4"][a])
 
-
         cartList.append(productAList)
         cartList.append(productBList)
         cartList.append(productCList)
@@ -870,7 +876,6 @@ def delete_item(id):
 
         for x in cartList[3]:
             list_keyD.append(x.get_id())
-
 
         productAupdate = dict(zip(list_keyA, cartList[0]))
         productBupdate = dict(zip(list_keyB, cartList[1]))
@@ -936,7 +941,6 @@ def checkout():
         for a in cart_dict["4"]:
             productDList.append(cart_dict["4"][a])
 
-
         cartList.append(productAList)
         cartList.append(productBList)
         cartList.append(productCList)
@@ -962,9 +966,9 @@ def checkout():
             except:
                 print("Error in retrieving Inventory from shipping.db")
             shipping = ShippingProcess(create_shipment_form.email.data, create_shipment_form.country.data,
-                                    create_shipment_form.first_name.data, create_shipment_form.last_name.data,
-                                    create_shipment_form.address.data, create_shipment_form.postal_code.data,
-                                    create_shipment_form.city.data, create_shipment_form.phone.data)
+                                       create_shipment_form.first_name.data, create_shipment_form.last_name.data,
+                                       create_shipment_form.address.data, create_shipment_form.postal_code.data,
+                                       create_shipment_form.city.data, create_shipment_form.phone.data)
             shipping_dict[0] = shipping
             db["Shipping"] = shipping_dict
 
@@ -974,7 +978,8 @@ def checkout():
         trees = db["Trees"]
         db.close()
 
-        return render_template("checkout.html", form=create_shipment_form, cartList=cartList, subtotal=subtotal, grandtotal=grandtotal, trees=trees)
+        return render_template("checkout.html", form=create_shipment_form, cartList=cartList, subtotal=subtotal,
+                               grandtotal=grandtotal, trees=trees)
 
     else:
         db = shelve.open("database/inventory.db", 'w')
@@ -1018,7 +1023,6 @@ def checkout():
         for a in cart_dict["4"]:
             productDList.append(cart_dict["4"][a])
 
-
         cartList.append(productAList)
         cartList.append(productBList)
         cartList.append(productCList)
@@ -1044,9 +1048,9 @@ def checkout():
             except:
                 print("Error in retrieving Inventory from shipping.db")
             shipping = ShippingProcess(create_shipment_form.email.data, create_shipment_form.country.data,
-                                    create_shipment_form.first_name.data, create_shipment_form.last_name.data,
-                                    create_shipment_form.address.data, create_shipment_form.postal_code.data,
-                                    create_shipment_form.city.data, create_shipment_form.phone.data)
+                                       create_shipment_form.first_name.data, create_shipment_form.last_name.data,
+                                       create_shipment_form.address.data, create_shipment_form.postal_code.data,
+                                       create_shipment_form.city.data, create_shipment_form.phone.data)
             shipping_dict[0] = shipping
             db["Shipping"] = shipping_dict
 
@@ -1055,6 +1059,9 @@ def checkout():
         db = shelve.open("database/trees.db", "c")
         trees = db["Trees"]
         db.close()
+
+        return render_template("checkout.html", form=create_shipment_form, cartList=cartList, subtotal=subtotal,
+                               grandtotal=grandtotal, trees=trees)
 
 
 @app.route("/checkout/payment", methods=['GET', 'POST'])
@@ -1146,7 +1153,7 @@ def payment():
                 print("Error in retrieving Sales from payment.db")
 
             payment = PaymentProcess(create_payment_form.card_num.data, create_payment_form.name_card.data,
-                                    create_payment_form.expire.data, create_payment_form.ccv.data)
+                                     create_payment_form.expire.data, create_payment_form.ccv.data)
             payment_dict[0] = payment
             db["payment"] = payment_dict
 
@@ -1160,7 +1167,8 @@ def payment():
         trees = db["Trees"]
         db.close()
 
-        return render_template("payment.html", form=create_payment_form, cartList=cartList, subtotal=subtotal, grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict, trees=trees)
+        return render_template("payment.html", form=create_payment_form, cartList=cartList, subtotal=subtotal,
+                               grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict, trees=trees)
 
     else:
         db = shelve.open("database/inventory.db", 'w')
@@ -1240,7 +1248,7 @@ def payment():
                 print("Error in retrieving Sales from payment.db")
 
             payment = PaymentProcess(create_payment_form.card_num.data, create_payment_form.name_card.data,
-                                    create_payment_form.expire.data, create_payment_form.ccv.data)
+                                     create_payment_form.expire.data, create_payment_form.ccv.data)
             payment_dict[0] = payment
             db["payment"] = payment_dict
 
@@ -1254,7 +1262,8 @@ def payment():
         trees = db["Trees"]
         db.close()
 
-        return render_template("payment.html", form=create_payment_form, cartList=cartList, subtotal=subtotal, grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict, trees=trees)
+        return render_template("payment.html", form=create_payment_form, cartList=cartList, subtotal=subtotal,
+                               grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict, trees=trees)
 
 
 @app.route("/checkout/paymentdone")
@@ -1349,12 +1358,12 @@ def paymentdone():
             print("Error in retrieving Sales from sales.db")
 
         combinedShippingnPayment = Sales(shipping_dict[0].get_email(), shipping_dict[0].get_country(),
-                                        shipping_dict[0].get_firstname(), shipping_dict[0].get_lastname(),
-                                        shipping_dict[0].get_address(), shipping_dict[0].get_postal(),
-                                        shipping_dict[0].get_city(), shipping_dict[0].get_phone(),
-                                        payment_dict[0].get_cardnum(), payment_dict[0].get_namecard(),
-                                        payment_dict[0].get_expire(), payment_dict[0].get_ccv(),
-                                        cart_dict)
+                                         shipping_dict[0].get_firstname(), shipping_dict[0].get_lastname(),
+                                         shipping_dict[0].get_address(), shipping_dict[0].get_postal(),
+                                         shipping_dict[0].get_city(), shipping_dict[0].get_phone(),
+                                         payment_dict[0].get_cardnum(), payment_dict[0].get_namecard(),
+                                         payment_dict[0].get_expire(), payment_dict[0].get_ccv(),
+                                         cart_dict)
 
         sales_dict[payment_dict[0].get_paymentid()] = combinedShippingnPayment
         db["sales"] = sales_dict
@@ -1364,8 +1373,9 @@ def paymentdone():
         trees = db["Trees"]
         db.close()
 
-        return render_template("paymentdone.html", subtotal=subtotal, grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict, sales=sales_dict, cartList=cartList, trees=trees)
-    
+        return render_template("paymentdone.html", subtotal=subtotal, grandtotal=grandtotal, ship=shipping_dict,
+                               payment=payment_dict, sales=sales_dict, cartList=cartList, trees=trees)
+
     else:
         db = shelve.open("database/inventory.db", 'w')
         products_dict = db["Products"]
@@ -1452,12 +1462,12 @@ def paymentdone():
             print("Error in retrieving Sales from sales.db")
 
         combinedShippingnPayment = Sales(shipping_dict[0].get_email(), shipping_dict[0].get_country(),
-                                        shipping_dict[0].get_firstname(), shipping_dict[0].get_lastname(),
-                                        shipping_dict[0].get_address(), shipping_dict[0].get_postal(),
-                                        shipping_dict[0].get_city(), shipping_dict[0].get_phone(),
-                                        payment_dict[0].get_cardnum(), payment_dict[0].get_namecard(),
-                                        payment_dict[0].get_expire(), payment_dict[0].get_ccv(),
-                                        cart_dict)
+                                         shipping_dict[0].get_firstname(), shipping_dict[0].get_lastname(),
+                                         shipping_dict[0].get_address(), shipping_dict[0].get_postal(),
+                                         shipping_dict[0].get_city(), shipping_dict[0].get_phone(),
+                                         payment_dict[0].get_cardnum(), payment_dict[0].get_namecard(),
+                                         payment_dict[0].get_expire(), payment_dict[0].get_ccv(),
+                                         cart_dict)
 
         sales_dict[payment_dict[0].get_paymentid()] = combinedShippingnPayment
         db["sales"] = sales_dict
@@ -1467,7 +1477,8 @@ def paymentdone():
         trees = db["Trees"]
         db.close()
 
-        return render_template("paymentdone.html", subtotal=subtotal, grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict, sales=sales_dict, cartList=cartList, trees=trees)
+        return render_template("paymentdone.html", subtotal=subtotal, grandtotal=grandtotal, ship=shipping_dict,
+                               payment=payment_dict, sales=sales_dict, cartList=cartList, trees=trees)
 
 
 @app.route("/checkout/paymentdone/clear", methods=['POST'])
@@ -1608,7 +1619,7 @@ def mainshop():
     trees = db["Trees"]
     db.close()
 
-    return render_template("mainshop.html", products = products_dict, form = productview, trees=trees)
+    return render_template("mainshop.html", products=products_dict, form=productview, trees=trees)
 
 
 @app.route("/bagbase", methods=['GET', 'POST'])
@@ -1618,7 +1629,7 @@ def bagbase():
         db = shelve.open("database/user.db", "w")
         users_dict = db["Users"]
         customer_user = users_dict.get(customer)
-        
+
         db = shelve.open("database/inventory.db", 'w')
         products_dict = db["Products"]
         productList = []
@@ -1649,9 +1660,9 @@ def bagbase():
                 print("Error in retrieving Inventory from addtocart.db")
 
             addtocart = Addtocart(addtocartform.name.data, addtocartform.description.data,
-                                int(addtocartform.price.data), int(addtocartform.quantity.data),
-                                addtocartform.category.data, int(addtocartform.discount.data),
-                                int(addtocartform.top.data))
+                                  int(addtocartform.price.data), int(addtocartform.quantity.data),
+                                  addtocartform.category.data, int(addtocartform.discount.data),
+                                  int(addtocartform.top.data))
 
             if addtocart.get_name() == productList[0].get_name():
                 addtocart_dict["1"][addtocart.get_id()] = addtocart
@@ -1668,7 +1679,7 @@ def bagbase():
             db["Add_to_cart"] = addtocart_dict
             print(addtocart_dict)
             return redirect(url_for("cart"))
-        
+
         db = shelve.open("database/trees.db", "c")
         trees = db["Trees"]
         db.close()
@@ -1706,9 +1717,9 @@ def bagbase():
                 print("Error in retrieving Inventory from addtocart.db")
 
             addtocart = Addtocart(addtocartform.name.data, addtocartform.description.data,
-                                int(addtocartform.price.data), int(addtocartform.quantity.data),
-                                addtocartform.category.data, int(addtocartform.discount.data),
-                                int(addtocartform.top.data))
+                                  int(addtocartform.price.data), int(addtocartform.quantity.data),
+                                  addtocartform.category.data, int(addtocartform.discount.data),
+                                  int(addtocartform.top.data))
 
             if addtocart.get_name() == productList[0].get_name():
                 addtocart_dict["1"][addtocart.get_id()] = addtocart
@@ -1725,7 +1736,7 @@ def bagbase():
             db["Add_to_cartnosession"] = addtocart_dict
             print(addtocart_dict)
             return redirect(url_for("cart"))
-        
+
         db = shelve.open("database/trees.db", "c")
         trees = db["Trees"]
         db.close()
@@ -1750,10 +1761,9 @@ def auction():
 
     bid_list = []
     for key in bid_dict:
-        #bid_dict.pop()
+        # bid_dict.pop()
         user = bid_dict.get(key)
         bid_list.append(user)
-
 
     auction_dict = {}
     db = shelve.open('database/auction.db', 'c')
@@ -1851,6 +1861,7 @@ def update_bid(id):
 
 randomOTP = random.randint(111111, 999999)
 
+
 @app.route("/forgetPassword", methods=["POST", "GET"])
 def forget_password():
     create_forget_form = CreateForgetPassForm(request.form)
@@ -1872,7 +1883,8 @@ def forget_password():
                 userId = userKey
                 break
 
-        if create_forget_form.newPass.data == create_forget_form.confirmPass.data and create_forget_form.otp.data == str(randomOTP):
+        if create_forget_form.newPass.data == create_forget_form.confirmPass.data and create_forget_form.otp.data == str(
+                randomOTP):
             db = shelve.open("database/user.db", "w")
             users_dict = db['Users']
 
@@ -1947,15 +1959,14 @@ def play_game():
             user_details = users_details_dict.get(session["customer_session"])
             user_credit_points = user_details.get_points()
 
-
-        return render_template("game.html", points_list=points_list, points=leaderboard_points, credit_points=user_credit_points)
+        return render_template("game.html", points_list=points_list, points=leaderboard_points,
+                               credit_points=user_credit_points)
     else:
         return redirect(url_for("log_in"))
 
 
 @app.route("/game/<int:key>", methods=["POST"])
 def save_point(key):
-
     points = ""
     value = ''
     multiply = 0
@@ -2043,9 +2054,11 @@ def leaderboard():
                 sorted_list = []
                 username_list = []
 
-        return render_template("leaderboard.html", sorted_list=sorted_list, username_list=username_list, session_user=session_user)
+        return render_template("leaderboard.html", sorted_list=sorted_list, username_list=username_list,
+                               session_user=session_user)
     else:
         return redirect(url_for("log_in"))
+
 
 # Admin Side
 @app.route("/admin")
@@ -2094,7 +2107,6 @@ def admin():
 
         for y in salesList[sum].get_cart()["6"]:
             productBList.append(salesList[sum].get_cart()["6"][y])
-            
 
     cartList.append(productAList)
     cartList.append(productBList)
@@ -2172,7 +2184,7 @@ def admin():
         forgraphvalue.append(c_total)
 
     forgraphlabel = []
-    for k in range(1, len(salesList)+1):
+    for k in range(1, len(salesList) + 1):
         forgraphlabel.append(k)
 
     labels = forgraphlabel
@@ -2180,7 +2192,9 @@ def admin():
     orders_quantity = len(salesList)
     print(salesList)
 
-    return render_template("adminDashboard.html", top4=products_dict, labels=labels, values=values, subtotal=subtotal, date=time_now, auction_on=auction_on, salesList=salesList, store_c=store_c, orders_quantity=orders_quantity)
+    return render_template("adminDashboard.html", top4=products_dict, labels=labels, values=values, subtotal=subtotal,
+                           date=time_now, auction_on=auction_on, salesList=salesList, store_c=store_c,
+                           orders_quantity=orders_quantity)
 
 
 @app.route("/adminAuction")
@@ -2349,7 +2363,7 @@ def admin_creation():
     code = 0
     create_admin_form = CreateAdminForm(request.form)
     if request.method == 'POST' and create_admin_form.validate():
-        db = shelve.open('database/user.db','r')
+        db = shelve.open('database/user.db', 'r')
         user_dict = db['Users']
         for user in user_dict:
             if create_admin_form.email.data.upper() == user_dict[user].get_email().upper():
@@ -2373,7 +2387,7 @@ def admin_creation():
             return redirect(url_for('admin_admin_management'))
         else:
             print("Password does not match!")
-    return render_template("adminAdminCreation.html", form=create_admin_form, code = code)
+    return render_template("adminAdminCreation.html", form=create_admin_form, code=code)
 
 
 @app.route("/adminAdminUpdate/<int:id>/", methods=["GET", "POST"])
@@ -2388,10 +2402,12 @@ def update_admin(id):
         admin = users_dict.get(id)
         # Make uuids for customers and admins the same method to retrieve
         for user in users_dict:
-            if update_admin_form.email.data.upper() == users_dict[user].get_email().upper() and id != users_dict[user].get_admin_id():
+            if update_admin_form.email.data.upper() == users_dict[user].get_email().upper() and id != users_dict[
+                user].get_admin_id():
                 code = 1
                 break
-        hashed_password = hl.pbkdf2_hmac('sha256', str(update_admin_form.current_password.data).encode(), b'salt', 100000).hex()
+        hashed_password = hl.pbkdf2_hmac('sha256', str(update_admin_form.current_password.data).encode(), b'salt',
+                                         100000).hex()
         if update_admin_form.current_password.data == "" and code == 0:
             admin.set_first_name(update_admin_form.first_name.data)
             admin.set_last_name(update_admin_form.last_name.data)
@@ -2432,7 +2448,7 @@ def update_admin(id):
         update_admin_form.last_name.data = admin.get_last_name()
         update_admin_form.email.data = admin.get_email()
         update_admin_form.employee_id.data = admin.get_employee_id()
-    return render_template("adminAdminUpdate.html", form=update_admin_form, error = error, code = code)
+    return render_template("adminAdminUpdate.html", form=update_admin_form, error=error, code=code)
 
 
 @app.route("/adminAccount", methods=["GET", "POST"])
@@ -2449,15 +2465,18 @@ def admin_logged_in():
         if request.method == 'POST' and update_admin_form.validate():
             # Make uuids for customers and admins the same method to retrieve
             for user in users_dict:
-                    if isinstance(users_dict[user], Customer):
-                        if update_admin_form.email.data.upper() == users_dict[user].get_email().upper() and admin != users_dict[user].get_customer_id():
-                            code = 1
-                            break
-                    if isinstance(users_dict[user], Admin):
-                        if update_admin_form.email.data.upper() == users_dict[user].get_email().upper() and admin != users_dict[user].get_admin_id():
-                            code = 1
-                            break
-            hashed_password = hl.pbkdf2_hmac('sha256', str(update_admin_form.current_password.data).encode(), b'salt', 100000).hex()
+                if isinstance(users_dict[user], Customer):
+                    if update_admin_form.email.data.upper() == users_dict[user].get_email().upper() and admin != \
+                            users_dict[user].get_customer_id():
+                        code = 1
+                        break
+                if isinstance(users_dict[user], Admin):
+                    if update_admin_form.email.data.upper() == users_dict[user].get_email().upper() and admin != \
+                            users_dict[user].get_admin_id():
+                        code = 1
+                        break
+            hashed_password = hl.pbkdf2_hmac('sha256', str(update_admin_form.current_password.data).encode(), b'salt',
+                                             100000).hex()
             if update_admin_form.current_password.data == "" and code == 0:
                 admin_user.set_first_name(update_admin_form.first_name.data)
                 admin_user.set_last_name(update_admin_form.last_name.data)
@@ -2484,7 +2503,7 @@ def admin_logged_in():
             update_admin_form.last_name.data = admin_user.get_last_name()
             update_admin_form.email.data = admin_user.get_email()
             update_admin_form.employee_id.data = admin_user.get_employee_id()
-        return render_template("adminAccount.html", form=update_admin_form, error = error, code = code)
+        return render_template("adminAccount.html", form=update_admin_form, error=error, code=code)
     else:
         return redirect(url_for('log_in'))
 
@@ -2507,7 +2526,7 @@ def admin_product_management():
     return render_template("adminProductManagement.html", count=len(product_list), product_list=product_list)
 
 
-@app.route("/adminProductCreation", methods = ["GET","POST"])
+@app.route("/adminProductCreation", methods=["GET", "POST"])
 def admin_product_creation():
     create_product_form = CreateProductForm(request.form)
     if request.method == 'POST' and create_product_form.validate():
@@ -2519,14 +2538,14 @@ def admin_product_creation():
             print("Error in retrieving Products from inventory.db")
 
         new_product = Product(create_product_form.name.data, int(create_product_form.price.data),
-                          int(create_product_form.quantity.data), create_product_form.category.data,
-                          int(create_product_form.discount.data), create_product_form.description.data, 0)
+                              int(create_product_form.quantity.data), create_product_form.category.data,
+                              int(create_product_form.discount.data), create_product_form.description.data, 0)
         products_dict[new_product.get_product_id()] = new_product
         print(new_product.get_product_id())
         db['Products'] = products_dict
         db.close()
         return redirect(url_for('admin_product_management'))
-    return render_template("adminProductCreation.html", form = create_product_form)
+    return render_template("adminProductCreation.html", form=create_product_form)
 
 
 @app.route("/adminProductUpdate/<id>/", methods=['GET', 'POST'])
@@ -2563,7 +2582,7 @@ def update_product(id):
         update_product_form.discount.data = products_dict.get(id).get_discount()
         update_product_form.category.data = products_dict.get(id).get_category()
         update_product_form.description.data = products_dict.get(id).get_description()
-    return render_template("adminProductUpdate.html", form=update_product_form, product_id = id)
+    return render_template("adminProductUpdate.html", form=update_product_form, product_id=id)
 
 
 @app.route('/deleteProduct/<id>', methods=['POST'])
