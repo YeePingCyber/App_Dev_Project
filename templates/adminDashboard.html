@@ -199,7 +199,7 @@
                                                   <td>{{ sales.get_firstname() }}</td>
                                                   <td>Done</td>
                                                   <td>
-                                                      ${{ store_c[loop.index - 1] }}
+                                                      ${{ customer_totalList[loop.index - 1] }}
                                                   </td>
                                               </tr>
                                               {% endfor %}
@@ -232,10 +232,10 @@
                                         </thead>
                                         <tbody>
                                             {% for sales in salesList %}
-                                            {% if store_c[loop.index - 1] > 500 %}
+                                            {% if customer_totalList[loop.index - 1] > 500 %}
                                             <tr>
                                                 <td><p class="value">Order Id {{ loop.index }}</p></td>
-                                                <td><p class="remarks">${{ store_c[loop.index - 1] }}</p></td>
+                                                <td><p class="remarks">${{ customer_totalList[loop.index - 1] }}</p></td>
                                             </tr>
                                             {% endif %}
                                             {% endfor %}

@@ -237,18 +237,20 @@ def cart():
     products_dict = db["Products"]
     db.close()
 
+    listofDict = []
+    listofKeys = []
+
+    for i in range(1, len(products_dict) + 1):
+        listofKeys.append(str(i))
+        i = dict()
+        listofDict.append(i)
+
     if "customer_session" in session:
         customer = session["customer_session"]
         db = shelve.open("database/user.db", "w")
         users_dict = db["Users"]
         customer_user = users_dict.get(customer)
 
-        listofDict = []
-        listofKeys = []
-        for i in range(1, len(products_dict) + 1):
-            listofKeys.append(str(i))
-            i = dict()
-            listofDict.append(i)
         cart_dict = dict(zip(listofKeys, listofDict))
 
         cartList = []
@@ -285,46 +287,40 @@ def cart():
             return render_template("cart_empty.html", trees=trees)
 
     else:
-        listofDict = []
-        listofKeys = []
+        cart_dictnosession = dict(zip(listofKeys, listofDict))
 
-        for i in range(1, len(products_dict) + 1):
-            listofKeys.append(str(i))
-            i = dict()
-            listofDict.append(i)
-
-        cart_dict = dict(zip(listofKeys, listofDict))
-
-        cartList = []
+        cartListnosession = []
         for j in range(1, len(products_dict) + 1):
             j = list()
-            cartList.append(j)
+            cartListnosession.append(j)
 
         db = shelve.open("database/addtocartnosession", "c")
         try:
             if "Add_to_cartnosession" in db:
-                cart_dict = db["Add_to_cartnosession"]
+                cart_dictnosession = db["Add_to_cartnosession"]
             else:
-                db["Add_to_cartnosession"] = cart_dict
+                db["Add_to_cartnosession"] = cart_dictnosession
         except:
             print("Error in retrieving Inventory from addtocart.db")
-
-        for i, j in zip(cart_dict, products_dict):
-            for y in cart_dict[i]:
-                cart_dict[i][y].set_price(products_dict[j].get_price())
         db.close()
 
-        if len(cart_dict["1"]) or len(cart_dict["2"]) or len(cart_dict["3"]) or len(cart_dict["4"]) > 0:
-            for i in cart_dict:
-                for y in cart_dict[i]:
-                    cartList[int(i) - 1].append(cart_dict[i][y])
+        print(cart_dictnosession)
+
+        for i, j in zip(cart_dictnosession, products_dict):
+            for y in cart_dictnosession[i]:
+                cart_dictnosession[i][y].set_price(products_dict[j].get_price())
+
+        if len(cart_dictnosession["1"]) or len(cart_dictnosession["2"]) or len(cart_dictnosession["3"]) or len(cart_dictnosession["4"]) or len(cart_dictnosession["5"]) > 0:
+            for i in cart_dictnosession:
+                for y in cart_dictnosession[i]:
+                    cartListnosession[int(i) - 1].append(cart_dictnosession[i][y])
 
             subtotal = 0
-            for total in range(0, len(cartList)):
-                for x in cartList[total]:
+            for total in range(0, len(cartListnosession)):
+                for x in cartListnosession[total]:
                     subtotal += x.get_price()
 
-            return render_template("cart.html", cartList=cartList, subtotal=subtotal, trees=trees)
+            return render_template("cart.html", cartList=cartListnosession, subtotal=subtotal, trees=trees)
         else:
             return render_template("cart_empty.html", trees=trees)
 
@@ -429,18 +425,19 @@ def updateSubCart(id):
     products_dict = db["Products"]
     db.close()
 
+    listofDict = []
+    listofKeys = []
+    for i in range(1, len(products_dict) + 1):
+        listofKeys.append(str(i))
+        i = dict()
+        listofDict.append(i)
+
     if "customer_session" in session:
         customer = session["customer_session"]
         db = shelve.open("database/user.db", "w")
         users_dict = db["Users"]
         customer_user = users_dict.get(customer)
 
-        listofDict = []
-        listofKeys = []
-        for i in range(1, len(products_dict) + 1):
-            listofKeys.append(str(i))
-            i = dict()
-            listofDict.append(i)
         cart_dict = dict(zip(listofKeys, listofDict))
 
         cartList = []
@@ -479,8 +476,6 @@ def updateSubCart(id):
             list_keyD.append(x.get_id())
 
         if request.method == "POST":
-            print(cart_dict)
-            print(cartList)
             if id == 0:
                 cartList[id].pop()
                 productAupdate = dict(zip(list_keyA, cartList[0]))
@@ -516,81 +511,96 @@ def updateSubCart(id):
         return redirect(url_for("cart"))
 
     else:
-        listofDict = []
-        listofKeys = []
-        for i in range(1, len(products_dict) + 1):
-            listofKeys.append(str(i))
-            i = dict()
-            listofDict.append(i)
-        cart_dict = dict(zip(listofKeys, listofDict))
+        cart_dictnosession = dict(zip(listofKeys, listofDict))
 
-        cartList = []
+        cartListnosession = []
         for j in range(1, len(products_dict) + 1):
             j = list()
-            cartList.append(j)
+            cartListnosession.append(j)
 
         db = shelve.open("database/addtocartnosession", "c")
         try:
             if "Add_to_cartnosession" in db:
-                cart_dict = db["Add_to_cartnosession"]
+                cart_dictnosession = db["Add_to_cartnosession"]
             else:
-                db["Add_to_cartnosession"] = cart_dict
+                db["Add_to_cartnosession"] = cart_dictnosession
         except:
             print("Error in retrieving Inventory from addtocart.db")
 
-        for i in cart_dict:
-            for y in cart_dict[i]:
-                cartList[int(i) - 1].append(cart_dict[i][y])
+        for i in cart_dictnosession:
+            for y in cart_dictnosession[i]:
+                cartListnosession[int(i) - 1].append(cart_dictnosession[i][y])
+
+        print(cartListnosession)
+
+        # use pop to remove last item from list. [[1,2],[],[],[]] -> [[1,2],[],[],[]]
 
         list_keyA = []
         list_keyB = []
         list_keyC = []
         list_keyD = []
+        list_keyE = []
+        list_keyF = []
 
-        for x in cartList[0]:
+        for x in cartListnosession[0]:
             list_keyA.append(x.get_id())
 
-        for x in cartList[1]:
+        for x in cartListnosession[1]:
             list_keyB.append(x.get_id())
 
-        for x in cartList[2]:
+        for x in cartListnosession[2]:
             list_keyC.append(x.get_id())
 
-        for x in cartList[3]:
+        for x in cartListnosession[3]:
             list_keyD.append(x.get_id())
 
-        if request.method == "POST":
-            print(cart_dict)
-            if id == 0:
-                cartList[0].pop()
-                productAupdate = dict(zip(list_keyA, cartList[0]))
-                productBupdate = dict(zip(list_keyB, cartList[1]))
-                productCupdate = dict(zip(list_keyC, cartList[2]))
-                productDupdate = dict(zip(list_keyD, cartList[3]))
-                cart_dict = {"1": productAupdate, "2": productBupdate, "3": productCupdate, "4": productDupdate}
-            if id == 1:
-                cartList[1].pop()
-                productAupdate = dict(zip(list_keyA, cartList[0]))
-                productBupdate = dict(zip(list_keyB, cartList[1]))
-                productCupdate = dict(zip(list_keyC, cartList[2]))
-                productDupdate = dict(zip(list_keyD, cartList[3]))
-                cart_dict = {"1": productAupdate, "2": productBupdate, "3": productCupdate, "4": productDupdate}
-            if id == 2:
-                cartList[2].pop()
-                productAupdate = dict(zip(list_keyA, cartList[0]))
-                productBupdate = dict(zip(list_keyB, cartList[1]))
-                productCupdate = dict(zip(list_keyC, cartList[2]))
-                productDupdate = dict(zip(list_keyD, cartList[3]))
-                cart_dict = {"1": productAupdate, "2": productBupdate, "3": productCupdate, "4": productDupdate}
-            if id == 3:
-                cartList[3].pop()
-                productAupdate = dict(zip(list_keyA, cartList[0]))
-                productBupdate = dict(zip(list_keyB, cartList[1]))
-                productCupdate = dict(zip(list_keyC, cartList[2]))
-                productDupdate = dict(zip(list_keyD, cartList[3]))
-                cart_dict = {"1": productAupdate, "2": productBupdate, "3": productCupdate, "4": productDupdate}
+        for x in cartListnosession[4]:
+            list_keyE.append(x.get_id())
 
-            db["Add_to_cartnosession"] = cart_dict
+
+        if request.method == "POST":
+            if id == 0:
+                cartListnosession[id].pop()
+                productAupdate = dict(zip(list_keyA, cartListnosession[0]))
+                productBupdate = dict(zip(list_keyB, cartListnosession[1]))
+                productCupdate = dict(zip(list_keyC, cartListnosession[2]))
+                productDupdate = dict(zip(list_keyD, cartListnosession[3]))
+                productEupdate = dict(zip(list_keyE, cartListnosession[4]))
+                cart_dictnosession = {"1": productAupdate, "2": productBupdate, "3": productCupdate, "4": productDupdate, "5": productEupdate}
+            if id == 1:
+                cartListnosession[id].pop()
+                productAupdate = dict(zip(list_keyA, cartListnosession[0]))
+                productBupdate = dict(zip(list_keyB, cartListnosession[1]))
+                productCupdate = dict(zip(list_keyC, cartListnosession[2]))
+                productDupdate = dict(zip(list_keyD, cartListnosession[3]))
+                productEupdate = dict(zip(list_keyE, cartListnosession[4]))
+                cart_dictnosession = {"1": productAupdate, "2": productBupdate, "3": productCupdate, "4": productDupdate, "5": productEupdate}
+            if id == 2:
+                cartListnosession[id].pop()
+                productAupdate = dict(zip(list_keyA, cartListnosession[0]))
+                productBupdate = dict(zip(list_keyB, cartListnosession[1]))
+                productCupdate = dict(zip(list_keyC, cartListnosession[2]))
+                productDupdate = dict(zip(list_keyD, cartListnosession[3]))
+                productEupdate = dict(zip(list_keyE, cartListnosession[4]))
+                cart_dictnosession = {"1": productAupdate, "2": productBupdate, "3": productCupdate, "4": productDupdate, "5": productEupdate}
+            if id == 3:
+                cartListnosession[id].pop()
+                productAupdate = dict(zip(list_keyA, cartListnosession[0]))
+                productBupdate = dict(zip(list_keyB, cartListnosession[1]))
+                productCupdate = dict(zip(list_keyC, cartListnosession[2]))
+                productDupdate = dict(zip(list_keyD, cartListnosession[3]))
+                productEupdate = dict(zip(list_keyE, cartListnosession[4]))
+                cart_dictnosession = {"1": productAupdate, "2": productBupdate, "3": productCupdate, "4": productDupdate, "5": productEupdate}
+            if id == 4:
+                cartListnosession[id].pop()
+                productAupdate = dict(zip(list_keyA, cartListnosession[0]))
+                productBupdate = dict(zip(list_keyB, cartListnosession[1]))
+                productCupdate = dict(zip(list_keyC, cartListnosession[2]))
+                productDupdate = dict(zip(list_keyD, cartListnosession[3]))
+                productEupdate = dict(zip(list_keyE, cartListnosession[4]))
+                cart_dictnosession = {"1": productAupdate, "2": productBupdate, "3": productCupdate, "4": productDupdate, "5": productEupdate}
+
+            db["Add_to_cartnosession"] = cart_dictnosession
             db.close()
 
         return redirect(url_for("cart"))
@@ -1336,25 +1346,26 @@ def bagbase():
         productList.append(products_dict[x])
     db.close()
 
+    listofDict = []
+    listofKeys = []
+    for i in range(1, len(products_dict) + 1):
+        listofKeys.append(str(i))
+        i = dict()
+        listofDict.append(i)
+
     if "customer_session" in session:
         customer = session["customer_session"]
         db = shelve.open("database/user.db", "w")
         users_dict = db["Users"]
         customer_user = users_dict.get(customer)
 
-        listofDict = []
-        listofKeys = []
-        for i in range(1, len(products_dict) + 1):
-            listofKeys.append(str(i))
-            i = dict()
-            listofDict.append(i)
+        addtocart_dict = dict(zip(listofKeys, listofDict))
 
         x = temp_product_id
         addtocartform = CreateAddCartForm(request.form)
         if request.method == "POST":
-            addtocart_dict = dict(zip(listofKeys, listofDict))
-            db = shelve.open("database/addtocart", "c")
 
+            db = shelve.open("database/addtocart", "c")
             try:
                 if "Add_to_cart" in db:
                     addtocart_dict = db["Add_to_cart"]
@@ -1373,29 +1384,23 @@ def bagbase():
                     addtocart_dict[str(j)][addtocart.get_id()] = addtocart
 
             db["Add_to_cart"] = addtocart_dict
+            db.close()
             return redirect(url_for("cart"))
 
         return render_template("bagbase.html", form=addtocartform, products=products_dict, x=x, trees=trees)
 
     else:
-        listofDict = []
-        listofKeys = []
-        for i in range(1, len(products_dict) + 1):
-            listofKeys.append(str(i))
-            i = dict()
-            listofDict.append(i)
+        addtocartnosession_dict = dict(zip(listofKeys, listofDict))
 
         x = temp_product_id
         addtocartform = CreateAddCartForm(request.form)
         if request.method == "POST":
-            addtocart_dict = dict(zip(listofKeys, listofDict))
             db = shelve.open("database/addtocartnosession", "c")
-
             try:
                 if "Add_to_cartnosession" in db:
-                    addtocart_dict = db["Add_to_cartnosession"]
+                    addtocartnosession_dict = db["Add_to_cartnosession"]
                 else:
-                    db["Add_to_cartnosession"] = addtocart_dict
+                    db["Add_to_cartnosession"] = addtocartnosession_dict
             except:
                 print("Error in retrieving Inventory from addtocart.db")
 
@@ -1406,9 +1411,10 @@ def bagbase():
 
             for x, j in zip(productList, range(1, len(productList) + 1)):
                 if addtocart.get_name() == x.get_name():
-                    addtocart_dict[str(j)][addtocart.get_id()] = addtocart
+                    addtocartnosession_dict[str(j)][addtocart.get_id()] = addtocart
 
-            db["Add_to_cartnosession"] = addtocart_dict
+            db["Add_to_cartnosession"] = addtocartnosession_dict
+            db.close()
             return redirect(url_for("cart"))
 
         return render_template("bagbase.html", form=addtocartform, products=products_dict, x=x, trees=trees)
@@ -1733,10 +1739,13 @@ def leaderboard():
 # Admin Side
 @app.route("/admin")
 def admin():
+    db = shelve.open("database/inventory.db", 'r')
+    products_dict = db["Products"]
+    db.close()
+
     time_now = datetime.now()
 
     sales_dict = {}
-    salesList = []
     db = shelve.open("database/sales", "c")
     try:
         if "sales" in db:
@@ -1745,77 +1754,43 @@ def admin():
             db["sales"] = sales_dict
     except:
         print("Error in retrieving Sales from sales.db")
-
     db.close()
 
+    salesList = []
     for x in sales_dict:
         salesList.append(sales_dict[x])
 
-    cartList = []
-    productAList = []
-    productBList = []
-    productCList = []
-    productDList = []
-    productEList = []
-    productFList = []
-
-    for sum in range(0, len(salesList)):
-        for x in salesList[sum].get_cart()["1"]:
-            productAList.append(salesList[sum].get_cart()["1"][x])
-
-        for y in salesList[sum].get_cart()["2"]:
-            productBList.append(salesList[sum].get_cart()["2"][y])
-
-        for y in salesList[sum].get_cart()["3"]:
-            productBList.append(salesList[sum].get_cart()["3"][y])
-
-        for y in salesList[sum].get_cart()["4"]:
-            productBList.append(salesList[sum].get_cart()["4"][y])
-
-        for y in salesList[sum].get_cart()["5"]:
-            productBList.append(salesList[sum].get_cart()["5"][y])
-
-        for y in salesList[sum].get_cart()["6"]:
-            productBList.append(salesList[sum].get_cart()["6"][y])
-
-    cartList.append(productAList)
-    cartList.append(productBList)
-    cartList.append(productCList)
-    cartList.append(productDList)
-    cartList.append(productEList)
-    cartList.append(productFList)
+    print(salesList)
 
     # get total of each customer purchase
-    c_total = 0
-    store_c = []
+    customer_total = 0
+    customer_totalList = []
+
+    for i in range(0, len(salesList)):
+        print(salesList[i].get_cart())
+
+
     for i in range(0, len(salesList)):
         for j in salesList[i].get_cart()["1"]:
-            c_total += salesList[i].get_cart()["1"][j].get_price()
+            customer_total += salesList[i].get_cart()["1"][j].get_price()
 
         for j in salesList[i].get_cart()["2"]:
-            c_total += salesList[i].get_cart()["2"][j].get_price()
+            customer_total += salesList[i].get_cart()["2"][j].get_price()
 
         for j in salesList[i].get_cart()["3"]:
-            c_total += salesList[i].get_cart()["3"][j].get_price()
+            customer_total += salesList[i].get_cart()["3"][j].get_price()
 
         for j in salesList[i].get_cart()["4"]:
-            c_total += salesList[i].get_cart()["4"][j].get_price()
+            customer_total += salesList[i].get_cart()["4"][j].get_price()
 
-        for j in salesList[i].get_cart()["5"]:
-            c_total += salesList[i].get_cart()["5"][j].get_price()
-
-        for j in salesList[i].get_cart()["6"]:
-            c_total += salesList[i].get_cart()["6"][j].get_price()
-
-        store_c.append(c_total)
-        c_total = 0
-    print(store_c)
+        customer_totalList.append(customer_total)
+        customer_total = 0
 
     # getting total sales money
     subtotal = 0
-    for total in range(0, len(cartList)):
-        for x in cartList[total]:
-            subtotal += x.get_price()
+    # for total in range(0, len(cartList)):
+    #     for x in cartList[total]:
+    #         subtotal += x.get_price()
 
     db = shelve.open("database/trees.db", "c")
     db["Trees"] = subtotal / 5
@@ -1839,19 +1814,15 @@ def admin():
 
     auction_on = len(ongoing)
 
-    db = shelve.open("database/inventory.db", 'r')
-    products_dict = db["Products"]
-    db.close()
-
     forgraphvalue = []
     for i in range(0, len(salesList)):
         for j in salesList[i].get_cart()["1"]:
-            c_total += salesList[i].get_cart()["1"][j].get_price()
+            customer_total += salesList[i].get_cart()["1"][j].get_price()
 
         for j in salesList[i].get_cart()["2"]:
-            c_total += salesList[i].get_cart()["2"][j].get_price()
+            customer_total += salesList[i].get_cart()["2"][j].get_price()
 
-        forgraphvalue.append(c_total)
+        forgraphvalue.append(customer_total)
 
     forgraphlabel = []
     for k in range(1, len(salesList) + 1):
@@ -1860,11 +1831,8 @@ def admin():
     labels = forgraphlabel
     values = forgraphvalue
     orders_quantity = len(salesList)
-    print(salesList)
 
-    return render_template("adminDashboard.html", top4=products_dict, labels=labels, values=values, subtotal=subtotal,
-                           date=time_now, auction_on=auction_on, salesList=salesList, store_c=store_c,
-                           orders_quantity=orders_quantity)
+    return render_template("adminDashboard.html", top4=products_dict, labels=labels, values=values, subtotal=subtotal, date=time_now, auction_on=auction_on, salesList=salesList, customer_totalList=customer_totalList, orders_quantity=orders_quantity)
 
 
 @app.route("/adminAuction")
