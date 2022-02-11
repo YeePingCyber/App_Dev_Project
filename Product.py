@@ -11,6 +11,13 @@ class Product(Goods):
         self.__category = category
         self.__sold_units = 0
         self.__top = top
+        self.__picture = None
+
+    def set_picture(self, picture):
+        self.__picture = picture
+
+    def get_picture(self):
+        return self.__picture
 
     def set_category(self, category):
         self.__category = category

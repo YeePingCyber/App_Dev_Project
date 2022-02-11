@@ -2273,6 +2273,7 @@ def admin_product_creation():
             if ext == "jpg":
                 pic_name = str(new_product.get_product_id()) + "." + str(ext)
                 try:
+                    new_product.set_picture(pic_name)
                     pic.save(os.path.join("static/images/product_pics/", pic_name))
                     print("saved")
                 except:
@@ -2300,6 +2301,7 @@ def update_product(id):
             if ext == "jpg":
                 pic_name = str(product.get_product_id()) + "." + str(ext)
                 try:
+                    product.set_picture(pic_name)
                     pic.save(os.path.join("static/images/product_pics/", pic_name))
                     print("saved")
                 except:
