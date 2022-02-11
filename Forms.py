@@ -63,6 +63,7 @@ class CreateProductForm(Form):
     discount = FloatField('Discount: ', [validators.DataRequired(), NumberRange(min=1, max=99)],  render_kw={"placeholder": "Discount"})
     description = TextAreaField('Description: ', [validators.Length(min=1, max=300), validators.DataRequired()],  render_kw={"placeholder": "Description"})
     top = BooleanField('Top product')
+    product_pic = FileField('Upload product picture:')
 
 
 class CreateAdminForm(Form):

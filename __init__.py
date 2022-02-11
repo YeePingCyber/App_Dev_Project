@@ -2236,7 +2236,7 @@ def admin_product_management():
 
 @app.route("/adminProductCreation", methods=["GET", "POST"])
 def admin_product_creation():
-    create_product_form = CreateProductForm(request.form)
+    create_product_form = CreateProductForm(CombinedMultiDict((request.files, request.form)))
     if request.method == 'POST' and create_product_form.validate():
         products_dict = {}
         db = shelve.open('database/inventory.db', 'c')
@@ -2249,6 +2249,19 @@ def admin_product_creation():
                               int(create_product_form.quantity.data), create_product_form.category.data,
                               int(create_product_form.discount.data), create_product_form.description.data, 0)
         products_dict[new_product.get_product_id()] = new_product
+        if "product_pic" in request.files:
+            pic = create_product_form.product_pic.data
+            fn = pic.filename.split(".")
+            ext = fn[len(fn)-1]
+            if ext == "jpg":
+                pic_name = str(new_product.get_product_id()) + "." + str(ext)
+                try:
+                    pic.save(os.path.join("static/images/product_pics/", pic_name))
+                    print("saved")
+                except:
+                    print("upload failed")
+        if "product_picture" not in request.files:
+            print("not saved")
         print(new_product.get_product_id())
         db['Products'] = products_dict
         db.close()
@@ -2258,11 +2271,24 @@ def admin_product_creation():
 
 @app.route("/adminProductUpdate/<id>/", methods=['GET', 'POST'])
 def update_product(id):
-    update_product_form = CreateProductForm(request.form)
+    update_product_form = CreateProductForm(CombinedMultiDict((request.files, request.form)))
     if request.method == 'POST' and update_product_form.validate():
         db = shelve.open("database/inventory.db", 'w')
         products_dict = db["Products"]
-
+        product = products_dict.get(id)
+        if "product_pic" in request.files:
+            pic = update_product_form.product_pic.data
+            fn = pic.filename.split(".")
+            ext = fn[len(fn)-1]
+            if ext == "jpg":
+                pic_name = str(product.get_product_id()) + "." + str(ext)
+                try:
+                    pic.save(os.path.join("static/images/product_pics/", pic_name))
+                    print("saved")
+                except:
+                    print("upload failed")
+        if "product_picture" not in request.files:
+            print("not saved")
         products_dict.get(id).set_name(update_product_form.name.data)
         products_dict.get(id).set_price(int(update_product_form.price.data))
         products_dict.get(id).set_quantity(int(update_product_form.quantity.data))

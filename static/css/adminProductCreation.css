@@ -79,3 +79,10 @@ margin: 0 auto;
     height: 140%;
     width: 50%;
 }
+.form-login-field-file{
+background-color: transparent;
+border: none;
+width: 50%;
+margin: 0 auto;
+
+}
