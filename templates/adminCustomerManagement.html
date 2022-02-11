@@ -24,7 +24,13 @@
     </tr>
     {% for customer in customer_list %}
     <tr>
-        <td><img src="../static/images/Default_picture.jpg" class="profile-pic"> {{ customer.get_customer_id() }}</td>
+        <td>
+            {% if customer.get_picture() %}
+            <img src="../../static/images/profile_pics/{{ customer.get_picture() }}" class="profile-pic">
+            {% else %}
+            <img src="../../static/images/Default_picture.jpg" class="profile-pic">
+            {% endif %}{{ customer.get_customer_id() }}
+        </td>
         <td>{{ customer.get_first_name() }} {{ customer.get_last_name() }}</td>
         <td>{{ customer.get_email() }}</td>
         <td>{{ customer.get_points() }}</td>

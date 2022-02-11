@@ -27,7 +27,13 @@
     </tr>
 {% for admin in admin_list %}
     <tr>
-        <td><img src="../static/images/Default_picture.jpg" class="profile-pic"> {{ admin.get_admin_id() }}</td>
+        <td>
+            {% if admin.get_picture() %}
+            <img src="../../static/images/profile_pics/{{ admin.get_picture() }}" class="profile-pic">
+            {% else %}
+            <img src="../../static/images/Default_picture.jpg" class="profile-pic">
+            {% endif %}{{ admin.get_admin_id() }}
+        </td>
         <td>{{ admin.get_first_name() }} {{ admin.get_last_name() }}</td>
         <td>{{ admin.get_email() }}</td>
         <td>{{ admin.get_employee_id() }}</td>

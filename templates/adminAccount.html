@@ -15,7 +15,11 @@
     <form method="POST" class="form-login" action="" enctype="multipart/form-data">
       <h1>Your Admin Account</h1>
       <br><br>
+      {% if picture_status == 1 %}
+      <img src="{{ path }}" class="profile-pic">
+      {% else %}
       <img src="../../static/images/Default_picture.jpg" class="profile-pic">
+      {% endif %}
       <br><br><br>
       <div class="form-login-field-file">
         &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
