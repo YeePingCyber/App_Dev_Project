@@ -19,6 +19,7 @@ from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreateSh
 from werkzeug.datastructures import CombinedMultiDict
 from createProduct import load_product
 import os
+from PIL import Image
 
 app = Flask(__name__)
 app.secret_key = "abc"
@@ -103,12 +104,18 @@ def customer_logged_in():
     code = 0
     pw_code = 0
     error = ""
+    picture_status = 0
     update_customer_form = UpdateCustomerForm(CombinedMultiDict((request.files, request.form)))
     if "customer_session" in session:
         customer = session["customer_session"]
         db = shelve.open('database/user.db', 'w')
         users_dict = db['Users']
         customer_user = users_dict.get(customer)
+        path = "../static/images/profile_pics/"+str(customer_user.get_customer_id())+".jpg"
+        print(path)
+        if customer_user.get_picture() is not None:
+            picture_status = 1
+
         if request.method == "POST" and update_customer_form.validate():
             for user in users_dict:
                 if isinstance(users_dict[user], Customer):
@@ -130,6 +137,7 @@ def customer_logged_in():
                 if ext == "jpg":
                     pic_name = str(customer_user.get_customer_id()) + "." + str(ext)
                     try:
+                        customer_user.set_picture(pic_name)
                         pic.save(os.path.join("static/images/profile_pics/", pic_name))
                         print("saved")
                     except:
@@ -168,7 +176,7 @@ def customer_logged_in():
         db.close()
 
         return render_template("customer_logged_in.html", form=update_customer_form, error=error, code=code,
-                               pw_code=pw_code, trees=trees)
+                               pw_code=pw_code, trees=trees, picture_status=picture_status, customer=customer_user, path=path)
     else:
         return redirect(url_for('home'))
 
@@ -209,8 +217,9 @@ def create_customer():
                 fn = pic.filename.split(".")
                 ext = fn[len(fn)-1]
                 if ext == "jpg":
-                    pic_name = str(new_customer.get_customer_id()) + str(ext)
+                    pic_name = str(new_customer.get_customer_id()) + "." + str(ext)
                     try:
+                        new_customer.set_picture(pic_name)
                         pic.save(os.path.join("static/images/profile_pics/", pic_name))
                         print("saved")
                     except:

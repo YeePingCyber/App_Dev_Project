@@ -7,8 +7,13 @@ class User:
         self.__lastname = lname
         self.__email = email
         self.__password = self.hashing_pwsd(password)
+        self.__picture = None
 
+    def set_picture(self, picture):
+        self.__picture = picture
 
+    def get_picture(self):
+        return self.__picture
     def set_first_name(self, fname):
         self.__firstname = fname
 

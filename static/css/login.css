@@ -69,6 +69,7 @@ color:blue;
 
 .profile-pic{
 border-radius: 50%;
+border: 1px solid black;
 height: 15%;
 width: 15%;
 }
