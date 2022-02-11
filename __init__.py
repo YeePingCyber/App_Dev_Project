@@ -251,7 +251,7 @@ def cart():
     listofDict = []
     listofKeys = []
 
-    for i in range(1, len(products_dict) + 1):
+    for i in range(1, len(products_dict) + 10):
         listofKeys.append(str(i))
         i = dict()
         listofDict.append(i)
@@ -265,7 +265,7 @@ def cart():
         cart_dict = dict(zip(listofKeys, listofDict))
 
         cartList = []
-        for j in range(1, len(products_dict) + 1):
+        for j in range(1, len(products_dict) + 10):
             j = list()
             cartList.append(j)
 
@@ -283,7 +283,7 @@ def cart():
                 cart_dict[i][y].set_price(products_dict[j].get_price())
         db.close()
 
-        if len(cart_dictnosession["1"]) or len(cart_dictnosession["2"]) or len(cart_dictnosession["3"]) or len(cart_dictnosession["4"]) or len(cart_dictnosession["5"]) > 0:
+        if len(cart_dictnosession["1"]) or len(cart_dictnosession["2"]) or len(cart_dictnosession["3"]) or len(cart_dictnosession["4"]) or len(cart_dictnosession["5"]) or len(cart_dictnosession["6"]) or len(cart_dictnosession["7"]) or len(cart_dictnosession["8"]) or len(cart_dictnosession["5"]) or len(cart_dictnosession["9"]) or len(cart_dictnosession["10"])  > 0:
             for i in cart_dict:
                 for y in cart_dict[i]:
                     cartList[int(i) - 1].append(cart_dict[i][y])
@@ -301,7 +301,7 @@ def cart():
         cart_dictnosession = dict(zip(listofKeys, listofDict))
 
         cartListnosession = []
-        for j in range(1, len(products_dict) + 1):
+        for j in range(1, len(products_dict) + 10):
             j = list()
             cartListnosession.append(j)
 
@@ -318,10 +318,13 @@ def cart():
         print(cart_dictnosession)
 
         for i, j in zip(cart_dictnosession, products_dict):
+            print(j)
             for y in cart_dictnosession[i]:
                 cart_dictnosession[i][y].set_price(products_dict[j].get_price())
 
-        if len(cart_dictnosession["1"]) or len(cart_dictnosession["2"]) or len(cart_dictnosession["3"]) or len(cart_dictnosession["4"]) or len(cart_dictnosession["5"]) > 0:
+        print(cart_dictnosession)
+
+        if len(cart_dictnosession["1"]) or len(cart_dictnosession["2"]) or len(cart_dictnosession["3"]) or len(cart_dictnosession["4"]) or len(cart_dictnosession["5"]) or len(cart_dictnosession["6"]) or len(cart_dictnosession["7"]) or len(cart_dictnosession["8"]) or len(cart_dictnosession["5"]) or len(cart_dictnosession["9"]) or len(cart_dictnosession["10"])  > 0:
             for i in cart_dictnosession:
                 for y in cart_dictnosession[i]:
                     cartListnosession[int(i) - 1].append(cart_dictnosession[i][y])
@@ -350,14 +353,14 @@ def updateAddCart(id):
 
         listofDict = []
         listofKeys = []
-        for i in range(1, len(products_dict) + 1):
+        for i in range(1, len(products_dict) + 10):
             listofKeys.append(str(i))
             i = dict()
             listofDict.append(i)
         cart_dict = dict(zip(listofKeys, listofDict))
 
         cartList = []
-        for j in range(1, len(products_dict) + 1):
+        for j in range(1, len(products_dict) + 10):
             j = list()
             cartList.append(j)
 
@@ -391,14 +394,14 @@ def updateAddCart(id):
     else:
         listofDict = []
         listofKeys = []
-        for i in range(1, len(products_dict) + 1):
+        for i in range(1, len(products_dict) + 10):
             listofKeys.append(str(i))
             i = dict()
             listofDict.append(i)
         cart_dict = dict(zip(listofKeys, listofDict))
 
         cartList = []
-        for j in range(1, len(products_dict) + 1):
+        for j in range(1, len(products_dict) + 10):
             j = list()
             cartList.append(j)
 
@@ -438,7 +441,7 @@ def updateSubCart(id):
 
     listofDict = []
     listofKeys = []
-    for i in range(1, len(products_dict) + 1):
+    for i in range(1, len(products_dict) + 10):
         listofKeys.append(str(i))
         i = dict()
         listofDict.append(i)
@@ -499,7 +502,7 @@ def delete_item(id):
 
     listofDict = []
     listofKeys = []
-    for i in range(1, len(products_dict) + 1):
+    for i in range(1, len(products_dict) + 10):
         listofKeys.append(str(i))
         i = dict()
         listofDict.append(i)
@@ -524,7 +527,7 @@ def delete_item(id):
 
         db['Add_to_cart'] = cart_dict
         db.close()
-        if len(cart_dictnosession["1"]) or len(cart_dictnosession["2"]) or len(cart_dictnosession["3"]) or len(cart_dictnosession["4"]) or len(cart_dictnosession["5"]) > 0:
+        if len(cart_dictnosession["1"]) or len(cart_dictnosession["2"]) or len(cart_dictnosession["3"]) or len(cart_dictnosession["4"]) or len(cart_dictnosession["5"]) or len(cart_dictnosession["6"]) or len(cart_dictnosession["7"]) or len(cart_dictnosession["8"]) or len(cart_dictnosession["5"]) or len(cart_dictnosession["9"]) or len(cart_dictnosession["10"])  > 0:
             return redirect(url_for("cart"))
 
         else:
@@ -545,7 +548,7 @@ def delete_item(id):
 
         db['Add_to_cartnosession'] = cart_dictnosession
         db.close()
-        if len(cart_dictnosession["1"]) or len(cart_dictnosession["2"]) or len(cart_dictnosession["3"]) or len(cart_dictnosession["4"]) or len(cart_dictnosession["5"]) > 0:
+        if len(cart_dictnosession["1"]) or len(cart_dictnosession["2"]) or len(cart_dictnosession["3"]) or len(cart_dictnosession["4"]) or len(cart_dictnosession["5"]) or len(cart_dictnosession["6"]) or len(cart_dictnosession["7"]) or len(cart_dictnosession["8"]) or len(cart_dictnosession["5"]) or len(cart_dictnosession["9"]) or len(cart_dictnosession["10"])  > 0:
             return redirect(url_for("cart"))
 
         else:
@@ -570,14 +573,14 @@ def checkout():
 
         listofDict = []
         listofKeys = []
-        for i in range(1, len(products_dict) + 1):
+        for i in range(1, len(products_dict) + 10):
             listofKeys.append(str(i))
             i = dict()
             listofDict.append(i)
         cart_dict = dict(zip(listofKeys, listofDict))
 
         cartList = []
-        for j in range(1, len(products_dict) + 1):
+        for j in range(1, len(products_dict) + 10):
             j = list()
             cartList.append(j)
 
@@ -627,14 +630,14 @@ def checkout():
     else:
         listofDict = []
         listofKeys = []
-        for i in range(1, len(products_dict) + 1):
+        for i in range(1, len(products_dict) + 10):
             listofKeys.append(str(i))
             i = dict()
             listofDict.append(i)
         cart_dict = dict(zip(listofKeys, listofDict))
 
         cartList = []
-        for j in range(1, len(products_dict) + 1):
+        for j in range(1, len(products_dict) + 10):
             j = list()
             cartList.append(j)
 
@@ -700,14 +703,14 @@ def payment():
 
         listofDict = []
         listofKeys = []
-        for i in range(1, len(products_dict) + 1):
+        for i in range(1, len(products_dict) + 10):
             listofKeys.append(str(i))
             i = dict()
             listofDict.append(i)
         cart_dict = dict(zip(listofKeys, listofDict))
 
         cartList = []
-        for j in range(1, len(products_dict) + 1):
+        for j in range(1, len(products_dict) + 10):
             j = list()
             cartList.append(j)
 
@@ -766,14 +769,14 @@ def payment():
     else:
         listofDict = []
         listofKeys = []
-        for i in range(1, len(products_dict) + 1):
+        for i in range(1, len(products_dict) + 10):
             listofKeys.append(str(i))
             i = dict()
             listofDict.append(i)
         cart_dict = dict(zip(listofKeys, listofDict))
 
         cartList = []
-        for j in range(1, len(products_dict) + 1):
+        for j in range(1, len(products_dict) + 10):
             j = list()
             cartList.append(j)
 
@@ -849,14 +852,14 @@ def paymentdone():
 
         listofDict = []
         listofKeys = []
-        for i in range(1, len(products_dict) + 1):
+        for i in range(1, len(products_dict) + 10):
             listofKeys.append(str(i))
             i = dict()
             listofDict.append(i)
         cart_dict = dict(zip(listofKeys, listofDict))
 
         cartList = []
-        for j in range(1, len(products_dict) + 1):
+        for j in range(1, len(products_dict) + 10):
             j = list()
             cartList.append(j)
 
@@ -926,14 +929,14 @@ def paymentdone():
     else:
         listofDict = []
         listofKeys = []
-        for i in range(1, len(products_dict) + 1):
+        for i in range(1, len(products_dict) + 10):
             listofKeys.append(str(i))
             i = dict()
             listofDict.append(i)
         cart_dict = dict(zip(listofKeys, listofDict))
 
         cartList = []
-        for j in range(1, len(products_dict) + 1):
+        for j in range(1, len(products_dict) + 10):
             j = list()
             cartList.append(j)
 
@@ -1016,7 +1019,7 @@ def done_clear():
 
         listofDict = []
         listofKeys = []
-        for i in range(1, len(products_dict) + 1):
+        for i in range(1, len(products_dict) + 10):
             listofKeys.append(str(i))
             i = dict()
             listofDict.append(i)
@@ -1053,7 +1056,7 @@ def done_clear():
 
         nlistofDict = []
         nlistofKeys = []
-        for i in range(1, len(products_dict) + 1):
+        for i in range(1, len(products_dict) + 10):
             nlistofKeys.append(str(i))
             i = dict()
             nlistofDict.append(i)
@@ -1070,7 +1073,7 @@ def done_clear():
     else:
         listofDict = []
         listofKeys = []
-        for i in range(1, len(products_dict) + 1):
+        for i in range(1, len(products_dict) + 10):
             listofKeys.append(str(i))
             i = dict()
             listofDict.append(i)
@@ -1107,7 +1110,7 @@ def done_clear():
 
         nlistofDict = []
         nlistofKeys = []
-        for i in range(1, len(products_dict) + 1):
+        for i in range(1, len(products_dict) + 10):
             nlistofKeys.append(str(i))
             i = dict()
             nlistofDict.append(i)
@@ -1158,7 +1161,7 @@ def bagbase():
 
     listofDict = []
     listofKeys = []
-    for i in range(1, len(products_dict) + 1):
+    for i in range(1, len(products_dict) + 10):
         listofKeys.append(str(i))
         i = dict()
         listofDict.append(i)
@@ -2087,10 +2090,6 @@ def update_product(id):
             products_dict.get(id).set_top(1)
         db["Products"] = products_dict
         db.close()
-
-        db1 = shelve.open("database/addtocart", "c")
-        addtocart_dict = db1["Add_to_cart"]
-        print(addtocart_dict)
 
         return redirect(url_for("admin_product_management"))
     else:
