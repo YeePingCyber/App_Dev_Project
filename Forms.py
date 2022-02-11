@@ -72,6 +72,7 @@ class CreateAdminForm(Form):
     register_password = PasswordField('', [validators.Length(min=8, max=15), validators.DataRequired(),validators.EqualTo('confirm_password', message='Passwords must match'),validate_password],render_kw={"placeholder": "Password"})
     confirm_password = PasswordField('', [validators.Length(min=8, max=15), validators.DataRequired()],render_kw={"placeholder": "Confirm Password"})
     employee_id = StringField('', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "Employee ID"})
+    profile_pic = FileField('')
 
 
 class UpdateAdminForm(Form):

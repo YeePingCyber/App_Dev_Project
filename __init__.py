@@ -103,7 +103,7 @@ def customer_logged_in():
     code = 0
     pw_code = 0
     error = ""
-    update_customer_form = UpdateCustomerForm(request.form)
+    update_customer_form = UpdateCustomerForm(CombinedMultiDict((request.files, request.form)))
     if "customer_session" in session:
         customer = session["customer_session"]
         db = shelve.open('database/user.db', 'w')
@@ -123,6 +123,19 @@ def customer_logged_in():
                         break
             hashed_password = hl.pbkdf2_hmac('sha256', str(update_customer_form.current_password.data).encode(),
                                              b'salt', 100000).hex()
+            if "profile_pic" in request.files:
+                pic = update_customer_form.profile_pic.data
+                fn = pic.filename.split(".")
+                ext = fn[len(fn)-1]
+                if ext == "jpg":
+                    pic_name = str(customer_user.get_customer_id()) + "." + str(ext)
+                    try:
+                        pic.save(os.path.join("static/images/profile_pics/", pic_name))
+                        print("saved")
+                    except:
+                        print("upload failed")
+            if "profile_picture" not in request.files:
+                print("not saved")
             if update_customer_form.current_password.data == "" and code == 0:
                 customer_user.set_first_name(update_customer_form.first_name.data)
                 customer_user.set_last_name(update_customer_form.last_name.data)
@@ -195,8 +208,6 @@ def create_customer():
                 pic = create_customer_form.profile_pic.data
                 fn = pic.filename.split(".")
                 ext = fn[len(fn)-1]
-                print(ext)
-                print("hi")
                 if ext == "jpg":
                     pic_name = str(new_customer.get_customer_id()) + str(ext)
                     try:
@@ -2020,7 +2031,7 @@ def delete_admin(id):
 @app.route("/adminAccountCreation", methods=['GET', 'POST'])
 def admin_creation():
     code = 0
-    create_admin_form = CreateAdminForm(request.form)
+    create_admin_form = CreateAdminForm(CombinedMultiDict((request.files, request.form)))
     if request.method == 'POST' and create_admin_form.validate():
         db = shelve.open('database/user.db', 'r')
         user_dict = db['Users']
@@ -2040,7 +2051,19 @@ def admin_creation():
                               create_admin_form.email.data, create_admin_form.register_password.data,
                               create_admin_form.employee_id.data)
             admin_dict[new_admin.get_admin_id()] = new_admin
-            print(new_admin.get_password())
+            if "profile_pic" in request.files:
+                pic = create_admin_form.profile_pic.data
+                fn = pic.filename.split(".")
+                ext = fn[len(fn)-1]
+                if ext == "jpg":
+                    pic_name = str(new_admin.get_admin_id()) + "." + str(ext)
+                    try:
+                        pic.save(os.path.join("static/images/profile_pics/", pic_name))
+                        print("saved")
+                    except:
+                        print("upload failed")
+            if "profile_picture" not in request.files:
+                print("not saved")
             db['Users'] = admin_dict
             db.close()
             return redirect(url_for('admin_admin_management'))
@@ -2051,7 +2074,7 @@ def admin_creation():
 
 @app.route("/adminAdminUpdate/<int:id>/", methods=["GET", "POST"])
 def update_admin(id):
-    update_admin_form = UpdateAdminForm(request.form)
+    update_admin_form = UpdateAdminForm(CombinedMultiDict((request.files, request.form)))
     error = ""
     code = 0
     if request.method == 'POST' and update_admin_form.validate():
@@ -2067,6 +2090,19 @@ def update_admin(id):
                 break
         hashed_password = hl.pbkdf2_hmac('sha256', str(update_admin_form.current_password.data).encode(), b'salt',
                                          100000).hex()
+        if "profile_pic" in request.files:
+                pic = update_admin_form.profile_pic.data
+                fn = pic.filename.split(".")
+                ext = fn[len(fn)-1]
+                if ext == "jpg":
+                    pic_name = str(admin.get_admin_id()) + "." + str(ext)
+                    try:
+                        pic.save(os.path.join("static/images/profile_pics/", pic_name))
+                        print("saved")
+                    except:
+                        print("upload failed")
+        if "profile_picture" not in request.files:
+            print("not saved")
         if update_admin_form.current_password.data == "" and code == 0:
             admin.set_first_name(update_admin_form.first_name.data)
             admin.set_last_name(update_admin_form.last_name.data)
@@ -2112,7 +2148,7 @@ def update_admin(id):
 
 @app.route("/adminAccount", methods=["GET", "POST"])
 def admin_logged_in():
-    update_admin_form = UpdateAdminForm(request.form)
+    update_admin_form = UpdateAdminForm(CombinedMultiDict((request.files, request.form)))
     error = ""
     code = 0
 
@@ -2136,6 +2172,19 @@ def admin_logged_in():
                         break
             hashed_password = hl.pbkdf2_hmac('sha256', str(update_admin_form.current_password.data).encode(), b'salt',
                                              100000).hex()
+            if "profile_pic" in request.files:
+                pic = update_admin_form.profile_pic.data
+                fn = pic.filename.split(".")
+                ext = fn[len(fn)-1]
+                if ext == "jpg":
+                    pic_name = str(admin_user.get_admin_id()) + "." + str(ext)
+                    try:
+                        pic.save(os.path.join("static/images/profile_pics/", pic_name))
+                        print("saved")
+                    except:
+                        print("upload failed")
+            if "profile_picture" not in request.files:
+                print("not saved")
             if update_admin_form.current_password.data == "" and code == 0:
                 admin_user.set_first_name(update_admin_form.first_name.data)
                 admin_user.set_last_name(update_admin_form.last_name.data)
