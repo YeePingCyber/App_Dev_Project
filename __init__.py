@@ -2067,6 +2067,7 @@ def admin_creation():
                 if ext == "jpg":
                     pic_name = str(new_admin.get_admin_id()) + "." + str(ext)
                     try:
+                        new_admin.set_picture(pic_name)
                         pic.save(os.path.join("static/images/profile_pics/", pic_name))
                         print("saved")
                     except:
@@ -2106,6 +2107,7 @@ def update_admin(id):
                 if ext == "jpg":
                     pic_name = str(admin.get_admin_id()) + "." + str(ext)
                     try:
+                        admin.set_picture(pic_name)
                         pic.save(os.path.join("static/images/profile_pics/", pic_name))
                         print("saved")
                     except:
@@ -2160,12 +2162,17 @@ def admin_logged_in():
     update_admin_form = UpdateAdminForm(CombinedMultiDict((request.files, request.form)))
     error = ""
     code = 0
+    picture_status = 0
 
     if "admin_session" in session:
         admin = session["admin_session"]
         db = shelve.open('database/user.db', 'w')
         users_dict = db['Users']
         admin_user = users_dict.get(admin)
+        path = "../static/images/profile_pics/"+str(admin_user.get_admin_id())+".jpg"
+        print(path)
+        if admin_user.get_picture() is not None:
+            picture_status = 1
         if request.method == 'POST' and update_admin_form.validate():
             # Make uuids for customers and admins the same method to retrieve
             for user in users_dict:
@@ -2188,6 +2195,7 @@ def admin_logged_in():
                 if ext == "jpg":
                     pic_name = str(admin_user.get_admin_id()) + "." + str(ext)
                     try:
+                        admin_user.set_picture(pic_name)
                         pic.save(os.path.join("static/images/profile_pics/", pic_name))
                         print("saved")
                     except:
@@ -2220,7 +2228,7 @@ def admin_logged_in():
             update_admin_form.last_name.data = admin_user.get_last_name()
             update_admin_form.email.data = admin_user.get_email()
             update_admin_form.employee_id.data = admin_user.get_employee_id()
-        return render_template("adminAccount.html", form=update_admin_form, error=error, code=code)
+        return render_template("adminAccount.html", form=update_admin_form, error=error, code=code, picture_status=picture_status, path=path)
     else:
         return redirect(url_for('log_in'))
 
