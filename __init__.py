@@ -295,12 +295,11 @@ def cart():
                 cart_dict[i][y].set_price(products_dict[j].get_price())
         db.close()
 
-
         for i in cart_dict:
             for y in cart_dict[i]:
                 cartList[int(i) - 1].append(cart_dict[i][y])
 
-        if 1 == 1:
+        if len(cart_dict["1"]) or len(cart_dict["2"]) or len(cart_dict["3"]) or len(cart_dict["4"]) > 0:
             subtotal = 0
             for total in range(0, len(cartList)):
                 for x in cartList[total]:
@@ -354,13 +353,20 @@ def cart():
             for y in cart_dictnosession[i]:
                 cartListnosession[int(i) - 1].append(cart_dictnosession[i][y])
 
-        if 1 == 1:
+        print(cart_dictnosession)
+
+        if len(cart_dictnosession["1"]) or len(cart_dictnosession["2"]) or len(cart_dictnosession["3"]) or len(cart_dictnosession["4"]) > 0:
             subtotal = 0
             for total in range(0, len(cartListnosession)):
                 for x in cartListnosession[total]:
                     subtotal += x.get_price()
 
-            return render_template("cart.html", cartList=cartListnosession, subtotal=subtotal, trees=trees)
+            increment = []
+            for i in range(len(cart_dictnosession)):
+                increment.append(i)
+
+            return render_template("cart.html", cartList=cartListnosession, subtotal=subtotal, trees=trees, increment=increment)
+
         else:
             return render_template("cart_empty.html", trees=trees)
 
@@ -627,7 +633,7 @@ def delete_item(id):
         db['Add_to_cart'] = cart_dict
         db.close()
 
-        if 1 == 1:
+        if len(cart_dict["1"]) or len(cart_dict["2"]) or len(cart_dict["3"]) or len(cart_dict["4"]) > 0:
             return redirect(url_for("cart"))
 
         else:
@@ -664,7 +670,7 @@ def delete_item(id):
         db['Add_to_cartnosession'] = cart_dictnosession
         db.close()
 
-        if 1 == 1:
+        if len(cart_dictnosession["1"]) or len(cart_dictnosession["2"]) or len(cart_dictnosession["3"]) or len(cart_dictnosession["4"]) > 0:
             return redirect(url_for("cart"))
 
         else:
@@ -1537,7 +1543,7 @@ def auction():
         if pre_expire > end_date:
             expire_date = abs((end_date - pre_expire).days)
         else:
-            expire_date = pre_expire
+            expire_date = 10
 
 
     db = shelve.open("database/trees.db", "c")
@@ -2444,6 +2450,11 @@ def delete_product(id):
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template("errorPage.html"), 404
+
+
+@app.route("/aboutUs", methods=['GET', 'POST'])
+def aboutUs():
+    return render_template("aboutUs.html")
 
 
 if __name__ == "__main__":

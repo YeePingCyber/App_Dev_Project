@@ -7,7 +7,7 @@
    ├─ 3. creator-showcase
 
     /* --------------------------------------------------------------------------
-        1. header
+        1. body
     -------------------------------------------------------------------------- */
 
     .shopHeader {
@@ -15,6 +15,10 @@
         margin-left: auto;
         margin-right: auto;
         text-align: center;
+    }
+
+    .whitespace {
+        height: 20vh;
     }
 
 /* --------------------------------------------------------------------------
@@ -36,10 +40,14 @@
 
     .img-subtitle {
         font-size: 1em;
-        color: #52504e;
+        color: #50504D;
         padding-left: 3px;
     }
 
+    #reference {
+        font-size: 0.8em;
+        color: #595956;
+    }
 
 /* --------------------------------------------------------------------------
         3. product info (right div)
@@ -66,8 +74,30 @@
         border-radius: 8px;
     }
 
-    .cart-btn {
+    .faq-table td a {
+        padding: 2em;
+    }
+
+    .faq-table td i {
+        padding-left: 1.8em;
+    }
+
+    .faq-table td {
+        padding-bottom: 0.5em;
+        padding-top: 0.5em;
+    }
+
+    .faq-table .td-top {
+        padding-top: 1.2em;
+    }
+
+    .faq-table .td-bot {
+        padding-bottom: 1.2em;
+    }
+
+    #cart-btn {
     background-color: transparent;
-    padding: 1em;
+    padding: 1em 4.3em;
+    margin: 1em 0;
     border-radius: 30px;
     }
