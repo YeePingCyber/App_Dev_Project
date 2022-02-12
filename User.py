@@ -14,6 +14,7 @@ class User:
 
     def get_picture(self):
         return self.__picture
+
     def set_first_name(self, fname):
         self.__firstname = fname
 

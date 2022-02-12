@@ -71,8 +71,11 @@ class Sales(ShippingProcess, PaymentProcess):
         PaymentProcess.__init__(self, card_num, name_card, expire, ccv)
         self.__cart = cart
 
+
     def get_cart(self):
         return self.__cart
+
+
 
     def __str__(self):
         return f"{self.get_cart(), self.get_shippingid(), self.get_paymentid(), self.get_email(), self.get_firstname(), self.get_lastname(), self.get_address(), self.get_postal(), self.get_city(), self.get_phone(), self.get_cardnum(), self.get_namecard(), self.get_expire(), self.get_ccv()}"

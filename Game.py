@@ -6,6 +6,7 @@ class PlayerStatus:
         self.__totalPoints = 0
         self.__today = today
         self.__nextDay = nextDay
+        self.__discount_code = ""
 
     def set_customer_id(self, customerID):
         self.__customerID = customerID
@@ -36,6 +37,15 @@ class PlayerStatus:
             self.__totalPoints *= multiplier
         else:
             self.__totalPoints += points
+
+    def generate_discount_code(self, position):
+        discount_code_dict = {0: "TPFreeBag2022", 1: "TP70%Discount2022", 2: "TP50%Discount2022", 3: "TP30%Discount2022",
+                              4: "TP10%Discount2022", 5: "TP5%Discount2022"}
+
+        if (position > 5) and (position <= 9):
+            position = 5
+
+        self.__discount_code = discount_code_dict[position]
 
 
 # Function for a list of different amount of points

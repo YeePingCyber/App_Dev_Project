@@ -20,9 +20,21 @@
     }
 
     .search_bar{
-        width: 20%;
-        margin-left: 70%;
+        width: 25%;
+        margin-left: 65%;
         margin-top: 0.5%;
+    }
+
+    #search_btn{
+        border: none;
+        background-color: black;
+        color: white;
+        height: 1.8em;
+        width: 5em;
+    }
+
+    #searchbar:focus{
+        outline: 2px solid black;
     }
 
     /* --------------------------------------------------------------------------
@@ -33,7 +45,7 @@
     }
 
     .top_container{
-        margin-left: 4.3%;
+        margin-left: 2%;
     }
 
     .bottom_container .row{
@@ -41,17 +53,35 @@
         margin: 0% 0% 2% 0%;
     }
 
+    .orders_container hr{
+        margin-bottom: 2%;
+    }
+
     /* --------------------------------------------------------------------------
         3. content
     -------------------------------------------------------------------------- */
-    .top_container button{
+    .sorted_btn{
+        width: 6em;
+        height: 2em;
+        background-color: transparent;
+        border-radius: 20px;
+        border: 2px solid black;
+        margin: 1.5% 0% 1.5% 1%;
+    }
+
+    .sorted_btn:hover{
+        background-color:black;
+        color: white;
+    }
+
+    .sorted_btn_active{
         width: 6em;
         height: 2em;
         background-color: black;
         color: white;
         border-radius: 20px;
         border: none;
-        margin: 1.5% 0% 2% 1%;
+        margin: 1.5% 0% 1.5% 1%;
     }
 
     .user_order_top{
@@ -97,10 +127,9 @@
         font-weight: bold;
     }
 
-    .user_order_view_more{
+    .user_order_status{
         width: 100%;
         text-align: center;
-        text-decoration: underline;
         margin-bottom: 3%;
     }
 
@@ -110,11 +139,12 @@
     }
 
     .user_order_bottom_btn{
-        width: 33.3333333333%;
+        width: 33.33333333333333333%;
         height: 3em;
     }
 
     .arrange_btn{
+        background-color:transparent;
         border: none;
         width: 100%;
         height: 100%;
@@ -124,13 +154,16 @@
     }
 
     .view_btn{
+        background-color: transparent;
         border: none;
+        margin: 0%;
         width: 100%;
         height: 100%;
         border-top: 1px solid black;
     }
 
     .cancel_btn{
+        background-color:transparent;
         border: none;
         width: 100%;
         height: 100%;
@@ -138,5 +171,18 @@
         border-top: 1px solid black;
         border-left: 1px solid black;
         color: red;
+    }
+
+    .modal_cross{
+        background-color: transparent;
+        border: none;
+        height: 2.1em;
+        width: 2.1em;
+
+    }
+
+    .cross_svg{
+        height:1.5em;
+        width:1.5em;
     }
 

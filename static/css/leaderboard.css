@@ -157,3 +157,42 @@
     .rank_place{
         font-weight: bold;
     }
+
+    /* --------------------------------------------------------------------------
+        5. responsive
+    -------------------------------------------------------------------------- */
+    @media only screen and (min-width: 2560px){
+        #second_place .palladium_bar{
+            height: 20.1em;
+            width: 10em;
+            margin-left: 8.5%;
+            margin-top: 1%;
+        }
+
+        #first_place .palladium_bar{
+            height: 30.4em;
+            width: 10em;
+            margin-left: 8.5%;
+            margin-top: 1%;
+        }
+
+        #third_place .palladium_bar{
+            width: 10em;
+            height: 10em;
+            margin-left: 8.5%;
+            margin-top: 1%;
+        }
+    }
+
+    @media only screen and (min-width: 1440px) and (max-width: 2559px){
+        #second_place .palladium_bar{
+            height: 15.8em;
+            margin-top: 1%;
+        }
+
+        #first_place .palladium_bar{
+            height: 21.5em;
+            margin-left: 42.5%;
+            margin-top: 1%;
+        }
+    }

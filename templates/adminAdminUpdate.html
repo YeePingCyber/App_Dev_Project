@@ -15,7 +15,11 @@
     <form method="POST" class="form-login" action="" enctype="multipart/form-data">
       <h1>Update Admin</h1>
       <br><br>
+      {% if admin.get_picture() %}
+      <img src="../../static/images/profile_pics/{{ admin.get_picture() }}" class="profile-pic">
+      {% else %}
       <img src="../../static/images/Default_picture.jpg" class="profile-pic">
+      {% endif %}
       <br><br><br>
       <div class="form-login-field-file">
         &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp

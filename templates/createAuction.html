@@ -24,15 +24,24 @@
     <form method="post">
       <div id="productName">
         <div>
+          <label id="productNameLbl">Product Name:</label>
+        </div>
+        <div>
           {{ render_field(form.product_name) }}
         </div>
       </div>
       <div id="baseAmt">
         <div>
+          <label id="baseAmtLbl">Base Amount:</label>
+        </div>
+        <div>
           {{ render_field(form.base_amount) }}
         </div>
       </div>
       <div id="minimumAmt">
+        <div>
+          <label id="minimumAmtLbl">Minimum Amount:</label>
+        </div>
         <div>
           {{ render_field(form.minimum_amount) }}
         </div>

@@ -31,15 +31,22 @@ hr{
     background-color: transparent;
     border:none;
     border-bottom: 1.5px solid black;
+    padding-left: 0.5%;
+    margin-top: 1%;
 }
 
 #pName:focus, #bAmt:focus, #mAmt:focus{
     outline: none;
 }
 
-#productName, #baseAmt, #minimumAmt{
+#productName{
     height: 2em;
-    margin-top: 3%;
+    margin: 0%;
+}
+
+#baseAmt, #minimumAmt{
+    height: 2em;
+    margin: 7% 0%;
 }
 
 label{
@@ -47,7 +54,7 @@ label{
 }
 
 .date_container, #description, #create_btn{
-    margin-top: 2%;
+    margin-top: 5%;
 }
 
 #startDate, #endDate{
@@ -76,6 +83,6 @@ label{
     border: none;
 }
 
-#startDateLbl, #endDateLbl, #descLbl, #create_btn{
+#productNameLbl, #baseAmtLbl, #minimumAmtLbl, #startDateLbl, #endDateLbl, #descLbl, #create_btn{
     margin-left: 0.4em;
 }

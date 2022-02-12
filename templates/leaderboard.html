@@ -83,19 +83,23 @@
     <div id="current_position">
         <h5>Your current position:</h5>
         <p>
-            {% for a in range(0, (username_list|length)) %}
-            {% if username_list[a] == session_user.get_last_name() %}
-            {% if a == 0 %}
-            {{ a+1 }}st
-            {% elif a == 1 %}
-            {{ a+1 }}nd
-            {% elif a == 2 %}
-            {{ a+1 }}rd
+            {% if username_list != [] %}
+                {% for a in range(0, (username_list|length)) %}
+                    {% if username_list[a] == session_user.get_last_name() %}
+                        {% if a == 0 %}
+                            {{ a+1 }}st
+                        {% elif a == 1 %}
+                            {{ a+1 }}nd
+                        {% elif a == 2 %}
+                            {{ a+1 }}rd
+                        {% else %}
+                            {{ a+1 }}th
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
             {% else %}
-            {{ a+1 }}th
+                No position found
             {% endif %}
-            {% endif %}
-            {% endfor %}
         </p>
     </div>
 
@@ -111,7 +115,7 @@
                             {% if (username_list|length) >= 2 %}
                                 <span class="palladium_username">{{ username_list[1] }}</span>
                             {% else %}
-                                No user has played the game
+                                <span>No user</span>
                             {% endif %}
                         </span>
                     </div>
@@ -120,7 +124,7 @@
                             {% if (sorted_list|length) >= 2 %}
                                 <span class="palladium_points">Points:</span> {{ sorted_list[1].get_total_points() }}
                             {% else %}
-                                No points recorded
+                                No points
                             {% endif %}
                         </span>
                     </div>
@@ -141,7 +145,7 @@
                             {% if (username_list|length) >= 1 %}
                                 <span class="palladium_username">{{ username_list[0] }}</span>
                             {% else %}
-                                No user has played the game
+                                No user
                             {% endif %}
                         </span>
                     </div>
@@ -150,7 +154,7 @@
                             {% if (sorted_list|length) >= 1 %}
                                 <span class="palladium_points">Points:</span> {{ sorted_list[0].get_total_points() }}
                             {% else %}
-                                No points recorded
+                                No points
                             {% endif %}
                         </span>
                     </div>
@@ -171,7 +175,7 @@
                             {% if (username_list|length) >= 3 %}
                                 <span class="palladium_username">{{ username_list[2] }}</span>
                             {% else %}
-                                No third player found
+                                No user
                             {% endif %}
                         </span>
                     </div>
@@ -180,7 +184,7 @@
                             {% if (sorted_list|length) >= 3 %}
                                 <span class="palladium_points">Points:</span> {{ sorted_list[2].get_total_points() }}
                             {% else %}
-                                No points recorded
+                                No points
                             {% endif %}
                         </span>
                     </div>

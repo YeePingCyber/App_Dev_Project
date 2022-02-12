@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Tom Patterson - Page Not Found{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="../static/css/errorPage.css">
+{% endblock %}
+
+{% block navbar %}
+<span></span>
+{% endblock %}
+
+{% block bodyContent %}
+<h1>Page Not Found</h1>
+<p class="zoom-area">This page is not found please click the button below to return to homepage</p>
+<section class="error-container">
+  <span class="four"><span class="screen-reader-text">4</span></span>
+  <span class="zero"><span class="screen-reader-text">0</span></span>
+  <span class="four"><span class="screen-reader-text">4</span></span>
+</section>
+<div class="link-container">
+    {% if "customer_session" in session%}
+    <a href="/" class="more-link">Return to home page</a>
+    {% elif "admin_session" in session %}
+    <a href="/admin" class="more-link">Return to home page</a>
+    {% else %}
+    <a href="/" class="more-link">Return to home page</a>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block footer %}
+<span></span>
+{% endblock %}
