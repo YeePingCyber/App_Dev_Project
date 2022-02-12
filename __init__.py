@@ -2417,5 +2417,10 @@ def page_not_found(e):
     return render_template("errorPage.html"), 404
 
 
+@app.route("/aboutUs", methods=['GET', 'POST'])
+def aboutUs():
+    return render_template("aboutUs.html")
+
+
 if __name__ == "__main__":
     app.run(debug=True)
