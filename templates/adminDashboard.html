@@ -167,7 +167,7 @@
                         <div class="col-lg-6 col-md-12" style="min-height: 30.640625em;">
                             <div class="p-1">
                                 <div class="cardd">
-                                    <h3 class="title">Latest Sales Orders</h3>
+                                    <h3 class="title">Sales Orders</h3>
                                     <nav class="navbar navbar-light bg-light">
                                         <form class="form-inline">
                                               <input id="myInput" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
@@ -193,16 +193,55 @@
                                             </tr>
                                         </thead>
                                         <tbody id="myTable">
-                                              {% for sales in salesList %}
-                                              <tr>
-                                                  <th scope="row">{{ loop.index }}</th>
-                                                  <td>{{ sales.get_firstname() }}</td>
-                                                  <td>Done</td>
-                                                  <td>
-                                                      ${{ customer_totalList[loop.index - 1] }}
-                                                  </td>
-                                              </tr>
-                                              {% endfor %}
+                                            {% for sales in salesList %}
+                                            <tr data-toggle="modal" data-target="#exampleModalCenter{{ loop.index }}">
+                                                <th scope="row">{{ loop.index }}</th>
+                                                <td>{{ sales.get_firstname() }}</td>
+                                                <td>Done</td>
+                                                <td>
+                                                    ${{ customer_totalList[loop.index - 1] }}
+                                                </td>
+                                            </tr>
+
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="exampleModalCenter{{ loop.index }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLongTitle">Customer : {{ sales.get_firstname() }}</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                        </div>
+                                                        <div class="modal-body d-flex justify-content-center">
+                                                            <div class="container-fluid">
+                                                                {% for i in sales.get_cart() %}
+                                                                {% for y in sales.get_cart()[i] %}
+                                                                        <div class="p-1">
+                                                                            <div class="product-grid__products">
+                                                                                <div class="product-grid__products p-2">
+                                                                                    <div class="top-items__card">
+                                                                                        <div class="top-items__card-detail">
+                                                                                            {% for top in top4 %}
+                                                                                                {% if sales.get_cart()[i][y].get_name() == top4[top].get_name() %}
+                                                                                                    <a class="thumbnail" href="/adminProductUpdate/{{top4[top].get_product_id()}}/"><img src="../../static/images/product_pics/{{ top4[top].get_picture() }}"/></a>
+                                                                                                    <p>{{ sales.get_cart()[i][y].get_name() }}</p>
+                                                                                                    <div class="top-items__card-price">
+                                                                                                        <p><span>${{ sales.get_cart()[i][y].get_price() }}</span></p>
+                                                                                                    </div>
+                                                                                                {% endif %}
+                                                                                            {% endfor %}
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                {% endfor %}
+                                                            {% endfor %}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
                                         </tbody>
                                     </table>
                                 </div>
@@ -251,9 +290,8 @@
                                     <h3 class="title">Top Selling Products</h3>
                                     <div class="product-grid__products justify-content-center p-2">
                                         {% for top in top4 %}
-                                            {% if top4[top].get_top() == 1 %}
                                                 <div class="top-items__card">
-                                                    <a class="thumbnail" href="/adminProductUpdate/{{top4[top].get_product_id()}}/"><img src="../static/images/1-Urth-Norite-24L-Backpack-Combo-Grey-1614664835017_300x@2x.png"/></a>
+                                                    <a class="thumbnail" href="/adminProductUpdate/{{top4[top].get_product_id()}}/"><img src="../../static/images/product_pics/{{ top4[top].get_picture() }}"/></a>
                                                     <div class="top-items__card-detail">
                                                         <a href="/adminProductUpdate/{{top4[top].get_product_id()}}/"> {{ top4[top].get_name() }} </a>
                                                         <div class="top-items__card-price">
@@ -261,7 +299,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            {% endif %}
                                         {% endfor %}
                                     </div>
                                 </div>

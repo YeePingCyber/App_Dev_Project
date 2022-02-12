@@ -52,9 +52,8 @@
                 </header>
                 <div class="product-grid__products p-5">
                     {% for top in top4 %}
-                        {% if top4[top].get_top() == 1 %}
                         <div class="top-items__card">
-                            <a class="thumbnail" href=""><img src="../static/images/1-Urth-Norite-24L-Backpack-Combo-Grey-1614664835017_300x@2x.png"/></a>
+                            <a class="thumbnail" href=""><img src="../../static/images/product_pics/{{ top4[top].get_picture() }}"/></a>
                             <div class="top-items__card-detail">
                                 <a href=""> {{ top4[top].get_name() }} </a>
                                 <div class="top-items__card-price">
@@ -62,7 +61,6 @@
                                 </div>
                             </div>
                         </div>
-                        {% endif %}
                     {% endfor %}
                 </div>
             </div>
