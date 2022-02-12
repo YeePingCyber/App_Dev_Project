@@ -350,8 +350,6 @@ def cart():
             for y in cart_dictnosession[i]:
                 cart_dictnosession[i][y].set_price(products_dict[j].get_price())
 
-        print(cart_dictnosession)
-
         for i in cart_dictnosession:
             for y in cart_dictnosession[i]:
                 cartListnosession[int(i) - 1].append(cart_dictnosession[i][y])
@@ -373,18 +371,19 @@ def updateAddCart(id):
     products_dict = db["Products"]
     db.close()
 
+    listofDict = []
+    listofKeys = []
+    for i in range(1, len(products_dict) + 1):
+        listofKeys.append(str(i))
+        i = dict()
+        listofDict.append(i)
+
     if "customer_session" in session:
         customer = session["customer_session"]
         db = shelve.open("database/user.db", "w")
         users_dict = db["Users"]
         customer_user = users_dict.get(customer)
 
-        listofDict = []
-        listofKeys = []
-        for i in range(1, len(products_dict) + 1):
-            listofKeys.append(str(i))
-            i = dict()
-            listofDict.append(i)
         cart_dict = dict(zip(listofKeys, listofDict))
 
         cartList = []
@@ -436,13 +435,7 @@ def updateAddCart(id):
         return redirect(url_for("cart"))
 
     else:
-        listofDict = []
-        listofKeys = []
-        for i in range(1, len(products_dict) + 1):
-            listofKeys.append(str(i))
-            i = dict()
-            listofDict.append(i)
-        cart_dict = dict(zip(listofKeys, listofDict))
+        cart_dictnosession = dict(zip(listofKeys, listofDict))
 
         cartListnosession = []
         for j in range(1, len(products_dict) + 1):
@@ -470,7 +463,7 @@ def updateAddCart(id):
 
                     cart_dictnosession.update(temp)
             else:
-                db["Add_to_cartnosession"] = cart_dict
+                db["Add_to_cartnosession"] = cart_dictnosession
         except:
             print("Error in retrieving Inventory from addtocart.db")
 
@@ -688,18 +681,19 @@ def checkout():
     products_dict = db["Products"]
     db.close()
 
+    listofDict = []
+    listofKeys = []
+    for i in range(1, len(products_dict) + 1):
+        listofKeys.append(str(i))
+        i = dict()
+        listofDict.append(i)
+
     if "customer_session" in session:
         customer = session["customer_session"]
         db = shelve.open("database/user.db", "w")
         users_dict = db["Users"]
         customer_user = users_dict.get(customer)
 
-        listofDict = []
-        listofKeys = []
-        for i in range(1, len(products_dict) + 1):
-            listofKeys.append(str(i))
-            i = dict()
-            listofDict.append(i)
         cart_dict = dict(zip(listofKeys, listofDict))
 
         cartList = []
@@ -767,18 +761,12 @@ def checkout():
         return render_template("checkout.html", form=create_shipment_form, cartList=cartList, subtotal=subtotal, grandtotal=grandtotal, trees=trees)
 
     else:
-        listofDict = []
-        listofKeys = []
-        for i in range(1, len(products_dict) + 1):
-            listofKeys.append(str(i))
-            i = dict()
-            listofDict.append(i)
-        cart_dict = dict(zip(listofKeys, listofDict))
+        cart_dictnosession = dict(zip(listofKeys, listofDict))
 
-        cartList = []
+        cartListnosession = []
         for j in range(1, len(products_dict) + 1):
             j = list()
-            cartList.append(j)
+            cartListnosession.append(j)
 
         db = shelve.open("database/addtocartnosession", "c")
         try:
@@ -800,17 +788,17 @@ def checkout():
 
                     cart_dictnosession.update(temp)
             else:
-                db["Add_to_cartnosession"] = cart_dict
+                db["Add_to_cartnosession"] = cart_dictnosession
         except:
             print("Error in retrieving Inventory from addtocart.db")
 
-        for i in cart_dict:
-            for y in cart_dict[i]:
-                cartList[int(i) - 1].append(cart_dict[i][y])
+        for i in cart_dictnosession:
+            for y in cart_dictnosession[i]:
+                cartListnosession[int(i) - 1].append(cart_dictnosession[i][y])
 
         subtotal = 0
-        for total in range(0, len(cartList)):
-            for x in cartList[total]:
+        for total in range(0, len(cartListnosession)):
+            for x in cartListnosession[total]:
                 subtotal += x.get_price()
 
         grandtotal = subtotal + 4
@@ -836,7 +824,7 @@ def checkout():
 
             return redirect(url_for("payment"))
 
-        return render_template("checkout.html", form=create_shipment_form, cartList=cartList, subtotal=subtotal,grandtotal=grandtotal, trees=trees)
+        return render_template("checkout.html", form=create_shipment_form, cartList=cartListnosession, subtotal=subtotal,grandtotal=grandtotal, trees=trees)
 
 
 @app.route("/checkout/payment", methods=['GET', 'POST'])
@@ -849,18 +837,19 @@ def payment():
     products_dict = db["Products"]
     db.close()
 
+    listofDict = []
+    listofKeys = []
+    for i in range(1, len(products_dict) + 1):
+        listofKeys.append(str(i))
+        i = dict()
+        listofDict.append(i)
+
     if "customer_session" in session:
         customer = session["customer_session"]
         db = shelve.open("database/user.db", "w")
         users_dict = db["Users"]
         customer_user = users_dict.get(customer)
 
-        listofDict = []
-        listofKeys = []
-        for i in range(1, len(products_dict) + 1):
-            listofKeys.append(str(i))
-            i = dict()
-            listofDict.append(i)
         cart_dict = dict(zip(listofKeys, listofDict))
 
         cartList = []
@@ -937,18 +926,12 @@ def payment():
         return render_template("payment.html", form=create_payment_form, cartList=cartList, subtotal=subtotal, grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict, trees=trees)
 
     else:
-        listofDict = []
-        listofKeys = []
-        for i in range(1, len(products_dict) + 1):
-            listofKeys.append(str(i))
-            i = dict()
-            listofDict.append(i)
-        cart_dict = dict(zip(listofKeys, listofDict))
+        cart_dictnosession = dict(zip(listofKeys, listofDict))
 
-        cartList = []
+        cartListnosession = []
         for j in range(1, len(products_dict) + 1):
             j = list()
-            cartList.append(j)
+            cartListnosession.append(j)
 
         db = shelve.open("database/addtocartnosession", "c")
         try:
@@ -970,17 +953,17 @@ def payment():
 
                     cart_dictnosession.update(temp)
             else:
-                db["Add_to_cartnosession"] = cart_dict
+                db["Add_to_cartnosession"] =  cart_dictnosession
         except:
             print("Error in retrieving Inventory from addtocart.db")
 
-        for i in cart_dict:
-            for y in cart_dict[i]:
-                cartList[int(i) - 1].append(cart_dict[i][y])
+        for i in cart_dictnosession:
+            for y in cart_dictnosession[i]:
+                cartListnosession[int(i) - 1].append(cart_dictnosession[i][y])
 
         subtotal = 0
-        for total in range(0, len(cartList)):
-            for x in cartList[total]:
+        for total in range(0, len(cartListnosession)):
+            for x in cartListnosession[total]:
                 subtotal += x.get_price()
 
         grandtotal = subtotal + 4
@@ -1016,7 +999,7 @@ def payment():
             return redirect(url_for("paymentdone"))
         db.close()
 
-        return render_template("payment.html", form=create_payment_form, cartList=cartList, subtotal=subtotal, grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict, trees=trees)
+        return render_template("payment.html", form=create_payment_form, cartList=cartListnosession, subtotal=subtotal, grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict, trees=trees)
 
 
 @app.route("/checkout/paymentdone")
@@ -1029,6 +1012,13 @@ def paymentdone():
     products_dict = db["Products"]
     db.close()
 
+    listofDict = []
+    listofKeys = []
+    for i in range(1, len(products_dict) + 1):
+        listofKeys.append(str(i))
+        i = dict()
+        listofDict.append(i)
+
     if "customer_session" in session:
         # do not delete this customer I use it for calculating the credit points
         customer = session["customer_session"]
@@ -1036,12 +1026,6 @@ def paymentdone():
         users_dict = db1["Users"]
         customer_user = users_dict.get(customer)
 
-        listofDict = []
-        listofKeys = []
-        for i in range(1, len(products_dict) + 1):
-            listofKeys.append(str(i))
-            i = dict()
-            listofDict.append(i)
         cart_dict = dict(zip(listofKeys, listofDict))
 
         cartList = []
@@ -1135,18 +1119,12 @@ def paymentdone():
         return render_template("paymentdone.html", subtotal=subtotal, grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict, sales=sales_dict, cartList=cartList, trees=trees)
 
     else:
-        listofDict = []
-        listofKeys = []
-        for i in range(1, len(products_dict) + 1):
-            listofKeys.append(str(i))
-            i = dict()
-            listofDict.append(i)
-        cart_dict = dict(zip(listofKeys, listofDict))
+        cart_dictnosession = dict(zip(listofKeys, listofDict))
 
-        cartList = []
+        cartListnosession = []
         for j in range(1, len(products_dict) + 1):
             j = list()
-            cartList.append(j)
+            cartListnosession.append(j)
 
         db = shelve.open("database/addtocartnosession", "c")
         try:
@@ -1168,17 +1146,17 @@ def paymentdone():
 
                     cart_dictnosession.update(temp)
             else:
-                db["Add_to_cartnosession"] = cart_dict
+                db["Add_to_cartnosession"] = cart_dictnosession
         except:
             print("Error in retrieving Inventory from addtocart.db")
 
-        for i in cart_dict:
-            for y in cart_dict[i]:
-                cartList[int(i) - 1].append(cart_dict[i][y])
+        for i in cart_dictnosession:
+            for y in cart_dictnosession[i]:
+                cartListnosession[int(i) - 1].append(cart_dictnosession[i][y])
 
         subtotal = 0
-        for total in range(0, len(cartList)):
-            for x in cartList[total]:
+        for total in range(0, len(cartListnosession)):
+            for x in cartListnosession[total]:
                 subtotal += x.get_price()
 
         grandtotal = subtotal + 4
@@ -1219,13 +1197,13 @@ def paymentdone():
                                          shipping_dict[0].get_city(), shipping_dict[0].get_phone(),
                                          payment_dict[0].get_cardnum(), payment_dict[0].get_namecard(),
                                          payment_dict[0].get_expire(), payment_dict[0].get_ccv(),
-                                         cart_dict)
+                                         cart_dictnosession)
 
         sales_dict[payment_dict[0].get_paymentid()] = combinedShippingnPayment
         db["sales"] = sales_dict
         db.close()
 
-        return render_template("paymentdone.html", subtotal=subtotal, grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict, sales=sales_dict, cartList=cartList, trees=trees)
+        return render_template("paymentdone.html", subtotal=subtotal, grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict, sales=sales_dict, cartList=cartListnosession, trees=trees)
 
 
 @app.route("/checkout/paymentdone/clear", methods=['POST'])
@@ -1234,18 +1212,19 @@ def done_clear():
     products_dict = db["Products"]
     db.close()
 
+    listofDict = []
+    listofKeys = []
+    for i in range(1, len(products_dict) + 1):
+        listofKeys.append(str(i))
+        i = dict()
+        listofDict.append(i)
+
     if "customer_session" in session:
         customer = session["customer_session"]
         db = shelve.open("database/user.db", "w")
         users_dict = db["Users"]
         customer_user = users_dict.get(customer)
 
-        listofDict = []
-        listofKeys = []
-        for i in range(1, len(products_dict) + 1):
-            listofKeys.append(str(i))
-            i = dict()
-            listofDict.append(i)
         cart_dict = dict(zip(listofKeys, listofDict))
 
         db1 = shelve.open("database/addtocart", "c")
@@ -1310,13 +1289,7 @@ def done_clear():
         return redirect(url_for("home"))
 
     else:
-        listofDict = []
-        listofKeys = []
-        for i in range(1, len(products_dict) + 1):
-            listofKeys.append(str(i))
-            i = dict()
-            listofDict.append(i)
-        cart_dict = dict(zip(listofKeys, listofDict))
+        cart_dictnosession = dict(zip(listofKeys, listofDict))
 
         db1 = shelve.open("database/addtocartnosession", "c")
         try:
@@ -1338,7 +1311,7 @@ def done_clear():
 
                     cart_dictnosession.update(temp)
             else:
-                db1["Add_to_cartnosession"] = cart_dict
+                db1["Add_to_cartnosession"] = cart_dictnosession
         except:
             print("Error in retrieving Inventory from addtocart.db")
 
@@ -1867,29 +1840,18 @@ def admin():
     for x in sales_dict:
         salesList.append(sales_dict[x])
 
-    print(salesList)
-
-    # get total of each customer purchase
     customer_total = 0
     customer_totalList = []
 
     for i in range(0, len(salesList)):
-        for j in salesList[i].get_cart()["1"]:
-            customer_total += salesList[i].get_cart()["1"][j].get_price()
-
-        for j in salesList[i].get_cart()["2"]:
-            customer_total += salesList[i].get_cart()["2"][j].get_price()
-
-        for j in salesList[i].get_cart()["3"]:
-            customer_total += salesList[i].get_cart()["3"][j].get_price()
-
-        for j in salesList[i].get_cart()["4"]:
-            customer_total += salesList[i].get_cart()["4"][j].get_price()
+        print(salesList[i].get_cart())
+        for j in salesList[i].get_cart():
+            for y in salesList[i].get_cart()[j]:
+                customer_total += salesList[i].get_cart()[j][y].get_price()
 
         customer_totalList.append(customer_total)
         customer_total = 0
 
-    # getting total sales money
     subtotal = 0
     # for total in range(0, len(cartList)):
     #     for x in cartList[total]:
@@ -1908,12 +1870,19 @@ def admin():
 
     today = date.today().strftime('%Y-%m-%d')
     upcoming = []
-    ongoing = []
-    for keys, values in auction_dict.items():
-        start = date.strftime(values.get_start_date(), '%Y-%m-%d')
-        end = date.strftime(values.get_end_date(), '%Y-%m-%d')
-        if start == today or today > start or start <= today and end <= today:
-            ongoing.append(values)
+    ongoing = ""
+    if auction_dict != {}:
+        for keys, values in auction_dict.items():
+            start = date.strftime(values.get_start_date(), '%Y-%m-%d')
+            end = date.strftime(values.get_end_date(), '%Y-%m-%d')
+
+            if (start == today or today > start or start <= today) and end <= today:
+                if today > end:
+                    ongoing = ""
+                else:
+                    ongoing = values
+            elif start > today and end > today:
+                upcoming.append(values)
 
     auction_on = len(ongoing)
 
