@@ -23,14 +23,14 @@
         <div class="top_container">
 
             {% if sales_dict_keys == [] %}
-            <button class="sorted_btn_active">All (<span>0</span>)</button>
+            <a href="/adminOrders"><button class="sorted_btn_active">All (<span>0</span>)</button></a>
             {% elif sales_dict_keys[(sales_dict_keys|length)-1] == "" %}
-            <button class="sorted_btn_active">All (<span>{{ (sales_dict_keys|length)-1 }}</span>)</button>
+            <a href="/adminOrders"><button class="sorted_btn_active">All (<span>{{ (sales_dict_keys|length)-1 }}</span>)</button></a>
             {% else %}
-            <button class="sorted_btn_active">All (<span>{{ (sales_dict_keys|length) }}</span>)</button>
+            <a href="/adminOrders"><button class="sorted_btn_active">All (<span>{{ (sales_dict_keys|length) }}</span>)</button></a>
             {% endif %}
 
-            <button class="sorted_btn">Pending</button>
+            <a href="/adminOrders/pending"><button class="sorted_btn">Pending</button></a>
             <button class="sorted_btn">Accepted</button>
             <button class="sorted_btn">Shipping</button>
         </div>
@@ -85,7 +85,7 @@
                         </div>
                         <div class="user_order_bottom">
                             <div class="user_order_bottom_btn">
-                                <button class="arrange_btn">Arrange Shipment</button>
+                                <button class="accept_btn">Accept Order</button>
                             </div>
 
                             <div class="user_order_bottom_btn">

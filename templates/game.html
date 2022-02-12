@@ -170,8 +170,11 @@
                                     You have claimed {{ (points_list[i].values()|list)[0] }} points
                             </div>
                             <div class="modal-footer">
-                                <form action="/game/{{ (points_list[i].keys()|list)[0] }}" method="POST">
+                                <form action="/game/continue/{{ (points_list[i].keys()|list)[0] }}" method="POST">
                                     <button class="btn" type="submit">Claim</button>
+                                </form>
+                                <form action="/game/{{ (points_list[i].keys()|list)[0] }}" method="POST">
+                                    <button class="btn btn-secondary" type="submit">Claim</button>
                                 </form>
                             </div>
                         </div>

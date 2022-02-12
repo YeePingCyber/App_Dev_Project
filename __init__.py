@@ -1783,7 +1783,85 @@ def save_point(key):
 
             print(player_status.get_total_points())
 
+            with shelve.open("database/user.db", "w") as db3:
+                users_dict = {}
+                try:
+                    users_dict = db3['Users']
+                except:
+                    print("Error in retrieving user.db.")
+
+                points = users_dict.get(session["customer_session"]).get_points()
+
+                users_dict.get(session["customer_session"]).set_points(points-10)
+
+                db3['Users'] = users_dict
+
     return redirect(url_for("checkout"))
+
+
+@app.route("/game/continue/<int:key>", methods=["POST"])
+def save_point(key):
+    points = ""
+    value = ''
+    multiply = 0
+    with shelve.open("database/game.db", "r") as db:
+        points_list = db['Points']
+
+        for i in points_list:
+            if key == list(i.keys())[0]:
+                value = i.get(key)
+                break
+
+        try:
+            points = int(value)
+        except:
+            multiplier_dict = {"x5": 5, "x4": 4, "x3": 3, "x2": 2}
+
+            multiply = multiplier_dict.get(value)
+
+        with shelve.open("database/game.db", "c") as db2:
+            game_user_dict = {}
+            try:
+                game_user_dict = db2["Leaderboard"]
+            except:
+                print("Error in retrieving game.db.")
+
+            today = date.today().strftime('%Y-%m-%d')
+            next_day = (datetime.today() + timedelta(days=1)).strftime('%Y-%m-%d')
+
+            if game_user_dict.get(session["customer_session"]):
+                player_status = game_user_dict.get(session["customer_session"])
+            else:
+                player_status = PlayerStatus(session["customer_session"], today, next_day)
+
+            try:
+                if int(points) > 0:
+                    player_status.calculate_total_points(points)
+            except:
+                player_status.calculate_total_points(0, multiply)
+
+            # player_status.set_total_zero()
+
+            game_user_dict[player_status.get_customer_id()] = player_status
+
+            db2["Leaderboard"] = game_user_dict
+
+            print(player_status.get_total_points())
+
+            with shelve.open("database/user.db", "w") as db3:
+                users_dict = {}
+                try:
+                    users_dict = db3['Users']
+                except:
+                    print("Error in retrieving user.db.")
+
+                points = users_dict.get(session["customer_session"]).get_points()
+
+                users_dict.get(session["customer_session"]).set_points(points - 10)
+
+                db3['Users'] = users_dict
+
+    return redirect(url_for("play_game"))
 
 
 @app.route("/leaderboard")
@@ -2081,6 +2159,25 @@ def admin_orders():
     # sales_dict = sales_dict, sales_dict_keys = sales_dict_keys
     return render_template("adminOrders.html",sales_dict=sales_dict, sales_dict_keys=sales_dict_keys,
                            sales_cart_keys_list=sales_cart_keys_list, values_list=values_list)
+
+
+@app.route("/adminOrders/pending")
+def pending_order():
+    return render_template("adminOrders.html")
+
+
+@app.route("/adminOrders/accepted")
+def accept_order():
+    with shelve.open('database/sales', 'r') as db:
+        print(db["sales"])
+        try:
+            if "sales" in db:
+                sales_dict = db["sales"]
+        except:
+            print("Error in retrieving Sales from sales.db")
+
+
+    return render_template("adminOrders.html")
 
 
 @app.route("/adminCustomerManagement")
