@@ -1844,7 +1844,6 @@ def admin():
     customer_totalList = []
 
     for i in range(0, len(salesList)):
-        print(salesList[i].get_cart())
         for j in salesList[i].get_cart():
             for y in salesList[i].get_cart()[j]:
                 customer_total += salesList[i].get_cart()[j][y].get_price()
@@ -1852,10 +1851,10 @@ def admin():
         customer_totalList.append(customer_total)
         customer_total = 0
 
+    print(customer_totalList)
     subtotal = 0
-    # for total in range(0, len(cartList)):
-    #     for x in cartList[total]:
-    #         subtotal += x.get_price()
+    for total in customer_totalList:
+        subtotal += total
 
     db = shelve.open("database/trees.db", "c")
     db["Trees"] = subtotal / 5
