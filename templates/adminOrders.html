@@ -21,7 +21,15 @@
 
     <div class="orders_container">
         <div class="top_container">
-            <button class="sorted_btn_active">All</button>
+
+            {% if sales_dict_keys == [] %}
+            <button class="sorted_btn_active">All (<span>0</span>)</button>
+            {% elif sales_dict_keys[(sales_dict_keys|length)-1] == "" %}
+            <button class="sorted_btn_active">All (<span>{{ (sales_dict_keys|length)-1 }}</span>)</button>
+            {% else %}
+            <button class="sorted_btn_active">All (<span>{{ (sales_dict_keys|length) }}</span>)</button>
+            {% endif %}
+
             <button class="sorted_btn">Pending</button>
             <button class="sorted_btn">Accepted</button>
             <button class="sorted_btn">Shipping</button>
@@ -29,33 +37,66 @@
         <hr>
 
         <div class="bottom_container">
+            {% if sales_dict == {} %}
             <div class="row">
+                <div class="col-md">
+                    <p id="empty_order_txt">There is no orders for now</p>
+                </div>
+            </div>
+            {% else %}
+            {% for noOfRows in range(0, (sales_dict_keys|length)//2) %}
+            <div class="row">
+                {% for noOfCol in range(0, 2) %}
+                {% if sales_dict_keys[noOfRows+noOfRows+noOfCol] == "" %}
+                <div class="col-md-6"></div>
+                {% else %}
                 <div class="col-md-6">
                     <div class="user_order">
                         <div class="user_order_top">
                             <div class="user_order_username">
-                                <p>Username 1</p>
+                                <p>{{ sales_dict[sales_dict_keys[noOfRows+noOfRows+noOfCol]].get_firstname()+ " " +sales_dict[sales_dict_keys[noOfRows+noOfRows+noOfCol]].get_lastname()}}</p>
                             </div>
                             <div class="user_order_orderId">
-                                <p>Order ID: <span>00000000</span></p>
+                                <p>Order ID: <span>{{ sales_dict_keys[noOfRows+noOfRows+noOfCol][:8] + "..." }}</span></p>
                             </div>
                         </div>
                         <div class="user_order_center">
+
                             <div class="user_order_details">
                                 <img class="user_order_img" src="../static/images/blackBag2.png" alt="Product Image">
-                                <p class="user_order_product_name">Product Name</p>
-                                <p class="user_order_quantity">x1</p>
+
+                                <p class="user_order_product_name">
+                                    {{ (values_list[noOfRows+noOfRows+noOfCol][0].values()|list)[0].get_name() }}
+                                </p>
+
+                                <p class="user_order_quantity">
+                                    x{{ ((values_list[noOfRows+noOfRows+noOfCol][0].values()|list) | length) }}
+                                </p>
+
                             </div>
+
                             <div class="user_order_status">
+                                {% if sales_dict[sales_dict_keys[noOfRows+noOfRows+noOfCol]].get_order_status() == "pending"%}
                                 <span>Pending...</span>
+                                {% else %}
+                                <span>None</span>
+                                {% endif %}
                             </div>
                         </div>
                         <div class="user_order_bottom">
                             <div class="user_order_bottom_btn">
                                 <button class="arrange_btn">Arrange Shipment</button>
                             </div>
+
                             <div class="user_order_bottom_btn">
-                                <a href="#"><button class="view_btn">View more (<span>1</span>)</button></a>
+                                <a href="#">
+                                    <button class="view_btn">
+                                        View more (
+                                        <span>
+                                           {{ (values_list[noOfRows+noOfRows+noOfCol] | length) }}
+                                        </span>)
+                                    </button>
+                                </a>
 
                             </div>
                             <div class="user_order_bottom_btn">
@@ -100,40 +141,44 @@
                     </div>
 
                 </div>
-                <div class="col-md-6">
-                    <div class="user_order">
-                        <div class="user_order_top">
-                            <div class="user_order_username">
-                                <p>Username 1</p>
-                            </div>
-                            <div class="user_order_orderId">
-                                <p>Order ID: <span>00000000</span></p>
-                            </div>
-                        </div>
-                        <div class="user_order_center">
-                            <div class="user_order_details">
-                                <img class="user_order_img" src="../static/images/blackBag2.png" alt="Product Image">
-                                <p class="user_order_product_name">Product Name</p>
-                                <p class="user_order_quantity">x1</p>
-                            </div>
-                            <div class="user_order_status">
-                                <span>Pending...</span>
-                            </div>
-                        </div>
-                        <div class="user_order_bottom">
-                            <div class="user_order_bottom_btn">
-                                <button class="arrange_btn">Arrange Shipment</button>
-                            </div>
-                            <div class="user_order_bottom_btn">
-                                <a href="#"><button class="view_btn">View more (<span>1</span>)</button></a>
-                            </div>
-                            <div class="user_order_bottom_btn">
-                                <button class="cancel_btn">Cancel Order</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {% endif %}
+                {% endfor %}
+                <!--<div class="col-md-6">-->
+                <!--    <div class="user_order">-->
+                <!--        <div class="user_order_top">-->
+                <!--            <div class="user_order_username">-->
+                <!--                <p>Username 1</p>-->
+                <!--            </div>-->
+                <!--            <div class="user_order_orderId">-->
+                <!--                <p>Order ID: <span>00000000</span></p>-->
+                <!--            </div>-->
+                <!--        </div>-->
+                <!--        <div class="user_order_center">-->
+                <!--            <div class="user_order_details">-->
+                <!--                <img class="user_order_img" src="../static/images/blackBag2.png" alt="Product Image">-->
+                <!--                <p class="user_order_product_name">Product Name</p>-->
+                <!--                <p class="user_order_quantity">x1</p>-->
+                <!--            </div>-->
+                <!--            <div class="user_order_status">-->
+                <!--                <span>Pending...</span>-->
+                <!--            </div>-->
+                <!--        </div>-->
+                <!--        <div class="user_order_bottom">-->
+                <!--            <div class="user_order_bottom_btn">-->
+                <!--                <button class="arrange_btn">Arrange Shipment</button>-->
+                <!--            </div>-->
+                <!--            <div class="user_order_bottom_btn">-->
+                <!--                <a href="#"><button class="view_btn">View more (<span>1</span>)</button></a>-->
+                <!--            </div>-->
+                <!--            <div class="user_order_bottom_btn">-->
+                <!--                <button class="cancel_btn">Cancel Order</button>-->
+                <!--            </div>-->
+                <!--        </div>-->
+                <!--    </div>-->
+                <!--</div>-->
             </div>
+        {% endfor %}
+        {% endif %}
         </div>
     </div>
 {% endblock %}

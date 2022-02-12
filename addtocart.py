@@ -11,4 +11,4 @@ class Addtocart(Product):
         return self.__id
 
     def __str__(self):
-        return f"{self.get_id()}"
+        return f"{self.get_id(), self.get_name()}"

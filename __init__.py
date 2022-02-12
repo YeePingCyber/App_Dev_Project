@@ -2027,7 +2027,9 @@ def delete_auction(id):
 
 @app.route("/adminOrders")
 def admin_orders():
-
+    sales_dict_keys = []
+    keys_list = []
+    values_list = []
     with shelve.open('database/sales', 'r') as db:
         print(db["sales"])
         try:
@@ -2039,7 +2041,40 @@ def admin_orders():
         for keys, values in sales_dict.items():
             print(values)
 
-    return render_template("adminOrders.html", sales_dict=sales_dict)
+        # sales_dict.pop('e4116ad4-d0d3-4035-a358-9993d9241578')
+        # db['sales'] = sales_dict
+        # print(db["sales"])
+
+        sales_dict_keys = list(sales_dict.keys())
+        print(sales_dict_keys)
+        if (len(sales_dict_keys) % 2) == 1:
+            sales_dict_keys.append("")
+
+        for sales in sales_dict_keys:
+
+            if sales != "":
+                sales_cart = sales_dict[sales].get_cart()
+                sales_cart_keys_list = list(sales_cart.keys())
+
+                sales_cart_values_list = list(sales_cart.values())
+                count = 0
+                print(sales_cart_values_list)
+                for num in range(0, len(sales_cart_values_list)-1):
+                    print(num)
+
+                    if sales_cart_values_list[num] == {}:
+                        sales_cart_values_list.pop(num)
+                        sales_cart_keys_list.pop(num)
+
+                values_list.append(sales_cart_values_list)
+
+                # print(sales_cart_keys_list)
+                print(sales_cart_values_list)
+                # print(values_list)
+
+    # sales_dict = sales_dict, sales_dict_keys = sales_dict_keys
+    return render_template("adminOrders.html",sales_dict=sales_dict, sales_dict_keys=sales_dict_keys,
+                           sales_cart_keys_list=sales_cart_keys_list, values_list=values_list)
 
 
 @app.route("/adminCustomerManagement")
