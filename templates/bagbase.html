@@ -4,6 +4,7 @@
 {% block css %}
     <link rel="stylesheet" type="text/css" href="../static/css/base.css">
     <link rel="stylesheet" type="text/css" href="../static/css/bag1.css">
+    <script src="https://kit.fontawesome.com/50ba020d7f.js" crossorigin="anonymous"></script>
 {% endblock %}
 
 {% block bodyContent %}
@@ -22,37 +23,40 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="product-img">
-                    <img src="../static/images/1-urth-arkose-20l-backpack-grey_1000x@2x.png" alt="Norite 24L Modular Bag">
-                    <p id="img-text">Everyday Backpack</p>
+                        <img src="../static/images/1-urth-arkose-20l-backpack-grey_1000x@2x.png" alt="Norite 24L Modular Bag">
+                        <h4 class="img-title">{{ products[x].get_name() }}</h4>
+                        <p class="img-subtitle">{{ products[x].get_description() }}</p>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="product-info">
-                    <h3>Tom Patterson<br>{{ products[x].get_name() }}</h3>
-                    <p id="title">{{ products[x].get_description() }}</p>
-                    <hr>
-                    <h5>${{ products[x].get_price() }}</h5>
-                    <p>Free Shipping and Returns</p>
+                        <h3>Tom Patterson<br>{{ products[x].get_name() }}</h3>
+                        <p>{{ products[x].get_description() }}</p>
+                        <p id="reference">Reference: {{ products[x].get_product_id() }}</p>
+                        <hr>
+                        <h5 class="price text-center">${{ products[x].get_price() }}</h5>
 
-                    <div class="product-help">
-                        <a href="/productFAQ"><p>Check availability</p></a>
-                        <a href="/productFAQ"><p>Product Details</p></a>
-                        <a href="/productFAQ"><p>Customer Support Page</p></a>
-                        <a href="/productFAQ"><p>Contact us at +65 12345678</p></a>
-                        <table>
-                            <form method=post action="">
-                                {{ render_field(form.product_id, value=products[x].get_product_id()) }}
-                                {{ render_field(form.name, value=products[x].get_name()) }}
-                                {{ render_field(form.description, value=products[x].get_description()) }}
-                                {{ render_field(form.price, value=products[x].get_price()) }}
-                                {{ render_field(form.quantity, value=1) }}
-                                {{ render_field(form.category, value=products[x].get_category()) }}
-                                {{ render_field(form.discount, value=products[x].get_discount()) }}
-                                {{ render_field(form.top, value=products[x].get_top()) }}
-                                <input type=submit value="Add to Cart">
-                            </form>
-                        </table>
-                    </div>
+                                <form method=post action="">
+                                    {{ render_field(form.product_id, value=products[x].get_product_id()) }}
+                                    {{ render_field(form.name, value=products[x].get_name()) }}
+                                    {{ render_field(form.description, value=products[x].get_description()) }}
+                                    {{ render_field(form.price, value=products[x].get_price()) }}
+                                    {{ render_field(form.quantity, value=1) }}
+                                    {{ render_field(form.category, value=products[x].get_category()) }}
+                                    {{ render_field(form.discount, value=products[x].get_discount()) }}
+                                    {{ render_field(form.top, value=products[x].get_top()) }}
+                                    <input type=submit value="Add to Cart">
+                                </form>
+                        <p class="returns text-center">Free Shipping and Returns</p>
+
+                        <div class="product-help">
+                            <p><i class="fa-solid fa-magnifying-glass"></i><a href="/productFAQ">Check availability</a></p>
+                            <p><i class="fa-solid fa-check"></i><a href="/productFAQ">Product Details</a></p>
+                            <p><i class="fa-solid fa-truck-fast"></i><a href="/productFAQ">Product Policies</a></p>
+                            <p><i class="fa-solid fa-phone"></i><a href="/productFAQ">Contact us at +65 12345678</a></p>
+
+
+                        </div>
                     </div>
                 </div>
             </div>

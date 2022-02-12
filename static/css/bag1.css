@@ -27,24 +27,41 @@
         margin-right: auto;
     }
 
+    .img-title {
+        font-size: 1.3em;
+        margin-bottom: 0px;
+        padding-top: 1em;
+        padding-left: 3px;
+    }
+
+    .img-subtitle {
+        font-size: 1em;
+        color: #52504e;
+        padding-left: 3px;
+    }
+
 
 /* --------------------------------------------------------------------------
         3. product info (right div)
     -------------------------------------------------------------------------- */
 
-.add-button {
-    padding: 1% 2% 1% 2%;
-    background-color: black;
-    border: none;
-    color: white;
-    border-radius: 8px;
-}
+    .product-info {
+        width: 90%;
+    }
 
-.product-help {
-    margin-top: 2vh;
-    margin-bottom: 2vh;
-    border: 0.1em solid;
-    border-collapse: separate;
-    border-color: #d6d5d2;
-    border-radius: 8px;
-}
+    .add-button {
+        padding: 1% 2% 1% 2%;
+        background-color: black;
+        border: none;
+        color: white;
+        border-radius: 8px;
+    }
+
+    .product-help {
+        margin-top: 2vh;
+        margin-bottom: 2vh;
+        border: 0.1em solid;
+        border-collapse: separate;
+        border-color: #d6d5d2;
+        border-radius: 8px;
+    }

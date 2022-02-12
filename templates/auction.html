@@ -22,7 +22,8 @@
                 <div class="col-md-6">
                     <div class="product-img">
                         <img src="../static/images/1-urth-arkose-20l-backpack-grey_1000x@2x.png" alt="Norite 24L Modular Bag">
-                        <p id="img-text">Everyday Backpack</p>
+                        <h4 class="img-title">{{ ongoing.get_name() }}</h4>
+                        <p class="img-subtitle">{{ ongoing.get_description() }}</p>
                     </div>
                 </div>
 
@@ -55,11 +56,11 @@
                             <div id="offer" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#offer-table">
                             <div class="accordion-body">
                                 <form>
-                                    <table class="offer-table">
+                                    <table class="offer-table text-center">
                                         <tr><th>Price</th><th>Expiration</th><th>From</th><th>Delete</th><th>Update</th></tr>
                                         {% for user in bid_list %}
                                         <tr>
-                                            <td class="product-text">{{ user.get_bidAmount() }}</td>
+                                            <td class="product-text">${{ user.get_bidAmount() }}</td>
                                             <td class="product-text">Placeholder Date</td>
                                             <td class="product-text">{{ user.get_bidUser() }}
                                             </td>

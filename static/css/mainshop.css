@@ -23,7 +23,8 @@
     }
 
     #myCarousel {
-        width: 80%;
+        width: 88%;
+        padding-top: 1.5em;
         margin-left: auto;
         margin-right: auto;
         text-align: center;
@@ -40,14 +41,23 @@
             2. product grid
         -------------------------------------------------------------------------- */
 
+    .product-view {
+      width: 88%;
+      margin: auto;
+      padding-bottom: 30px;
+    }
+
+    .product-view .product-item {
+      margin-bottom: 30px;
+    }
 
     .product-item .product-image {
       position: relative;
       overflow: hidden;
       margin-left: auto;
       margin-right: auto;
-      width: 70%;
-      height: 90%;
+      width: 90%;
+      height: 100%;
       border-style: None;
     }
 
@@ -70,16 +80,21 @@
       box-shadow: 1px 4px 3px 4px #ced0d9;
     }
 
-    .product-item .product-price p span {
-        font-size: 16px;
+    .product-price {
+      margin-left: auto;
+      margin-right: auto;
+      width: 90%;
     }
 
-    .product-view {
-      position: relative;
-      width: 100%;
-      padding: 30px 0;
+    .price-tag {
+        font-size: 0.9em;
     }
 
-    .product-view .product-item {
-      margin-bottom: 30px;
+    .view-btn {
+        background-color: black;
+        color: white;
+        padding: 0.4em;
+        border-radius: 0.3em;
+        font-size: 0.8em;
+        width: 100%;
     }
