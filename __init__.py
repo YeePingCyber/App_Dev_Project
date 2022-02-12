@@ -1851,7 +1851,6 @@ def admin():
         customer_totalList.append(customer_total)
         customer_total = 0
 
-    print(customer_totalList)
     subtotal = 0
     for total in customer_totalList:
         subtotal += total
@@ -1885,7 +1884,9 @@ def admin():
 
     auction_on = len(ongoing)
 
-    forgraphvalue = []
+    from itertools import accumulate
+    cumulative_total = list(accumulate(customer_totalList))
+    forgraphvalue = cumulative_total
     for i in range(0, len(salesList)):
         for j in salesList[i].get_cart()["1"]:
             customer_total += salesList[i].get_cart()["1"][j].get_price()
