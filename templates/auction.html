@@ -61,7 +61,7 @@
                                         {% for user in bid_list %}
                                         <tr>
                                             <td class="product-text">${{ user.get_bidAmount() }}</td>
-                                            <td class="product-text">Placeholder Date</td>
+                                            <td class="product-text">{{ expire_date }} days</td>
                                             <td class="product-text">{{ user.get_bidUser() }}
                                             </td>
                                             <td>

@@ -1,4 +1,5 @@
 import uuid
+from datetime import date
 
 
 class UserBid:

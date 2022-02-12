@@ -1522,6 +1522,9 @@ def auction():
 
     today = date.today().strftime('%Y-%m-%d')
     ongoing = ""
+    expire_date = ""
+
+    pre_expire = date.today() + timedelta(days=10)
 
     for keys, values in auction_dict.items():
         start = date.strftime(values.get_start_date(), '%Y-%m-%d')
@@ -1530,11 +1533,18 @@ def auction():
         if start == today or today > start or start <= today and end <= today:
             ongoing = values
 
+        end_date = values.get_end_date()
+        if pre_expire > end_date:
+            expire_date = abs((end_date - pre_expire).days)
+        else:
+            expire_date = pre_expire
+
+
     db = shelve.open("database/trees.db", "c")
     trees = db["Trees"]
     db.close()
 
-    return render_template('auction.html', auction_dict=auction_dict, bid_list=bid_list, ongoing=ongoing, trees=trees)
+    return render_template('auction.html', auction_dict=auction_dict, bid_list=bid_list, ongoing=ongoing, trees=trees, expire_date=expire_date)
 
 
 @app.route("/auctionForm", methods=['GET', 'POST'])
