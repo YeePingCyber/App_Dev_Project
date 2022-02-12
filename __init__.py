@@ -295,11 +295,12 @@ def cart():
                 cart_dict[i][y].set_price(products_dict[j].get_price())
         db.close()
 
-        if 1 == 1:
-            for i in cart_dict:
-                for y in cart_dict[i]:
-                    cartList[int(i) - 1].append(cart_dict[i][y])
 
+        for i in cart_dict:
+            for y in cart_dict[i]:
+                cartList[int(i) - 1].append(cart_dict[i][y])
+
+        if 1 == 1:
             subtotal = 0
             for total in range(0, len(cartList)):
                 for x in cartList[total]:
@@ -322,6 +323,7 @@ def cart():
         try:
             if "Add_to_cartnosession" in db:
                 temp = db["Add_to_cartnosession"]
+                print(len(products_dict), "in invenetory", len(temp), "in database")
 
                 if len(products_dict) == len(temp):
                     cart_dictnosession = temp
@@ -350,11 +352,11 @@ def cart():
 
         print(cart_dictnosession)
 
-        if 1 == 1:
-            for i in cart_dictnosession:
-                for y in cart_dictnosession[i]:
-                    cartListnosession[int(i) - 1].append(cart_dictnosession[i][y])
+        for i in cart_dictnosession:
+            for y in cart_dictnosession[i]:
+                cartListnosession[int(i) - 1].append(cart_dictnosession[i][y])
 
+        if 1 == 1:
             subtotal = 0
             for total in range(0, len(cartListnosession)):
                 for x in cartListnosession[total]:
@@ -442,10 +444,10 @@ def updateAddCart(id):
             listofDict.append(i)
         cart_dict = dict(zip(listofKeys, listofDict))
 
-        cartList = []
+        cartListnosession = []
         for j in range(1, len(products_dict) + 1):
             j = list()
-            cartList.append(j)
+            cartListnosession.append(j)
 
         db = shelve.open("database/addtocartnosession", "c")
 
@@ -472,19 +474,19 @@ def updateAddCart(id):
         except:
             print("Error in retrieving Inventory from addtocart.db")
 
-        for i in cart_dict:
-            for y in cart_dict[i]:
-                cartList[int(i) - 1].append(cart_dict[i][y])
+        for i in cart_dictnosession:
+            for y in cart_dictnosession[i]:
+                cartListnosession[int(i) - 1].append(cart_dictnosession[i][y])
 
         if request.method == "POST":
-            addtocart = Addtocart(cartList[id][0].get_name(), cartList[id][0].get_description(),
-                                  cartList[id][0].get_price(), 1, cartList[id][0].get_category(),
-                                  cartList[id][0].get_discount(), cartList[id][0].get_top())
-            for x in cart_dict:
+            addtocartnosession = Addtocart(cartListnosession[id][0].get_name(), cartListnosession[id][0].get_description(),
+                                  cartListnosession[id][0].get_price(), 1, cartListnosession[id][0].get_category(),
+                                  cartListnosession[id][0].get_discount(), cartListnosession[id][0].get_top())
+            for x in cart_dictnosession:
                 if id == int(x) - 1:
-                    cart_dict[x][addtocart.get_id()] = addtocart
+                    cart_dictnosession[x][addtocartnosession.get_id()] = addtocartnosession
 
-            db["Add_to_cartnosession"] = cart_dict
+            db["Add_to_cartnosession"] = cart_dictnosession
             db.close()
 
         return redirect(url_for("cart"))
@@ -660,7 +662,7 @@ def delete_item(id):
 
                     cart_dictnosession.update(temp)
             else:
-                db["Add_to_cart"] = cart_dictnosession
+                db["Add_to_cartnosession"] = cart_dictnosession
         except:
             print("Error in retrieving Inventory from addtocart.db")
 
@@ -1411,6 +1413,8 @@ def bagbase():
         productList.append(products_dict[x])
     db.close()
 
+    print(productList)
+
     listofDict = []
     listofKeys = []
     for i in range(1, len(products_dict) + 1):
@@ -1433,7 +1437,23 @@ def bagbase():
             db = shelve.open("database/addtocart", "c")
             try:
                 if "Add_to_cart" in db:
-                    addtocart_dict = db["Add_to_cart"]
+                    temp = db["Add_to_cart"]
+
+                    if len(products_dict) == len(temp):
+                        addtocart_dict = temp
+
+                    elif len(products_dict) > len(temp):
+                        new_listofDict = []
+                        new_listofKeys = []
+
+                        for i in range(1, len(products_dict) + 1):
+                            new_listofKeys.append(str(i))
+                            i = dict()
+                            new_listofDict.append(i)
+                        addtocart_dict = dict(zip(new_listofKeys, new_listofDict))
+
+                        addtocart_dict.update(temp)
+
                 else:
                     db["Add_to_cart"] = addtocart_dict
             except:
@@ -1463,7 +1483,23 @@ def bagbase():
             db = shelve.open("database/addtocartnosession", "c")
             try:
                 if "Add_to_cartnosession" in db:
-                    addtocartnosession_dict = db["Add_to_cartnosession"]
+                    temp = db["Add_to_cartnosession"]
+
+                    if len(products_dict) == len(temp):
+                        addtocartnosession_dict = temp
+
+                    elif len(products_dict) > len(temp):
+                        new_listofDict = []
+                        new_listofKeys = []
+
+                        for i in range(1, len(products_dict) + 1):
+                            new_listofKeys.append(str(i))
+                            i = dict()
+                            new_listofDict.append(i)
+                        addtocartnosession_dict = dict(zip(new_listofKeys, new_listofDict))
+
+                        addtocartnosession_dict.update(temp)
+
                 else:
                     db["Add_to_cartnosession"] = addtocartnosession_dict
             except:
