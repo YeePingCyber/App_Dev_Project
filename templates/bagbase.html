@@ -35,7 +35,6 @@
                         <p id="reference">Reference: {{ products[x].get_product_id() }}</p>
                         <hr>
                         <h5 class="price text-center">${{ products[x].get_price() }}</h5>
-
                                 <form method=post action="">
                                     {{ render_field(form.product_id, value=products[x].get_product_id()) }}
                                     {{ render_field(form.name, value=products[x].get_name()) }}
@@ -45,17 +44,14 @@
                                     {{ render_field(form.category, value=products[x].get_category()) }}
                                     {{ render_field(form.discount, value=products[x].get_discount()) }}
                                     {{ render_field(form.top, value=products[x].get_top()) }}
-                                    <input type=submit value="Add to Cart">
+                                    <input type=submit value="Add to Cart" class="text-center cart-btn">
                                 </form>
                         <p class="returns text-center">Free Shipping and Returns</p>
-
                         <div class="product-help">
                             <p><i class="fa-solid fa-magnifying-glass"></i><a href="/productFAQ">Check availability</a></p>
                             <p><i class="fa-solid fa-check"></i><a href="/productFAQ">Product Details</a></p>
                             <p><i class="fa-solid fa-truck-fast"></i><a href="/productFAQ">Product Policies</a></p>
                             <p><i class="fa-solid fa-phone"></i><a href="/productFAQ">Contact us at +65 12345678</a></p>
-
-
                         </div>
                     </div>
                 </div>

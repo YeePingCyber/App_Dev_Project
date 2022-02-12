@@ -65,3 +65,9 @@
         border-color: #d6d5d2;
         border-radius: 8px;
     }
+
+    .cart-btn {
+    background-color: transparent;
+    padding: 1em;
+    border-radius: 30px;
+    }
