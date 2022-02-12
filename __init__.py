@@ -1537,7 +1537,7 @@ def auction():
         if pre_expire > end_date:
             expire_date = abs((end_date - pre_expire).days)
         else:
-            expire_date = pre_expire
+            expire_date = 10
 
 
     db = shelve.open("database/trees.db", "c")
