@@ -854,12 +854,10 @@ def checkout():
         return render_template("checkout.html", form=create_shipment_form, cartList=cartListnosession, subtotal=subtotal,grandtotal=grandtotal, trees=trees)
 
 
-discount_code_dict = {0: "15$OFF", 1: "70$OFF", 2: "50$OFF", 3: "30$OFF", 4: "10$OFF", 5: "20$OFF"}
-discount = 0
-
-
 @app.route("/checkout/payment", methods=['GET', 'POST'])
 def payment():
+    global discount
+    discount_code_dict = {0: "15$OFF", 1: "70$OFF", 2: "50$OFF", 3: "30$OFF", 4: "10$OFF", 5: "20$OFF"}
     try:
         db = shelve.open("database/trees", "r")
         trees = db["Trees"]
@@ -1164,7 +1162,7 @@ def paymentdone():
         db1["Users"] = users_dict
         db1.close()
 
-        return render_template("paymentdone.html", subtotal=subtotal, grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict, sales=sales_dict, cartList=cartList, trees=trees)
+        return render_template("paymentdone.html", subtotal=subtotal, grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict, sales=sales_dict, cartList=cartList, trees=trees, discount=discount)
 
     else:
         cart_dictnosession = dict(zip(listofKeys, listofDict))
