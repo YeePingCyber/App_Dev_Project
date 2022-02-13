@@ -2129,23 +2129,34 @@ def admin():
     except:
         auction_dict = {}
 
+    auction_dict = {}
+    db = shelve.open('database/auction.db', 'c')
+    auction_dict = db["Auction"]
+    db.close()
+
     today = date.today().strftime('%Y-%m-%d')
-    upcoming = []
     ongoing = ""
-    if auction_dict != {}:
-        for keys, values in auction_dict.items():
-            start = date.strftime(values.get_start_date(), '%Y-%m-%d')
-            end = date.strftime(values.get_end_date(), '%Y-%m-%d')
+    ongoingList = []
+    expire_date = ""
 
-            if (start == today or today > start or start <= today) and end <= today:
-                if today > end:
-                    ongoing = ""
-                else:
-                    ongoing = values
-            elif start > today and end > today:
-                upcoming.append(values)
+    pre_expire = date.today() + timedelta(days=10)
 
-    auction_on = len(ongoing)
+    for keys, values in auction_dict.items():
+        start = date.strftime(values.get_start_date(), '%Y-%m-%d')
+        end = date.strftime(values.get_end_date(), '%Y-%m-%d')
+
+        if start == today or today > start or start <= today and end <= today:
+            ongoing = values
+            ongoingList.append(ongoing)
+
+        end_date = values.get_end_date()
+        current = date.today()
+        if pre_expire > end_date:
+            expire_date = abs((end_date - current).days)
+        else:
+            expire_date = 10
+
+    auction_on = len(ongoingList)
 
     from itertools import accumulate
     cumulative_total = list(accumulate(customer_totalList))
