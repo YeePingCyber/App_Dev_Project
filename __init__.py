@@ -2164,7 +2164,7 @@ def admin_orders():
 
     keys_list = []
     values_list = []
-    with shelve.open('database/sales.db', 'r') as db:
+    with shelve.open('database/sales', 'r') as db:
         # print(db["sales"])
         try:
             if "sales" in db:
