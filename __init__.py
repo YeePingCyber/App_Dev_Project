@@ -1547,10 +1547,16 @@ def auction():
     db.close()
 
     bid_list = []
+    bid_amt = []
     for key in bid_dict:
-        # bid_dict.pop()
         user = bid_dict.get(key)
         bid_list.append(user)
+        #print(user)
+        w = user.get_bidAmount()
+        bid_amt.append(w)
+
+    sorted_bid_amt = sorted(bid_amt, reverse=True)
+    highest_bid = sorted_bid_amt[0]
 
     auction_dict = {}
     db = shelve.open('database/auction.db', 'c')
@@ -1584,7 +1590,8 @@ def auction():
         trees = 0
     db.close()
 
-    return render_template('auction.html', auction_dict=auction_dict, bid_list=bid_list, ongoing=ongoing, trees=trees, expire_date=expire_date)
+    return render_template('auction.html', auction_dict=auction_dict, bid_list=bid_list, ongoing=ongoing, trees=trees,
+                           expire_date=expire_date, highest_bid=highest_bid)
 
 
 @app.route("/auctionForm", methods=['GET', 'POST'])
@@ -1596,8 +1603,37 @@ def auctionForm():
     except:
         trees = 0
 
+
+    bid_dict = {}
+    db = shelve.open('database/UserBid.db', 'c')
+    try:
+        bid_dict = db['UserBid']
+    except:
+        print("Error in retrieving userbid.db.")
+
+    bid_list = []
+    for key in bid_dict:
+        user = bid_dict.get(key)
+        bid_list.append(user)
+
+    auction_dict = {}
+    db = shelve.open('database/auction.db', 'c')
+    auction_dict = db["Auction"]
+    db.close()
+
+    today = date.today().strftime('%Y-%m-%d')
+    expire_date = ""
+
+    pre_expire = date.today() + timedelta(days=10)
+
+    for keys, values in auction_dict.items():
+        end_date = values.get_end_date()
+        if pre_expire > end_date:
+            expire_date = abs((end_date - pre_expire).days)
+        else:
+            expire_date = 10
+
     create_bid_form = CreateBidForm(request.form)
-    print("JUST PRINT SOMETHING")
     if request.method == 'POST' and create_bid_form.validate():
         bid_dict = {}
         db = shelve.open('database/userbid.db', 'c')
@@ -1611,14 +1647,10 @@ def auctionForm():
         print(userbidID)
         bid_dict[userbidID.get_bidId()] = userbidID
         db['UserBid'] = bid_dict
-
-        # for x in bid_dict:
-        #     print(x)
-
         db.close()
 
         return redirect(url_for("auction"))
-    return render_template('auctionForm.html', form=create_bid_form, trees=trees)
+    return render_template('auctionForm.html', form=create_bid_form, trees=trees, expire_date=expire_date, bid_list=bid_list)
 
 
 @app.route("/deleteBid/<id>", methods=["POST"])
@@ -1636,6 +1668,44 @@ def delete_bid(id):
 
 @app.route("/updateBid/<id>/", methods=['GET', 'POST'])
 def update_bid(id):
+    try:
+        db = shelve.open("database/trees", "r")
+        trees = db["Trees"]
+        db.close()
+    except:
+        trees = 0
+
+
+    bid_dict = {}
+    db = shelve.open('database/UserBid.db', 'c')
+    try:
+        bid_dict = db['UserBid']
+    except:
+        print("Error in retrieving userbid.db.")
+
+    bid_list = []
+    for key in bid_dict:
+        user = bid_dict.get(key)
+        bid_list.append(user)
+
+    auction_dict = {}
+    db = shelve.open('database/auction.db', 'c')
+    auction_dict = db["Auction"]
+    db.close()
+
+    today = date.today().strftime('%Y-%m-%d')
+    expire_date = ""
+
+    pre_expire = date.today() + timedelta(days=10)
+
+    for keys, values in auction_dict.items():
+        end_date = values.get_end_date()
+        if pre_expire > end_date:
+            expire_date = abs((end_date - pre_expire).days)
+        else:
+            expire_date = 10
+
+
     update_bid_form = CreateBidForm(request.form)
     if request.method == 'POST' and update_bid_form.validate():
         bid_dict = {}
@@ -1663,7 +1733,7 @@ def update_bid(id):
         update_bid_form.bid_amount.data = customer.get_bidAmount()
         update_bid_form.bid_user.data = customer.get_bidUser()
 
-        return render_template('updateBid.html', form=update_bid_form)
+        return render_template('updateBid.html', form=update_bid_form, trees=trees, expire_date=expire_date, bid_list=bid_list)
 
 
 randomOTP = random.randint(111111, 999999)
@@ -2632,7 +2702,13 @@ def page_not_found(e):
 
 @app.route("/aboutUs", methods=['GET', 'POST'])
 def aboutUs():
-    return render_template("aboutUs.html")
+    try:
+        db = shelve.open("database/trees", "r")
+        trees = db["Trees"]
+    except:
+        trees = 0
+
+    return render_template("aboutUs.html", trees=trees)
 
 
 if __name__ == "__main__":
