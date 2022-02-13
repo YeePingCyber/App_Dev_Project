@@ -269,6 +269,7 @@ def cart():
         listofDict.append(i)
 
     if "customer_session" in session:
+        temp = {}
         customer = session["customer_session"]
         db = shelve.open("database/user.db", "w")
         users_dict = db["Users"]
@@ -305,6 +306,8 @@ def cart():
                 db["Add_to_cart"] = cart_dict
         except:
             print("Error in retrieving Inventory from addtocart")
+
+        print(cart_dict)
 
         for i, j in zip(cart_dict, products_dict):
             for y in cart_dict[i]:
@@ -1472,6 +1475,7 @@ def bagbase():
                                   int(addtocartform.price.data), int(addtocartform.quantity.data),
                                   addtocartform.category.data, int(addtocartform.discount.data),
                                   int(addtocartform.top.data))
+            addtocart.set_picture(addtocartform.pic.data)
 
             for x, j in zip(productList, range(1, len(productList)+1)):
                 if addtocart.get_name() == x.get_name():
