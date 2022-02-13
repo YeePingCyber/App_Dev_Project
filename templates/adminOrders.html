@@ -23,11 +23,11 @@
         <div class="top_container">
 
             {% if sales_dict_keys == [] %}
-            <a href="/adminOrders"><button class="sorted_btn_active">All (<span>0</span>)</button></a>
+            <a href="/adminOrders/all"><button class="sorted_btn_active">All (<span>0</span>)</button></a>
             {% elif sales_dict_keys[(sales_dict_keys|length)-1] == "" %}
-            <a href="/adminOrders"><button class="sorted_btn_active">All (<span>{{ (sales_dict_keys|length)-1 }}</span>)</button></a>
+            <a href="/adminOrders/all"><button class="sorted_btn_active">All (<span>{{ (sales_dict_keys|length)-1 }}</span>)</button></a>
             {% else %}
-            <a href="/adminOrders"><button class="sorted_btn_active">All (<span>{{ (sales_dict_keys|length) }}</span>)</button></a>
+            <a href="/adminOrders/all"><button class="sorted_btn_active">All (<span>{{ (sales_dict_keys|length) }}</span>)</button></a>
             {% endif %}
 
             <a href="/adminOrders/pending"><button class="sorted_btn">Pending</button></a>
@@ -44,7 +44,7 @@
                 </div>
             </div>
             {% else %}
-            {% for noOfRows in range(0, (sales_dict_keys|length)//2) %}
+            {% for noOfRows in range(0, (values_list|length)//2) %}
             <div class="row">
                 {% for noOfCol in range(0, 2) %}
                 {% if sales_dict_keys[noOfRows+noOfRows+noOfCol] == "" %}
@@ -54,11 +54,11 @@
                     <div class="user_order">
                         <div class="user_order_top">
                             <div class="user_order_username">
-                                <p><b>Username:</b> {{ sales_dict[sales_dict_keys[noOfRows+noOfRows+noOfCol]].get_firstname()+ " " +sales_dict[sales_dict_keys[noOfRows+noOfRows+noOfCol]].get_lastname()}}</p>
+                                <p><b>Username:</b> {{ sales_dict[keys_list[noOfRows+noOfRows+noOfCol]].get_firstname()+ " " +sales_dict[sales_dict_keys[noOfRows+noOfRows+noOfCol]].get_lastname()}}</p>
                             </div>
                             <div class="user_order_orderId">
                                 <!--[:8] + "..."-->
-                                <p><b>Order ID:</b> <span>{{ sales_dict_keys[noOfRows+noOfRows+noOfCol] }}</span></p>
+                                <p><b>Order ID:</b> <span>{{ keys_list[noOfRows+noOfRows+noOfCol] }}</span></p>
                             </div>
                         </div>
                         <div class="user_order_center">
@@ -78,8 +78,10 @@
                             </div>
 
                             <div class="user_order_status">
-                                {% if sales_dict[sales_dict_keys[noOfRows+noOfRows+noOfCol]].get_order_status() == "pending"%}
+                                {% if sales_dict[keys_list[noOfRows+noOfRows+noOfCol]].get_order_status() == "pending"%}
                                 <span>Pending...</span>
+                                {% elif sales_dict[keys_list[noOfRows+noOfRows+noOfCol]].get_order_status() == "accepted" %}
+                                <span style="color:green;">Accepted</span>
                                 {% else %}
                                 <span>None</span>
                                 {% endif %}
@@ -87,7 +89,7 @@
                         </div>
                         <div class="user_order_bottom">
                             <div class="user_order_bottom_btn">
-                                <button class="accept_btn">Accept Order</button>
+                                <a href="/accept_order/{{ sales_dict_keys[noOfRows+noOfRows+noOfCol] }}"><button class="accept_btn" style="color:green;">Accept Order</button></a>
                             </div>
 
                             <div class="user_order_bottom_btn">
