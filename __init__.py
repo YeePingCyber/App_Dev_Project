@@ -1594,8 +1594,9 @@ def auction():
             ongoing = values
 
         end_date = values.get_end_date()
+        current = date.today()
         if pre_expire > end_date:
-            expire_date = abs((end_date - pre_expire).days)
+            expire_date = abs((end_date - current).days)
         else:
             expire_date = 10
 
