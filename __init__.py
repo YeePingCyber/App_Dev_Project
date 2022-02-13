@@ -1954,6 +1954,11 @@ def leaderboard():
 
             print(game_user_dict)
 
+            # game_user_dict.pop(3399)
+            # game_user_dict.pop(9067)
+            # db["Leaderboard"] = game_user_dict
+            # print(db["Leaderboard"])
+
             def sort_by_points(player):
                 return player.get_total_points()
 
@@ -1987,7 +1992,8 @@ def leaderboard():
         except:
             trees = 0
 
-        return render_template("leaderboard.html", sorted_list=sorted_list, username_list=username_list, trees=trees)
+        # , sorted_list=sorted_list, username_list=username_list, trees=trees
+        return render_template("leaderboard.html", sorted_list=sorted_list, username_list=username_list, trees=trees, session_user=session_user)
     else:
         return redirect(url_for("log_in"))
 
@@ -2202,6 +2208,7 @@ def admin_orders():
 
     keys_list = []
     values_list = []
+    print(session["adminOrders_sorting"])
     with shelve.open('database/sales', 'r') as db:
         print(db["sales"])
         try:
@@ -2237,7 +2244,6 @@ def admin_orders():
                         sales_cart_values_list.pop(num)
                         sales_cart_keys_list.pop(num)
                 else:
-
                     for num in range(0, len(sales_cart_values_list)-1):
                         print(num)
                         try:
@@ -2247,43 +2253,50 @@ def admin_orders():
                         except IndexError:
                             print("leo")
 
-                keys_list.append(sales_cart_keys_list)
-                values_list.append(sales_cart_values_list)
+                try:
+                    if session["adminOrders_sorting"] == "pending":
+                        print("hello")
+                        if sales_dict[sales].get_order_status() == "pending":
+                            print("sort pending")
+                            keys_list.append(sales)
+                            values_list.append(sales_cart_values_list)
+                    elif session["adminOrders_sorting"] == "":
+                        keys_list.append(sales)
+                        values_list.append(sales_cart_values_list)
+                except KeyError:
+                    keys_list.append(sales)
+                    values_list.append(sales_cart_values_list)
 
                 # print(sales_cart_keys_list)
                 print("after popping",sales_cart_values_list)
                 # print(values_list)
+
         if len(values_list) == 1:
             if values_list[0][-1] == {}:
                 values_list[0].pop(-1)
-                keys_list[0].pop(-1)
+                # keys_list[0].pop(-1)
         else:
             for num1 in range(0, len(values_list)-1):
 
                 if values_list[num1][-1] == {}:
                     values_list[num1].pop(-1)
-                    keys_list[num1].pop(-1)
+                    # keys_list[num1].pop(-1)
 
                 elif values_list[num1][0] == {}:
                     values_list[num1].pop(0)
-                    keys_list[num1].pop(0)
-
+                    # keys_list[num1].pop(0)
 
         print(values_list)
+        print(keys_list)
 
     # ,sales_dict=sales_dict, sales_dict_keys=sales_dict_keys,
     #                            sales_cart_keys_list=sales_cart_keys_list, values_list=values_list
-    return render_template("adminOrders.html", sales_dict=sales_dict, sales_dict_keys=sales_dict_keys, values_list=values_list)
+    return render_template("adminOrders.html", sales_dict=sales_dict, sales_dict_keys=sales_dict_keys, values_list=values_list, keys_list=keys_list)
 
 
-@app.route("/adminOrders/pending")
-def pending_order():
-    return redirect(url_for("admin_orders"))
-
-
-@app.route("/adminOrders/accepted")
-def accept_order():
-    with shelve.open('database/sales', 'r') as db:
+@app.route("/accept_order/<key>")
+def accept_order(key):
+    with shelve.open('database/sales', 'w') as db:
         print(db["sales"])
         try:
             if "sales" in db:
@@ -2291,8 +2304,23 @@ def accept_order():
         except:
             print("Error in retrieving Sales from sales.db")
 
+        sales_dict[key].set_order_status("accepted")
 
-    return render_template("adminOrders.html")
+        db["sales"] = sales_dict
+
+    return redirect(url_for("admin_orders"))
+
+
+@app.route("/adminOrders/all")
+def all_order():
+    session["adminOrders_sorting"] = ""
+    return redirect(url_for("admin_orders"))
+
+
+@app.route("/adminOrders/pending")
+def pending_order():
+    session["adminOrders_sorting"] = "pending"
+    return redirect(url_for("admin_orders"))
 
 
 @app.route("/adminCustomerManagement")

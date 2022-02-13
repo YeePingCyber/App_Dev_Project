@@ -82,7 +82,7 @@ class Sales(ShippingProcess, PaymentProcess):
         return self.__order_status
 
     def __str__(self):
-        # return f"{self.get_cart(), self.get_shippingid(), self.get_paymentid(), self.get_firstname(), self.get_lastname(), self.get_address(), self.get_postal(), self.get_city(), self.get_phone(), self.get_cardnum(), self.get_namecard(), self.get_expire(), self.get_ccv(), self.get_order_status()}"
-        g = self.get_cart()
+        return f"{self.get_cart(), self.get_shippingid(), self.get_paymentid(), self.get_firstname(), self.get_lastname(), self.get_address(), self.get_postal(), self.get_city(), self.get_phone(), self.get_cardnum(), self.get_namecard(), self.get_expire(), self.get_ccv(), self.get_order_status()}"
+        # g = self.get_cart()
         # ["1"]['1ef3e14c-f87a-4a95-bbec-9771c78e791a']
-        return str(g)
+        # return str(g)
