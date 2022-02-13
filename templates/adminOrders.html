@@ -54,16 +54,18 @@
                     <div class="user_order">
                         <div class="user_order_top">
                             <div class="user_order_username">
-                                <p>{{ sales_dict[sales_dict_keys[noOfRows+noOfRows+noOfCol]].get_firstname()+ " " +sales_dict[sales_dict_keys[noOfRows+noOfRows+noOfCol]].get_lastname()}}</p>
+                                <p><b>Username:</b> {{ sales_dict[sales_dict_keys[noOfRows+noOfRows+noOfCol]].get_firstname()+ " " +sales_dict[sales_dict_keys[noOfRows+noOfRows+noOfCol]].get_lastname()}}</p>
                             </div>
                             <div class="user_order_orderId">
-                                <p>Order ID: <span>{{ sales_dict_keys[noOfRows+noOfRows+noOfCol][:8] + "..." }}</span></p>
+                                <!--[:8] + "..."-->
+                                <p><b>Order ID:</b> <span>{{ sales_dict_keys[noOfRows+noOfRows+noOfCol] }}</span></p>
                             </div>
                         </div>
                         <div class="user_order_center">
 
                             <div class="user_order_details">
                                 <img class="user_order_img" src="../static/images/blackBag2.png" alt="Product Image">
+                                {#<img class="user_order_img" src="../static/images/product_pics/{{ (values_list[noOfRows+noOfRows+noOfCol][0].values()|list)[0].get_picture() }}" alt="Product Image">#}
 
                                 <p class="user_order_product_name">
                                     {{ (values_list[noOfRows+noOfRows+noOfCol][0].values()|list)[0].get_name() }}
@@ -93,7 +95,7 @@
                                     <button class="view_btn">
                                         View more (
                                         <span>
-                                           {{ (values_list[noOfRows+noOfRows+noOfCol] | length) }}
+                                            {{ (values_list[noOfRows+noOfRows+noOfCol] | length) }}
                                         </span>)
                                     </button>
                                 </a>

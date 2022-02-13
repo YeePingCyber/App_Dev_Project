@@ -305,7 +305,7 @@ def cart():
                 for x in cartList[total]:
                     subtotal += x.get_price()
 
-            return render_template("cart.html", cartList=cartList, subtotal=subtotal, trees=tree)
+            return render_template("cart.html", cartList=cartList, subtotal=subtotal, trees=trees)
         else:
             return render_template("cart_empty.html", trees=trees)
 
@@ -2114,26 +2114,27 @@ def delete_auction(id):
 
 @app.route("/adminOrders")
 def admin_orders():
-    sales_dict_keys = []
+
     keys_list = []
     values_list = []
-    with shelve.open('database/sales', 'r') as db:
-        print(db["sales"])
+    with shelve.open('database/sales.db', 'r') as db:
+        # print(db["sales"])
         try:
             if "sales" in db:
                 sales_dict = db["sales"]
         except:
             print("Error in retrieving Sales from sales.db")
 
-        for keys, values in sales_dict.items():
-            print(values)
+        # for keys, values in sales_dict.items():
+        #     print(values)
 
-        # sales_dict.pop('e4116ad4-d0d3-4035-a358-9993d9241578')
+        # sales_dict.pop('a52fafdb-3bd2-435f-b66a-df18a7f7d3d8')
+        # sales_dict.pop('a01594c2-31ac-49ad-86b2-67f944e9ae44')
         # db['sales'] = sales_dict
         # print(db["sales"])
 
         sales_dict_keys = list(sales_dict.keys())
-        print(sales_dict_keys)
+        # print(sales_dict_keys)
         if (len(sales_dict_keys) % 2) == 1:
             sales_dict_keys.append("")
 
@@ -2144,24 +2145,47 @@ def admin_orders():
                 sales_cart_keys_list = list(sales_cart.keys())
 
                 sales_cart_values_list = list(sales_cart.values())
-                count = 0
-                print(sales_cart_values_list)
-                for num in range(0, len(sales_cart_values_list)-1):
-                    print(num)
 
-                    if sales_cart_values_list[num] == {}:
+                print(sales_cart_values_list)
+                if len(sales_cart_values_list) == 1:
+                    if sales_cart_values_list[0] == {}:
                         sales_cart_values_list.pop(num)
                         sales_cart_keys_list.pop(num)
+                else:
 
+                    for num in range(0, len(sales_cart_values_list)-1):
+                        print(num)
+                        try:
+                            if sales_cart_values_list[num] == {}:
+                                sales_cart_values_list.pop(num)
+                                sales_cart_keys_list.pop(num)
+                        except IndexError:
+                            print("leo")
+
+                keys_list.append(sales_cart_keys_list)
                 values_list.append(sales_cart_values_list)
 
                 # print(sales_cart_keys_list)
                 print(sales_cart_values_list)
                 # print(values_list)
+        if len(values_list) == 1:
+            if values_list[0][-1] == {}:
+                values_list[0].pop(-1)
+                keys_list[0].pop(-1)
+        else:
+            for num1 in range(0, len(values_list)-1):
 
-    # sales_dict = sales_dict, sales_dict_keys = sales_dict_keys
-    return render_template("adminOrders.html",sales_dict=sales_dict, sales_dict_keys=sales_dict_keys,
-                           sales_cart_keys_list=sales_cart_keys_list, values_list=values_list)
+                if values_list[num1][-1] == {}:
+
+                    values_list[num1].pop(-1)
+                    keys_list[num1].pop(-1)
+
+
+        print(values_list)
+
+    # ,sales_dict=sales_dict, sales_dict_keys=sales_dict_keys,
+    #                            sales_cart_keys_list=sales_cart_keys_list, values_list=values_list
+    return render_template("adminOrders.html", sales_dict=sales_dict, sales_dict_keys=sales_dict_keys, values_list=values_list)
 
 
 @app.route("/adminOrders/pending")

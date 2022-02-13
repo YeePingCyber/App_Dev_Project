@@ -97,11 +97,13 @@
     }
 
     .user_order_username{
-        margin: 2% 0% 2% 5%;
+        width: 50%;
+        padding: 2% 0% 2% 5%;
     }
 
     .user_order_orderId{
-        margin: 2% 5% 2% 53%;
+        width: 50%;
+        padding: 2% 5% 2% 10%;
     }
 
     .user_order_details{
