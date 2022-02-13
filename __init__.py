@@ -408,7 +408,7 @@ def updateAddCart(id):
             j = list()
             cartList.append(j)
 
-        db = shelve.open("database/addtocart", "r")
+        db = shelve.open("database/addtocart", "w")
         try:
             if "Add_to_cart" in db:
                 temp = db["Add_to_cart"]
@@ -459,7 +459,7 @@ def updateAddCart(id):
             j = list()
             cartListnosession.append(j)
 
-        db = shelve.open("database/addtocartnosession", "r")
+        db = shelve.open("database/addtocartnosession", "w")
 
         try:
             if "Add_to_cartnosession" in db:
@@ -522,7 +522,7 @@ def updateSubCart(id):
         customer_user = users_dict.get(customer)
 
         cart_dict = dict(zip(listofKeys, listofDict))
-        db = shelve.open("database/addtocart", "r")
+        db = shelve.open("database/addtocart", "w")
         try:
             if "Add_to_cart" in db:
                 temp = db["Add_to_cart"]
@@ -557,7 +557,7 @@ def updateSubCart(id):
 
     else:
         cart_dictnosession = dict(zip(listofKeys, listofDict))
-        db = shelve.open("database/addtocartnosession", "r")
+        db = shelve.open("database/addtocartnosession", "w")
         try:
             if "Add_to_cartnosession" in db:
                 temp = db["Add_to_cartnosession"]
@@ -595,9 +595,9 @@ def delete_item(id):
     try:
         db = shelve.open("database/trees.db", "r")
         trees = db["Trees"]
+        db.close()
     except:
         trees = 0
-    db.close()
 
     db = shelve.open("database/inventory.db", 'r')
     products_dict = db["Products"]
@@ -617,7 +617,7 @@ def delete_item(id):
         customer_user = users_dict.get(customer)
 
         cart_dict = dict(zip(listofKeys, listofDict))
-        db = shelve.open("database/addtocart", "r")
+        db = shelve.open("database/addtocart", "w")
         try:
             if "Add_to_cart" in db:
                 temp = db["Add_to_cart"]
@@ -655,7 +655,7 @@ def delete_item(id):
 
     else:
         cart_dictnosession = dict(zip(listofKeys, listofDict))
-        db = shelve.open("database/addtocartnosession", "r")
+        db = shelve.open("database/addtocartnosession", "w")
         try:
             if "Add_to_cartnosession" in db:
                 temp = db["Add_to_cartnosession"]
