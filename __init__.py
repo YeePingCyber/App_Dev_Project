@@ -1801,7 +1801,7 @@ def save_point(key):
 
 
 @app.route("/game/continue/<int:key>", methods=["POST"])
-def save_point(key):
+def save_and_continue_point(key):
     points = ""
     value = ''
     multiply = 0
