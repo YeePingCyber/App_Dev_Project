@@ -197,7 +197,13 @@
                                             <tr data-toggle="modal" data-target="#exampleModalCenter{{ loop.index }}">
                                                 <th scope="row">{{ loop.index }}</th>
                                                 <td>{{ sales.get_firstname() }}</td>
-                                                <td>Done</td>
+
+                                                {% if sales.get_order_status() == "pending" %}
+                                                    <td class="pending"> {{ sales.get_order_status() }} </td>
+                                                {% else %}
+                                                    <td class="approve"> {{ sales.get_order_status() }} </td>
+                                                {% endif %}
+
                                                 <td>
                                                     ${{ customer_totalList[loop.index - 1] }}
                                                 </td>

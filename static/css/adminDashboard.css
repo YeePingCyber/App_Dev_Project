@@ -67,3 +67,11 @@
     .white {
         color: white;
     }
+
+    .pending {
+        color : #FF9900;
+    }
+
+    .accepted {
+        color : #16C35B;
+    }
