@@ -47,12 +47,10 @@
                         <tr style="margin-top: 0.8571428571em;padding-top: 0.8571428571em;border-top: 1px solid #e2e1dc;">
                             <td style="font-size: 14px">Contact</td>
                             <td style="font-size: 14px">{{ ship[0].get_email() }}</td>
-                            <td style="font-size: 14px"><a href="/checkout">Change</a></td>
                         </tr>
                         <tr style="margin-top: 0.8571428571em;padding-top: 0.8571428571em;border-top: 1px solid #e2e1dc;">
                             <td style="font-size: 14px">Ship to</td>
                             <td style="font-size: 14px">{{ ship[0].get_address() }}</td>
-                            <td style="font-size: 14px"><a href="/checkout">Change</a></td>
                         </tr>
                     </tbody>
                 </table>
@@ -84,23 +82,6 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="card">
-                                <div class="card-header" id="headingTwo">
-                                    <h5 class="mb-0">
-                                        <button class="btn collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                            Others
-                                        </button>
-                                      </h5>
-                                </div>
-                                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-                                    <div class="card-body">
-                                        <div class="blank-slate">
-                                            <p class="shown-if-js">After clicking “Complete order”, you will be redirected to PayPal to complete your purchase securely.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
 
                         <div class="step__footer">
@@ -126,7 +107,7 @@
                     {% if (products | length) > 0 %}
                         <div class="d-flex justify-content-between align-items-center p-1">
                             <span>{{ products | length }} x</span>
-                            <img class="product-thumbnail__image" src="../../static/images/1-urth-arkose-20l-backpack-grey_1000x@2x.png" width="64" height="64">
+                            <img class="product-thumbnail__image" src="../../static/images/product_pics/{{ products[0].get_picture() }}" width="64" height="64">
                             <div class="product__description">
                                 <span class="product__description__name">{{ products[0].get_name() }}</span>
                             </div>
@@ -138,7 +119,6 @@
 
                 <div class="discount d-flex align-items-center">
                     {{  render_field(form.discount, class="field__input len")  }}
-                    <button type="button" class="btn">Apply</button>
                 </div>
 
                 <div class="subtotal d-flex justify-content-between align-items-center">

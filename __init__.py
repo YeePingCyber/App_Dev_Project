@@ -269,6 +269,7 @@ def cart():
         listofDict.append(i)
 
     if "customer_session" in session:
+        temp = {}
         customer = session["customer_session"]
         db = shelve.open("database/user.db", "w")
         users_dict = db["Users"]
@@ -281,7 +282,7 @@ def cart():
             j = list()
             cartList.append(j)
 
-        db = shelve.open("database/addtocart", "r")
+        db = shelve.open("database/addtocart", "c")
         try:
             if "Add_to_cart" in db:
                 temp = db["Add_to_cart"]
@@ -305,6 +306,8 @@ def cart():
                 db["Add_to_cart"] = cart_dict
         except:
             print("Error in retrieving Inventory from addtocart")
+
+        print(cart_dict)
 
         for i, j in zip(cart_dict, products_dict):
             for y in cart_dict[i]:
@@ -334,7 +337,7 @@ def cart():
             j = list()
             cartListnosession.append(j)
 
-        db = shelve.open("database/addtocartnosession", "r")
+        db = shelve.open("database/addtocartnosession", "c")
         try:
             if "Add_to_cartnosession" in db:
                 temp = db["Add_to_cartnosession"]
@@ -853,6 +856,8 @@ def checkout():
 
 @app.route("/checkout/payment", methods=['GET', 'POST'])
 def payment():
+    global discount
+    discount_code_dict = {0: "15$OFF", 1: "70$OFF", 2: "50$OFF", 3: "30$OFF", 4: "10$OFF", 5: "20$OFF"}
     try:
         db = shelve.open("database/trees", "r")
         trees = db["Trees"]
@@ -863,6 +868,8 @@ def payment():
     db = shelve.open("database/inventory.db", 'r')
     products_dict = db["Products"]
     db.close()
+
+    print(discount_code_dict)
 
     listofDict = []
     listofKeys = []
@@ -933,6 +940,10 @@ def payment():
         payment_dict = {}
         create_payment_form = CreatePaymentForm(request.form)
         if request.method == 'POST' and create_payment_form.validate():
+            for i in range(len(discount_code_dict)):
+                if create_payment_form.discount.data == str(discount_code_dict[i]):
+                    discount = int(discount_code_dict[i][:2])
+
             db = shelve.open("database/payment", "c")
             try:
                 if "payment" in db:
@@ -1008,6 +1019,10 @@ def payment():
         payment_dict = {}
         create_payment_form = CreatePaymentForm(request.form)
         if request.method == 'POST' and create_payment_form.validate():
+            for i in range(len(discount_code_dict)):
+                if create_payment_form.discount.data == str(discount_code_dict[i]):
+                    discount = int(discount_code_dict[i][:2])
+
             db = shelve.open("database/payment", "c")
             try:
                 if "payment" in db:
@@ -1031,6 +1046,7 @@ def payment():
 
 @app.route("/checkout/paymentdone")
 def paymentdone():
+    print(discount)
     try:
         db = shelve.open("database/trees", "r")
         trees = db["Trees"]
@@ -1146,7 +1162,7 @@ def paymentdone():
         db1["Users"] = users_dict
         db1.close()
 
-        return render_template("paymentdone.html", subtotal=subtotal, grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict, sales=sales_dict, cartList=cartList, trees=trees)
+        return render_template("paymentdone.html", subtotal=subtotal, grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict, sales=sales_dict, cartList=cartList, trees=trees, discount=discount)
 
     else:
         cart_dictnosession = dict(zip(listofKeys, listofDict))
@@ -1233,7 +1249,7 @@ def paymentdone():
         db["sales"] = sales_dict
         db.close()
 
-        return render_template("paymentdone.html", subtotal=subtotal, grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict, sales=sales_dict, cartList=cartListnosession, trees=trees)
+        return render_template("paymentdone.html", subtotal=subtotal, grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict, sales=sales_dict, cartList=cartListnosession, trees=trees, discount=discount)
 
 
 @app.route("/checkout/paymentdone/clear", methods=['POST'])
@@ -1472,6 +1488,7 @@ def bagbase():
                                   int(addtocartform.price.data), int(addtocartform.quantity.data),
                                   addtocartform.category.data, int(addtocartform.discount.data),
                                   int(addtocartform.top.data))
+            addtocart.set_picture(addtocartform.pic.data)
 
             for x, j in zip(productList, range(1, len(productList)+1)):
                 if addtocart.get_name() == x.get_name():
@@ -1840,13 +1857,32 @@ def play_game():
             user_details = users_details_dict.get(session["customer_session"])
             user_credit_points = user_details.get_points()
 
-        db = shelve.open("database/trees.db", "c")
-        trees = db["Trees"]
+        try:
+            db = shelve.open("database/trees", "r")
+            trees = db["Trees"]
+        except:
+            trees = 0
 
         return render_template("game.html", points_list=points_list, points=leaderboard_points,
                                credit_points=user_credit_points, trees=trees)
     else:
         return redirect(url_for("log_in"))
+
+
+@app.route("/game/fromCheckout")
+def game_from_checkout():
+    if 'gameFromCheckout' not in session:
+        session['gameFromCheckout'] = True
+
+    return redirect(url_for("play_game"))
+
+
+@app.route("/game/backFromCheckout")
+def game_back_from_checkout():
+    if 'gameFromCheckout' in session:
+        print("hello")
+        session.pop('gameFromCheckout')
+        return redirect(url_for("checkout"))
 
 
 @app.route("/game/<int:key>", methods=["POST"])
@@ -1990,6 +2026,13 @@ def leaderboard():
             except:
                 print("Error in retrieving game.db.")
 
+            print(game_user_dict)
+
+            # game_user_dict.pop(3399)
+            # game_user_dict.pop(9067)
+            # db["Leaderboard"] = game_user_dict
+            # print(db["Leaderboard"])
+
             def sort_by_points(player):
                 return player.get_total_points()
 
@@ -2017,10 +2060,14 @@ def leaderboard():
                 sorted_list = []
                 username_list = []
 
-        db = shelve.open("database/trees.db", "c")
-        trees = db["Trees"]
+        try:
+            db = shelve.open("database/trees", "r")
+            trees = db["Trees"]
+        except:
+            trees = 0
 
-        return render_template("leaderboard.html", sorted_list=sorted_list, username_list=username_list, trees=trees)
+        # , sorted_list=sorted_list, username_list=username_list, trees=trees
+        return render_template("leaderboard.html", sorted_list=sorted_list, username_list=username_list, trees=trees, session_user=session_user)
     else:
         return redirect(url_for("log_in"))
 
@@ -2060,7 +2107,7 @@ def admin():
             for y in salesList[i].get_cart()[j]:
                 customer_total += salesList[i].get_cart()[j][y].get_price()
 
-        customer_totalList.append(customer_total)
+        customer_totalList.append(customer_total + 4)
         customer_total = 0
 
     subtotal = 0
@@ -2235,8 +2282,9 @@ def admin_orders():
 
     keys_list = []
     values_list = []
+
     with shelve.open('database/sales', 'r') as db:
-        # print(db["sales"])
+        print(db["sales"])
         try:
             if "sales" in db:
                 sales_dict = db["sales"]
@@ -2264,13 +2312,12 @@ def admin_orders():
 
                 sales_cart_values_list = list(sales_cart.values())
 
-                print(sales_cart_values_list)
+                print("before popping",sales_cart_values_list)
                 if len(sales_cart_values_list) == 1:
                     if sales_cart_values_list[0] == {}:
                         sales_cart_values_list.pop(num)
                         sales_cart_keys_list.pop(num)
                 else:
-
                     for num in range(0, len(sales_cart_values_list)-1):
                         print(num)
                         try:
@@ -2280,40 +2327,53 @@ def admin_orders():
                         except IndexError:
                             print("leo")
 
-                keys_list.append(sales_cart_keys_list)
-                values_list.append(sales_cart_values_list)
+                try:
+                    if session["adminOrders_sorting"] == "pending":
+                        print("hello")
+                        if sales_dict[sales].get_order_status() == "pending":
+                            print("sort pending")
+                            keys_list.append(sales)
+                            values_list.append(sales_cart_values_list)
+                    elif session["adminOrders_sorting"] == "":
+                        keys_list.append(sales)
+                        values_list.append(sales_cart_values_list)
+                except KeyError:
+                    keys_list.append(sales)
+                    values_list.append(sales_cart_values_list)
 
                 # print(sales_cart_keys_list)
-                print(sales_cart_values_list)
+                print("after popping",sales_cart_values_list)
                 # print(values_list)
+
         if len(values_list) == 1:
             if values_list[0][-1] == {}:
                 values_list[0].pop(-1)
-                keys_list[0].pop(-1)
+                # keys_list[0].pop(-1)
         else:
             for num1 in range(0, len(values_list)-1):
 
                 if values_list[num1][-1] == {}:
-
                     values_list[num1].pop(-1)
-                    keys_list[num1].pop(-1)
+                    # keys_list[num1].pop(-1)
 
+                elif values_list[num1][0] == {}:
+                    values_list[num1].pop(0)
+                    # keys_list[num1].pop(0)
 
         print(values_list)
+        print(len(keys_list)//2)
+        if len(keys_list)%2 == 1:
+            keys_list.append("")
 
+        print(len(keys_list) // 2)
     # ,sales_dict=sales_dict, sales_dict_keys=sales_dict_keys,
     #                            sales_cart_keys_list=sales_cart_keys_list, values_list=values_list
-    return render_template("adminOrders.html", sales_dict=sales_dict, sales_dict_keys=sales_dict_keys, values_list=values_list)
+    return render_template("adminOrders.html", sales_dict=sales_dict, sales_dict_keys=sales_dict_keys, values_list=values_list, keys_list=keys_list)
 
 
-@app.route("/adminOrders/pending")
-def pending_order():
-    return render_template("adminOrders.html")
-
-
-@app.route("/adminOrders/accepted")
-def accept_order():
-    with shelve.open('database/sales', 'r') as db:
+@app.route("/accept_order/<key>")
+def accept_order(key):
+    with shelve.open('database/sales', 'w') as db:
         print(db["sales"])
         try:
             if "sales" in db:
@@ -2321,8 +2381,23 @@ def accept_order():
         except:
             print("Error in retrieving Sales from sales.db")
 
+        sales_dict[key].set_order_status("accepted")
 
-    return render_template("adminOrders.html")
+        db["sales"] = sales_dict
+
+    return redirect(url_for("admin_orders"))
+
+
+@app.route("/adminOrders/all")
+def all_order():
+    session["adminOrders_sorting"] = ""
+    return redirect(url_for("admin_orders"))
+
+
+@app.route("/adminOrders/pending")
+def pending_order():
+    session["adminOrders_sorting"] = "pending"
+    return redirect(url_for("admin_orders"))
 
 
 @app.route("/adminCustomerManagement")

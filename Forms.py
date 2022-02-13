@@ -112,8 +112,10 @@ class CreateShipmentForm(Form):
     apartment = StringField("Apartment", render_kw={"placeholder": "Apartment (optional)"})
     postal_code = StringField("Postal Code", [validators.Length(min=6, max=6), validators.DataRequired()], render_kw={"placeholder": "Postal Code"})
     city = StringField("City", [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "City"})
-    phone = StringField("Phone", [validators.Length(min=8, max=8)], render_kw={"placeholder": "Phone (optional)"})
-    discount = StringField("Gift card or discount code", [validators.Length(min=4, max=8)], render_kw={"placeholder": "Gift card or discount code"})
+    phone = StringField("Phone", [validators.Length(min=8, max=8)], render_kw={"placeholder": "Phone Number"})
+
+
+discount_code_dict = {0: "15$OFF", 1: "70$OFF", 2: "50$OFF", 3: "30$OFF", 4: "10$OFF", 5: "20$OFF"}
 
 
 class CreatePaymentForm(Form):
@@ -121,7 +123,7 @@ class CreatePaymentForm(Form):
     name_card = StringField("", [validators.DataRequired()], render_kw={"placeholder": "Name on card"})
     expire = DateField('', [validators.DataRequired()], render_kw={"placeholder": "Expiration date (MM / YY)"})
     ccv = StringField('', [validators.Length(min=3, max=3), validators.DataRequired()], render_kw={"placeholder": "Security code"})
-    discount = StringField("Gift card or discount code", [validators.Length(min=4, max=8)], render_kw={"placeholder": "Gift card or discount code"})
+    discount = StringField("Gift card or discount code", [validators.AnyOf(values=[discount_code_dict[x] for x in discount_code_dict])], render_kw={"placeholder": "Discount code"})
 
 
 class CreateAuctionForm(Form):
