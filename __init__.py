@@ -1779,6 +1779,23 @@ def play_game():
         return redirect(url_for("log_in"))
 
 
+@app.route("/game/fromCheckout")
+def game_from_checkout():
+    if 'gameFromCheckout' not in session:
+        session['gameFromCheckout'] = True
+
+    return redirect(url_for("play_game"))
+
+
+@app.route("/game/backFromCheckout")
+def game_back_from_checkout():
+    if 'gameFromCheckout' in session:
+        print("hello")
+        session.pop('gameFromCheckout')
+        return redirect(url_for("checkout"))
+
+
+
 @app.route("/game/<int:key>", methods=["POST"])
 def save_point(key):
     points = ""
@@ -1919,6 +1936,8 @@ def leaderboard():
                 game_user_dict = db["Leaderboard"]
             except:
                 print("Error in retrieving game.db.")
+
+            print(game_user_dict)
 
             def sort_by_points(player):
                 return player.get_total_points()
@@ -2166,7 +2185,7 @@ def admin_orders():
     keys_list = []
     values_list = []
     with shelve.open('database/sales', 'r') as db:
-        # print(db["sales"])
+        print(db["sales"])
         try:
             if "sales" in db:
                 sales_dict = db["sales"]
@@ -2194,7 +2213,7 @@ def admin_orders():
 
                 sales_cart_values_list = list(sales_cart.values())
 
-                print(sales_cart_values_list)
+                print("before popping",sales_cart_values_list)
                 if len(sales_cart_values_list) == 1:
                     if sales_cart_values_list[0] == {}:
                         sales_cart_values_list.pop(num)
@@ -2214,7 +2233,7 @@ def admin_orders():
                 values_list.append(sales_cart_values_list)
 
                 # print(sales_cart_keys_list)
-                print(sales_cart_values_list)
+                print("after popping",sales_cart_values_list)
                 # print(values_list)
         if len(values_list) == 1:
             if values_list[0][-1] == {}:
@@ -2224,9 +2243,12 @@ def admin_orders():
             for num1 in range(0, len(values_list)-1):
 
                 if values_list[num1][-1] == {}:
-
                     values_list[num1].pop(-1)
                     keys_list[num1].pop(-1)
+
+                elif values_list[num1][0] == {}:
+                    values_list[num1].pop(0)
+                    keys_list[num1].pop(0)
 
 
         print(values_list)

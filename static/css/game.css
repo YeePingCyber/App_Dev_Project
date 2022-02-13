@@ -121,7 +121,7 @@
      font-weight: bold;
     }
 
-    #back_btn:hover{
+    .back_btn:hover{
         text-decoration: underline;
     }
 
