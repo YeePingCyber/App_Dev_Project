@@ -47,6 +47,9 @@ class PlayerStatus:
 
         self.__discount_code = discount_code_dict[position]
 
+    def get_discount_code(self):
+        return self.__discount_code
+
 
 # Function for a list of different amount of points
 def generate_points():

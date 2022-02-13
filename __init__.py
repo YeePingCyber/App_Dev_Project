@@ -921,7 +921,8 @@ def payment():
             for x in cartList[total]:
                 subtotal += x.get_price()
 
-        grandtotal = subtotal + 4
+        discount = 1
+        grandtotal = subtotal + 4 - discount
 
         shipping_dict = {}
         db = shelve.open("database/shipping", "r")
@@ -996,7 +997,8 @@ def payment():
             for x in cartListnosession[total]:
                 subtotal += x.get_price()
 
-        grandtotal = subtotal + 4
+        discount = 1
+        grandtotal = subtotal + 4 - discount
 
         shipping_dict = {}
         db = shelve.open("database/shipping", "r")
@@ -1800,7 +1802,6 @@ def game_back_from_checkout():
         print("hello")
         session.pop('gameFromCheckout')
         return redirect(url_for("checkout"))
-
 
 
 @app.route("/game/<int:key>", methods=["POST"])
