@@ -1552,6 +1552,10 @@ def auction():
 
 @app.route("/auctionForm", methods=['GET', 'POST'])
 def auctionForm():
+    db = shelve.open("database/trees.db", "c")
+    trees = db["Trees"]
+    db.close()
+
     create_bid_form = CreateBidForm(request.form)
     print("JUST PRINT SOMETHING")
     if request.method == 'POST' and create_bid_form.validate():
@@ -1574,7 +1578,7 @@ def auctionForm():
         db.close()
 
         return redirect(url_for("auction"))
-    return render_template('auctionForm.html', form=create_bid_form)
+    return render_template('auctionForm.html', form=create_bid_form, trees=trees)
 
 
 @app.route("/deleteBid/<id>", methods=["POST"])
@@ -2511,6 +2515,7 @@ def update_product(id):
         products_dict.get(id).set_description(update_product_form.description.data)
         if update_product_form.top.data:
             products_dict.get(id).set_top(1)
+
         db["Products"] = products_dict
         db.close()
 

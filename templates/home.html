@@ -8,7 +8,7 @@
 
 {% block bodyContent %}
     <div class="header">
-        <a href="#" class="tom-banner">
+        <div class="tom-banner">
             <div class="tom-banner-media-container">
                 <video class="tom-banner-media" autoplay loop preload width="100%">
                     <source src="../static/images/hi.mp4" type="video/mp4">
@@ -19,7 +19,7 @@
                 <h1>Tom Art</h1>
                 <p class="header-subtitle">Introducing a considered curation of limited edition fine art NFTs with real-world impact.</p>
             </div>
-        </a>
+        </div>
     </div>
 
     <div class="top-links container">
@@ -52,6 +52,7 @@
                 </header>
                 <div class="product-grid__products p-5">
                     {% for top in top4 %}
+                    {% if top4[top].get_top() == 1 %}
                         <div class="top-items__card">
                             <a class="thumbnail" href=""><img src="../../static/images/product_pics/{{ top4[top].get_picture() }}"/></a>
                             <div class="top-items__card-detail">
@@ -61,6 +62,7 @@
                                 </div>
                             </div>
                         </div>
+                    {% endif %}
                     {% endfor %}
                 </div>
             </div>
