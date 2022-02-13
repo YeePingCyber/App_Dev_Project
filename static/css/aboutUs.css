@@ -1,0 +1,63 @@
+/* NYP Y1S2 2021 - 2022 APP DEVELOPMENT PROJECT
+
+   Structure of aboutUs.css
+   |
+   ├─ 1. first para aka blurb
+   ├─ 2. product info (right div)
+   ├─ 3. creator-showcase
+
+    /* --------------------------------------------------------------------------
+        1. first para aka blurb
+    -------------------------------------------------------------------------- */
+
+    .whitespace {
+        height: 20vh;
+    }
+
+    .blurb {
+        width: 100%;
+        height: 80%;
+    }
+
+    .blurb-img img {
+        width: 70vh;
+        height: 40vh;
+    }
+
+    .blurb-text {
+        width: 84%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* --------------------------------------------------------------------------
+        2. second para aka mission
+    -------------------------------------------------------------------------- */
+
+     .mission {
+        width: 100%;
+        height: 80%;
+    }
+
+    .mission-img img {
+        width: 70vh;
+        height: 40vh;
+    }
+
+    .mission-text {
+        width: 84%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .mission-table {
+        margin-top: 1.7em;
+    }
+
+    #table-empty {
+        padding-top: 1.5em;
+    }
+
+    .mission-table i {
+        font-size: 30px;
+    }

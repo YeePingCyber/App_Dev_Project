@@ -1,30 +1,72 @@
 {% extends "base.html" %}
-{% block title %}Tom Patterson - Register{% endblock %}
+{% block title %}Tom Patterson - About Us{% endblock %}
 
 {% block css %}
     <link rel="stylesheet" type="text/css" href="../static/css/base.css">
-    <link rel="stylesheet" type="text/css" href="../static/css/login.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/aboutUs.css">
     <script src="https://kit.fontawesome.com/50ba020d7f.js" crossorigin="anonymous"></script>
 {% endblock %}
 
 {% block bodyContent %}
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-6">
+    <div class="whitespace"></div>
+    <div class="blurb">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-6">
                     <div class="blurb-text">
-                    <h5><i class="fa-solid fa-tree"></i>[] Trees Planted</h5>
-                    <p>Tom Patterson was born in 2021 on a half-year semester road trip from SengKang to Ang Mo Kio. Founders Sze Yan and Stefanie spent as much time in nature as possible and met the rest of us founders, Yee Ping, Kabilash and Dylan, along the journey.</p>
-                    <p>Immersing ourselves in nature reminded us of the impact we have on the environment and our responsibility to minimise our carbon footprint.</p>
+                    <h5><i class="fa-solid fa-tree"></i>  {{ "%.0f" | format(trees) }} Trees Planted</h5>
+                    <p>Tom Patterson was born in 2021 on a half-year semester road trip from SengKang to Ang Mo Kio. Founders Sze Yan and Stefanie spent as much time in nature as possible and met the rest of us founders, Yee Ping and Dylan, along the journey.</p><br>
+                    <p>Immersing ourselves in nature reminded us of the impact we have on the environment and our responsibility to minimise our carbon footprint.</p><br>
                     <p>We realised business was the most impactful way to revolutionise the future of fashion. And so every time you support Tom Patterson, you are funding GRCs to plant 3 trees, offsetting your impact, and nourishing ecosystems.</p>
                     </div>
-            </div>
-            <div class="col-6">
-                <div class="blurb-img">
-                    <img src="../static/images/banner.jpg">
+                </div>
+                <div class="col-6">
+                    <div class="blurb-img text-center">
+                        <img src="../static/images/banner.jpg">
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <div class="whitespace"></div>
+
+    <div class="mission">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-6">
+                    <div class="mission-img text-center">
+                        <img src="../static/images/totebag.jpg">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="mission-text">
+                    <h5>OUR MISSION</h5>
+                    <table class="mission-table">
+                        <tr>
+                            <td><i class="fa-solid fa-recycle"></i></td><td><i class="fa-brands fa-pagelines"></i></td>
+                        </tr>
+                        <tr>
+                            <td><h6>Sustainable Quality</h6><p>Our products are bio-degradable and environmentally clean.</p></td>
+                            <td><h6>Planting Trees</h6><p>Every purchase from Tom Patterson plants 2 trees</p></td>
+                        </tr>
+                        <tr><td id="table-empty"></td></tr>
+                        <tr>
+                            <td><i class="fa-solid fa-shoe-prints"></i></td>
+                            <td><i class="fa-solid fa-lightbulb"></i></td>
+                        </tr>
+                        <tr>
+                            <td><h6>Reducing Footprint</h6><p>Minimise carbon footprint by using reusable products</p></td>
+                            <td><h6>Creative Design</h6><p>Provide platform for freelance designers to showcase</p></td>
+                        </tr>
+                    </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="whitespace"></div>
+    <h1 class="text-center">SAVE THE EARTH</h1>
+    <div class="whitespace"></div>
 {% endblock %}
 

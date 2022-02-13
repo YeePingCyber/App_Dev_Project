@@ -10,24 +10,66 @@
 {% from "includes/formHelper.html" import render_field %}
 <br>
 <br>
-<div id="container">
-    <form method="post">
-        <h1>Create Bid</h1>
-        <br><br>
-        <div class="form-container" id="bidAmount">
-            <div>
-              {{ render_field(form.bid_amount, class="form-container") }}
+ <div class="card">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="align-items-center py-5">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-lg-10 col-xl-7 mx-auto">
+                      <h3 class="display-4">See Bids</h3>
+                        <table class="offer-table text-center">
+                            <tr><th>Price</th><th>Expiration</th><th>From</th>
+                            {% for user in bid_list %}
+                            <tr>
+                                <td class="product-text">${{ user.get_bidAmount() }}</td>
+                                <td class="product-text">{{ expire_date }} days</td>
+                                <td class="product-text">{{ user.get_bidUser() }}</td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-        </div>
-        <br><br><br>
-        <div class="form-container" id="bidUser">
-            <div>
-              {{ render_field(form.bid_user, class="form-container") }}
-            </div>
-        </div>
-        <br><br><br>
-        <button type="submit" value="Submit" class="submit-login">Submit</button>
-    </form>
 
-    </div>
+            <div class="col-md-6">
+              <div class="align-items-center py-5">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-lg-10 col-xl-7 mx-auto">
+                      <h3 class="display-4">Create Bid</h3>
+                        <div id="bid-form">
+                            <div id="container">
+                                <form method="post">
+                                    <br><br>
+                                    <div class="form-container" id="bidAmount">
+                                        <div>
+                                          {{ render_field(form.bid_amount, class="form-container") }}
+                                        </div>
+                                    </div>
+                                    <br><br><br>
+                                    <div class="form-container" id="bidUser">
+                                        <div>
+                                          {{ render_field(form.bid_user, class="form-container") }}
+                                        </div>
+                                    </div>
+                                    <br><br><br>
+                                    <button type="submit" value="Submit" class="submit-btn">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+<div class="whitespace"></div>
 {% endblock %}

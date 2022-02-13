@@ -18,6 +18,11 @@
         text-align: center;
     }
 
+
+    .whitespace {
+            height: 20vh;
+        }
+
     /* --------------------------------------------------------------------------
         2. product img (left div)
     -------------------------------------------------------------------------- */
@@ -83,10 +88,14 @@
         color: #545251;
     }
 
-    #minAmt {
+    .bidAmt {
         font-size: 1.4em;
         font-weight: bold;
         padding: 0;
+        margin: 0;
+    }
+
+    .bid-table p {
         margin: 0;
     }
 

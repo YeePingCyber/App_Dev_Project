@@ -36,12 +36,11 @@
                                     <td id="bidLine"><p class="product-text">Sale ends at {{ ongoing.get_end_date() }}</p></td>
                                 </tr>
                                 <tr>
-                                    <td rowspan="3" class="product-text">Minimum Bid:<br>
-                                        <p id="minAmt">{{ ongoing.get_minimum_amount() }}</p>
-                                        <a class="btn btn-primary" href="/auctionForm" role="button">
-                                            Make a bid
-                                        </a>
-                                        <br>
+                                    <td class="product-text">Minimum Bid:
+                                        <p class="bidAmt">{{ ongoing.get_minimum_amount() }}</p><br>
+                                    <p>Highest Bid:</p>
+                                    <p class="bidAmt">{{ highest_bid }}</p>
+                                    <a class="btn btn-primary" href="/auctionForm" role="button">Make a bid</a>
                                     </td>
                                 </tr>
                             </table>
@@ -88,6 +87,6 @@
         </div>
     </div>
 
-
+<div class="whitespace"></div>
 
 {% endblock %}

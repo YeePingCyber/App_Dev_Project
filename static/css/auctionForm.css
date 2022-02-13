@@ -4,18 +4,16 @@
 
 
 #container {
-    margin-left: 10%;
-    margin-right: 10%;
-    margin-bottom: 10%;
     text-align: center;
+    width: 100%;
 }
 
 .form-container {
     background-color: transparent;
     border: none;
-    width: 50%;
+    width: 100%;
     border-radius: 1px;
-    margin: auto;
+    text-align: center;
 }
 
 input[type=number] {
@@ -26,40 +24,39 @@ input[type=text] {
     border-bottom: 2px solid #000000;
 }
 
-
-.form-login {
-    text-align: center;
-}
-
-.forget-pw{
-text-align: right;
-font-size: 70%;
-font-weight: bold;
-}
-
-.submit-login {
+.submit-btn {
     padding: 1% 2% 1% 2%;
     background-color: black;
     border: none;
     color: white;
     border-radius: 8px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.register-link{
-font-size:60%;
+
+.offer-table {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.register-link-click{
-color:blue;
+.whitespace {
+        height: 20vh;
+    }
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  border-radius: 5px;
+  width: 75%;
+  height: 90%;
+  padding: 10px;
+  text-align: center;
+  margin: auto;
 }
 
-.profile-pic{
-border-radius: 50%;
-height: 15%;
-width: 15%;
-}
-
-.forgot-link-click{
-color:black;
-font-weight: bold;
+.login,
+.image {
+  min-height: 90vh;
 }
