@@ -23,7 +23,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="product-img">
-                        <img src="../static/images/1-urth-arkose-20l-backpack-grey_1000x@2x.png" alt="Norite 24L Modular Bag">
+                        <img src="../../static/images/product_pics/{{ products[x].get_picture() }}" alt="Norite 24L Modular Bag">
                         <h4 class="img-title">{{ products[x].get_name() }}</h4>
                         <p class="img-subtitle">{{ products[x].get_description() }}</p>
                     </div>
@@ -44,6 +44,7 @@
                                     {{ render_field(form.category, value=products[x].get_category()) }}
                                     {{ render_field(form.discount, value=products[x].get_discount()) }}
                                     {{ render_field(form.top, value=products[x].get_top()) }}
+                                    {{ render_field(form.pic, value=products[x].get_picture()) }}
                                     <input type=submit value="ADD TO CART" id="cart-btn">
                                 </form>
                         <p class="returns text-center">Free Shipping and Returns</p>

@@ -305,7 +305,7 @@ def cart():
                 for x in cartList[total]:
                     subtotal += x.get_price()
 
-            return render_template("cart.html", cartList=cartList, subtotal=subtotal, trees=trees)
+            return render_template("cart.html", cartList=cartList, subtotal=subtotal, trees=tree)
         else:
             return render_template("cart_empty.html", trees=trees)
 
@@ -361,11 +361,7 @@ def cart():
                 for x in cartListnosession[total]:
                     subtotal += x.get_price()
 
-            increment = []
-            for i in range(len(cart_dictnosession)):
-                increment.append(i)
-
-            return render_template("cart.html", cartList=cartListnosession, subtotal=subtotal, trees=trees, increment=increment)
+            return render_template("cart.html", cartList=cartListnosession, subtotal=subtotal, trees=trees)
 
         else:
             return render_template("cart_empty.html", trees=trees)
@@ -1488,6 +1484,7 @@ def bagbase():
                                   int(addtocartform.price.data), int(addtocartform.quantity.data),
                                   addtocartform.category.data, int(addtocartform.discount.data),
                                   int(addtocartform.top.data))
+            addtocart.set_picture(addtocartform.pic.data)
 
             for x, j in zip(productList, range(1, len(productList) + 1)):
                 if addtocart.get_name() == x.get_name():

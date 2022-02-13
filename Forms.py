@@ -99,6 +99,7 @@ class CreateAddCartForm(Form):
     discount = HiddenField('')
     description = HiddenField('', [validators.Length(min=1, max=300)])
     top = HiddenField('')
+    pic = HiddenField('')
 
 
 class CreateShipmentForm(Form):
