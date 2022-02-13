@@ -2212,7 +2212,7 @@ def admin_orders():
 
     keys_list = []
     values_list = []
-    print(session["adminOrders_sorting"])
+
     with shelve.open('database/sales', 'r') as db:
         print(db["sales"])
         try:
