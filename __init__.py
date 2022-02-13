@@ -1931,6 +1931,8 @@ def admin():
         print("Error in retrieving Sales from sales.db")
     db.close()
 
+    sales_dict
+
     salesList = []
     for x in sales_dict:
         salesList.append(sales_dict[x])
