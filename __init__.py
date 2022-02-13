@@ -854,6 +854,10 @@ def checkout():
         return render_template("checkout.html", form=create_shipment_form, cartList=cartListnosession, subtotal=subtotal,grandtotal=grandtotal, trees=trees)
 
 
+discount_code_dict = {0: "15$OFF", 1: "70$OFF", 2: "50$OFF", 3: "30$OFF", 4: "10$OFF", 5: "20$OFF"}
+discount = 0
+
+
 @app.route("/checkout/payment", methods=['GET', 'POST'])
 def payment():
     try:
@@ -867,7 +871,6 @@ def payment():
     products_dict = db["Products"]
     db.close()
 
-    discount_code_dict = {0: "15%OFF", 1: "70%OFF", 2: "50%OFF", 3: "30%OFF", 4: "10%OFF", 5: "20%OFF"}
     print(discount_code_dict)
 
     listofDict = []
@@ -939,6 +942,10 @@ def payment():
         payment_dict = {}
         create_payment_form = CreatePaymentForm(request.form)
         if request.method == 'POST' and create_payment_form.validate():
+            for i in range(len(discount_code_dict)):
+                if create_payment_form.discount.data == str(discount_code_dict[i]):
+                    discount = int(discount_code_dict[i][:2])
+
             db = shelve.open("database/payment", "c")
             try:
                 if "payment" in db:
@@ -1016,7 +1023,6 @@ def payment():
         if request.method == 'POST' and create_payment_form.validate():
             for i in range(len(discount_code_dict)):
                 if create_payment_form.discount.data == str(discount_code_dict[i]):
-                    global discount
                     discount = int(discount_code_dict[i][:2])
 
             db = shelve.open("database/payment", "c")
@@ -2033,7 +2039,7 @@ def admin():
             for y in salesList[i].get_cart()[j]:
                 customer_total += salesList[i].get_cart()[j][y].get_price()
 
-        customer_totalList.append(customer_total)
+        customer_totalList.append(customer_total + 4)
         customer_total = 0
 
     subtotal = 0

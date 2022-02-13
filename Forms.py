@@ -115,7 +115,7 @@ class CreateShipmentForm(Form):
     phone = StringField("Phone", [validators.Length(min=8, max=8)], render_kw={"placeholder": "Phone Number"})
 
 
-discount_code_dict = {0: "15%OFF", 1: "70%OFF", 2: "50%OFF", 3: "30%OFF",4: "10%OFF", 5: "20%OFF"}
+discount_code_dict = {0: "15$OFF", 1: "70$OFF", 2: "50$OFF", 3: "30$OFF", 4: "10$OFF", 5: "20$OFF"}
 
 
 class CreatePaymentForm(Form):
