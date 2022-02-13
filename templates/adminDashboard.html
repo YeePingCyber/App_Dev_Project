@@ -200,7 +200,7 @@
 
                                                 {% if sales.get_order_status() == "pending" %}
                                                     <td class="pending"> {{ sales.get_order_status() }} </td>
-                                                {% elif sales.get_order_status() == "accepted" %}
+                                                {% else %}
                                                     <td class="accepted"> {{ sales.get_order_status() }} </td>
                                                 {% endif %}
 
