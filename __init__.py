@@ -299,7 +299,7 @@ def cart():
             for y in cart_dict[i]:
                 cartList[int(i) - 1].append(cart_dict[i][y])
 
-        if len(cart_dict["1"]) or len(cart_dict["2"]) or len(cart_dict["3"]) or len(cart_dict["4"]) > 0:
+        if any(len(cart_dict[y]) > 0 for y in cart_dict):
             subtotal = 0
             for total in range(0, len(cartList)):
                 for x in cartList[total]:
@@ -355,7 +355,7 @@ def cart():
 
         print(cart_dictnosession)
 
-        if len(cart_dictnosession["1"]) or len(cart_dictnosession["2"]) or len(cart_dictnosession["3"]) or len(cart_dictnosession["4"]) > 0:
+        if any(len(cart_dictnosession[y]) > 0 for y in cart_dictnosession):
             subtotal = 0
             for total in range(0, len(cartListnosession)):
                 for x in cartListnosession[total]:
@@ -633,7 +633,7 @@ def delete_item(id):
         db['Add_to_cart'] = cart_dict
         db.close()
 
-        if len(cart_dict["1"]) or len(cart_dict["2"]) or len(cart_dict["3"]) or len(cart_dict["4"]) > 0:
+        if any(len(cart_dict[y]) > 0 for y in cart_dict):
             return redirect(url_for("cart"))
 
         else:
@@ -670,7 +670,7 @@ def delete_item(id):
         db['Add_to_cartnosession'] = cart_dictnosession
         db.close()
 
-        if len(cart_dictnosession["1"]) or len(cart_dictnosession["2"]) or len(cart_dictnosession["3"]) or len(cart_dictnosession["4"]) > 0:
+        if any(len(cart_dictnosession[y]) > 0 for y in cart_dictnosession):
             return redirect(url_for("cart"))
 
         else:
