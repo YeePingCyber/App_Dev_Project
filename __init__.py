@@ -2188,17 +2188,26 @@ def admin_auction():
         for keys, values in auction_dict.items():
             start = date.strftime(values.get_start_date(), '%Y-%m-%d')
             end = date.strftime(values.get_end_date(), '%Y-%m-%d')
-
-            if (start == today or today > start or start <= today) and end <= today:
-                if today > end:
-                    print("empty")
-                    ongoing = ""
-                else:
-                    print("ongoing")
-                    ongoing = values
+            #   now, past
+            print("today:", today)
+            print("start:",start)
+            print("end:",end, "\n\n")
+            if start == today or today > start or start <= today and end <= today:
+                ongoing = values
             elif start > today and end > today:
                 print("upcoming")
                 upcoming.append(values)
+
+    # with shelve.open('database/auction.db', 'w') as db:
+    #     h = db["Auction"]
+    #
+    #     h.pop('AUcf8049435ff5782c')
+    #     h.pop('AU9e20e24357e96f3d')
+    #     h.pop('AU0bb4d64603e27db5')
+    #
+    #     db["Auction"] = h
+    #     print(h)
+
     return render_template("adminAuction.html", ongoing=ongoing, upcoming=upcoming)
 
 
