@@ -97,11 +97,13 @@
     }
 
     .user_order_username{
-        margin: 2% 0% 2% 5%;
+        width: 50%;
+        padding: 2% 0% 2% 5%;
     }
 
     .user_order_orderId{
-        margin: 2% 5% 2% 53%;
+        width: 50%;
+        padding: 2% 5% 2% 10%;
     }
 
     .user_order_details{
@@ -143,7 +145,7 @@
         height: 3em;
     }
 
-    .arrange_btn{
+    .accept_btn{
         background-color:transparent;
         border: none;
         width: 100%;
@@ -184,5 +186,13 @@
     .cross_svg{
         height:1.5em;
         width:1.5em;
+    }
+
+    #empty_order_txt{
+        text-align: center;
+        font-weight: bold;
+        font-size: 1.5em;
+        height: 40vh;
+        padding-top: 9%;
     }
 

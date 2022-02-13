@@ -62,7 +62,7 @@ class CreateProductForm(Form):
     category = StringField('Category: ', [validators.Length(min=1, max=150), validators.DataRequired()],  render_kw={"placeholder": "Category"})
     discount = FloatField('Discount: ', [validators.DataRequired(), NumberRange(min=1, max=99)],  render_kw={"placeholder": "Discount"})
     description = TextAreaField('Description: ', [validators.Length(min=1, max=300), validators.DataRequired()],  render_kw={"placeholder": "Description"})
-    top = BooleanField('Top product')
+    top = StringField('Top product', [validators.AnyOf(values=["YES", "Y", "NO", "N", "yes", "y", "no", "n"])], render_kw={"placeholder": "YES or NO"})
     product_pic = FileField('Upload product picture:')
 
 
@@ -99,6 +99,7 @@ class CreateAddCartForm(Form):
     discount = HiddenField('')
     description = HiddenField('', [validators.Length(min=1, max=300)])
     top = HiddenField('')
+    pic = HiddenField('')
 
 
 class CreateShipmentForm(Form):

@@ -39,8 +39,11 @@ def home():
     products_dict = db["Products"]
     db.close()
 
-    db = shelve.open("database/trees.db", "c")
-    trees = db["Trees"]
+    try:
+        db = shelve.open("database/trees", "r")
+        trees = db["Trees"]
+    except:
+        trees = 0
 
     return render_template("home.html", top4=products_dict, trees=trees)
 
@@ -85,9 +88,12 @@ def log_in():
                     error = "Invalid email or password"
             db.close()
 
-        db = shelve.open("database/trees.db", "c")
-        trees = db["Trees"]
-        db.close()
+        try:
+            db = shelve.open("database/trees", "r")
+            trees = db["Trees"]
+            db.close()
+        except:
+            trees = 0
 
         return render_template("loginpage.html", form=create_log_in_form, error=error, trees=trees)
 
@@ -170,9 +176,12 @@ def customer_logged_in():
             update_customer_form.email.data = customer_user.get_email()
             update_customer_form.birthdate.data = customer_user.get_birth_date()
 
-        db = shelve.open("database/trees.db", "c")
-        trees = db["Trees"]
-        db.close()
+        try:
+            db = shelve.open("database/trees", "r")
+            trees = db["Trees"]
+            db.close()
+        except:
+            trees = 0
 
         return render_template("customer_logged_in.html", form=update_customer_form, error=error, code=code,
                                pw_code=pw_code, trees=trees, picture_status=picture_status, customer=customer_user, path=path)
@@ -185,9 +194,13 @@ def create_customer():
     errortwo = ""
     code = 0
     create_customer_form = CreateCustomerForm(CombinedMultiDict((request.files, request.form)))
-    db = shelve.open("database/trees.db", "c")
-    trees = db["Trees"]
-    db.close()
+    try:
+        db = shelve.open("database/trees", "r")
+        trees = db["Trees"]
+        db.close()
+    except:
+        trees = 0
+
 
     if request.method == 'POST' and create_customer_form.validate():
         user_dict = {}
@@ -237,11 +250,14 @@ def create_customer():
 
 @app.route("/cart")
 def cart():
-    db = shelve.open("database/trees.db", "c")
-    trees = db["Trees"]
-    db.close()
+    try:
+        db = shelve.open("database/trees", "r")
+        trees = db["Trees"]
+        db.close()
+    except:
+        trees = 0
 
-    db = shelve.open("database/inventory.db", 'w')
+    db = shelve.open("database/inventory.db", 'r')
     products_dict = db["Products"]
     db.close()
 
@@ -265,7 +281,7 @@ def cart():
             j = list()
             cartList.append(j)
 
-        db = shelve.open("database/addtocart", "c")
+        db = shelve.open("database/addtocart", "r")
         try:
             if "Add_to_cart" in db:
                 temp = db["Add_to_cart"]
@@ -288,7 +304,7 @@ def cart():
             else:
                 db["Add_to_cart"] = cart_dict
         except:
-            print("Error in retrieving Inventory from addtocart.db")
+            print("Error in retrieving Inventory from addtocart")
 
         for i, j in zip(cart_dict, products_dict):
             for y in cart_dict[i]:
@@ -299,7 +315,7 @@ def cart():
             for y in cart_dict[i]:
                 cartList[int(i) - 1].append(cart_dict[i][y])
 
-        if len(cart_dict["1"]) or len(cart_dict["2"]) or len(cart_dict["3"]) or len(cart_dict["4"]) > 0:
+        if any(len(cart_dict[y]) > 0 for y in cart_dict):
             subtotal = 0
             for total in range(0, len(cartList)):
                 for x in cartList[total]:
@@ -318,7 +334,7 @@ def cart():
             j = list()
             cartListnosession.append(j)
 
-        db = shelve.open("database/addtocartnosession", "c")
+        db = shelve.open("database/addtocartnosession", "r")
         try:
             if "Add_to_cartnosession" in db:
                 temp = db["Add_to_cartnosession"]
@@ -342,7 +358,7 @@ def cart():
             else:
                 db["Add_to_cartnosession"] = cart_dictnosession
         except:
-            print("Error in retrieving Inventory from addtocart.db")
+            print("Error in retrieving Inventory from addtocart")
         db.close()
 
         for i, j in zip(cart_dictnosession, products_dict):
@@ -355,17 +371,13 @@ def cart():
 
         print(cart_dictnosession)
 
-        if len(cart_dictnosession["1"]) or len(cart_dictnosession["2"]) or len(cart_dictnosession["3"]) or len(cart_dictnosession["4"]) > 0:
+        if any(len(cart_dictnosession[y]) > 0 for y in cart_dictnosession):
             subtotal = 0
             for total in range(0, len(cartListnosession)):
                 for x in cartListnosession[total]:
                     subtotal += x.get_price()
 
-            increment = []
-            for i in range(len(cart_dictnosession)):
-                increment.append(i)
-
-            return render_template("cart.html", cartList=cartListnosession, subtotal=subtotal, trees=trees, increment=increment)
+            return render_template("cart.html", cartList=cartListnosession, subtotal=subtotal, trees=trees)
 
         else:
             return render_template("cart_empty.html", trees=trees)
@@ -373,7 +385,7 @@ def cart():
 
 @app.route('/updateAddCart/<int:id>', methods=['POST'])
 def updateAddCart(id):
-    db = shelve.open("database/inventory.db", 'w')
+    db = shelve.open("database/inventory.db", 'r')
     products_dict = db["Products"]
     db.close()
 
@@ -397,7 +409,7 @@ def updateAddCart(id):
             j = list()
             cartList.append(j)
 
-        db = shelve.open("database/addtocart", "c")
+        db = shelve.open("database/addtocart", "w")
         try:
             if "Add_to_cart" in db:
                 temp = db["Add_to_cart"]
@@ -420,7 +432,7 @@ def updateAddCart(id):
             else:
                 db["Add_to_cart"] = cart_dict
         except:
-            print("Error in retrieving Inventory from addtocart.db")
+            print("Error in retrieving Inventory from addtocart")
 
         for i in cart_dict:
             for y in cart_dict[i]:
@@ -448,7 +460,7 @@ def updateAddCart(id):
             j = list()
             cartListnosession.append(j)
 
-        db = shelve.open("database/addtocartnosession", "c")
+        db = shelve.open("database/addtocartnosession", "w")
 
         try:
             if "Add_to_cartnosession" in db:
@@ -471,7 +483,7 @@ def updateAddCart(id):
             else:
                 db["Add_to_cartnosession"] = cart_dictnosession
         except:
-            print("Error in retrieving Inventory from addtocart.db")
+            print("Error in retrieving Inventory from addtocart")
 
         for i in cart_dictnosession:
             for y in cart_dictnosession[i]:
@@ -493,7 +505,7 @@ def updateAddCart(id):
 
 @app.route('/updateSubCart/<int:id>', methods=['POST'])
 def updateSubCart(id):
-    db = shelve.open("database/inventory.db", 'w')
+    db = shelve.open("database/inventory.db", 'r')
     products_dict = db["Products"]
     db.close()
 
@@ -511,7 +523,7 @@ def updateSubCart(id):
         customer_user = users_dict.get(customer)
 
         cart_dict = dict(zip(listofKeys, listofDict))
-        db = shelve.open("database/addtocart", "c")
+        db = shelve.open("database/addtocart", "w")
         try:
             if "Add_to_cart" in db:
                 temp = db["Add_to_cart"]
@@ -534,7 +546,7 @@ def updateSubCart(id):
             else:
                 db["Add_to_cart"] = cart_dict
         except:
-            print("Error in retrieving Inventory from addtocart.db")
+            print("Error in retrieving Inventory from addtocart")
 
         if request.method == "POST":
             cart_dict[str(id + 1)].popitem()
@@ -546,7 +558,7 @@ def updateSubCart(id):
 
     else:
         cart_dictnosession = dict(zip(listofKeys, listofDict))
-        db = shelve.open("database/addtocartnosession", "c")
+        db = shelve.open("database/addtocartnosession", "w")
         try:
             if "Add_to_cartnosession" in db:
                 temp = db["Add_to_cartnosession"]
@@ -568,7 +580,7 @@ def updateSubCart(id):
             else:
                 db["Add_to_cartnosession"] = cart_dictnosession
         except:
-            print("Error in retrieving Inventory from addtocart.db")
+            print("Error in retrieving Inventory from addtocart")
 
         if request.method == "POST":
            cart_dictnosession[str(id + 1)].popitem()
@@ -581,11 +593,14 @@ def updateSubCart(id):
 
 @app.route('/deleteCart/<int:id>', methods=['POST'])
 def delete_item(id):
-    db = shelve.open("database/trees.db", "c")
-    trees = db["Trees"]
-    db.close()
+    try:
+        db = shelve.open("database/trees", "r")
+        trees = db["Trees"]
+        db.close()
+    except:
+        trees = 0
 
-    db = shelve.open("database/inventory.db", 'w')
+    db = shelve.open("database/inventory.db", 'r')
     products_dict = db["Products"]
     db.close()
 
@@ -603,7 +618,7 @@ def delete_item(id):
         customer_user = users_dict.get(customer)
 
         cart_dict = dict(zip(listofKeys, listofDict))
-        db = shelve.open("database/addtocart", "c")
+        db = shelve.open("database/addtocart", "w")
         try:
             if "Add_to_cart" in db:
                 temp = db["Add_to_cart"]
@@ -626,14 +641,14 @@ def delete_item(id):
             else:
                 db["Add_to_cart"] = cart_dict
         except:
-            print("Error in retrieving Inventory from addtocart.db")
+            print("Error in retrieving Inventory from addtocart")
 
         cart_dict[str(id + 1)].clear()
 
         db['Add_to_cart'] = cart_dict
         db.close()
 
-        if len(cart_dict["1"]) or len(cart_dict["2"]) or len(cart_dict["3"]) or len(cart_dict["4"]) > 0:
+        if any(len(cart_dict[y]) > 0 for y in cart_dict):
             return redirect(url_for("cart"))
 
         else:
@@ -641,7 +656,7 @@ def delete_item(id):
 
     else:
         cart_dictnosession = dict(zip(listofKeys, listofDict))
-        db = shelve.open("database/addtocartnosession", "c")
+        db = shelve.open("database/addtocartnosession", "w")
         try:
             if "Add_to_cartnosession" in db:
                 temp = db["Add_to_cartnosession"]
@@ -663,14 +678,14 @@ def delete_item(id):
             else:
                 db["Add_to_cartnosession"] = cart_dictnosession
         except:
-            print("Error in retrieving Inventory from addtocart.db")
+            print("Error in retrieving Inventory from addtocart")
 
         cart_dictnosession[str(id + 1)].clear()
 
         db['Add_to_cartnosession'] = cart_dictnosession
         db.close()
 
-        if len(cart_dictnosession["1"]) or len(cart_dictnosession["2"]) or len(cart_dictnosession["3"]) or len(cart_dictnosession["4"]) > 0:
+        if any(len(cart_dictnosession[y]) > 0 for y in cart_dictnosession):
             return redirect(url_for("cart"))
 
         else:
@@ -679,11 +694,14 @@ def delete_item(id):
 
 @app.route("/checkout", methods=['GET', 'POST'])
 def checkout():
-    db = shelve.open("database/trees.db", "c")
-    trees = db["Trees"]
-    db.close()
+    try:
+        db = shelve.open("database/trees", "r")
+        trees = db["Trees"]
+        db.close()
+    except:
+        trees = 0
 
-    db = shelve.open("database/inventory.db", 'w')
+    db = shelve.open("database/inventory.db", 'r')
     products_dict = db["Products"]
     db.close()
 
@@ -707,7 +725,7 @@ def checkout():
             j = list()
             cartList.append(j)
 
-        db = shelve.open("database/addtocart", "c")
+        db = shelve.open("database/addtocart", "r")
         try:
             if "Add_to_cart" in db:
                 temp = db["Add_to_cart"]
@@ -730,7 +748,7 @@ def checkout():
             else:
                 db["Add_to_cart"] = cart_dict
         except:
-            print("Error in retrieving Inventory from addtocart.db")
+            print("Error in retrieving Inventory from addtocart")
 
         for i in cart_dict:
             for y in cart_dict[i]:
@@ -774,7 +792,7 @@ def checkout():
             j = list()
             cartListnosession.append(j)
 
-        db = shelve.open("database/addtocartnosession", "c")
+        db = shelve.open("database/addtocartnosession", "r")
         try:
             if "Add_to_cartnosession" in db:
                 temp = db["Add_to_cartnosession"]
@@ -796,7 +814,7 @@ def checkout():
             else:
                 db["Add_to_cartnosession"] = cart_dictnosession
         except:
-            print("Error in retrieving Inventory from addtocart.db")
+            print("Error in retrieving Inventory from addtocart")
 
         for i in cart_dictnosession:
             for y in cart_dictnosession[i]:
@@ -835,11 +853,14 @@ def checkout():
 
 @app.route("/checkout/payment", methods=['GET', 'POST'])
 def payment():
-    db = shelve.open("database/trees.db", "c")
-    trees = db["Trees"]
-    db.close()
+    try:
+        db = shelve.open("database/trees", "r")
+        trees = db["Trees"]
+        db.close()
+    except:
+        trees = 0
 
-    db = shelve.open("database/inventory.db", 'w')
+    db = shelve.open("database/inventory.db", 'r')
     products_dict = db["Products"]
     db.close()
 
@@ -863,7 +884,7 @@ def payment():
             j = list()
             cartList.append(j)
 
-        db = shelve.open("database/addtocart", "c")
+        db = shelve.open("database/addtocart", "r")
         try:
             if "Add_to_cart" in db:
                 temp = db["Add_to_cart"]
@@ -886,7 +907,7 @@ def payment():
             else:
                 db["Add_to_cart"] = cart_dict
         except:
-            print("Error in retrieving Inventory from addtocart.db")
+            print("Error in retrieving Inventory from addtocart")
 
         for i in cart_dict:
             for y in cart_dict[i]:
@@ -900,7 +921,7 @@ def payment():
         grandtotal = subtotal + 4
 
         shipping_dict = {}
-        db = shelve.open("database/shipping", "c")
+        db = shelve.open("database/shipping", "r")
         try:
             if "Shipping" in db:
                 shipping_dict = db["Shipping"]
@@ -939,7 +960,7 @@ def payment():
             j = list()
             cartListnosession.append(j)
 
-        db = shelve.open("database/addtocartnosession", "c")
+        db = shelve.open("database/addtocartnosession", "r")
         try:
             if "Add_to_cartnosession" in db:
                 temp = db["Add_to_cartnosession"]
@@ -961,7 +982,7 @@ def payment():
             else:
                 db["Add_to_cartnosession"] =  cart_dictnosession
         except:
-            print("Error in retrieving Inventory from addtocart.db")
+            print("Error in retrieving Inventory from addtocart")
 
         for i in cart_dictnosession:
             for y in cart_dictnosession[i]:
@@ -975,7 +996,7 @@ def payment():
         grandtotal = subtotal + 4
 
         shipping_dict = {}
-        db = shelve.open("database/shipping", "c")
+        db = shelve.open("database/shipping", "r")
         try:
             if "Shipping" in db:
                 shipping_dict = db["Shipping"]
@@ -1010,11 +1031,14 @@ def payment():
 
 @app.route("/checkout/paymentdone")
 def paymentdone():
-    db = shelve.open("database/trees.db", "c")
-    trees = db["Trees"]
-    db.close()
+    try:
+        db = shelve.open("database/trees", "r")
+        trees = db["Trees"]
+        db.close()
+    except:
+        trees = 0
 
-    db = shelve.open("database/inventory.db", 'w')
+    db = shelve.open("database/inventory.db", 'r')
     products_dict = db["Products"]
     db.close()
 
@@ -1039,7 +1063,7 @@ def paymentdone():
             j = list()
             cartList.append(j)
 
-        db = shelve.open("database/addtocart", "c")
+        db = shelve.open("database/addtocart", "r")
         try:
             if "Add_to_cart" in db:
                 temp = db["Add_to_cart"]
@@ -1062,7 +1086,7 @@ def paymentdone():
             else:
                 db["Add_to_cart"] = cart_dict
         except:
-            print("Error in retrieving Inventory from addtocart.db")
+            print("Error in retrieving Inventory from addtocart")
 
         for i in cart_dict:
             for y in cart_dict[i]:
@@ -1076,7 +1100,7 @@ def paymentdone():
         grandtotal = subtotal + 4
 
         shipping_dict = {}
-        db = shelve.open("database/shipping", "c")
+        db = shelve.open("database/shipping", "r")
         try:
             if "Shipping" in db:
                 shipping_dict = db["Shipping"]
@@ -1086,7 +1110,7 @@ def paymentdone():
             print("Error in retrieving Inventory from shipping.db")
 
         payment_dict = {}
-        db = shelve.open("database/payment", "c")
+        db = shelve.open("database/payment", "r")
         try:
             if "payment" in db:
                 payment_dict = db["payment"]
@@ -1132,7 +1156,7 @@ def paymentdone():
             j = list()
             cartListnosession.append(j)
 
-        db = shelve.open("database/addtocartnosession", "c")
+        db = shelve.open("database/addtocartnosession", "r")
         try:
             if "Add_to_cartnosession" in db:
                 temp = db["Add_to_cartnosession"]
@@ -1154,7 +1178,7 @@ def paymentdone():
             else:
                 db["Add_to_cartnosession"] = cart_dictnosession
         except:
-            print("Error in retrieving Inventory from addtocart.db")
+            print("Error in retrieving Inventory from addtocart")
 
         for i in cart_dictnosession:
             for y in cart_dictnosession[i]:
@@ -1168,7 +1192,7 @@ def paymentdone():
         grandtotal = subtotal + 4
 
         shipping_dict = {}
-        db = shelve.open("database/shipping", "c")
+        db = shelve.open("database/shipping", "r")
         try:
             if "Shipping" in db:
                 shipping_dict = db["Shipping"]
@@ -1178,7 +1202,7 @@ def paymentdone():
             print("Error in retrieving Inventory from shipping.db")
 
         payment_dict = {}
-        db = shelve.open("database/payment", "c")
+        db = shelve.open("database/payment", "r")
         try:
             if "payment" in db:
                 payment_dict = db["payment"]
@@ -1214,7 +1238,7 @@ def paymentdone():
 
 @app.route("/checkout/paymentdone/clear", methods=['POST'])
 def done_clear():
-    db = shelve.open("database/inventory.db", 'w')
+    db = shelve.open("database/inventory.db", 'r')
     products_dict = db["Products"]
     db.close()
 
@@ -1233,7 +1257,7 @@ def done_clear():
 
         cart_dict = dict(zip(listofKeys, listofDict))
 
-        db1 = shelve.open("database/addtocart", "c")
+        db1 = shelve.open("database/addtocart", "w")
         try:
             if "Add_to_cart" in db:
                 temp = db["Add_to_cart"]
@@ -1256,10 +1280,10 @@ def done_clear():
             else:
                 db["Add_to_cart"] = cart_dict
         except:
-            print("Error in retrieving Inventory from addtocart.db")
+            print("Error in retrieving Inventory from addtocart")
 
         shipping_dict = {}
-        db2 = shelve.open("database/shipping", "c")
+        db2 = shelve.open("database/shipping", "w")
         try:
             if "Shipping" in db2:
                 shipping_dict = db2["Shipping"]
@@ -1269,7 +1293,7 @@ def done_clear():
             print("Error in retrieving Inventory from shipping.db")
 
         payment_dict = {}
-        db3 = shelve.open("database/payment", "c")
+        db3 = shelve.open("database/payment", "w")
         try:
             if "payment" in db3:
                 payment_dict = db3["payment"]
@@ -1297,7 +1321,7 @@ def done_clear():
     else:
         cart_dictnosession = dict(zip(listofKeys, listofDict))
 
-        db1 = shelve.open("database/addtocartnosession", "c")
+        db1 = shelve.open("database/addtocartnosession", "w")
         try:
             if "Add_to_cartnosession" in db1:
                 temp = db["Add_to_cartnosession"]
@@ -1319,10 +1343,10 @@ def done_clear():
             else:
                 db1["Add_to_cartnosession"] = cart_dictnosession
         except:
-            print("Error in retrieving Inventory from addtocart.db")
+            print("Error in retrieving Inventory from addtocart")
 
         shipping_dict = {}
-        db2 = shelve.open("database/shipping", "c")
+        db2 = shelve.open("database/shipping", "w")
         try:
             if "Shipping" in db2:
                 shipping_dict = db2["Shipping"]
@@ -1332,7 +1356,7 @@ def done_clear():
             print("Error in retrieving Inventory from shipping.db")
 
         payment_dict = {}
-        db3 = shelve.open("database/payment", "c")
+        db3 = shelve.open("database/payment", "w")
         try:
             if "payment" in db3:
                 payment_dict = db3["payment"]
@@ -1362,11 +1386,14 @@ def done_clear():
 @app.route("/mainshop", methods=['GET', 'POST'])
 def mainshop():
     global temp_product_id
-    db = shelve.open("database/trees.db", "c")
-    trees = db["Trees"]
-    db.close()
+    try:
+        db = shelve.open("database/trees", "r")
+        trees = db["Trees"]
+        db.close()
+    except:
+        trees = 0
 
-    db = shelve.open("database/inventory.db", 'w')
+    db = shelve.open("database/inventory.db", 'r')
     products_dict = db["Products"]
     db.close()
 
@@ -1381,11 +1408,14 @@ def mainshop():
 
 @app.route("/bagbase", methods=['GET', 'POST'])
 def bagbase():
-    db = shelve.open("database/trees.db", "c")
-    trees = db["Trees"]
-    db.close()
+    try:
+        db = shelve.open("database/trees", "r")
+        trees = db["Trees"]
+        db.close()
+    except:
+        trees = 0
 
-    db = shelve.open("database/inventory.db", 'w')
+    db = shelve.open("database/inventory.db", 'r')
     products_dict = db["Products"]
     productList = []
     for x in products_dict:
@@ -1436,7 +1466,7 @@ def bagbase():
                 else:
                     db["Add_to_cart"] = addtocart_dict
             except:
-                print("Error in retrieving Inventory from addtocart.db")
+                print("Error in retrieving Inventory from addtocart")
 
             addtocart = Addtocart(addtocartform.name.data, addtocartform.description.data,
                                   int(addtocartform.price.data), int(addtocartform.quantity.data),
@@ -1482,12 +1512,13 @@ def bagbase():
                 else:
                     db["Add_to_cartnosession"] = addtocartnosession_dict
             except:
-                print("Error in retrieving Inventory from addtocart.db")
+                print("Error in retrieving Inventory from addtocart")
 
             addtocart = Addtocart(addtocartform.name.data, addtocartform.description.data,
                                   int(addtocartform.price.data), int(addtocartform.quantity.data),
                                   addtocartform.category.data, int(addtocartform.discount.data),
                                   int(addtocartform.top.data))
+            addtocart.set_picture(addtocartform.pic.data)
 
             for x, j in zip(productList, range(1, len(productList) + 1)):
                 if addtocart.get_name() == x.get_name():
@@ -1545,9 +1576,12 @@ def auction():
         else:
             expire_date = 10
 
-
-    db = shelve.open("database/trees.db", "c")
-    trees = db["Trees"]
+    try:
+        db = shelve.open("database/trees", "r")
+        trees = db["Trees"]
+        db.close()
+    except:
+        trees = 0
     db.close()
 
     return render_template('auction.html', auction_dict=auction_dict, bid_list=bid_list, ongoing=ongoing, trees=trees, expire_date=expire_date)
@@ -1555,6 +1589,13 @@ def auction():
 
 @app.route("/auctionForm", methods=['GET', 'POST'])
 def auctionForm():
+    try:
+        db = shelve.open("database/trees", "r")
+        trees = db["Trees"]
+        db.close()
+    except:
+        trees = 0
+
     create_bid_form = CreateBidForm(request.form)
     print("JUST PRINT SOMETHING")
     if request.method == 'POST' and create_bid_form.validate():
@@ -1577,7 +1618,7 @@ def auctionForm():
         db.close()
 
         return redirect(url_for("auction"))
-    return render_template('auctionForm.html', form=create_bid_form)
+    return render_template('auctionForm.html', form=create_bid_form, trees=trees)
 
 
 @app.route("/deleteBid/<id>", methods=["POST"])
@@ -1661,8 +1702,12 @@ def forget_password():
 
             return redirect(url_for("log_in"))
 
-    db = shelve.open("database/trees.db", "c")
-    trees = db["Trees"]
+    try:
+        db = shelve.open("database/trees", "r")
+        trees = db["Trees"]
+        db.close()
+    except:
+        trees = 0
     db.close()
 
     return render_template("forgetPassword.html", form=create_forget_form, otpNum=randomOTP, trees=trees)
@@ -1783,7 +1828,85 @@ def save_point(key):
 
             print(player_status.get_total_points())
 
+            with shelve.open("database/user.db", "w") as db3:
+                users_dict = {}
+                try:
+                    users_dict = db3['Users']
+                except:
+                    print("Error in retrieving user.db.")
+
+                points = users_dict.get(session["customer_session"]).get_points()
+
+                users_dict.get(session["customer_session"]).set_points(points-10)
+
+                db3['Users'] = users_dict
+
     return redirect(url_for("checkout"))
+
+
+@app.route("/game/continue/<int:key>", methods=["POST"])
+def save_and_continue_point(key):
+    points = ""
+    value = ''
+    multiply = 0
+    with shelve.open("database/game.db", "r") as db:
+        points_list = db['Points']
+
+        for i in points_list:
+            if key == list(i.keys())[0]:
+                value = i.get(key)
+                break
+
+        try:
+            points = int(value)
+        except:
+            multiplier_dict = {"x5": 5, "x4": 4, "x3": 3, "x2": 2}
+
+            multiply = multiplier_dict.get(value)
+
+        with shelve.open("database/game.db", "c") as db2:
+            game_user_dict = {}
+            try:
+                game_user_dict = db2["Leaderboard"]
+            except:
+                print("Error in retrieving game.db.")
+
+            today = date.today().strftime('%Y-%m-%d')
+            next_day = (datetime.today() + timedelta(days=1)).strftime('%Y-%m-%d')
+
+            if game_user_dict.get(session["customer_session"]):
+                player_status = game_user_dict.get(session["customer_session"])
+            else:
+                player_status = PlayerStatus(session["customer_session"], today, next_day)
+
+            try:
+                if int(points) > 0:
+                    player_status.calculate_total_points(points)
+            except:
+                player_status.calculate_total_points(0, multiply)
+
+            # player_status.set_total_zero()
+
+            game_user_dict[player_status.get_customer_id()] = player_status
+
+            db2["Leaderboard"] = game_user_dict
+
+            print(player_status.get_total_points())
+
+            with shelve.open("database/user.db", "w") as db3:
+                users_dict = {}
+                try:
+                    users_dict = db3['Users']
+                except:
+                    print("Error in retrieving user.db.")
+
+                points = users_dict.get(session["customer_session"]).get_points()
+
+                users_dict.get(session["customer_session"]).set_points(points - 10)
+
+                db3['Users'] = users_dict
+
+    return redirect(url_for("play_game"))
 
 
 @app.route("/leaderboard")
@@ -1841,16 +1964,19 @@ def admin():
 
     time_now = datetime.now()
 
-    sales_dict = {}
-    db = shelve.open("database/sales", "c")
     try:
-        if "sales" in db:
-            sales_dict = db["sales"]
-        else:
-            db["sales"] = sales_dict
+        sales_dict = {}
+        db = shelve.open("database/sales", "r")
+        try:
+            if "sales" in db:
+                sales_dict = db["sales"]
+            else:
+                db["sales"] = sales_dict
+        except:
+            print("Error in retrieving Sales from sales.db")
+        db.close()
     except:
-        print("Error in retrieving Sales from sales.db")
-    db.close()
+        print("havnt create sales yet")
 
     salesList = []
     for x in sales_dict:
@@ -1871,9 +1997,12 @@ def admin():
     for total in customer_totalList:
         subtotal += total
 
-    db = shelve.open("database/trees.db", "c")
-    db["Trees"] = subtotal / 5
-    db.close()
+    try:
+        db = shelve.open("database/trees", "c")
+        db["Trees"] = subtotal / 5
+        db.close()
+    except:
+        print("havnt create trees")
 
     try:
         db = shelve.open('database/auction.db', 'r')
@@ -2034,6 +2163,86 @@ def delete_auction(id):
 @app.route("/adminOrders")
 def admin_orders():
 
+    keys_list = []
+    values_list = []
+    with shelve.open('database/sales', 'r') as db:
+        # print(db["sales"])
+        try:
+            if "sales" in db:
+                sales_dict = db["sales"]
+        except:
+            print("Error in retrieving Sales from sales.db")
+
+        # for keys, values in sales_dict.items():
+        #     print(values)
+
+        # sales_dict.pop('a52fafdb-3bd2-435f-b66a-df18a7f7d3d8')
+        # sales_dict.pop('a01594c2-31ac-49ad-86b2-67f944e9ae44')
+        # db['sales'] = sales_dict
+        # print(db["sales"])
+
+        sales_dict_keys = list(sales_dict.keys())
+        # print(sales_dict_keys)
+        if (len(sales_dict_keys) % 2) == 1:
+            sales_dict_keys.append("")
+
+        for sales in sales_dict_keys:
+
+            if sales != "":
+                sales_cart = sales_dict[sales].get_cart()
+                sales_cart_keys_list = list(sales_cart.keys())
+
+                sales_cart_values_list = list(sales_cart.values())
+
+                print(sales_cart_values_list)
+                if len(sales_cart_values_list) == 1:
+                    if sales_cart_values_list[0] == {}:
+                        sales_cart_values_list.pop(num)
+                        sales_cart_keys_list.pop(num)
+                else:
+
+                    for num in range(0, len(sales_cart_values_list)-1):
+                        print(num)
+                        try:
+                            if sales_cart_values_list[num] == {}:
+                                sales_cart_values_list.pop(num)
+                                sales_cart_keys_list.pop(num)
+                        except IndexError:
+                            print("leo")
+
+                keys_list.append(sales_cart_keys_list)
+                values_list.append(sales_cart_values_list)
+
+                # print(sales_cart_keys_list)
+                print(sales_cart_values_list)
+                # print(values_list)
+        if len(values_list) == 1:
+            if values_list[0][-1] == {}:
+                values_list[0].pop(-1)
+                keys_list[0].pop(-1)
+        else:
+            for num1 in range(0, len(values_list)-1):
+
+                if values_list[num1][-1] == {}:
+
+                    values_list[num1].pop(-1)
+                    keys_list[num1].pop(-1)
+
+
+        print(values_list)
+
+    # ,sales_dict=sales_dict, sales_dict_keys=sales_dict_keys,
+    #                            sales_cart_keys_list=sales_cart_keys_list, values_list=values_list
+    return render_template("adminOrders.html", sales_dict=sales_dict, sales_dict_keys=sales_dict_keys, values_list=values_list)
+
+
+@app.route("/adminOrders/pending")
+def pending_order():
+    return render_template("adminOrders.html")
+
+
+@app.route("/adminOrders/accepted")
+def accept_order():
     with shelve.open('database/sales', 'r') as db:
         print(db["sales"])
         try:
@@ -2042,10 +2251,8 @@ def admin_orders():
         except:
             print("Error in retrieving Sales from sales.db")
 
-        for keys, values in sales_dict.items():
-            print(values)
 
-    return render_template("adminOrders.html", sales_dict=sales_dict)
+    return render_template("adminOrders.html")
 
 
 @app.route("/adminCustomerManagement")
@@ -2359,7 +2566,6 @@ def update_product(id):
     products_dict = db["Products"]
     product = products_dict.get(id)
     if request.method == 'POST' and update_product_form.validate():
-
         if "product_pic" in request.files:
             pic = update_product_form.product_pic.data
             fn = pic.filename.split(".")
@@ -2380,8 +2586,11 @@ def update_product(id):
         products_dict.get(id).set_discount(int(update_product_form.discount.data))
         products_dict.get(id).set_category(update_product_form.category.data)
         products_dict.get(id).set_description(update_product_form.description.data)
-        if update_product_form.top.data:
+        if update_product_form.top.data.upper() == "YES" or update_product_form.top.data.upper() == "Y":
             products_dict.get(id).set_top(1)
+        elif update_product_form.top.data.upper() == "NO" or update_product_form.top.data.upper() == "N":
+            products_dict.get(id).set_top(0)
+
         db["Products"] = products_dict
         db.close()
 
@@ -2397,6 +2606,10 @@ def update_product(id):
         update_product_form.discount.data = products_dict.get(id).get_discount()
         update_product_form.category.data = products_dict.get(id).get_category()
         update_product_form.description.data = products_dict.get(id).get_description()
+        if products_dict.get(id).get_top() == 1:
+            update_product_form.top.data = "YES"
+        elif products_dict.get(id).get_top() == 0:
+            update_product_form.top.data = "NO"
     return render_template("adminProductUpdate.html", form=update_product_form, product_id=id, product=product)
 
 
