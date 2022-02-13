@@ -40,7 +40,7 @@ def home():
     db.close()
 
     try:
-        db = shelve.open("database/trees.db", "r")
+        db = shelve.open("database/trees", "r")
         trees = db["Trees"]
     except:
         trees = 0
@@ -89,7 +89,7 @@ def log_in():
             db.close()
 
         try:
-            db = shelve.open("database/trees.db", "r")
+            db = shelve.open("database/trees", "r")
             trees = db["Trees"]
             db.close()
         except:
@@ -177,7 +177,7 @@ def customer_logged_in():
             update_customer_form.birthdate.data = customer_user.get_birth_date()
 
         try:
-            db = shelve.open("database/trees.db", "r")
+            db = shelve.open("database/trees", "r")
             trees = db["Trees"]
             db.close()
         except:
@@ -195,11 +195,12 @@ def create_customer():
     code = 0
     create_customer_form = CreateCustomerForm(CombinedMultiDict((request.files, request.form)))
     try:
-        db = shelve.open("database/trees.db", "r")
+        db = shelve.open("database/trees", "r")
         trees = db["Trees"]
+        db.close()
     except:
         trees = 0
-    db.close()
+
 
     if request.method == 'POST' and create_customer_form.validate():
         user_dict = {}
@@ -250,7 +251,7 @@ def create_customer():
 @app.route("/cart")
 def cart():
     try:
-        db = shelve.open("database/trees.db", "r")
+        db = shelve.open("database/trees", "r")
         trees = db["Trees"]
         db.close()
     except:
@@ -593,7 +594,7 @@ def updateSubCart(id):
 @app.route('/deleteCart/<int:id>', methods=['POST'])
 def delete_item(id):
     try:
-        db = shelve.open("database/trees.db", "r")
+        db = shelve.open("database/trees", "r")
         trees = db["Trees"]
         db.close()
     except:
@@ -694,7 +695,7 @@ def delete_item(id):
 @app.route("/checkout", methods=['GET', 'POST'])
 def checkout():
     try:
-        db = shelve.open("database/trees.db", "r")
+        db = shelve.open("database/trees", "r")
         trees = db["Trees"]
         db.close()
     except:
@@ -853,7 +854,7 @@ def checkout():
 @app.route("/checkout/payment", methods=['GET', 'POST'])
 def payment():
     try:
-        db = shelve.open("database/trees.db", "r")
+        db = shelve.open("database/trees", "r")
         trees = db["Trees"]
         db.close()
     except:
@@ -1031,7 +1032,7 @@ def payment():
 @app.route("/checkout/paymentdone")
 def paymentdone():
     try:
-        db = shelve.open("database/trees.db", "r")
+        db = shelve.open("database/trees", "r")
         trees = db["Trees"]
         db.close()
     except:
@@ -1386,7 +1387,7 @@ def done_clear():
 def mainshop():
     global temp_product_id
     try:
-        db = shelve.open("database/trees.db", "r")
+        db = shelve.open("database/trees", "r")
         trees = db["Trees"]
         db.close()
     except:
@@ -1408,7 +1409,7 @@ def mainshop():
 @app.route("/bagbase", methods=['GET', 'POST'])
 def bagbase():
     try:
-        db = shelve.open("database/trees.db", "r")
+        db = shelve.open("database/trees", "r")
         trees = db["Trees"]
         db.close()
     except:
@@ -1576,7 +1577,7 @@ def auction():
             expire_date = 10
 
     try:
-        db = shelve.open("database/trees.db", "r")
+        db = shelve.open("database/trees", "r")
         trees = db["Trees"]
         db.close()
     except:
@@ -1589,7 +1590,7 @@ def auction():
 @app.route("/auctionForm", methods=['GET', 'POST'])
 def auctionForm():
     try:
-        db = shelve.open("database/trees.db", "r")
+        db = shelve.open("database/trees", "r")
         trees = db["Trees"]
         db.close()
     except:
@@ -1702,7 +1703,7 @@ def forget_password():
             return redirect(url_for("log_in"))
 
     try:
-        db = shelve.open("database/trees.db", "r")
+        db = shelve.open("database/trees", "r")
         trees = db["Trees"]
         db.close()
     except:
