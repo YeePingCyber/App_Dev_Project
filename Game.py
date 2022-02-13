@@ -39,8 +39,8 @@ class PlayerStatus:
             self.__totalPoints += points
 
     def generate_discount_code(self, position):
-        discount_code_dict = {0: "TPFreeBag2022", 1: "TP70%Discount2022", 2: "TP50%Discount2022", 3: "TP30%Discount2022",
-                              4: "TP10%Discount2022", 5: "TP5%Discount2022"}
+        discount_code_dict = {0: "15%OFF", 1: "70%OFF", 2: "50%OFF", 3: "30%OFF",
+                              4: "10%OFF", 5: "20%OFF"}
 
         if (position > 5) and (position <= 9):
             position = 5

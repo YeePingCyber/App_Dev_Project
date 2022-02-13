@@ -867,6 +867,9 @@ def payment():
     products_dict = db["Products"]
     db.close()
 
+    discount_code_dict = {0: "15%OFF", 1: "70%OFF", 2: "50%OFF", 3: "30%OFF", 4: "10%OFF", 5: "20%OFF"}
+    print(discount_code_dict)
+
     listofDict = []
     listofKeys = []
     for i in range(1, len(products_dict) + 1):
@@ -921,8 +924,7 @@ def payment():
             for x in cartList[total]:
                 subtotal += x.get_price()
 
-        discount = 1
-        grandtotal = subtotal + 4 - discount
+        grandtotal = subtotal + 4
 
         shipping_dict = {}
         db = shelve.open("database/shipping", "r")
@@ -997,8 +999,7 @@ def payment():
             for x in cartListnosession[total]:
                 subtotal += x.get_price()
 
-        discount = 1
-        grandtotal = subtotal + 4 - discount
+        grandtotal = subtotal + 4
 
         shipping_dict = {}
         db = shelve.open("database/shipping", "r")
@@ -1013,6 +1014,11 @@ def payment():
         payment_dict = {}
         create_payment_form = CreatePaymentForm(request.form)
         if request.method == 'POST' and create_payment_form.validate():
+            for i in range(len(discount_code_dict)):
+                if create_payment_form.discount.data == str(discount_code_dict[i]):
+                    global discount
+                    discount = int(discount_code_dict[i][:2])
+
             db = shelve.open("database/payment", "c")
             try:
                 if "payment" in db:
@@ -1036,6 +1042,7 @@ def payment():
 
 @app.route("/checkout/paymentdone")
 def paymentdone():
+    print(discount)
     try:
         db = shelve.open("database/trees", "r")
         trees = db["Trees"]
@@ -1238,7 +1245,7 @@ def paymentdone():
         db["sales"] = sales_dict
         db.close()
 
-        return render_template("paymentdone.html", subtotal=subtotal, grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict, sales=sales_dict, cartList=cartListnosession, trees=trees)
+        return render_template("paymentdone.html", subtotal=subtotal, grandtotal=grandtotal, ship=shipping_dict, payment=payment_dict, sales=sales_dict, cartList=cartListnosession, trees=trees, discount=discount)
 
 
 @app.route("/checkout/paymentdone/clear", methods=['POST'])
