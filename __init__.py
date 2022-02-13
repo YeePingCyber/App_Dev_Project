@@ -2266,7 +2266,7 @@ def admin_orders():
 
 @app.route("/adminOrders/pending")
 def pending_order():
-    return render_template("adminOrders.html")
+    return redirect(url_for("admin_orders"))
 
 
 @app.route("/adminOrders/accepted")
