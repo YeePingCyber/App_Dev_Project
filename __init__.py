@@ -1770,8 +1770,11 @@ def play_game():
             user_details = users_details_dict.get(session["customer_session"])
             user_credit_points = user_details.get_points()
 
-        db = shelve.open("database/trees.db", "c")
-        trees = db["Trees"]
+        try:
+            db = shelve.open("database/trees", "r")
+            trees = db["Trees"]
+        except:
+            trees = 0
 
         return render_template("game.html", points_list=points_list, points=leaderboard_points,
                                credit_points=user_credit_points, trees=trees)
@@ -1947,8 +1950,11 @@ def leaderboard():
                 sorted_list = []
                 username_list = []
 
-        db = shelve.open("database/trees.db", "c")
-        trees = db["Trees"]
+        try:
+            db = shelve.open("database/trees", "r")
+            trees = db["Trees"]
+        except:
+            trees = 0
 
         return render_template("leaderboard.html", sorted_list=sorted_list, username_list=username_list, trees=trees)
     else:
