@@ -2492,7 +2492,6 @@ def update_product(id):
     products_dict = db["Products"]
     product = products_dict.get(id)
     if request.method == 'POST' and update_product_form.validate():
-
         if "product_pic" in request.files:
             pic = update_product_form.product_pic.data
             fn = pic.filename.split(".")
@@ -2513,8 +2512,10 @@ def update_product(id):
         products_dict.get(id).set_discount(int(update_product_form.discount.data))
         products_dict.get(id).set_category(update_product_form.category.data)
         products_dict.get(id).set_description(update_product_form.description.data)
-        if update_product_form.top.data:
+        if update_product_form.top.data.upper() == "YES" or update_product_form.top.data.upper() == "Y":
             products_dict.get(id).set_top(1)
+        elif update_product_form.top.data.upper() == "NO" or update_product_form.top.data.upper() == "N":
+            products_dict.get(id).set_top(0)
 
         db["Products"] = products_dict
         db.close()
@@ -2531,6 +2532,10 @@ def update_product(id):
         update_product_form.discount.data = products_dict.get(id).get_discount()
         update_product_form.category.data = products_dict.get(id).get_category()
         update_product_form.description.data = products_dict.get(id).get_description()
+        if products_dict.get(id).get_top() == 1:
+            update_product_form.top.data = "YES"
+        elif products_dict.get(id).get_top() == 0:
+            update_product_form.top.data = "NO"
     return render_template("adminProductUpdate.html", form=update_product_form, product_id=id, product=product)
 
 
