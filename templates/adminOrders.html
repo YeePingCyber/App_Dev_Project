@@ -21,18 +21,53 @@
 
     <div class="orders_container">
         <div class="top_container">
-
-            {% if sales_dict_keys == [] %}
-            <a href="/adminOrders/all"><button class="sorted_btn_active">All (<span>0</span>)</button></a>
-            {% elif sales_dict_keys[(sales_dict_keys|length)-1] == "" %}
-            <a href="/adminOrders/all"><button class="sorted_btn_active">All (<span>{{ (sales_dict_keys|length)-1 }}</span>)</button></a>
-            {% else %}
-            <a href="/adminOrders/all"><button class="sorted_btn_active">All (<span>{{ (sales_dict_keys|length) }}</span>)</button></a>
-            {% endif %}
-
-            <a href="/adminOrders/pending"><button class="sorted_btn">Pending</button></a>
+            {% if ("adminOrders_sorting" in session) and (session["adminOrders_sorting"] == "")%}
+            <a href="/adminOrders/all">
+                <button class="sorted_btn_active">
+                    All (
+                    <span>
+                        {% if sales_dict_keys == [] %}
+                        0
+                        {% elif sales_dict_keys[(sales_dict_keys|length)-1] == "" %}
+                        {{ (sales_dict_keys|length)-1 }}
+                        {% else %}
+                        {{ (sales_dict_keys|length) }}
+                        {% endif %}
+                    </span>
+                    )
+                </button>
+            </a>
+            <a href="/adminOrders/pending">
+                <button class="sorted_btn">
+                    Pending
+                </button>
+            </a>
             <button class="sorted_btn">Accepted</button>
             <button class="sorted_btn">Shipping</button>
+            {% elif ("adminOrders_sorting" in session) and (session["adminOrders_sorting"] == "pending") %}
+            <a href="/adminOrders/all">
+                <button class="sorted_btn">
+                    All (
+                    <span>
+                        {% if sales_dict_keys == [] %}
+                        0
+                        {% elif sales_dict_keys[(sales_dict_keys|length)-1] == "" %}
+                        {{ (sales_dict_keys|length)-1 }}
+                        {% else %}
+                        {{ (sales_dict_keys|length) }}
+                        {% endif %}
+                    </span>
+                    )
+                </button>
+            </a>
+            <a href="/adminOrders/pending">
+                <button class="sorted_btn_active">
+                    Pending
+                </button>
+            </a>
+            <button class="sorted_btn">Accepted</button>
+            <button class="sorted_btn">Shipping</button>
+            {% endif %}
         </div>
         <hr>
 
@@ -44,10 +79,10 @@
                 </div>
             </div>
             {% else %}
-            {% for noOfRows in range(0, (values_list|length)//2) %}
+            {% for noOfRows in range(0, (keys_list|length)//2) %}
             <div class="row">
                 {% for noOfCol in range(0, 2) %}
-                {% if sales_dict_keys[noOfRows+noOfRows+noOfCol] == "" %}
+                {% if keys_list[noOfRows+noOfRows+noOfCol] == "" %}
                 <div class="col-md-6"></div>
                 {% else %}
                 <div class="col-md-6">
@@ -64,8 +99,8 @@
                         <div class="user_order_center">
 
                             <div class="user_order_details">
-                                <img class="user_order_img" src="../static/images/blackBag2.png" alt="Product Image">
-                                {#<img class="user_order_img" src="../static/images/product_pics/{{ (values_list[noOfRows+noOfRows+noOfCol][0].values()|list)[0].get_picture() }}" alt="Product Image">#}
+                                <!--<img class="user_order_img" src="../static/images/blackBag2.png" alt="Product Image">-->
+                                <img class="user_order_img" src="../static/images/product_pics/{{ (values_list[noOfRows+noOfRows+noOfCol][0].values()|list)[0].get_picture() }}" alt="Product Image">
 
                                 <p class="user_order_product_name">
                                     {{ (values_list[noOfRows+noOfRows+noOfCol][0].values()|list)[0].get_name() }}
@@ -147,39 +182,6 @@
                 </div>
                 {% endif %}
                 {% endfor %}
-                <!--<div class="col-md-6">-->
-                <!--    <div class="user_order">-->
-                <!--        <div class="user_order_top">-->
-                <!--            <div class="user_order_username">-->
-                <!--                <p>Username 1</p>-->
-                <!--            </div>-->
-                <!--            <div class="user_order_orderId">-->
-                <!--                <p>Order ID: <span>00000000</span></p>-->
-                <!--            </div>-->
-                <!--        </div>-->
-                <!--        <div class="user_order_center">-->
-                <!--            <div class="user_order_details">-->
-                <!--                <img class="user_order_img" src="../static/images/blackBag2.png" alt="Product Image">-->
-                <!--                <p class="user_order_product_name">Product Name</p>-->
-                <!--                <p class="user_order_quantity">x1</p>-->
-                <!--            </div>-->
-                <!--            <div class="user_order_status">-->
-                <!--                <span>Pending...</span>-->
-                <!--            </div>-->
-                <!--        </div>-->
-                <!--        <div class="user_order_bottom">-->
-                <!--            <div class="user_order_bottom_btn">-->
-                <!--                <button class="arrange_btn">Arrange Shipment</button>-->
-                <!--            </div>-->
-                <!--            <div class="user_order_bottom_btn">-->
-                <!--                <a href="#"><button class="view_btn">View more (<span>1</span>)</button></a>-->
-                <!--            </div>-->
-                <!--            <div class="user_order_bottom_btn">-->
-                <!--                <button class="cancel_btn">Cancel Order</button>-->
-                <!--            </div>-->
-                <!--        </div>-->
-                <!--    </div>-->
-                <!--</div>-->
             </div>
         {% endfor %}
         {% endif %}

@@ -2291,8 +2291,11 @@ def admin_orders():
                     # keys_list[num1].pop(0)
 
         print(values_list)
-        print(keys_list)
+        print(len(keys_list)//2)
+        if len(keys_list)%2 == 1:
+            keys_list.append("")
 
+        print(len(keys_list) // 2)
     # ,sales_dict=sales_dict, sales_dict_keys=sales_dict_keys,
     #                            sales_cart_keys_list=sales_cart_keys_list, values_list=values_list
     return render_template("adminOrders.html", sales_dict=sales_dict, sales_dict_keys=sales_dict_keys, values_list=values_list, keys_list=keys_list)
