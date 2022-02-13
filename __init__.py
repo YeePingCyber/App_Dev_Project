@@ -281,7 +281,7 @@ def cart():
             j = list()
             cartList.append(j)
 
-        db = shelve.open("database/addtocart", "r")
+        db = shelve.open("database/addtocart", "c")
         try:
             if "Add_to_cart" in db:
                 temp = db["Add_to_cart"]
@@ -334,7 +334,7 @@ def cart():
             j = list()
             cartListnosession.append(j)
 
-        db = shelve.open("database/addtocartnosession", "r")
+        db = shelve.open("database/addtocartnosession", "c")
         try:
             if "Add_to_cartnosession" in db:
                 temp = db["Add_to_cartnosession"]
