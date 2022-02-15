@@ -21,7 +21,7 @@
 
     <div class="orders_container">
         <div class="top_container">
-            {% if ("adminOrders_sorting" in session) and (session["adminOrders_sorting"] == "")%}
+            {% if ("adminOrders_sorting" not in session) or (session["adminOrders_sorting"] == "")%}
             <a href="/adminOrders/all">
                 <button class="sorted_btn_active">
                     All (
