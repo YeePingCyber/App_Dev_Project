@@ -62,8 +62,19 @@ class CreateProductForm(Form):
     category = StringField('Category: ', [validators.Length(min=1, max=150), validators.DataRequired()],  render_kw={"placeholder": "Category"})
     discount = FloatField('Discount: ', [validators.DataRequired(), NumberRange(min=1, max=99)],  render_kw={"placeholder": "Discount"})
     description = TextAreaField('Description: ', [validators.Length(min=1, max=300), validators.DataRequired()],  render_kw={"placeholder": "Description"})
+    product_pic = FileField('Upload product picture:')
+
+
+class UpdateProductForm(Form):
+    name = StringField('Name: ', [validators.Length(min=1, max=70), validators.DataRequired()],  render_kw={"placeholder": "Product Name"})
+    price = FloatField('Price: ', [validators.DataRequired()],  render_kw={"placeholder": "Product price"})
+    quantity = IntegerField('Quantity: ', [validators.DataRequired(), NumberRange(min=1, max=50)],  render_kw={"placeholder": "Quantity"})
+    category = StringField('Category: ', [validators.Length(min=1, max=150), validators.DataRequired()],  render_kw={"placeholder": "Category"})
+    discount = FloatField('Discount: ', [validators.DataRequired(), NumberRange(min=1, max=99)],  render_kw={"placeholder": "Discount"})
+    description = TextAreaField('Description: ', [validators.Length(min=1, max=300), validators.DataRequired()],  render_kw={"placeholder": "Description"})
     top = StringField('Top product', [validators.AnyOf(values=["YES", "Y", "NO", "N", "yes", "y", "no", "n"])], render_kw={"placeholder": "YES or NO"})
     product_pic = FileField('Upload product picture:')
+
 
 
 class CreateAdminForm(Form):

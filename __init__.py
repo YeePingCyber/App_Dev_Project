@@ -14,7 +14,7 @@ from Auction import Auction
 from ProcessCart import PaymentProcess, ShippingProcess, Sales
 from UserBid import UserBid
 from Game import PlayerStatus, generate_points
-from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreateShipmentForm, CreatePaymentForm, CreateProductForm, CreateAddCartForm, CreateAuctionForm, UpdateAdminForm, CreateBidForm, CreateForgetPassForm, UpdateCustomerForm, CreateProductView
+from Forms import CreateAdminForm, CreateLoginForm, CreateCustomerForm, CreateShipmentForm, CreatePaymentForm, CreateProductForm, CreateAddCartForm, CreateAuctionForm, UpdateAdminForm, CreateBidForm, CreateForgetPassForm, UpdateCustomerForm, CreateProductView, UpdateProductForm
 from werkzeug.datastructures import CombinedMultiDict
 import os
 # from PIL import Image
@@ -1573,7 +1573,11 @@ def auction():
         bid_amt.append(w)
 
     sorted_bid_amt = sorted(bid_amt, reverse=True)
-    highest_bid = sorted_bid_amt[0]
+
+    if not bid_amt:
+        highest_bid = 0
+    else:
+        highest_bid = sorted_bid_amt[0]
 
     auction_dict = {}
     db = shelve.open('database/auction.db', 'c')
@@ -2727,7 +2731,7 @@ def admin_product_creation():
 
 @app.route("/adminProductUpdate/<id>/", methods=['GET', 'POST'])
 def update_product(id):
-    update_product_form = CreateProductForm(CombinedMultiDict((request.files, request.form)))
+    update_product_form = UpdateProductForm(CombinedMultiDict((request.files, request.form)))
     db = shelve.open("database/inventory.db", 'w')
     products_dict = db["Products"]
     product = products_dict.get(id)
